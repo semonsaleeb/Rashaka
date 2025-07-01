@@ -2,9 +2,9 @@
   <div class="header-container">
     <!-- Logo -->
     <div class="logo">
-      <img src="assets/images/logo.png" alt="Happy Fitness" class="logo-img">
+      <img src="assets/images/logo.svg" alt="Happy Fitness" class="logo-img">
     </div>
-
+<!-- src/app/header/assets/images/logo.svg -->
     <!-- Search Bar -->
     <div class="search-container">
       <input 
@@ -46,11 +46,12 @@
           <i *ngIf="item.hasDropdown" class="fas fa-chevron-down"></i>
         </a>
       </li>
-    </ul>
-  </nav>
-   <!-- WhatsApp Button -->
+       <!-- WhatsApp Button -->
     <button class="whatsapp-btn" (click)="onWhatsAppClick()">
       <i class="fab fa-whatsapp"></i>
       <span>واتساب</span>
     </button>
+    </ul>
+  </nav>
+  
 </header>
