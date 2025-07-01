@@ -12,12 +12,13 @@
   justify-content: space-between;
   padding: 1rem 2rem;
   max-width: 1200px;
-  margin: 0 auto;
+//   margin: 0 auto;
   gap: 1rem;
 }
 
 .logo {
   flex-shrink: 0;
+  margin-right: 120px;
 }
 
 .logo-img {
@@ -29,7 +30,7 @@
 .search-container {
   flex: 1;
   max-width: 400px;
-  margin: 0 1rem;
+  margin: 0 0.2rem;
   position: relative;
 }
 
@@ -157,6 +158,7 @@
 .navigation {
   background: white;
   border-top: 1px solid white;
+  margin-right: 120px;
 
 }
 

@@ -1,0 +1,66 @@
+<section class="hero-section">
+  <div class="hero-container">
+    <!-- Left side - Image -->
+    <div class="hero-image">
+      <div class="image-container">
+        <img src="assets/images/hero-people.jpg" alt="Health consultation" class="main-image">
+        
+        <!-- Weight indicators -->
+        <div class="weight-indicator current-weight">
+          <span class="weight-label">الوزن السابق</span>
+          <span class="weight-value">{{ currentWeight }}</span>
+        </div>
+        
+        <div class="weight-indicator target-weight">
+          <span class="weight-label">الوزن الحالي</span>
+          <span class="weight-value">{{ targetWeight }}</span>
+        </div>
+      </div>
+      
+      <!-- Progress dots -->
+      <div class="progress-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot active"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <!-- Right side - Content -->
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="highlight">شفافيتك هدفنا</span> وصحتك أولويتنا
+        </h1>
+        
+        <p class="hero-description">
+          بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا
+        </p>
+        
+        <p class="hero-subtitle">
+          اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك
+        </p>
+        
+        <div class="product-info">
+          <span class="product-code">502 Hug x 74 Hug</span>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="features">
+        <div class="feature-item" *ngFor="let stat of stats">
+          <div class="feature-icon">
+            <i class="checkmark">{{ stat.icon }}</i>
+          </div>
+          <span class="feature-text">{{ stat.label }}</span>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <button class="cta-button" (click)="onGetStarted()">
+        احجز الآن
+        <i class="arrow-icon">→</i>
+      </button>
+    </div>
+  </div>
+</section>
