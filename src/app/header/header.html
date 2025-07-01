@@ -21,21 +21,17 @@
     <!-- Language Selector and Login -->
     <div class="language-selector">
       <button class="lang-btn">
-        <span class="flag-icon">🇸🇦</span>
+        <i class="fa-thin fa-circle-user"></i>
         <span>تسجيل الدخول</span>
-        <i class="fas fa-globe"></i>
       </button>
+        <i class="fas fa-globe"></i>
       <select class="lang-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
         <option value="العربية">العربية</option>
         <option value="English">English</option>
       </select>
     </div>
 
-    <!-- WhatsApp Button -->
-    <button class="whatsapp-btn" (click)="onWhatsAppClick()">
-      <i class="fab fa-whatsapp"></i>
-      <span>واتساب</span>
-    </button>
+   
   </div>
 
   <!-- Navigation -->
@@ -52,4 +48,9 @@
       </li>
     </ul>
   </nav>
+   <!-- WhatsApp Button -->
+    <button class="whatsapp-btn" (click)="onWhatsAppClick()">
+      <i class="fab fa-whatsapp"></i>
+      <span>واتساب</span>
+    </button>
 </header>
