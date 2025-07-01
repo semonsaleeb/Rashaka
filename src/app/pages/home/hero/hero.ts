@@ -9,10 +9,10 @@ import { Component } from '@angular/core';
 export class Hero { currentSlide: number = 0;
   
  sliderImages = [
-  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 1' },
-  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 2' },
-  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 3' },
-  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 4' }
+  { src: 'Rashaka/src/assets/Images/536783.png', alt: 'صورة الصحة 1' },
+  { src: 'Rashaka/src/assets/Images/536783.png', alt: 'صورة الصحة 2' },
+     { src: 'assets/Images/536783.png', alt: 'صورة الصحة 3' },
+    { src: 'assets/Images/536783.png', alt: 'صورة الصحة 4' }
 ];
 
   constructor() { }
