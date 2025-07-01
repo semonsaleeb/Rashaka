@@ -1,0 +1,55 @@
+<header class="header">
+  <div class="header-container">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="Happy Fitness" class="logo-img">
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery"
+        placeholder="ابحث عن منتجات"
+        class="search-input"
+        (keyup.enter)="onSearch()">
+      <button class="search-btn" (click)="onSearch()">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+
+    <!-- Language Selector and Login -->
+    <div class="language-selector">
+      <button class="lang-btn">
+        <span class="flag-icon">🇸🇦</span>
+        <span>تسجيل الدخول</span>
+        <i class="fas fa-globe"></i>
+      </button>
+      <select class="lang-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
+        <option value="العربية">العربية</option>
+        <option value="English">English</option>
+      </select>
+    </div>
+
+    <!-- WhatsApp Button -->
+    <button class="whatsapp-btn" (click)="onWhatsAppClick()">
+      <i class="fab fa-whatsapp"></i>
+      <span>واتساب</span>
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navigation">
+    <ul class="nav-list">
+      <li 
+        *ngFor="let item of navItems" 
+        class="nav-item"
+        [class.active]="item.active">
+        <a href="#" class="nav-link" (click)="onNavItemClick(item); $event.preventDefault()">
+          {{ item.label }}
+          <i *ngIf="item.hasDropdown" class="fas fa-chevron-down"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
