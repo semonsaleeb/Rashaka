@@ -1,57 +1,64 @@
-<header class="header">
-  <div class="header-container">
-    <!-- Logo -->
-    <div class="logo">
-      <img src="https://happyfitness.sa/wp-content/uploads/2021/04/%D8%B4%D8%B9%D8%A7%D8%B1-%D8%A7%D9%84%D8%B1%D8%B4%D8%A7%D9%82%D8%A9-%D9%84%D9%84%D9%85%D9%88%D9%82%D8%B9.webp" alt="Happy Fitness" class="logo-img">
-    </div>
-<!-- src/app/header/assets/images/logo.svg -->
-    <!-- Search Bar -->
-    <div class="search-container">
-      <input 
-        type="text" 
-        [(ngModel)]="searchQuery"
-        placeholder="ابحث عن منتجات"
-        class="search-input"
-        (keyup.enter)="onSearch()">
-      <button class="search-btn" (click)="onSearch()">
-        <i class="fas fa-search"></i>
-      </button>
-    </div>
-
-    <!-- Language Selector and Login -->
-    <div class="language-selector">
-      <button class="lang-btn">
-        <i class="fa-thin fa-circle-user"></i>
-        <span>تسجيل الدخول</span>
-      </button>
-        <i class="fas fa-globe"></i>
-      <select class="lang-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
-        <option value="العربية">العربية</option>
-        <option value="English">English</option>
-      </select>
+<section class="hero-section">
+  <div class="hero-container">
+    <!-- Left side - Slider -->
+    <div class="hero-slider">
+      <div class="slider-container">
+        <div class="slider-wrapper">
+          <div class="slides" [style.transform]="'translateX(' + (-currentSlide * 100) + '%)'">
+            <div class="slide" *ngFor="let image of sliderImages; let i = index">
+              <img [src]="image.src" [alt]="image.alt" class="slide-image">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Navigation arrows -->
+        <button class="slider-btn prev-btn" (click)="prevSlide()">‹</button>
+        <button class="slider-btn next-btn" (click)="nextSlide()">›</button>
+      </div>
+      
+      <!-- Slider dots -->
+      <div class="slider-dots">
+        <span 
+          class="dot" 
+          [class.active]="i === currentSlide"
+          *ngFor="let image of sliderImages; let i = index"
+          (click)="goToSlide(i)">
+        </span>
+      </div>
     </div>
 
-   
+    <!-- Right side - Content -->
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="highlight">شفافيتك هدفنا</span> وصحتك أولويتنا
+        </h1>
+        
+        <p class="hero-description">
+          بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا
+        </p>
+        
+        <p class="hero-subtitle">
+          اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك
+        </p>
+        
+        <div class="product-info">
+          <span class="product-code">502 Hug x 74 Hug</span>
+        </div>
+      </div>
+
+      <!-- Features as simple text -->
+      <div class="features-text">
+        <p class="feature-item">فحص مجاني</p>
+        <p class="feature-item">متابعة أسبوعية</p>
+        <p class="feature-item">منتجات صحية</p>
+      </div>
+
+      <!-- CTA Button -->
+      <button class="cta-button" (click)="onGetStarted()">
+        احجز الآن
+        <i class="arrow-icon">→</i>
+      </button>
+    </div>
   </div>
-
-  <!-- Navigation -->
-  <nav class="navigation">
-    <ul class="nav-list">
-      <li 
-        *ngFor="let item of navItems" 
-        class="nav-item"
-        [class.active]="item.active">
-        <a href="#" class="nav-link" (click)="onNavItemClick(item); $event.preventDefault()">
-          {{ item.label }}
-          <i *ngIf="item.hasDropdown" class="fas fa-chevron-down"></i>
-        </a>
-      </li>
-       <!-- WhatsApp Button -->
-    <button class="whatsapp-btn" (click)="onWhatsAppClick()">
-      <i class="fab fa-whatsapp"></i>
-      <span>واتساب</span>
-    </button>
-    </ul>
-  </nav>
-  
-</header>
+</section>
