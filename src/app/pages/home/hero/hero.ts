@@ -8,12 +8,12 @@ import { Component } from '@angular/core';
 })
 export class Hero { currentSlide: number = 0;
   
-  sliderImages = [
-    { src: 'Rashaka/public/Images/536783.png', alt: 'صورة الصحة 1' },
-    { src: 'Rashaka/public/Images/536783.png', alt: 'صورة الصحة 2' },
-    { src: 'Rashaka/public/Images/536783.png', alt: 'صورة الصحة 3' },
-    { src: 'Rashaka/public/Images/536783.png', alt: 'صورة الصحة 4' }
-  ];
+ sliderImages = [
+  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 1' },
+  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 2' },
+  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 3' },
+  { src: 'assets/Images/536783.png', alt: 'صورة الصحة 4' }
+];
 
   constructor() { }
 
