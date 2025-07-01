@@ -1,31 +1,6 @@
 <section class="hero-section">
   <div class="hero-container">
-    <!-- Left side - Slider -->
-    <div class="hero-slider">
-      <div class="slider-container">
-        <div class="slider-wrapper">
-          <div class="slides" [style.transform]="'translateX(' + (-currentSlide * 100) + '%)'">
-            <div class="slide" *ngFor="let image of sliderImages; let i = index">
-              <img [src]="image.src" [alt]="image.alt" class="slide-image">
-            </div>
-          </div>
-        </div>
-        
-        <!-- Navigation arrows -->
-        <button class="slider-btn prev-btn" (click)="prevSlide()">‹</button>
-        <button class="slider-btn next-btn" (click)="nextSlide()">›</button>
-      </div>
-      
-      <!-- Slider dots -->
-      <div class="slider-dots">
-        <span 
-          class="dot" 
-          [class.active]="i === currentSlide"
-          *ngFor="let image of sliderImages; let i = index"
-          (click)="goToSlide(i)">
-        </span>
-      </div>
-    </div>
+
 
     <!-- Right side - Content -->
     <div class="hero-content">
@@ -42,9 +17,7 @@
           اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك
         </p>
         
-        <div class="product-info">
-          <span class="product-code">502 Hug x 74 Hug</span>
-        </div>
+       
       </div>
 
       <!-- Features as simple text -->
@@ -59,6 +32,33 @@
         احجز الآن
         <i class="arrow-icon">→</i>
       </button>
+
+    </div>
+    
+
+        <!-- Left side - Slider -->
+    <div class="hero-slider">
+      <div class="slider-container">
+        <div class="slider-wrapper">
+          <div class="slides" [style.transform]="'translateX(' + (-currentSlide * 100) + '%)'">
+            <div class="slide" *ngFor="let image of sliderImages; let i = index">
+              <img [src]="image.src" [alt]="image.alt" class="slide-image">
+            </div>
+          </div>
+        </div>
+        
+       
+      
+      <!-- Slider dots -->
+      <div class="slider-dots">
+        <span 
+          class="dot" 
+          [class.active]="i === currentSlide"
+          *ngFor="let image of sliderImages; let i = index"
+          (click)="goToSlide(i)">
+        </span>
+      </div>
     </div>
   </div>
+</div>
 </section>
