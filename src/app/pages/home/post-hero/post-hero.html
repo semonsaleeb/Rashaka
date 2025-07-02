@@ -1,8 +1,7 @@
-<!-- src/app/pages/home/post_hero/post-hero-stats.component.html -->
 <div class="post-hero-stats-container">
   <div class="stats-grid">
     <div class="stat-item" *ngFor="let stat of stats">
-      <div class="stat-number">{{ stat.number }}</div>
+      <div class="stat-number" #statNumber>0</div>
       <div class="stat-label">{{ stat.label }}</div>
     </div>
   </div>

@@ -78,6 +78,8 @@
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
+    font-size: 1.2rem;
+
 }
 
 .lang-btn {
@@ -87,7 +89,7 @@
   background: none;
   color: #000000;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   padding: 0.5rem;
 }
 
@@ -102,7 +104,6 @@
 .lang-select {
   background: rgba(255, 255, 255, 0.15);
   color: #000000;
-  padding: 0.5rem 0.75rem;
   border-radius: 12px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -128,14 +129,15 @@
   gap: 0.5rem;
   background: white;
   color: #000000;
-  padding: 0.75rem 1.5rem;
+  padding: 0.1rem 2.5rem;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 400;
-  font-size: 0.9rem;
+  font-size: 1.4rem;
   flex-shrink: 0;
-  border: 1px #C5C5C5;
-
+  margin-left: 0px;
+  margin-right: 120px;
+  margin-bottom: 1px;
 }
 .fa-whatsapp{
   color: green;
@@ -146,9 +148,7 @@
   // box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
 }
 
-.whatsapp-btn:active {
- // transform: translateY(0);
-}
+
 
 .navigation {
   background: white;
@@ -317,7 +317,6 @@ margin-right: 20px;
 /* Focus styles for accessibility */
 .search-input:focus,
 .lang-select:focus,
-.whatsapp-btn:focus,
 .nav-link:focus {
   outline: 2px solid #a8e6a3;
   outline-offset: 2px;
@@ -343,37 +342,27 @@ margin-right: 20px;
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #333;
   cursor: pointer;
 }
 
-.lang-btn img {
-  width: 20px;
-  height: 20px;
-}
+
 
 .language-selector {
-  position: relative;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .language-selector select {
-  padding: 0.4rem 1rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
   border-radius: 8px;
   background: white;
   appearance: none;
   direction: rtl;
+  border: none;
 }
 
-.lang-icon {
-  width: 20px;
-  height: 20px;
-}
+
 
 .icon-buttons {
   display: flex;
@@ -391,10 +380,7 @@ margin-right: 20px;
   justify-content: center;
 }
 
-.icon-circle img {
-  width: 20px;
-  height: 20px;
-}
+
 
 .badge {
   position: absolute;
