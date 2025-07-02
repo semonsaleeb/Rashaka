@@ -103,7 +103,6 @@
   background: rgba(255, 255, 255, 0.15);
   color: #000000;
   padding: 0.5rem 0.75rem;
-  border-radius: 12px;
   cursor: pointer;
   font-size: 0.9rem;
   backdrop-filter: blur(10px);
@@ -112,8 +111,7 @@
 
 .lang-select:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
+
 }
 
 .lang-select option {
