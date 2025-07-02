@@ -175,24 +175,30 @@
   margin-bottom: 2rem;
 }
 
+.gradient-border {
+  padding: 2px; /* thickness of the border */
+  border-radius: 20px;
+  background: linear-gradient(90deg, #1B6079 0%, #3E6A1E 100%);
+}
+
 .feature-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 2rem;
+  border-radius: 17px;
   color: white;
   font-size: 1.1rem;
   white-space: nowrap;
-  background-color: rgba(255, 255, 255, 0.05); /* Optional for a subtle background */
-  backdrop-filter: blur(6px); /* Optional for a frosted effect */
+  background-color: rgba(255, 255, 255, 0.05); /* inner background */
+  backdrop-filter: blur(6px);
 }
 
-.check-icon {
-  color: #7ed321;
-  font-weight: bold;
+.check-icon img {
+  width: 18px;
+  height: 18px;
 }
+
 
 
 /* CTA Button */

@@ -13,7 +13,8 @@
         class="search-input"
         (keyup.enter)="onSearch()">
       <button class="search-btn" (click)="onSearch()">
-        <i class="fas fa-search"></i>
+            <img src="assets/Images/search-01.svg" alt="user" />
+
       </button>
     </div>
 
@@ -26,11 +27,11 @@
 
   <!-- Language -->
   <div class="language-selector">
+      <img src="assets/Images/language.svg" alt="globe" class="lang-icon" />
     <select class="lang-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
       <option value="العربية">العربية</option>
       <option value="English">English</option>
     </select>
-    <img src="assets/Images/language.svg" alt="globe" class="lang-icon" />
   </div>
 
   <!-- Cart + Favorites -->
