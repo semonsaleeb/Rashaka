@@ -17,18 +17,35 @@
       </button>
     </div>
 
-    <!-- Language Selector and Login -->
-    <div class="language-selector">
-      <button class="lang-btn">
-        <i class="fa-thin fa-circle-user"></i>
-        <span>تسجيل الدخول</span>
-      </button>
-        <i class="fas fa-globe"></i>
-      <select class="lang-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
-        <option value="العربية">العربية</option>
-        <option value="English">English</option>
-      </select>
+   <div class="top-bar">
+  <!-- Login -->
+  <button class="lang-btn">
+    <img src="assets/Images/user-circle.svg" alt="user" />
+    <span>تسجيل الدخول</span>
+  </button>
+
+  <!-- Language -->
+  <div class="language-selector">
+    <select class="lang-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
+      <option value="العربية">العربية</option>
+      <option value="English">English</option>
+    </select>
+    <img src="assets/Images/language.svg" alt="globe" class="lang-icon" />
+  </div>
+
+  <!-- Cart + Favorites -->
+  <div class="icon-buttons">
+    <div class="icon-circle">
+      <img src="assets/Images/Frame 1.svg" alt="cart" />
+      <span class="badge">2</span>
     </div>
+    <div class="icon-circle">
+      <img src="assets/Images/Frame 3.svg" alt="favorites" />
+      <span class="badge">2</span>
+    </div>
+  </div>
+</div>
+
 
    
   </div>

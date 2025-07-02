@@ -135,7 +135,6 @@
   align-items: center;
   gap: 0.5rem;
   background: white;
-  border: 1px;
   color: #000000;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
@@ -171,7 +170,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  max-width: 1200px;
+  // max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -251,6 +250,7 @@
   .whatsapp-btn {
     order: 1;
     align-self: flex-end;
+    border: 1px;
   }
   
   .nav-list {
@@ -280,7 +280,7 @@
   
   .whatsapp-btn {
     padding: 0.65rem 1.25rem;
-    font-size: 0.85rem;
+    font-size: 0.1.2rem;
   }
   
   .nav-link {
@@ -328,4 +328,92 @@
 .nav-link:focus {
   outline: 2px solid #a8e6a3;
   outline-offset: 2px;
+}
+
+
+
+
+
+
+
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: flex-end;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.lang-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.language-selector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.language-selector select {
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  appearance: none;
+  direction: rtl;
+}
+
+.lang-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.icon-circle {
+  position: relative;
+  border: 2px solid #7ed321;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-circle img {
+  width: 20px;
+  height: 20px;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
