@@ -46,7 +46,7 @@
 }
 
 .slide {
-  width: 40%;
+  width: 25%;
   height: 100%;
   flex-shrink: 0;
 }
@@ -131,15 +131,13 @@
 }
 
 .highlight {
-
-  background-image: url('assets/Images/Bubble Ellipse.svg');
+  background-image: url('/assets/Images/Bubble%20Ellipse.svg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  // height: 400px; 
-  // width: 100%;   
   position: relative;
 }
+
 
 .highlight::after {
   content: '';
