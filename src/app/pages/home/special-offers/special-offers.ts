@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 
@@ -13,10 +14,12 @@ interface Product {
 
 @Component({
   selector: 'app-special-offers',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './special-offers.html',
   styleUrls: ['./special-offers.scss']
 })
-export class SpecialOffersComponent implements OnInit, OnDestroy {
+export class SpecialOffersComponent{
 
   // Countdown timer properties
   days: number = 1;
@@ -34,7 +37,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
       description: 'قهوة كريس الخضراء للتنحيف من أقوى منتجات التخسيس',
       originalPrice: 230,
       discountedPrice: 230,
-      image: '/assets/images/green-coffee.jpg',
+      image: 'assets/Images/coffe.jpeg',
       isLimitedOffer: true
     },
     {
@@ -43,7 +46,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
       description: 'قهوة كريس الخضراء للتنحيف من أقوى منتجات التخسيس',
       originalPrice: 230,
       discountedPrice: 230,
-      image: '/assets/images/coffee-accessory.jpg',
+      image: 'assets/Images/coffe.jpeg',
       isLimitedOffer: true
     },
     {
@@ -52,7 +55,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
       description: 'قهوة كريس الخضراء للتنحيف من أقوى منتجات التخسيس',
       originalPrice: 230,
       discountedPrice: 230,
-      image: '/assets/images/nuts-product.jpg',
+      image: 'assets/Images/coffe.jpeg',
       isLimitedOffer: true
     }
   ];
