@@ -1,0 +1,103 @@
+<div class="special-offers-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="title-and-timer">
+      <h2 class="section-title">عروض خاصة</h2>
+      
+      <!-- Countdown Timer -->
+      <div class="countdown-timer">
+        <div class="timer-item">
+          <span class="timer-value">{{ days.toString().padStart(2, '0') }}</span>
+          <span class="timer-label">يوم</span>
+        </div>
+        <div class="timer-item">
+          <span class="timer-value">{{ hours.toString().padStart(2, '0') }}</span>
+          <span class="timer-label">ساعة</span>
+        </div>
+        <div class="timer-item">
+          <span class="timer-value">{{ minutes.toString().padStart(2, '0') }}</span>
+          <span class="timer-label">دقيقة</span>
+        </div>
+        <div class="timer-item">
+          <span class="timer-value">{{ seconds.toString().padStart(2, '0') }}</span>
+          <span class="timer-label">ثانية</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- View All Link -->
+    <div class="view-all">
+      <a href="#" class="view-all-link">
+        <span>عرض الكل</span>
+        <i class="arrow-icon">↗</i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Products Carousel -->
+  <div class="products-carousel">
+    <div class="carousel-container">
+      <div class="products-grid">
+        <div class="product-card" *ngFor="let product of products">
+          <!-- Limited Offer Badge -->
+          <div class="offer-badge" *ngIf="product.isLimitedOffer">
+            لفترة محدودة
+          </div>
+          
+          <!-- Product Actions -->
+          <div class="product-actions">
+            <button class="action-btn wishlist-btn" (click)="toggleWishlist(product)">
+              <i class="heart-icon">♡</i>
+            </button>
+            <button class="action-btn share-btn" (click)="shareProduct(product)">
+              <i class="share-icon">↗</i>
+            </button>
+          </div>
+
+          <!-- Product Image -->
+          <div class="product-image">
+            <img [src]="product.image" [alt]="product.title">
+          </div>
+
+          <!-- Product Info -->
+          <div class="product-info">
+            <h3 class="product-title">{{ product.title }}</h3>
+            <p class="product-description">{{ product.description }}</p>
+            
+            <!-- Price Section -->
+            <div class="price-section">
+              <span class="current-price">{{ product.discountedPrice }} ريال</span>
+              <span class="original-price" *ngIf="product.originalPrice !== product.discountedPrice">
+                {{ product.originalPrice }} ريال
+              </span>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button class="add-to-cart-btn" (click)="addToCart(product)">
+              <i class="cart-icon">🛒</i>
+              <span>إضافة للعربة</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel Navigation -->
+    <div class="carousel-navigation">
+      <button class="nav-btn prev-btn" (click)="previousSlide()">
+        <i class="arrow-left">←</i>
+      </button>
+      <button class="nav-btn next-btn" (click)="nextSlide()">
+        <i class="arrow-right">→</i>
+      </button>
+    </div>
+
+    <!-- Carousel Indicators -->
+    <div class="carousel-indicators">
+      <span class="indicator"></span>
+      <span class="indicator"></span>
+      <span class="indicator active"></span>
+      <span class="indicator"></span>
+    </div>
+  </div>
+</div>
