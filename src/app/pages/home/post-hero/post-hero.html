@@ -1,11 +1,21 @@
-<div class="post-hero-stats-container">
-  <div class="stats-grid">
-    <div class="stat-item" *ngFor="let stat of stats">
+<div class="container post-hero-stats-container bg-white shadow rounded-3 py-4 px-md-5 px-3">
+  <div class="row text-center g-4">
+    <div 
+      class="col-12 col-sm-6 col-md-3 stat-item position-relative" 
+      *ngFor="let stat of stats; let i = index"
+    >
       <div class="stat-number" #statNumber>0</div>
       <div class="stat-label">{{ stat.label }}</div>
+
+      <!-- Vertical Divider -->
+      <div 
+        *ngIf="i < stats.length - 1" 
+        class="vertical-divider d-none d-md-block">
+      </div>
     </div>
   </div>
-  <div class="progress-bar">
-    <div class="progress-fill"></div>
+
+  <div class="progress-bar mt-4 rounded-pill overflow-hidden">
+    <div class="progress-fill h-100 w-100"></div>
   </div>
 </div>

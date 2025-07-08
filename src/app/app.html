@@ -3,5 +3,24 @@
   <app-hero></app-hero>
   <app-post-hero></app-post-hero>
   <app-special-offers></app-special-offers>
+  <div class="container py-5">
+  <h1 class="text-center mb-4">Our Products</h1>
+  
+  @if (isLoading) {
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else {
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+      @for (product of products; track product.id) {
+        <div class="col">
+          <app-product-card [product]="product"></app-product-card>
+        </div>
+      }
+    </div>
+  }
+</div>
   <router-outlet></router-outlet>
 </main>

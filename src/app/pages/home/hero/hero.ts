@@ -7,7 +7,13 @@ import { Component } from '@angular/core';
   templateUrl: './hero.html',
   styleUrl: './hero.scss'
 })
-export class Hero { currentSlide: number = 0;
+export class Hero {
+    // You can make these dynamic with inputs
+  previousWeight = 160;
+  currentWeight = 80;
+  weeklyReward = 'مكعبات صحية';
+
+  currentSlide: number = 0;
   
  sliderImages = [
     { src: 'assets/Images/536783.png', alt: 'صورة الصحة 1' },
