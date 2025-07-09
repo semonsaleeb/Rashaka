@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
-
+import {
+  Component,
+  ElementRef,
+  AfterViewInit,
+  ViewChildren,
+  QueryList
+} from '@angular/core';
 @Component({
   selector: 'app-post-hero',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ],
   templateUrl: './post-hero.html',
   styleUrl: './post-hero.scss'
 })
@@ -23,7 +28,7 @@ export class PostHero implements AfterViewInit {
       const target = this.stats[index].number;
       const suffix = this.stats[index].suffix || '';
       let count = 0;
-      const step = Math.ceil(target / 300); // Adjust speed here
+      const step = Math.ceil(target / 300);
 
       const interval = setInterval(() => {
         count += step;
@@ -32,11 +37,11 @@ export class PostHero implements AfterViewInit {
           clearInterval(interval);
         }
         elRef.nativeElement.textContent = this.formatNumber(count) + suffix;
-      }, 20); // Update every 20ms
+      }, 20);
     });
   }
 
   formatNumber(num: number): string {
-    return num.toLocaleString(); // adds commas for large numbers
+    return num.toLocaleString();
   }
 }

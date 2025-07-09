@@ -1,103 +1,89 @@
-<div class="special-offers-container">
-  <!-- Header Section -->
-  <div class="header-section">
-    <div class="title-and-timer">
-      <h2 class="section-title">عروض خاصة</h2>
-      
-      <!-- Countdown Timer -->
-      <div class="countdown-timer">
-        <div class="timer-item">
-          <span class="timer-value">{{ days.toString().padStart(2, '0') }}</span>
-          <span class="timer-label">يوم</span>
-        </div>
-        <div class="timer-item">
-          <span class="timer-value">{{ hours.toString().padStart(2, '0') }}</span>
-          <span class="timer-label">ساعة</span>
-        </div>
-        <div class="timer-item">
-          <span class="timer-value">{{ minutes.toString().padStart(2, '0') }}</span>
-          <span class="timer-label">دقيقة</span>
-        </div>
-        <div class="timer-item">
-          <span class="timer-value">{{ seconds.toString().padStart(2, '0') }}</span>
-          <span class="timer-label">ثانية</span>
-        </div>
-      </div>
+<!-- Full-width wrapper -->
+<div class="my-5 px-3 w-100" *ngIf="!isLoading">
+  <div class="special-offers-container mb-5 w-100">
+
+    <!-- Header -->
+    <div class="header-section d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 w-100 px-3">
+      <h2 class="section-title mb-0">عروض خاصة</h2>
     </div>
-    
-    <!-- View All Link -->
-    <div class="view-all">
-      <a href="#" class="view-all-link">
-        <span>عرض الكل</span>
-        <i class="arrow-icon">↗</i>
-      </a>
-    </div>
-  </div>
 
-  <!-- Products Carousel -->
-  <div class="products-carousel">
-    <div class="carousel-container">
-      <div class="products-grid">
-        <div class="product-card" *ngFor="let product of products">
-          <!-- Limited Offer Badge -->
-          <div class="offer-badge" *ngIf="product.isLimitedOffer">
-            لفترة محدودة
-          </div>
-          
-          <!-- Product Actions -->
-          <div class="product-actions">
-            <button class="action-btn wishlist-btn" (click)="toggleWishlist(product)">
-<i class="fa-regular fa-heart"></i>
-            </button>
-            <button class="action-btn share-btn" (click)="shareProduct(product)">
-              <i class="fa-solid fa-retweet"></i>
-            </button>
-          </div>
+    <!-- Carousel -->
+    <div id="cardCarousel" class="carousel slide w-100" data-bs-ride="carousel">
 
-          <!-- Product Image -->
-          <div class="product-image">
-            <img [src]="product.image" [alt]="product.title">
-          </div>
+      <!-- Carousel Inner -->
+      <div class="carousel-inner w-100">
+        <div class="carousel-item w-100" *ngFor="let group of groupedProducts; let i = index" [class.active]="i === 0">
+          <div class="d-flex justify-content-center gap-3 px-3 flex-wrap w-100">
+            <div class="card product-card rounded-4" *ngFor="let product of group" style="width: 300px;">
 
-          <!-- Product Info -->
-          <div class="product-info">
-            <h3 class="product-title">{{ product.title }}</h3>
-            <p class="product-description">{{ product.description }}</p>
-            
-            <!-- Price Section -->
-            <div class="price-section">
-              <span class="current-price">{{ product.discountedPrice }} ريال</span>
-              <span class="original-price" *ngIf="product.originalPrice !== product.discountedPrice">
-                {{ product.originalPrice }} ريال
-              </span>
+              <!-- Product Image with Action Buttons -->
+              <div class="position-relative">
+                <div id="productCarousel-{{ product.id }}" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    <div *ngFor="let image of product.images; let i = index" class="carousel-item"
+                      [class.active]="i === 0">
+                      <img [src]="image" class="card-img-top p-3" [alt]="product.name"
+                        style="height: 200px; object-fit: contain;">
+                    </div>
+                  </div>
+
+                  <!-- Favorite & Compare -->
+                  <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+                    <button
+                      class="btn btn-light btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center"
+                      style="width: 30px; height: 30px;" (click)="toggleFavorite(product)"
+                      [ngClass]="{'text-danger': product.isFavorite}">
+                      <i class="far fa-heart" aria-hidden="false"></i>
+                    </button>
+                    <button
+                      class="btn btn-light btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center"
+                      style="width: 30px; height: 30px;" (click)="addToCompare(product)">
+                      <i class="fas fa-random"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card Content -->
+                <div class="card-body text-center p-2">
+                  <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ product.name_ar }}</h6>
+                  <p class="card-text text-muted" style="font-size: 13px; max-height: 40px; overflow: hidden;">
+                    {{ product.description }}
+                  </p>
+                  <button class="btn btn-outline-success custom-hover w-100 mt-2 btn-sm bg-white rounded-5">
+                    إضافة للعربة <i class="fas fa-shopping-cart ms-1 bg-white"></i>
+                  </button>
+
+
+                </div>
+              </div>
+
             </div>
-
-            <!-- Add to Cart Button -->
-            <button class="add-to-cart-btn" (click)="addToCart(product)">
-            <i class="fa-solid fa-cart-plus"></i>
-              <span>إضافة للعربة</span>
-            </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Carousel Navigation -->
-    <div class="carousel-navigation">
-      <button class="nav-btn prev-btn" (click)="previousSlide()">
-        <i class="arrow-left">←</i>
-      </button>
-      <button class="nav-btn next-btn" (click)="nextSlide()">
-        <i class="arrow-right">→</i>
-      </button>
-    </div>
+      <!-- Indicators & Arrows -->
+      <div class="d-flex justify-content-between align-items-center mt-4 px-3 w-100">
+        <!-- Dots -->
+        <div class="carousel-indicators position-static m-0 p-0 d-flex" style="gap: 8px;">
+          <button *ngFor="let group of groupedProducts; let i = index" type="button" data-bs-target="#cardCarousel"
+            [attr.data-bs-slide-to]="i" [class.active]="i === 0" class="bg-success rounded-circle"
+            style="width: 10px; height: 10px;" [attr.aria-label]="'الشريحة ' + (i + 1)">
+          </button>
+        </div>
 
-    <!-- Carousel Indicators -->
-    <div class="carousel-indicators">
-      <span class="indicator"></span>
-      <span class="indicator"></span>
-      <span class="indicator active"></span>
-      <span class="indicator"></span>
+        <!-- Arrows -->
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-dark btn-sm rounded-circle" type="button" data-bs-target="#cardCarousel"
+            data-bs-slide="next">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <button class="btn btn-outline-dark btn-sm rounded-circle" type="button" data-bs-target="#cardCarousel"
+            data-bs-slide="prev">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

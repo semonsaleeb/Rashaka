@@ -18,8 +18,8 @@ export const API_ENDPOINTS = {
     updateProfile: '/users/profile'
   },
   categories: {
-    getAll: '/products/categories',
-    getProducts: (category: string) => `/products/category/${category}`
+    getAll: '/categories',
+    getProducts: (category: string) => `/category/${category}`
   }
 } as const;
 

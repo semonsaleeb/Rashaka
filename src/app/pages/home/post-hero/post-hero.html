@@ -1,21 +1,23 @@
-<div class="container post-hero-stats-container bg-white shadow rounded-3 py-4 px-md-5 px-3">
-  <div class="row text-center g-4">
-    <div 
-      class="col-12 col-sm-6 col-md-3 stat-item position-relative" 
+<div class="container bg-white  rounded-3 py-4 px-md-5 px-3 text-center" dir="rtl">
+  <div class="row g-4">
+    <div
+      class="col-12 col-sm-6 col-md-3 position-relative"
       *ngFor="let stat of stats; let i = index"
     >
-      <div class="stat-number" #statNumber>0</div>
-      <div class="stat-label">{{ stat.label }}</div>
+      <div class="fs-2 fw-bold text-dark" #statNumber>0</div>
+      <div class="fs-6 text-secondary fw-medium">{{ stat.label }}</div>
 
-      <!-- Vertical Divider -->
+      <!-- Divider: hidden on mobile -->
       <div 
         *ngIf="i < stats.length - 1" 
-        class="vertical-divider d-none d-md-block">
+        class="position-absolute top-50 end-0 translate-middle-y d-none d-md-block"
+        style="width: 1px; height: 60px; background-color: #e5e5e5;">
       </div>
     </div>
   </div>
 
-  <div class="progress-bar mt-4 rounded-pill overflow-hidden">
-    <div class="progress-fill h-100 w-100"></div>
+  <!-- Progress Bar -->
+  <div class="mt-4 rounded-pill overflow-hidden bg-light" style="height: 8px;">
+    <div class="h-100 w-100" style="background: linear-gradient(90deg, #7AD03A 0%, #2EA2CC 100%); animation: fillProgress 2s ease-in-out;"></div>
   </div>
 </div>

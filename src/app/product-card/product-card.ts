@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Product } from '../services/product';
 import { provideHttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-product-card',
@@ -14,4 +16,5 @@ export class ProductCard {
 
 
   @Input() product!: Product;
+    @Input() isRTL: boolean = true;
 }

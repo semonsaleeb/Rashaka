@@ -1,22 +1,29 @@
 // src/app/services/product.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
 
 export interface Product {
   id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
+  name: string;
+  name_ar: string;
+  description:string;
+  stock: number;
+  price: string;         // string because it's "25.00" in quotes
+  sale_price: string;    // same here
+  cart_quantity: number;
+  images: string[];
+  categories: Category[];
+  isFavorite?: boolean;  // optional if you're using a favorites system
 }
+export interface Category {
+  id: number;
+  name: string;
+  name_ar: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +34,12 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   // Get all products
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.getFullUrl(API_ENDPOINTS.products.getAll));
-  }
+getProducts(): Observable<Product[]> {
+  return this.http
+    .get<{ status: string; data: Product[] }>(this.getFullUrl(API_ENDPOINTS.products.getAll))
+    .pipe(map(response => response.data));
+}
+
 
   // Get single product by ID
   getProductById(id: number): Observable<Product> {

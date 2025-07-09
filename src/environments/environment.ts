@@ -1,5 +1,5 @@
 // src/environments/environment.ts (development)
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://fakestoreapi.com'
+  apiBaseUrl: 'https://rshaka.ghaytiapp.com/api/client'
 };
