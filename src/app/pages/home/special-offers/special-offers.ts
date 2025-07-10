@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { Product, ProductService } from '../../../services/product';
 import { map } from 'rxjs/operators';
+import { PostHero } from '../post-hero/post-hero';
 
 
 @Component({

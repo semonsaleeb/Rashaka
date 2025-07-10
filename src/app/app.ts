@@ -45,11 +45,14 @@ import { Hero } from './pages/home/hero/hero';
 import { PostHero } from './pages/home/post-hero/post-hero';
 import { SpecialOffersComponent } from './pages/home/special-offers/special-offers';
 import { CategoryProducts } from './pages/home/category-products/category-products';
+import { OurService } from './pages/home/our-service/our-service';
+import { SucesStory } from './pages/home/suces-story/suces-story';
+import { Branches } from './pages/home/branches/branches';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Header, Hero, PostHero, SpecialOffersComponent, CategoryProducts],
+  imports: [CommonModule, RouterOutlet, Header, Hero, OurService, Branches, SucesStory, PostHero, SpecialOffersComponent, CategoryProducts],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

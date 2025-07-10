@@ -1,20 +1,48 @@
 <!-- Full-width wrapper -->
-<div class="my-5 px-3 w-100" *ngIf="!isLoading">
-  <div class="special-offers-container mb-5 w-100">
+<div class="my-5 px-3" style="width: 100%; " *ngIf="!isLoading">
+  <div class="special-offers-container mb-5" style="width: 100%;">
+    <!-- عروض خاصة Header Section -->
+<div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
 
-    <!-- Header -->
-    <div class="header-section d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 w-100 px-3">
-      <h2 class="section-title mb-0">عروض خاصة</h2>
+  <!-- Right Side: Title and Badges -->
+  <div class="d-flex align-items-center gap-3 flex-wrap">
+
+    <!-- Title -->
+    <h2 class="section-title mb-0 d-flex align-items-center text-dark" style="margin-top: -2rem;">
+      عروض خاصة
+    </h2>
+
+    <!-- Time Badges -->
+    <div class="time-badges d-flex gap-2">
+      <div class="time-badge text-center">01 <br>ثانية</div>
+      <div class="time-badge text-center">06 <br> دقيقة</div>
+      <div class="time-badge text-center">33 <br> ساعة</div>
+      <div class="time-badge text-center">16 <br> يوم</div>
     </div>
 
+  </div>
+
+  <!-- Left Side: Button -->
+  <button class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 p-0">
+    <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل">
+    عرض الكل
+  </button>
+
+</div>
+
+
+
+
+
     <!-- Carousel -->
-    <div id="cardCarousel" class="carousel slide w-100" data-bs-ride="carousel">
+    <div id="cardCarousel" class="carousel slide " data-bs-ride="carousel">
 
       <!-- Carousel Inner -->
-      <div class="carousel-inner w-100">
-        <div class="carousel-item w-100" *ngFor="let group of groupedProducts; let i = index" [class.active]="i === 0">
-          <div class="d-flex justify-content-center gap-3 px-3 flex-wrap w-100">
-            <div class="card product-card rounded-4" *ngFor="let product of group" style="width: 300px;">
+      <div class="carousel-inner  ">
+        <div class="carousel-item  " *ngFor="let group of groupedProducts; let i = index" [class.active]="i === 0">
+          <div class="d-flex justify-content-center gap-4 px-3 flex-wrap   ">
+            <div class="card product-card rounded-4 border  bg-whit" *ngFor="let product of group"
+              style="width:320px; overflow: hidden;">
 
               <!-- Product Image with Action Buttons -->
               <div class="position-relative">
@@ -22,6 +50,9 @@
                   <div class="carousel-inner">
                     <div *ngFor="let image of product.images; let i = index" class="carousel-item"
                       [class.active]="i === 0">
+                      <!-- Top-right Ribbon -->
+                      <div class="ribbon-top-right">لفترة محدودة</div>
+
                       <img [src]="image" class="card-img-top p-3" [alt]="product.name"
                         style="height: 200px; object-fit: contain;">
                     </div>
@@ -30,22 +61,25 @@
                   <!-- Favorite & Compare -->
                   <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
                     <button
-                      class="btn btn-light btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center"
-                      style="width: 30px; height: 30px;" (click)="toggleFavorite(product)"
+                      class="btn btn-light btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center border border-secondary btn-hover-green"
+                      style="width: 36px; height: 36px;" (click)="toggleFavorite(product)"
                       [ngClass]="{'text-danger': product.isFavorite}">
-                      <i class="far fa-heart" aria-hidden="false"></i>
+                      <i class="far fa-heart"></i>
                     </button>
+
                     <button
-                      class="btn btn-light btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center"
-                      style="width: 30px; height: 30px;" (click)="addToCompare(product)">
+                      class="btn btn-light btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center border border-secondary btn-hover-green"
+                      style="width: 36px; height: 36px;" (click)="addToCompare(product)">
                       <i class="fas fa-random"></i>
                     </button>
+
+
                   </div>
                 </div>
 
                 <!-- Card Content -->
                 <div class="card-body text-center p-2">
-                  <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ product.name_ar }}</h6>
+                  <h6 class="card-title fw-bold mb-2" style="font-size: 15px; ">{{ product.name_ar }}</h6>
                   <p class="card-text text-muted" style="font-size: 13px; max-height: 40px; overflow: hidden;">
                     {{ product.description }}
                   </p>
@@ -63,27 +97,31 @@
       </div>
 
       <!-- Indicators & Arrows -->
-      <div class="d-flex justify-content-between align-items-center mt-4 px-3 w-100">
-        <!-- Dots -->
-        <div class="carousel-indicators position-static m-0 p-0 d-flex" style="gap: 8px;">
-          <button *ngFor="let group of groupedProducts; let i = index" type="button" data-bs-target="#cardCarousel"
-            [attr.data-bs-slide-to]="i" [class.active]="i === 0" class="bg-success rounded-circle"
-            style="width: 10px; height: 10px;" [attr.aria-label]="'الشريحة ' + (i + 1)">
-          </button>
-        </div>
-
+      <div class="d-flex justify-content-between align-items-center  px-3"
+        style="margin-right: 1.5rem; margin-left: 1.5rem;">
         <!-- Arrows -->
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-dark btn-sm rounded-circle" type="button" data-bs-target="#cardCarousel"
-            data-bs-slide="next">
-            <i class="fas fa-chevron-right"></i>
-          </button>
+        <div class="d-flex gap-2 ">
+         
           <button class="btn btn-outline-dark btn-sm rounded-circle" type="button" data-bs-target="#cardCarousel"
             data-bs-slide="prev">
             <i class="fas fa-chevron-left"></i>
           </button>
+           <button class="btn btn-outline-dark btn-sm rounded-circle" type="button" data-bs-target="#cardCarousel"
+            data-bs-slide="next">
+            
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
+        <!-- Dots (right) -->
+        <div class="carousel-indicators position-static m-5 p-0 d-flex" style="gap: 8px;">
+          <button *ngFor="let group of groupedProducts; let i = index" type="button" data-bs-target="#categoryCarousel"
+            [attr.data-bs-slide-to]="i" [class.active]="i === 0" class="bg-success rounded-circle"
+            style="width: 10px; height: 10px;" [attr.aria-label]="'Slide ' + (i + 1)">
+          </button>
+        </div>
+
+
       </div>
     </div>
   </div>
-</div>
+

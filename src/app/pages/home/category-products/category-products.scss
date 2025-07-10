@@ -56,14 +56,23 @@
 
   .product-info {
     padding: 1.5rem;
+    
 
     .product-name {
       margin: 0 0 0.5rem;
       font-size: 1.2rem;
       color: #222;
+        text-align: right;
+      margin-right: 1rem;
+      justify-content: right;
+
     }
 
     .product-description {
+        text-align: right;
+      margin-right: 1rem;
+      justify-content: right;
+
         background-color: white;
       color: #666;
       font-size: 0.9rem;
@@ -209,7 +218,18 @@
 }
 .btn-outline-success.custom-hover:hover {
   background-color: rgb(255, 255, 255) !important;
-  
   color: black !important;
   border-color: black !important;
+}
+
+
+.btn-outline-light:hover i {
+  color: #7AD03A !important; /* أو أي لون تريديه مثل الأخضر */
+  background-color: white;
+}
+
+.btn-success {
+  background-color: #7AD03A !important;
+  color: white !important;
+  border-color: #7AD03A !important;
 }

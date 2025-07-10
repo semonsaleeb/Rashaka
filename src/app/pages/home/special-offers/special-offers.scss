@@ -1,57 +1,136 @@
-*{
-    background-color: #f2fff4;
+* {
+  background-color: #f2fff4;
 
 }
-.special-offers-container {
-  border-radius: 16px;
-  padding: 24px;
-  font-family: 'Cairo', sans-serif;
-  direction: rtl;
 
-  .section-title {
-    color: #0d4b28;
-    font-size: 1.8rem;
-    font-weight: bold;
+.special-offers-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+    font-size: 2rem;
   }
 
-  .carousel-indicators {
-    margin-bottom: 20px;
-    button {
-      background-color: #3c9d47;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
+  .loading,
+  .no-products {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+  }
 
-    .active {
-      background-color: #0d4b28;
+  .product-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
     }
   }
 
   .product-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    flex: 1 1 calc(33.333% - 1rem);
+    min-width: 300px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    
+
     &:hover {
       transform: translateY(-5px);
     }
   }
+
+  .product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .product-info {
+    text-align: right;
+    margin-right: 1rem;
+    justify-content: right;
+    padding: 1.5rem;
+
+    .product-name {
+      text-align: right;
+      margin-right: 1rem;
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+      color: #222;
+    }
+
+    .product-description {
+      text-align: right;
+      margin-right: 1rem;
+      justify-content: right;
+
+      background-color: white;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .product-price {
+      margin-bottom: 1rem;
+
+      .current-price {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #e63946;
+        margin-right: 0.5rem;
+      }
+
+      .old-price {
+        font-size: 1rem;
+        text-decoration: line-through;
+        color: #999;
+      }
+    }
+
+    .view-details {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #0077b6;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: #023e8a;
+      }
+    }
+  }
 }
+
 .product-card .card-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2;  // Show only 2 lines
+  -webkit-line-clamp: 2; // Show only 2 lines
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
   color: #666;
 }
+
 .product-card .card-body {
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 .carousel-indicators {
   justify-content: center;
   margin-top: 2rem;
@@ -62,4 +141,62 @@
   background-color: rgb(255, 255, 255) !important;
   color: black !important;
   border-color: black !important;
+
+  &:hover i {
+    // color: #fff !important; // Ensure icon turns white too
+    background-color: #28a745 !important; // Bootstrap green
+
+  }
+}
+
+.btn-hover-green {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background-color: #28a745 !important; // Bootstrap green
+    border-color: #28a745 !important;
+    color: #fff !important;
+  }
+
+  &:hover i {
+    // color: #fff !important; // Ensure icon turns white too
+    background-color: #28a745 !important; // Bootstrap green
+
+  }
+}
+
+
+.ribbon-top-right {
+  position: absolute;
+  top: 12px;
+  right: -32px;
+  transform: rotate(45deg);
+  background-color: #b35400; // deep orange
+  color: white;
+  padding: 4px 35px;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+.section-title {
+  line-height: 1.5;
+}
+
+
+.time-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+
+.time-badge {
+  background-color: #081E25;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 200;
 }
