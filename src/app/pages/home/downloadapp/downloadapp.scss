@@ -1,0 +1,64 @@
+.row{
+    padding: 80px;
+}
+
+.content-section {
+    padding: 20px;
+}
+
+.main-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.feature-item {
+    font-size: 1rem;
+    color: #34495e;
+}
+
+.feature-icon {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.qr-text {
+    font-size: 1.1rem;
+    color: #27ae60;
+    margin-bottom: 10px;
+}
+
+.qr-code {
+    border: 2px solid #27ae60;
+    border-radius: 8px;
+    padding: 10px;
+    background: white;
+}
+
+.download-buttons a {
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: #000;
+    border: none;
+}
+
+.download-buttons a:hover {
+    background: #333;
+}
+
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+    
+    .col-4 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+    }
+}

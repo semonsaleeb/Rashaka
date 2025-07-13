@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,6 +18,7 @@ export class CategoryProducts implements OnInit {
   isLoading = true;
   categories: Category[] = [];
   selectedCategory: number | 'all' = 'all';
+  currentSlideIndex = 0;
 
   constructor(private productService: ProductService) {}
 
@@ -50,14 +52,14 @@ export class CategoryProducts implements OnInit {
 
   filterByCategory(categoryId: number | 'all'): void {
     this.selectedCategory = categoryId;
-    if (categoryId === 'all') {
-      this.groupedProducts = this.chunkProducts(this.allProducts, 3);
-    } else {
-      const filtered = this.allProducts.filter(product =>
-        product.categories.some(cat => cat.id === categoryId)
-      );
-      this.groupedProducts = this.chunkProducts(filtered, 3);
-    }
+    this.currentSlideIndex = 0;
+
+    const filtered = categoryId === 'all'
+      ? this.allProducts
+      : this.allProducts.filter(product =>
+          product.categories.some(cat => cat.id === categoryId));
+
+    this.groupedProducts = this.chunkProducts(filtered, 3);
   }
 
   private chunkProducts(arr: Product[], size: number): Product[][] {
@@ -67,13 +69,24 @@ export class CategoryProducts implements OnInit {
     }
     return result;
   }
- // In your component class
-toggleFavorite(product: any) {
-  product.isFavorite = !product.isFavorite;
-  // Add your logic to handle favorites
-}
 
-addToCompare(product: any) {
-  // Add your logic to handle comparison
-}
+  toggleFavorite(product: Product): void {
+    product.isFavorite = !product.isFavorite;
+  }
+
+  addToCompare(product: Product): void {
+    console.log('Comparing:', product);
+  }
+
+  prevSlide(): void {
+    this.currentSlideIndex = (this.currentSlideIndex - 1 + this.groupedProducts.length) % this.groupedProducts.length;
+  }
+
+  nextSlide(): void {
+    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.groupedProducts.length;
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlideIndex = index;
+  }
 }

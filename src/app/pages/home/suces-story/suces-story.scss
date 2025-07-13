@@ -1,12 +1,17 @@
 .success-stories {
   background-color: #081E25;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  max-width: 100%;
+  padding: 80px;
   font-family: 'Tajawal', sans-serif;
   text-align: center;
 }
+.section-title{
+  padding-right: 45px;
+  color: white;
+  text-align: right;
+    font-family: 'Almarai', sans-serif  !important;
 
+}
 .story-deck {
   position: relative;
   height: 350px;
@@ -15,8 +20,8 @@
 
 .story-card-custom {
   position: absolute;
-  width: 800px;
-  height: 400px;
+  width: 600px;
+  height: 370px;
   padding: 30px;
   border-radius: 15px;
   background: white;

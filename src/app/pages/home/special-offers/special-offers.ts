@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { Product, ProductService } from '../../../services/product';
-import { map } from 'rxjs/operators';
-import { PostHero } from '../post-hero/post-hero';
-
 
 @Component({
   selector: 'app-special-offers',
@@ -20,6 +17,8 @@ export class SpecialOffersComponent implements OnInit {
   groupedProducts: Product[][] = [];
   isLoading = true;
 
+  currentSlideIndex = 0;
+
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
@@ -30,7 +29,7 @@ export class SpecialOffersComponent implements OnInit {
     this.productService.getProducts().subscribe({
       next: (products) => {
         this.products = products;
-        this.groupedProducts = this.chunkProducts(products, 3); // Group into slides of 3
+        this.groupedProducts = this.chunkProducts(products, 3); // 3 cards per slide
         this.isLoading = false;
       },
       error: (err) => {
@@ -47,13 +46,24 @@ export class SpecialOffersComponent implements OnInit {
     }
     return result;
   }
-  // In your component class
-toggleFavorite(product: any) {
-  product.isFavorite = !product.isFavorite;
-  // Add your logic to handle favorites
-}
 
-addToCompare(product: any) {
-  // Add your logic to handle comparison
-}
+  toggleFavorite(product: Product) {
+    product.isFavorite = !product.isFavorite;
+  }
+
+  addToCompare(product: Product) {
+    console.log('Compare:', product);
+  }
+
+  prevSlide() {
+    this.currentSlideIndex = (this.currentSlideIndex - 1 + this.groupedProducts.length) % this.groupedProducts.length;
+  }
+
+  nextSlide() {
+    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.groupedProducts.length;
+  }
+
+  goToSlide(index: number) {
+    this.currentSlideIndex = index;
+  }
 }

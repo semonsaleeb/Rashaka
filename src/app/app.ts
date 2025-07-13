@@ -48,12 +48,31 @@ import { CategoryProducts } from './pages/home/category-products/category-produc
 import { OurService } from './pages/home/our-service/our-service';
 import { SucesStory } from './pages/home/suces-story/suces-story';
 import { Branches } from './pages/home/branches/branches';
+import { ProductCard } from "./product-card/product-card";
+import { Product, ProductService } from './services/product';
+import { Checkup } from './pages/home/checkup/checkup';
+import { Pricing } from './pages/home/pricing/pricing';
+import { Blogs } from './pages/home/blogs/blogs';
+import { Downloadapp } from './pages/home/downloadapp/downloadapp';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Header, Hero, OurService, Branches, SucesStory, PostHero, SpecialOffersComponent, CategoryProducts],
+  imports: [CommonModule, RouterOutlet, Downloadapp, Checkup, Header, Pricing, Hero, OurService, 
+    Branches, SucesStory, PostHero,Blogs, SpecialOffersComponent, CategoryProducts],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {}
+export class App {
+
+//   products: Product[] = [];
+
+// constructor(private productService: ProductService) {}
+
+// ngOnInit() {
+//   this.productService.getProducts().subscribe((data) => {
+//     this.products = data;
+//   });
+// }
+
+}

@@ -20,6 +20,10 @@ export const API_ENDPOINTS = {
   categories: {
     getAll: '/categories',
     getProducts: (category: string) => `/category/${category}`
+  },
+  blogs: {
+    getAll: '/blogs',
+    getById: (id: number) => `/blogs/${id}`
   }
 } as const;
 

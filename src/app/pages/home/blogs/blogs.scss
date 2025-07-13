@@ -1,0 +1,128 @@
+/* src/app/components/blog-list/blog-list.component.scss */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+.blog-container {
+  
+  background-color: #081E25;
+  padding: 120px;
+  padding-top: 40px;
+}
+
+.section-title {
+  color: #2c3e50;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 700;
+ 
+}
+.view-all-btn {
+  font-size: 0.95rem;
+  font-weight: 500;
+  img {
+    width: 18px;
+    height: 18px;
+  }
+  &:hover {
+    color: #198754;
+  }
+}
+
+.carousel-indicators button {
+  border: none;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+}
+
+.product-card {
+  transition: transform 0.3s;
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.progress-bar-wrapper {
+  animation: fillProgress 2s ease-in-out;
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+    
+    .card-title {
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+    
+    .card-text {
+      color: #555;
+      line-height: 1.6;
+    }
+  }
+  
+  .card-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .card-img-top {
+    height: 250px !important;
+    margin: 5px;
+  }
+}
+
+.view-all-btn {
+  font-size: 0.95rem;
+  font-weight: 500;
+  img {
+    width: 18px;
+    height: 18px;
+  }
+  &:hover {
+    color: #198754;
+  }
+}
+
+.carousel-indicators button {
+  border: none;
+  opacity: 0.6;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+}
+
+.blog-card {
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+  }
+}

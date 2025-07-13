@@ -1,190 +1,142 @@
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
-        
-        * {
-            font-family: 'Cairo', sans-serif;
-        }
-        
-        body {
-// background: black;
-            min-height: 100vh;
-            padding: 20px 0;
-        }
-        
-        .top-header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 15px 0;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-pills .nav-link {
-            color: black;
-            background: transparent;
-            border: 2px solid transparent;
-            margin: 0 5px;
-            border: 1px solid #000;
-            border-radius: 12px;
-            padding: 8px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-pills .nav-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .nav-pills .nav-link.active {
-            background: #28a745;
-            color: white;
-            border-color: #28a745;
-        }
-        
-        .service-card {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-        }
-        
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-            z-index: 1;
-        }
-        
-        .service-card-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .phone-number {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            direction: ltr;
-            text-align: right;
-        }
-        
-        .service-title {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 15px;
-        }
-        
-        .service-features {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            backdrop-filter: blur(5px);
-        }
-        
-        .service-features span {
-            font-size: 0.85rem;
-            display: inline-block;
-            margin: 2px 5px;
-        }
-        
-        .whatsapp-icon {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #25d366;
-            color: white;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            z-index: 3;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-        }
-        
-        .network-icon {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.5rem;
-            z-index: 3;
-        }
-        
-        .navigation-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .nav-arrow {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: white;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .nav-arrow:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-        
-        .nav-dots {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .nav-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-dot.active {
-            background: #28a745;
-            transform: scale(1.2);
-        }
-        
-        @media (max-width: 768px) {
-            .nav-pills .nav-link {
-                font-size: 0.85rem;
-                padding: 6px 12px;
-                margin: 2px;
-            }
-            
-            .service-card {
-                padding: 20px;
-            }
-            
-            .phone-number {
-                font-size: 1rem;
-            }
-        }
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+* {
+  font-family: 'Cairo', sans-serif;
+}
+
+body {
+    padding: 80px;
+  min-height: 100vh;
+  background-color: white;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 1.25rem;
+}
+
+/* Branch Filter Buttons */
+.branch-filters .btn {
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  color: #000;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.branch-filters .btn:hover {
+  background-color: #f1f1f1;
+}
+
+.branch-filters .btn.active {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+/* Service Card */
+.service-card {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  border-radius: 20px;
+  padding: 25px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.service-card-content {
+  position: relative;
+  z-index: 2;
+}
+
+.phone-number {
+  font-size: 1.1rem;
+  font-weight: 600;
+  direction: ltr;
+  text-align: right;
+}
+
+.branch-title,
+.branch-location,
+.branch-description {
+  font-size: 0.95rem;
+}
+
+.branch-title {
+  color: #fff;
+}
+
+.branch-description {
+  opacity: 0.85;
+}
+
+/* Icons */
+.whatsapp-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #25d366;
+  color: white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.network-icon {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem;
+  z-index: 3;
+}
+
+/* Navigation Controls */
+.navigation-controls {
+  gap: 15px;
+}
+
+.nav-arrow {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: #28a745;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.nav-arrow:hover {
+  background: rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+}
+
+.nav-dots .nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  margin: 0 4px;
+  transition: all 0.3s ease;
+}
+
+.nav-dot.active {
+  background: #28a745;
+  transform: scale(1.2);
+}

@@ -1,165 +1,104 @@
 <body>
     <div class="container">
-        <!-- Header Navigation -->
-        <div class="top-header">
-            <div class="container">
-                <ul class="nav nav-pills justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-newspaper me-2"></i>الأخبار</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-utensils me-2"></i>المطاعم</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-female me-2"></i>الإحساء</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-map-marker-alt me-2"></i>دليل</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-graduation-cap me-2"></i>التعليم</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-dumbbell me-2"></i>الرياضة</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-user-md me-2"></i>البودكاست</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-paint-brush me-2"></i>الفنون</a>
-                    </li>
-                  
-                </ul>
-            </div>
+
+        <!-- Section Title -->
+        <h5 class="section-title text-end fw-bold mb-4">فروعنا</h5>
+
+        <!-- Branch Filters -->
+        <div class="branch-filters d-flex flex-wrap gap-2 justify-content-end mb-4">
+            <button class="btn btn-outline-secondary rounded-3">الخبر</button>
+            <button class="btn btn-outline-secondary rounded-3">الدمام</button>
+            <button class="btn btn-outline-secondary rounded-3">الأحساء</button>
+            <button class="btn btn-outline-secondary rounded-3">جدة</button>
+            <button class="btn btn-outline-secondary rounded-3">القصيم</button>
+            <button class="btn btn-outline-secondary rounded-3">الخرج</button>
+            <button class="btn btn-outline-secondary rounded-3 active">الرياض</button>
         </div>
 
-        <!-- Service Cards -->
+        <!-- Branch Cards -->
         <div class="row">
+            <!-- Repeat for each branch -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="service-card">
-                    <div class="whatsapp-icon">
-                        <i class="fab fa-whatsapp"></i>
+                    <div>
+                        966-920013458
+
+                        <img src="assets/Images/call-02.svg" alt="" width="20px">
+                        <!-- <i class="fab fa-whatsapp"></i> -->
                     </div>
-                    <div class="network-icon">
-                        <i class="fas fa-wifi"></i>
+                    <img src="assets/Images/Frame 37.svg" alt="Frame"
+                        style="position: absolute; bottom: -40px; left: -10; width: 50px; z-index: 2; transform: rotate(280deg);">
+                    <div class="service-card-content text-end">
+                        <div class="branch-title mb-1 fw-bold">أولي فروعنا</div>
+                        <div class="branch-location mb-1">الرياض – الرياض النخيل</div>
+                        <div class="branch-description mb-3">مركز العناية بالشعر و التجميل</div>
+                        <button class="btn btn-outline-light btn-sm rounded-pill px-3">
+                            عرض اتجاهات الموقع <img src="assets/Images/maps-location-01.svg" alt="">
+                        </button>
                     </div>
-                    <div class="service-card-content">
-                        <div class="phone-number">966-920013458</div>
-                        <div class="service-title">
-                            <i class="fas fa-phone me-2"></i>
-                            اتصال مباشر للهاتف الذكي
-                        </div>
-                        <div class="service-features">
-                            <i class="fas fa-cog me-2"></i>
-                            <span>عروض الخدمات المتقدمة</span>
-                        </div>
+                </div>
+            </div>
+
+            <!-- Clone this card as needed -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="service-card">
+ <div>
+                        966-920013458
+
+                        <img src="assets/Images/call-02.svg" alt="" width="20px">
+                        <!-- <i class="fab fa-whatsapp"></i> -->
+                    </div>                    <img src="assets/Images/Frame 37.svg" alt="Frame"
+                        style="position: absolute; bottom: -40px; left: -10; width: 50px; z-index: 2; transform: rotate(280deg);">
+                    <div class="service-card-content text-end">
+                        <div class="branch-title mb-1 fw-bold">أولي فروعنا</div>
+                        <div class="branch-location mb-1">الرياض – الرياض النخيل</div>
+                        <div class="branch-description mb-3">مركز العناية بالشعر و التجميل</div>
+                        <button class="btn btn-outline-light btn-sm rounded-pill px-3">
+                            عرض اتجاهات الموقع <img src="assets/Images/maps-location-01.svg" alt="">
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="service-card">
-                    <div class="whatsapp-icon">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <div class="network-icon">
-                        <i class="fas fa-wifi"></i>
-                    </div>
-                    <div class="service-card-content">
-                        <div class="phone-number">966-920013458</div>
-                        <div class="service-title">
-                            <i class="fas fa-phone me-2"></i>
-                            اتصال مباشر للهاتف الذكي
-                        </div>
-                        <div class="service-features">
-                            <i class="fas fa-cog me-2"></i>
-                            <span>عروض الخدمات المتقدمة</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+ <div>
+                        966-920013458
 
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="service-card">
-                    <div class="whatsapp-icon">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <div class="network-icon">
-                        <i class="fas fa-wifi"></i>
-                    </div>
-                    <div class="service-card-content">
-                        <div class="phone-number">966-920013458</div>
-                        <div class="service-title">
-                            <i class="fas fa-phone me-2"></i>
-                            اتصال مباشر للهاتف الذكي
-                        </div>
-                        <div class="service-features">
-                            <i class="fas fa-cog me-2"></i>
-                            <span>عروض الخدمات المتقدمة</span>
-                        </div>
+                        <img src="assets/Images/call-02.svg" alt="" width="20px">
+                        <!-- <i class="fab fa-whatsapp"></i> -->
+                    </div>                    <img src="assets/Images/Frame 37.svg" alt="Frame"
+                        style="position: absolute; bottom: -40px; left: -10; width: 50px; z-index: 2; transform: rotate(280deg);">
+                    <div class="service-card-content text-end">
+                        <div class="branch-title mb-1 fw-bold">أولي فروعنا</div>
+                        <div class="branch-location mb-1">الرياض – الرياض النخيل</div>
+                        <div class="branch-description mb-3">مركز العناية بالشعر و التجميل</div>
+                        <button class="btn btn-outline-light btn-sm rounded-pill px-3">
+                            عرض اتجاهات الموقع <img src="assets/Images/maps-location-01.svg" alt="">
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Navigation Controls -->
-        <div class="navigation-controls">
-            <button class="nav-arrow">
+        <div class="navigation-controls d-flex  mt-4 px-3">
+          
+           <button class="nav-arrow">
+                <i class="fas fa-chevron-left"></i>
+            </button>  <button class="nav-arrow">
                 <i class="fas fa-chevron-right"></i>
             </button>
-            <div class="nav-dots">
+           
+            <div class="nav-dots d-flex justify-content-end align-items-center">
                 <div class="nav-dot active"></div>
                 <div class="nav-dot"></div>
                 <div class="nav-dot"></div>
-                <div class="nav-dot"></div>
             </div>
-            <button class="nav-arrow">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+             
+            
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Add interactive functionality
-        document.querySelectorAll('.nav-arrow').forEach(arrow => {
-            arrow.addEventListener('click', function() {
-                // Add carousel functionality here
-                const dots = document.querySelectorAll('.nav-dot');
-                const currentActive = document.querySelector('.nav-dot.active');
-                const currentIndex = Array.from(dots).indexOf(currentActive);
-                
-                if (this.querySelector('.fa-chevron-left')) {
-                    // Next
-                    const nextIndex = (currentIndex + 1) % dots.length;
-                    dots[currentIndex].classList.remove('active');
-                    dots[nextIndex].classList.add('active');
-                } else {
-                    // Previous
-                    const prevIndex = (currentIndex - 1 + dots.length) % dots.length;
-                    dots[currentIndex].classList.remove('active');
-                    dots[prevIndex].classList.add('active');
-                }
-            });
-        });
-
-        // Add click functionality to service cards
-        document.querySelectorAll('.service-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const phoneNumber = this.querySelector('.phone-number').textContent;
-                // You can add phone call functionality here
-                console.log('Calling:', phoneNumber);
-            });
-        });
-
-        // Add WhatsApp functionality
-        document.querySelectorAll('.whatsapp-icon').forEach(icon => {
-            icon.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const phoneNumber = this.parentElement.querySelector('.phone-number').textContent;
-                const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`;
-                window.open(whatsappUrl, '_blank');
-            });
-        });
-    </script>
 </body>
