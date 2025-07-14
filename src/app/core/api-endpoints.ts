@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
   },
   auth: {
     login: '/auth/login',
-    register: '/users',
+    register: '/register',
     profile: '/users/me'
   },
   users: {

@@ -55,12 +55,12 @@ import { Pricing } from './pages/home/pricing/pricing';
 import { Blogs } from './pages/home/blogs/blogs';
 import { Downloadapp } from './pages/home/downloadapp/downloadapp';
 import { Footer } from './footer/footer';
+import { Home } from './pages/home';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Downloadapp, Checkup,Footer, Header, Pricing, Hero, OurService, 
-    Branches, SucesStory, PostHero,Blogs, SpecialOffersComponent, CategoryProducts],
+  imports: [CommonModule, RouterOutlet, Footer, Header],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

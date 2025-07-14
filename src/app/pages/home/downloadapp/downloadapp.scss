@@ -1,6 +1,6 @@
 .phone-overlap {
   position: relative;
-  bottom: -93px;      /* Pull it upward to overlap */
+  bottom: -43px;      /* Pull it upward to overlap */
   z-index: 2;      /* Ensure it's above the border box */
   max-height: 500px;
 }

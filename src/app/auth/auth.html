@@ -1,0 +1,13 @@
+<div class="auth-container text-center my-4">
+  <button class="btn btn-outline-primary me-2" (click)="activeTab = 'login'" [class.active]="activeTab === 'login'">
+    Login
+  </button>
+  <button class="btn btn-outline-primary" (click)="activeTab = 'register'" [class.active]="activeTab === 'register'">
+    Register
+  </button>
+</div>
+
+<div class="auth-content mt-4">
+  <app-login *ngIf="activeTab === 'login'"></app-login>
+  <app-register *ngIf="activeTab === 'register'"></app-register>
+</div>
