@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -24,50 +24,69 @@ export class CategoryProducts implements OnInit {
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.handleResize();
+  }
+
+  @HostListener('window:resize')
+  handleResize() {
+    const screenWidth = window.innerWidth;
+    let cardsPerSlide = 3; // Default for desktop
+    
+    if (screenWidth <= 576) {
+      cardsPerSlide = 1; // Mobile
+    } else if (screenWidth <= 992) {
+      cardsPerSlide = 2; // Tablet
+    }
+
+    if (this.allProducts.length) {
+      this.groupProducts(cardsPerSlide);
+    }
   }
 
   private fetchProducts(): void {
     this.isLoading = true;
     this.productService.getProducts().subscribe({
-      next: (products: Product[]) => {
+      next: (products) => {
         this.allProducts = products;
-        this.filterByCategory('all');
-
-        const categoryMap: Record<number, Category> = {};
-        products.forEach((product: Product) => {
-          product.categories.forEach((cat: Category) => {
-            categoryMap[cat.id] = cat;
-          });
-        });
-
-        this.categories = Object.values(categoryMap);
+        this.handleResize(); // Initial grouping
+        this.categories = this.extractUniqueCategories(products);
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('❌ Failed to load products:', err);
+        console.error('Failed to load products:', err);
         this.isLoading = false;
       }
     });
   }
 
+  private extractUniqueCategories(products: Product[]): Category[] {
+    const categoryMap = new Map<number, Category>();
+    products.forEach(product => {
+      product.categories.forEach(category => {
+        if (!categoryMap.has(category.id)) {
+          categoryMap.set(category.id, category);
+        }
+      });
+    });
+    return Array.from(categoryMap.values());
+  }
+
   filterByCategory(categoryId: number | 'all'): void {
     this.selectedCategory = categoryId;
     this.currentSlideIndex = 0;
-
-    const filtered = categoryId === 'all'
-      ? this.allProducts
-      : this.allProducts.filter(product =>
-          product.categories.some(cat => cat.id === categoryId));
-
-    this.groupedProducts = this.chunkProducts(filtered, 3);
+    this.handleResize();
   }
 
-  private chunkProducts(arr: Product[], size: number): Product[][] {
-    const result: Product[][] = [];
-    for (let i = 0; i < arr.length; i += size) {
-      result.push(arr.slice(i, i + size));
+  private groupProducts(itemsPerGroup: number): void {
+    const filtered = this.selectedCategory === 'all'
+      ? this.allProducts
+      : this.allProducts.filter(p => p.categories.some(c => c.id === this.selectedCategory));
+
+    const groups = [];
+    for (let i = 0; i < filtered.length; i += itemsPerGroup) {
+      groups.push(filtered.slice(i, i + itemsPerGroup));
     }
-    return result;
+    this.groupedProducts = groups;
   }
 
   toggleFavorite(product: Product): void {
@@ -75,7 +94,7 @@ export class CategoryProducts implements OnInit {
   }
 
   addToCompare(product: Product): void {
-    console.log('Comparing:', product);
+    console.log('Added to compare:', product);
   }
 
   prevSlide(): void {
