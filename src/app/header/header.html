@@ -1,23 +1,18 @@
-<header class="header bg-white w-100 "  dir="rtl">
+<header class="header bg-white w-100" dir="rtl">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
   <div class="container-fluid py-2">
     <div class="d-flex align-items-center justify-content-between flex-wrap">
       <!-- Logo -->
-      <div class="logo ms-3"> <!-- Changed from me-3 to ms-3 for RTL -->
+      <div class="logo ms-3">
         <img src="assets/Images/logo.svg" alt="Happy Fitness" class="img-fluid" style="height: 50px;">
       </div>
 
-      <!-- Search Bar with Icon Inside -->
+      <!-- Search Bar -->
       <div class="search-container flex-grow-1 mx-3" style="max-width: 400px;">
         <div class="input-group position-relative">
-          <input 
-            type="text" 
-            class="form-control pe-5" 
-            [(ngModel)]="searchQuery"
-            placeholder="ابحث عن منتجات"
-            (keyup.enter)="onSearch()"
-            dir="rtl"
-            style="text-align: right;">
+          <input type="text" class="form-control pe-5" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
+            (keyup.enter)="onSearch()" dir="rtl" style="text-align: right;">
           <span class="position-absolute end-0 top-50 translate-middle-y me-3" style="z-index: 5;">
             <i class="fas fa-search text-secondary"></i>
           </span>
@@ -26,23 +21,33 @@
 
       <!-- Top Bar -->
       <div class="top-bar d-flex align-items-center gap-3">
-      <!-- Login -->
-<!-- Login/Logout -->
-<a *ngIf="!isLoggedIn" routerLink="/auth" class="btn btn-outline-primary ms-2">
-  <i class="fas fa-user"></i> تسجيل الدخول
-</a>
+        <!-- If NOT logged in -->
+        <a *ngIf="!isLoggedIn" routerLink="/auth" class="btn btn-outline-primary ms-2">
+          <i class="fas fa-user"></i> تسجيل الدخول
+        </a>
 
-<button *ngIf="isLoggedIn" (click)="logout()" class="btn btn-outline-danger ms-2">
-  <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-</button>
+        <!-- If logged in -->
+        <ng-container *ngIf="isLoggedIn">
+          <div ngbDropdown class="d-inline-block ms-2">
+            <button ngbDropdownToggle class="btn btn-outline-secondary">
+              <i class="fas fa-user"></i> مرحباً، {{ client?.name || 'المستخدم' }}
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu-end text-end">
+              <a class="dropdown-item" routerLink="/profile">
+                <i class="fas fa-id-card me-2"></i> الملف الشخصي
+              </a>
+              <button class="dropdown-item text-danger" (click)="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج
+              </button>
+            </div>
+          </div>
+        </ng-container>
 
 
 
-
-
-        <!-- Language -->
+        <!-- Language Switch -->
         <div class="language-selector d-flex align-items-center">
-          <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1"> <!-- Changed from me-1 to ms-1 -->
+          <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1">
           <select class="form-select border-0" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
             <option value="العربية">العربية</option>
             <option value="English">English</option>
@@ -51,42 +56,61 @@
 
         <!-- Cart + Favorites -->
         <div class="icon-buttons d-flex gap-2">
-          <div class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-            <img src="assets/Images/Vector.svg" alt="cart" width="20">
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
-          </div>
-          <div class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+<a [routerLink]="['/cart']">
+  <div
+    class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
+    style="width: 36px; height: 36px;">
+    <img src="assets/Images/Vector.svg" alt="cart" width="20">
+    <span *ngIf="cartCount > 0"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {{ cartCount }}
+    </span>
+  </div>
+</a>
+
+
+
+
+          <div
+            class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
+            style="width: 36px; height: 36px;">
             <img src="assets/Images/shopping-cart-01.svg" alt="favorites" width="20">
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ favoriteCount }}
+            </span>
           </div>
+
         </div>
       </div>
     </div>
   </div>
 
-<nav class="navbar navbar-expand-lg bg-white mt-2 py-0" dir="rtl">
-  <div class="container-fluid">
-    <div class="collapse navbar-collapse d-flex">
-      <!-- Nav items -->
-      <ul class="navbar-nav d-flex" style="margin-right: -2rem;">
-        <li *ngFor="let item of navItems" class="nav-item mx-2" [class.active]="item.active">
-          <a class="nav-link text-dark position-relative" href="#" (click)="onNavItemClick(item); $event.preventDefault()">
-            {{ item.label }}
-            <i *ngIf="item.hasDropdown" class="fas fa-chevron-down me-1 small"></i>
-          </a>
-        </li>
-      </ul>
+  <!-- Main Navigation Bar -->
+  <nav class="navbar navbar-expand-lg bg-white mt-2 py-0" dir="rtl">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse d-flex">
+        <!-- Navigation Items -->
+       <ul class="navbar-nav d-flex" style="margin-right: -2rem;">
+  <li *ngFor="let item of navItems" class="nav-item mx-2" [class.active]="item.active">
+    <a class="nav-link text-dark position-relative"
+       [routerLink]="item.path"
+       (click)="onNavItemClick(item)">
+      {{ item.label }}
+      <i *ngIf="item.hasDropdown" class="fas fa-chevron-down me-1 small"></i>
+    </a>
+  </li>
+</ul>
 
-      <!-- WhatsApp Button aligned far left -->
-      <div class="ms-auto"  style="margin-right: 11rem;">
-        <button class="btn d-flex align-items-center justify-content-between border border-1 px-5 py-2 " style="color: #25D366; border-color: #ccc; " dir="rtl">
-  <span class="ms-2">واتساب</span>
-  <i class="fab fa-whatsapp"></i>
-</button>
 
+        <!-- WhatsApp Button -->
+        <div class="ms-auto " style="margin-right: 11rem; direction: rtl;" >
+          <button class="btn d-flex align-items-center justify-content-between border border-1 px-5 py-2"
+            style="color: #25D366; border-color: #ccc;">
+            <span class="ms-2">واتساب</span>
+            <i class="fab fa-whatsapp"></i>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
-
+  </nav>
 </header>

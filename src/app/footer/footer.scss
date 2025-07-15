@@ -114,8 +114,12 @@
       font-size: 0.9em;
       font-style: italic;
     }
-
+    .logo_img{
+align-items: right;
+    }
     .tagline {
+      direction: rtl;
+      text-align: right;
       margin: 20px 0;
       opacity: 0.9;
       line-height: 1.6;

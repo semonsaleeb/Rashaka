@@ -1,0 +1,48 @@
+<div class="position-relative" (click)="toggleDropdown()" style="cursor: pointer;" dir="rtl">
+  <!-- Cart Icon -->
+  <div
+    class="rounded-circle border border-success d-flex align-items-center justify-content-center"
+    style="width: 36px; height: 36px;">
+    <img src="assets/Images/Vector.svg" alt="cart" width="20">
+    <span *ngIf="cartCount > 0"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {{ cartCount }}
+    </span>
+  </div>
+
+  <!-- Dropdown -->
+  <div *ngIf="showDropdown"
+       class="dropdown-menu show p-3 mt-2"
+       style="min-width: 320px; right: 0; left: auto; box-shadow: 0 0 10px rgba(0,0,0,0.15); z-index: 1000;">
+       
+    <!-- Empty Message -->
+    <div *ngIf="cartItems.length === 0" class="text-center text-muted py-2">
+      لا توجد منتجات
+    </div>
+
+    <!-- Product List -->
+    <ng-container *ngFor="let item of cartItems">
+      <div class="d-flex justify-content-between align-items-center py-1">
+        <div class="text-truncate" style="max-width: 180px;">
+          {{ item.product_name }}
+        </div>
+        <div class="text-nowrap">
+          {{ item.quantity }} × 
+          {{ item.sale_unit_price ?? item.unit_price }} ج.م
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Divider -->
+    <hr class="my-2">
+
+  <!-- Total -->
+    <div class="text-end fw-bold">
+     <!-- Total -->
+<div class="text-end fw-bold">
+  الإجمالي:
+  <!-- {{ totalCartPrice | number: '1.2-2' }} ج.م -->
+</div>
+
+  </div>
+</div>

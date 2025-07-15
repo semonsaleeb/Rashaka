@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
   auth: {
     login: '/auth/login',
     register: '/register',
-    profile: '/users/me'
+    profile: '/profile'
   },
   users: {
     getAll: '/users',

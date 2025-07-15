@@ -1,17 +1,24 @@
-<div class="container my-5" dir="rtl">
-      <h2 class="mb-4">تسجيل الدخول</h2>
+<form (ngSubmit)="login()">
+  <div class="mb-3">
+    <label for="email">البريد الإلكتروني</label>
+    <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required />
+  </div>
 
-      <form (ngSubmit)="login()">
-        <div class="mb-3">
-          <label for="email">البريد الإلكتروني</label>
-          <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required />
-        </div>
+  <div class="mb-3">
+    <label for="password">كلمة المرور</label>
+    <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" required />
+  </div>
 
-        <div class="mb-3">
-          <label for="password">كلمة المرور</label>
-          <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" required />
-        </div>
+<a href="/forgot-password" class="d-block text-end text-primary mb-3"  style="text-decoration: none;">
+  هل نسيت كلمة المرور؟ <i class="fas fa-unlock"></i>
+</a>
 
-        <button type="submit" class="btn btn-success">دخول</button>
-      </form>
-    </div>
+
+  <button type="submit" class="btn btn-success w-100" [disabled]="loading">
+    {{ loading ? 'جاري الدخول...' : 'دخول' }}
+  </button>
+
+  <div class="text-danger mt-2" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+</form>

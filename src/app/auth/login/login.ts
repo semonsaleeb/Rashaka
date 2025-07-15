@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,34 +13,37 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.scss']
 })
 export class Login {
+  @Output() forgot = new EventEmitter<void>();
+
   email = '';
   password = '';
-  loading = false;
   errorMessage = '';
+  loading = false;
 
-  constructor(private http: HttpClient, private router: Router ,   private auth: AuthService) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login() {
-    this.loading = true;
     this.errorMessage = '';
+    this.loading = true;
 
-    const data = {
-      email: this.email,
-      password: this.password
-    };
+    const payload = { email: this.email, password: this.password };
 
-    this.http.post<any>(`${environment.apiBaseUrl}/login`, data, {
-      headers: new HttpHeaders({ 'Accept': 'application/json' })
-    }).subscribe({
+    const headers = new HttpHeaders({ Accept: 'application/json' });
+
+    this.http.post<any>(`${environment.apiBaseUrl}/login`, payload, { headers }).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.token);
-          this.auth.setLogin(res.token); 
-        this.router.navigate(['/']); // Navigate to homepage after login
+        if (res.token && res.client) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('client', JSON.stringify(res.client));
+          this.router.navigate(['/profile']);
+        } else {
+          this.errorMessage = 'بيانات تسجيل الدخول غير صحيحة.';
+        }
         this.loading = false;
       },
       error: (err) => {
-        this.errorMessage = err?.error?.message || 'فشل تسجيل الدخول';
         this.loading = false;
+        this.errorMessage = err.error?.message || 'فشل تسجيل الدخول. تأكد من صحة البيانات.';
       }
     });
   }

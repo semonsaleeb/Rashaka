@@ -1,6 +1,6 @@
 <div class="my-5 px-3" *ngIf="!isLoading">
   <div class="special-offers-container mb-5">
-    
+
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
       <div class="d-flex align-items-center gap-3 flex-wrap">
@@ -22,21 +22,19 @@
     <!-- Custom Carousel -->
     <div class="position-relative">
       <div class="carousel-inner-custom">
-        <div class="carousel-item-custom"
-             *ngFor="let group of groupedProducts; let i = index"
-             [class.active]="i === currentSlideIndex">
+        <div class="carousel-item-custom" *ngFor="let group of groupedProducts; let i = index"
+          [class.active]="i === currentSlideIndex">
           <div class="row justify-content-center mx-auto px-3" style="max-width: 1200px;">
-            <div class="col-md-4 col-sm-6 mb-4 d-flex justify-content-center"
-                 *ngFor="let product of group">
+            <div class="col-md-4 col-sm-6 mb-4 d-flex justify-content-center" *ngFor="let product of group">
               <div class="card product-card rounded-4 border bg-white" style="width: 320px;">
                 <div class="position-relative">
                   <div id="productCarousel-{{ product.id }}" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                      <div *ngFor="let image of product.images; let j = index"
-                           class="carousel-item"
-                           [class.active]="j === 0">
+                      <div *ngFor="let image of product.images; let j = index" class="carousel-item"
+                        [class.active]="j === 0">
                         <div class="ribbon-top-right">لفترة محدودة</div>
-                        <img [src]="image" class="card-img-top p-3" [alt]="product.name" style="height: 200px; object-fit: contain;">
+                        <img [src]="image" class="card-img-top p-3" [alt]="product.name"
+                          style="height: 200px; object-fit: contain;">
                       </div>
                     </div>
                   </div>
@@ -44,14 +42,12 @@
                   <!-- Buttons -->
                   <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
                     <button class="btn btn-light btn-sm rounded-circle border border-secondary"
-                            style="width: 36px; height: 36px;"
-                            (click)="toggleFavorite(product)"
-                            [ngClass]="{'text-danger': product.isFavorite}">
-                      <i class="far fa-heart"></i>
+                      style="width: 36px; height: 36px;" (click)="toggleFavorite(product)">
+                      <i [class]="product.isFavorite ? 'fas fa-heart text-danger' : 'far fa-heart'"></i>
                     </button>
+
                     <button class="btn btn-light btn-sm rounded-circle border border-secondary"
-                            style="width: 36px; height: 36px;"
-                            (click)="addToCompare(product)">
+                      style="width: 36px; height: 36px;" (click)="addToCompare(product)">
                       <i class="fas fa-random"></i>
                     </button>
                   </div>
@@ -62,9 +58,12 @@
                   <p class="card-text text-muted" style="font-size: 13px; max-height: 40px; overflow: hidden;">
                     {{ product.description }}
                   </p>
-                  <button class="btn btn-outline-success w-100 mt-2 btn-sm bg-white rounded-5">
-                    إضافة للعربة <i class="fas fa-shopping-cart ms-1 bg-white"></i>
-                  </button>
+                  <button 
+  class="btn btn-outline-success w-100 mt-2 btn-sm bg-white rounded-5"
+  (click)="addToCart(product.id)">
+  إضافة للعربة <i class="fas fa-shopping-cart ms-1 bg-white"></i>
+</button>
+
                 </div>
               </div>
             </div>
@@ -85,12 +84,9 @@
 
         <!-- Dots -->
         <div class="d-flex gap-2">
-          <button *ngFor="let group of groupedProducts; let i = index"
-                  (click)="goToSlide(i)"
-                  class="rounded-circle"
-                  [class.bg-success]="currentSlideIndex === i"
-                  [class.bg-secondary]="currentSlideIndex !== i"
-                  style="width: 10px; height: 10px; border: none;">
+          <button *ngFor="let group of groupedProducts; let i = index" (click)="goToSlide(i)" class="rounded-circle"
+            [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
+            style="width: 10px; height: 10px; border: none;">
           </button>
         </div>
       </div>

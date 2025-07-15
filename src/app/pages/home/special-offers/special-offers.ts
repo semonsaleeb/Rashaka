@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Product, ProductService } from '../../../services/product';
+import { AuthService } from '../../../services/auth.service';
+import { CartService } from '../../../services/cart.service';
+import { CartStateService } from '../../../services/cart-state-service';
 
 @Component({
   selector: 'app-special-offers',
@@ -19,11 +22,50 @@ export class SpecialOffersComponent implements OnInit {
 
   currentSlideIndex = 0;
 
-  constructor(private productService: ProductService) {}
 
+constructor(
+  private productService: ProductService,
+  private auth: AuthService,
+  private router: Router,
+  private cartService: CartService,
+   public cartState: CartStateService
+) {}
   ngOnInit(): void {
-    this.fetchProducts();
+    
+        this.fetchProducts();
+    throw new Error('Method not implemented.');
   }
+
+ addToCart(productId: number): void {
+    this.cartService.addToCart(productId).subscribe({
+      next: (res) => {
+        console.log('Product added successfully', res);
+        this.refreshCartCount();
+        // Optionally refresh cart icon count (via shared service or manual reload)
+      },
+      error: (err) => {
+        console.error('Failed to add to cart', err);
+      }
+    });
+  }
+refreshCartCount() {
+  this.cartService.getCart().subscribe(response => {
+    const count = response.data.items.reduce((total, item) => total + item.quantity, 0);
+    this.cartState.updateCount(count); // ✅ This triggers header update
+  });
+}
+
+toggleFavorite(product: Product) {
+  if (!this.auth.isLoggedIn$) {
+    // User is not logged in
+    alert('يرجى تسجيل الدخول أولاً لإضافة المنتج إلى المفضلة');
+    this.router.navigate(['/auth']); // Navigate to login page
+    return;
+  }
+
+  product.isFavorite = !product.isFavorite;
+}
+
 
   private fetchProducts(): void {
     this.productService.getProducts().subscribe({
@@ -47,9 +89,7 @@ export class SpecialOffersComponent implements OnInit {
     return result;
   }
 
-  toggleFavorite(product: Product) {
-    product.isFavorite = !product.isFavorite;
-  }
+ 
 
   addToCompare(product: Product) {
     console.log('Compare:', product);
