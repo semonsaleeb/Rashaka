@@ -91,10 +91,13 @@ export const routes: Routes = [
     path: 'home/sucesStory',
     component: SucesStory
   },
-  {
-    path: 'home/special-offers',
-    component: SpecialOffersComponent
-  },
+ {
+  path: 'home/special-offers',
+  component: SpecialOffersComponent,
+  data: { mode: 'grid' }
+}
+
+,
   {
     path: 'home/blogs',
     component: Blogs

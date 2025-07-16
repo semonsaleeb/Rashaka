@@ -1,93 +1,138 @@
-<div class="my-5 px-3" *ngIf="!isLoading">
-  <div class="special-offers-container mb-5">
+<!-- Carousel Mode -->
+<div class="position-relative" *ngIf="mode === 'carousel'">
+  <div class="my-5 px-3" *ngIf="!isLoading">
+    <div class="special-offers-container mb-5">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
-      <div class="d-flex align-items-center gap-3 flex-wrap">
-        <h2 class="section-title mb-0 d-flex align-items-center text-dark" style="margin-top: -2rem;">عروض خاصة</h2>
-        <div class="time-badges d-flex gap-2">
-          <div class="time-badge text-center">01 <br>ثانية</div>
-          <div class="time-badge text-center">06 <br>دقيقة</div>
-          <div class="time-badge text-center">33 <br>ساعة</div>
-          <div class="time-badge text-center">16 <br>يوم</div>
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <h2 class="section-title mb-0 d-flex align-items-center text-dark" style="margin-top: -2rem;">عروض خاصة</h2>
+          <div class="time-badges d-flex gap-2">
+            <div class="time-badge text-center">01 <br>ثانية</div>
+            <div class="time-badge text-center">06 <br>دقيقة</div>
+            <div class="time-badge text-center">33 <br>ساعة</div>
+            <div class="time-badge text-center">16 <br>يوم</div>
+          </div>
         </div>
+
+        <button class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 p-0">
+          <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل">
+          عرض الكل
+        </button>
       </div>
 
-      <button class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 p-0">
-        <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل">
-        عرض الكل
-      </button>
-    </div>
-
-    <!-- Custom Carousel -->
-    <div class="position-relative">
-      <div class="carousel-inner-custom">
-        <div class="carousel-item-custom" *ngFor="let group of groupedProducts; let i = index"
-          [class.active]="i === currentSlideIndex">
-          <div class="row justify-content-center mx-auto px-3" style="max-width: 1200px;">
-            <div class="col-md-4 col-sm-6 mb-4 d-flex justify-content-center" *ngFor="let product of group">
-              <div class="card product-card rounded-4 border bg-white" style="width: 320px;">
-                <div class="position-relative">
-                  <div id="productCarousel-{{ product.id }}" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                      <div *ngFor="let image of product.images; let j = index" class="carousel-item"
-                        [class.active]="j === 0">
-                        <div class="ribbon-top-right">لفترة محدودة</div>
-                        <img [src]="image" class="card-img-top p-3" [alt]="product.name"
-                          style="height: 200px; object-fit: contain;">
+      <!-- Custom Carousel -->
+      <div class="position-relative">
+        <div class="carousel-inner-custom">
+          <div class="carousel-item-custom" *ngFor="let group of groupedProducts; let i = index"
+            [class.active]="i === currentSlideIndex">
+            <div class="row justify-content-center mx-auto px-3" style="max-width: 1200px;">
+              <div class="col-md-4 col-sm-6 mb-4 d-flex justify-content-center" *ngFor="let product of group">
+                <div class="card product-card rounded-4 border bg-white" style="width: 320px;">
+                  <div class="position-relative">
+                    <div id="productCarousel-{{ product.id }}" class="carousel slide" data-bs-ride="carousel">
+                      <div class="carousel-inner">
+                        <div *ngFor="let image of product.images; let j = index" class="carousel-item"
+                          [class.active]="j === 0">
+                          <div class="ribbon-top-right">لفترة محدودة</div>
+                          <img [src]="image" class="card-img-top p-3" [alt]="product.name"
+                            style="height: 200px; object-fit: contain;">
+                        </div>
                       </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+                      <button class="btn btn-light btn-sm rounded-circle border border-secondary"
+                        style="width: 36px; height: 36px;" (click)="toggleFavorite(product)">
+                        <i [class]="product.isFavorite ? 'fas fa-heart text-danger' : 'far fa-heart'"></i>
+                      </button>
+
+                      <button class="btn btn-light btn-sm rounded-circle border border-secondary"
+                        style="width: 36px; height: 36px;" (click)="addToCompare(product)">
+                        <i class="fas fa-random"></i>
+                      </button>
                     </div>
                   </div>
 
-                  <!-- Buttons -->
-                  <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-                    <button class="btn btn-light btn-sm rounded-circle border border-secondary"
-                      style="width: 36px; height: 36px;" (click)="toggleFavorite(product)">
-                      <i [class]="product.isFavorite ? 'fas fa-heart text-danger' : 'far fa-heart'"></i>
-                    </button>
-
-                    <button class="btn btn-light btn-sm rounded-circle border border-secondary"
-                      style="width: 36px; height: 36px;" (click)="addToCompare(product)">
-                      <i class="fas fa-random"></i>
+                  <div class="card-body text-center p-2">
+                    <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ product.name_ar }}</h6>
+                    <p class="card-text text-muted" style="font-size: 13px; max-height: 40px; overflow: hidden;">
+                      {{ product.description }}
+                    </p>
+                    <button class="btn btn-outline-dark w-100 mt-2 btn-sm bg-white text-black rounded-5 custom-hover"
+                      (click)="addToCart(product.id)">
+                      إضافة للعربة
+                      <img src="assets/Images/shopping-cart-add-01.svg">
                     </button>
                   </div>
-                </div>
-
-                <div class="card-body text-center p-2">
-                  <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ product.name_ar }}</h6>
-                  <p class="card-text text-muted" style="font-size: 13px; max-height: 40px; overflow: hidden;">
-                    {{ product.description }}
-                  </p>
-                  <button class="btn btn-outline-dark w-100 mt-2 btn-sm bg-white text-black rounded-5 custom-hover"
-                    (click)="addToCart(product.id)">
-                    إضافة للعربة
-                    <img src="assets/Images/shopping-cart-add-01.svg">
-                  </button>
-
-
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Arrows -->
-      <div class="d-flex justify-content-between align-items-center px-4 mt-4">
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-dark btn-sm rounded-circle" (click)="prevSlide()">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <button class="btn btn-outline-dark btn-sm rounded-circle" (click)="nextSlide()">
-            <i class="fas fa-chevron-right"></i>
-          </button>
+        <!-- Arrows & Dots -->
+        <div class="d-flex justify-content-between align-items-center px-4 mt-4">
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark btn-sm rounded-circle" (click)="prevSlide()">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="btn btn-outline-dark btn-sm rounded-circle" (click)="nextSlide()">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="d-flex gap-2">
+            <button *ngFor="let group of groupedProducts; let i = index" (click)="goToSlide(i)" class="rounded-circle"
+              [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
+              style="width: 10px; height: 10px; border: none;">
+            </button>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Grid Mode -->
+<div *ngIf="mode === 'grid'" class="py-5 px-5 text-center" >
+  <!-- Offers Banner -->
+  <img src="assets/Images/Offer.svg" alt="عروض" class="img-fluid mb-4" style="max-width: 300px;">
 
-        <!-- Dots -->
-        <div class="d-flex gap-2">
-          <button *ngFor="let group of groupedProducts; let i = index" (click)="goToSlide(i)" class="rounded-circle"
-            [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
-            style="width: 10px; height: 10px; border: none;">
+  <!-- Heading -->
+  <h2 class="fw-bold mb-2">العروض</h2>
+  <p class="text-muted mb-4">استمتع بأفضل الخصومات والعروضات المصممة خصيصًا لك.</p>
+
+  <!-- Category Tabs -->
+  <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
+  
+    <button class="btn" *ngFor="let cat of categories"
+      [ngClass]="{'custom-green-btn': selectedCategory === cat.id, 'btn-outline-success': selectedCategory !== cat.id}"
+      (click)="filterByCategory(cat.id)">
+      {{ cat.name_ar }}
+    </button>
+  <button class="btn"
+      [ngClass]="{'custom-green-btn': selectedCategory === 'all', 'btn-outline-success': selectedCategory !== 'all'}"
+      (click)="filterByCategory('all')">
+      الكل
+    </button>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+    <div class="col" *ngFor="let product of filteredProducts">
+      <div class="card h-100 product-card bg-white rounded-4 border shadow-sm">
+        <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
+          style="height: 200px; object-fit: contain;">
+        <div class="card-body text-end px-3 pb-4">
+          <h6 class="card-title fw-bold mb-2">{{ product.name_ar }}</h6>
+          <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
+            {{ product.description }}
+          </p>
+          <button
+            class="btn btn-outline-dark w-100 btn-sm rounded-5 custom-hover d-flex align-items-center justify-content-center gap-2"
+            (click)="addToCart(product.id)">
+            إضافة للعربة
+            <img src="assets/Images/shopping-cart-add-01.svg" style="height: 16px;">
           </button>
         </div>
       </div>

@@ -251,3 +251,29 @@
   position: relative;
   z-index: 1; /* Lower than header's z-index */
 }
+/* Your custom green style */
+.custom-green-btn {
+  background-color: #7AD03A;
+  color: black;
+  border: 2px solid #7AD03A;
+  transition: all 0.3s ease;
+}
+
+.custom-green-btn:hover {
+  background-color: white;
+  color: #7AD03A;
+  border: 2px solid #7AD03A;
+}
+
+/* Override Bootstrap btn-outline-success */
+.btn-outline-success {
+  color: #7AD03A;
+  border-color: #7AD03A;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+  background-color: #7AD03A;
+  color: black;
+  border-color: #7AD03A;
+}
