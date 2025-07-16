@@ -4,7 +4,10 @@
   // padding: 0;
   // box-sizing: border-box;
 }
-
+// Add this to your global styles
+.main-content {
+  padding-top:8rem; // Adjust this value based on your header height
+}
 // html, body {
 //   width: 100%;
 //   max-width: 100%;

@@ -1,48 +1,105 @@
-<div class="position-relative" (click)="toggleDropdown()" style="cursor: pointer;" dir="rtl">
-  <!-- Cart Icon -->
-  <div
-    class="rounded-circle border border-success d-flex align-items-center justify-content-center"
-    style="width: 36px; height: 36px;">
-    <img src="assets/Images/Vector.svg" alt="cart" width="20">
-    <span *ngIf="cartCount > 0"
-          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-      {{ cartCount }}
-    </span>
+<div class="container m-5" dir="rtl">
+  <!-- Top message -->
+  <div class="alert alert-light text-center   p-2 mb-4 ">
+    <h4 class="text-center">
+      <img src="assets/Images/Frame 9033.svg"> <span class="mx-3">  عربة التسوق  </span><span class="badge bg-success rounded-pill">{{ totalCartItemsCount }}</span>
+
+
+    </h4>
+
   </div>
 
-  <!-- Dropdown -->
-  <div *ngIf="showDropdown"
-       class="dropdown-menu show p-3 mt-2"
-       style="min-width: 320px; right: 0; left: auto; box-shadow: 0 0 10px rgba(0,0,0,0.15); z-index: 1000;">
-       
-    <!-- Empty Message -->
-    <div *ngIf="cartItems.length === 0" class="text-center text-muted py-2">
-      لا توجد منتجات
-    </div>
-
-    <!-- Product List -->
-    <ng-container *ngFor="let item of cartItems">
-      <div class="d-flex justify-content-between align-items-center py-1">
-        <div class="text-truncate" style="max-width: 180px;">
-          {{ item.product_name }}
-        </div>
-        <div class="text-nowrap">
-          {{ item.quantity }} × 
-          {{ item.sale_unit_price ?? item.unit_price }} ج.م
-        </div>
-      </div>
-    </ng-container>
-
-    <!-- Divider -->
-    <hr class="my-2">
-
-  <!-- Total -->
-    <div class="text-end fw-bold">
-     <!-- Total -->
-<div class="text-end fw-bold">
-  الإجمالي:
-  <!-- {{ totalCartPrice | number: '1.2-2' }} ج.م -->
+  <div class="row">
+    <!-- Right Side: Cart Items -->
+    <div class="col-6 ">
+      <h4 class="mb-4 text-end mb-3">
+        <img src="assets/Images/delivery.svg" class="my-3"><span>  شحن مجاني للطلبات أكثر من </span> <strong>1000 ريال</strong>
+<div class="progress border border-c" style="height: 8px; height: 12px; ">
+  <div class="progress-bar" 
+       role="progressbar" 
+       [style.width.%]="progressValue" 
+       style="background-color: #2EA2CC;">
+  </div>
 </div>
 
+      </h4>
+
+      <div *ngFor="let item of cartItems" class=" card mb-3 shadow-sm border-1 rounded-4 py-3" style="background-color: #FAFAFA;">
+        <div class="row g-0 align-items-center">
+          <div class="col-md-2 text-center p-2">
+            <img [src]="item.images[0]" class="img-fluid rounded-3" style="max-height: 90px;">
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-body text-end">
+              <h3 class="card-title mb-2 fw-bold">{{ item.product_name }}</h3>
+              <div>
+                <ng-container *ngIf="item.sale_unit_price; else noSale">
+                  <span class="fw-bold text-success ms-2 mb-2">{{ item.sale_unit_price }} ر.س</span>
+                                    <br>
+                  <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
+                </ng-container>
+                <ng-template #noSale>
+                  <span class="fw-bold">{{ item.unit_price }} ر.س</span>
+                </ng-template>
+                <br>
+                              <button class="btn btn-outline-secondary btn-sm ms-3" (click)="removeItem(item.product_id)"> <i class="fa-solid fa-trash"></i>  &nbsp; إزلة </button>
+                              <!-- <button class="btn btn-outline-secondary btn-sm ms-3" (click)="removeItem(item.product_id)">  <img src="assets/Images/Frame 9036.svg">  &nbsp; إزلة </button> -->
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3 text-center">
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)">−</button>
+              <span class="mx-4">{{ item.quantity }}</span>
+              <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)">+</button>
+            </div>
+
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Left Side: Order Summary -->
+    <div class="col-5 p-5 text-center justify-content-center" >
+      <div class="card shadow-sm border-1 rounded-4 p-5" style="background-color: #FAFAFA;">
+        <h5 class="text-end mb-3">ملخص الطلب</h5>
+
+        <!-- Promo Code -->
+        <div class="input-group mb-3">
+          <input type="text" class="form-control text-end rounded-0" placeholder="ادخل الكود">
+<button class="btn custom-green-btn  rounded-0">  تطبيق</button>
+        </div>
+
+       <ul class="mb-3 text-end p-0">
+  <li class="d-flex justify-content-between py-2">
+    <span>المجموع</span>
+    <span>{{ totalPrice | number: '1.2-2' }} ر.س</span>
+  </li>
+  <li class="d-flex justify-content-between py-2">
+    <span>رسوم شحن</span>
+    <span>30.00 ر.س</span>
+  </li>
+<li class="d-flex justify-content-between fw-bold pt-3 border-top my-5">
+  <span>الإجمالي</span>
+  <span>{{ (totalSalePrice || totalPrice) + 30 | number: '1.2-2' }} ر.س</span>
+</li>
+
+</ul>
+
+
+        <button class="btn custom-green-btn w-100 fw-bold ">إتمام الطلب</button>
+      </div>
+    </div>
   </div>
+
+  <!-- Bottom Promo Banner -->
+  <!-- <div class="mt-5 text-center">
+    <img src="assets/images/app-promo-placeholder.png" class="img-fluid rounded shadow-sm" alt="Download our app"
+      style="max-height: 200px;">
+  </div> -->
 </div>

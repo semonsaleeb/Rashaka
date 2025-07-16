@@ -24,7 +24,7 @@
 
           <button class="btn rounded-0"
                   [ngClass]="{
-                    'bg-success text-white': activeTab === 'register',
+                    'custom-green-btn': activeTab === 'register',
                     'bg-light text-dark': activeTab !== 'register'
                   }"
                   (click)="setTab('register')">
@@ -33,7 +33,7 @@
 
              <button class="btn rounded-0"
                   [ngClass]="{
-                    'bg-success text-white': activeTab === 'login',
+                    'custom-green-btn': activeTab === 'login',
                     'bg-light text-dark': activeTab !== 'login'
                   }"
                   (click)="setTab('login')">

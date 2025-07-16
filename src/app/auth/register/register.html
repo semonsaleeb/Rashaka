@@ -32,44 +32,63 @@
     </div>
   </div>
 
-  <div class="mb-3">
-    <label class="form-label">كلمة المرور:</label>
-    <div class="input-group">
-      <input [type]="showPassword ? 'text' : 'password'" 
-             formControlName="password" 
-             class="form-control"
-             [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-      <button class="btn btn-outline-secondary" 
-              type="button"
-              (click)="togglePasswordVisibility()">
-        <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
-      </button>
-    </div>
-    <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="invalid-feedback">
-      كلمة المرور يجب أن تكون على الأقل 6 أحرف
-    </div>
+ <!-- كلمة المرور -->
+<div class="mb-3">
+  <label class="form-label">كلمة المرور:</label>
+  <div class="position-relative" dir="rtl">
+    <input 
+      [type]="showPassword ? 'text' : 'password'" 
+      formControlName="password" 
+      class="form-control ps-5"
+      [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+      placeholder="كلمة المرور">
+
+    <span 
+      class="position-absolute top-50 start-0 translate-middle-y ps-3"
+      style="cursor: pointer;"
+      (click)="togglePasswordVisibility()">
+      <i class="fas" 
+         [class.fa-eye]="!showPassword" 
+         [class.fa-eye-slash]="showPassword">
+      </i>
+    </span>
   </div>
 
-  <div class="mb-4">
-    <label class="form-label">تأكيد كلمة المرور:</label>
-    <div class="input-group">
-      <input [type]="showConfirmPassword ? 'text' : 'password'" 
-             formControlName="password_confirmation" 
-             class="form-control"
-             [class.is-invalid]="registerForm.hasError('mismatch')">
-      <button class="btn btn-outline-secondary" 
-              type="button"
-              (click)="toggleConfirmPasswordVisibility()">
-        <i class="fas" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
-      </button>
-    </div>
-    <div *ngIf="registerForm.hasError('mismatch')" class="invalid-feedback">
-      كلمات المرور غير متطابقة
-    </div>
+  <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="invalid-feedback text-end d-block">
+    كلمة المرور يجب أن تكون على الأقل 6 أحرف
   </div>
+</div>
+
+<!-- تأكيد كلمة المرور -->
+<div class="mb-4">
+  <label class="form-label">تأكيد كلمة المرور:</label>
+  <div class="position-relative" dir="rtl">
+    <input 
+      [type]="showConfirmPassword ? 'text' : 'password'" 
+      formControlName="password_confirmation" 
+      class="form-control ps-5"
+      [class.is-invalid]="registerForm.hasError('mismatch')"
+      placeholder="تأكيد كلمة المرور">
+
+    <span 
+      class="position-absolute top-50 start-0 translate-middle-y ps-3"
+      style="cursor: pointer;"
+      (click)="toggleConfirmPasswordVisibility()">
+      <i class="fas" 
+         [class.fa-eye]="!showConfirmPassword" 
+         [class.fa-eye-slash]="showConfirmPassword">
+      </i>
+    </span>
+  </div>
+
+  <div *ngIf="registerForm.hasError('mismatch')" class="invalid-feedback text-end d-block">
+    كلمات المرور غير متطابقة
+  </div>
+</div>
+
 
   <button type="submit" 
-          class="btn btn-success w-100 py-2" 
+          class="btn custom-green-btn w-100 py-2" 
           [disabled]="loading || registerForm.invalid">
     {{ loading ? 'جارٍ إنشاء الحساب...' : 'إنشاء حساب' }}
   </button>

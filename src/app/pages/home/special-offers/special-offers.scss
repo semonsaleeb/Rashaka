@@ -183,7 +183,7 @@
   padding: 4px 35px;
   font-size: 11px;
   font-weight: bold;
-  z-index: 5;
+  z-index: 2;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
 }
@@ -236,4 +236,18 @@
 
 .carousel-item-custom.active {
   display: block;
+}
+
+.custom-hover {
+  transition: all 0.3s ease;
+}
+
+.custom-hover:hover {
+  border-color: #7AD03A !important;
+}
+/* In your component's CSS or global styles */
+.product-carousel {
+  margin-top: var(--header-height, 80px); /* Uses CSS variable if defined */
+  position: relative;
+  z-index: 1; /* Lower than header's z-index */
 }

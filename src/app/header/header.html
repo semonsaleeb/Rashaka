@@ -1,7 +1,7 @@
-<header class="header bg-white w-100" dir="rtl">
+<header class="header bg-white w-100 fixed-top shadow-sm z-3 mb-5" dir="rtl">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-  <div class="container-fluid py-2">
+  <div class="container-fluid ">
     <div class="d-flex align-items-center justify-content-between flex-wrap">
       <!-- Logo -->
       <div class="logo ms-3">
@@ -9,28 +9,40 @@
       </div>
 
       <!-- Search Bar -->
-      <div class="search-container flex-grow-1 mx-3" style="max-width: 400px;">
-        <div class="input-group position-relative">
-          <input type="text" class="form-control pe-5" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
-            (keyup.enter)="onSearch()" dir="rtl" style="text-align: right;">
-          <span class="position-absolute end-0 top-50 translate-middle-y me-3" style="z-index: 5;">
-            <i class="fas fa-search text-secondary"></i>
-          </span>
-        </div>
-      </div>
+      <div class="search-container flex-grow-1 mx-3" style="max-width: 500px;">
+  <div class="input-group position-relative" dir="rtl">
+    <input 
+      type="text" 
+      class="form-control ps-5" 
+      [(ngModel)]="searchQuery" 
+      placeholder="ابحث عن منتجات"
+      (keyup.enter)="onSearch()" 
+      style="text-align: right;">
+
+    <!-- Icon inside input on the left side -->
+    <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="z-index: 5;">
+      <img src="assets/Images/search-01.svg">
+    </span>
+  </div>
+</div>
+
 
       <!-- Top Bar -->
       <div class="top-bar d-flex align-items-center gap-3">
         <!-- If NOT logged in -->
-        <a *ngIf="!isLoggedIn" routerLink="/auth" class="btn btn-outline-primary ms-2">
-          <i class="fas fa-user"></i> تسجيل الدخول
+        <a *ngIf="!isLoggedIn" routerLink="/auth"
+          class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
+          <img src="assets/Images/user-circle.svg" alt="User" width="20">
+          <span>تسجيل الدخول</span>
         </a>
 
+
         <!-- If logged in -->
+         <!-- <div class="px-3 "> -->
         <ng-container *ngIf="isLoggedIn">
           <div ngbDropdown class="d-inline-block ms-2">
-            <button ngbDropdownToggle class="btn btn-outline-secondary">
-              <i class="fas fa-user"></i> مرحباً، {{ client?.name || 'المستخدم' }}
+            <button ngbDropdownToggle class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
+               <img src="assets/Images/user-circle.svg" alt="User" width="20"> مرحباً، {{ client?.name || 'المستخدم' }}
             </button>
             <div ngbDropdownMenu class="dropdown-menu-end text-end">
               <a class="dropdown-item" routerLink="/profile">
@@ -46,39 +58,46 @@
 
 
         <!-- Language Switch -->
-        <div class="language-selector d-flex align-items-center">
-          <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1">
-          <select class="form-select border-0" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
-            <option value="العربية">العربية</option>
-            <option value="English">English</option>
-          </select>
-        </div>
+      <div class="language-selector d-flex align-items-center mx-2">
+  <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1 me-1">
+  <select class="form-select border-0 p-0 rtl-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
+    <option value="العربية">العربية</option>
+    <option value="English">English</option>
+  </select>
+</div>
+<!-- </div> -->
 
         <!-- Cart + Favorites -->
-        <div class="icon-buttons d-flex gap-2">
-<a [routerLink]="['/cart']">
-  <div
-    class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
-    style="width: 36px; height: 36px;">
-    <img src="assets/Images/Vector.svg" alt="cart" width="20">
-    <span *ngIf="cartCount > 0"
-          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-      {{ cartCount }}
-    </span>
-  </div>
-</a>
-
-
-
+        <div class="icon-buttons d-flex gap-3 mx-1 ">
 
           <div
             class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
-            style="width: 36px; height: 36px;">
-            <img src="assets/Images/shopping-cart-01.svg" alt="favorites" width="20">
+            style="width: 40px; height: 40px;">
+            <img src="assets/Images/Vector.svg" alt="cart" width="20">
+
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
               {{ favoriteCount }}
             </span>
           </div>
+
+
+          <a [routerLink]="['/cart']">
+            <div
+              class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
+              style="width: 40px; height: 40px;">
+              <img src="assets/Images/shopping-cart-01.svg" alt="favorites" width="20">
+
+              <span *ngIf="cartCount > 0"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ cartCount }}
+              </span>
+            </div>
+          </a>
+
+
+
+
+
 
         </div>
       </div>
@@ -90,20 +109,18 @@
     <div class="container-fluid">
       <div class="collapse navbar-collapse d-flex">
         <!-- Navigation Items -->
-       <ul class="navbar-nav d-flex" style="margin-right: -2rem;">
-  <li *ngFor="let item of navItems" class="nav-item mx-2" [class.active]="item.active">
-    <a class="nav-link text-dark position-relative"
-       [routerLink]="item.path"
-       (click)="onNavItemClick(item)">
-      {{ item.label }}
-      <i *ngIf="item.hasDropdown" class="fas fa-chevron-down me-1 small"></i>
-    </a>
-  </li>
-</ul>
+        <ul class="navbar-nav d-flex" style="margin-right: -2rem;">
+          <li *ngFor="let item of navItems" class="nav-item mx-2" [class.active]="item.active">
+            <a class="nav-link text-dark position-relative" [routerLink]="item.path" (click)="onNavItemClick(item)">
+              {{ item.label }}
+              <i *ngIf="item.hasDropdown" class="fas fa-chevron-down me-1 small"></i>
+            </a>
+          </li>
+        </ul>
 
 
         <!-- WhatsApp Button -->
-        <div class="ms-auto " style="margin-right: 11rem; direction: rtl;" >
+        <div class="ms-auto " style=" direction: rtl; position: absolute; left: 0;">
           <button class="btn d-flex align-items-center justify-content-between border border-1 px-5 py-2"
             style="color: #25D366; border-color: #ccc;">
             <span class="ms-2">واتساب</span>

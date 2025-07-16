@@ -1,5 +1,6 @@
 header{
-  font-size: .8rem;
+  font-size: 1rem;
+  height: 8rem;
   // padding-left: 120px;
   //   padding-right: 120px;
  padding: 20px 100px  20px 100px;
@@ -16,4 +17,10 @@ header{
 /* Search bar icon positioning */
 .search-container .fa-search {
   pointer-events: none;
+}
+
+.rtl-select {
+  background-position: left center; /* move arrow to the left */
+  padding-left: .7rem !important;  /* add padding to prevent text overlap with arrow */
+  padding-right: 0.5rem !important; /* remove extra right padding */
 }

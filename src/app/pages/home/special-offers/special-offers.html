@@ -58,11 +58,12 @@
                   <p class="card-text text-muted" style="font-size: 13px; max-height: 40px; overflow: hidden;">
                     {{ product.description }}
                   </p>
-                  <button 
-  class="btn btn-outline-success w-100 mt-2 btn-sm bg-white rounded-5"
-  (click)="addToCart(product.id)">
-  إضافة للعربة <i class="fas fa-shopping-cart ms-1 bg-white"></i>
-</button>
+                  <button class="btn btn-outline-dark w-100 mt-2 btn-sm bg-white text-black rounded-5 custom-hover"
+                    (click)="addToCart(product.id)">
+                    إضافة للعربة
+                    <img src="assets/Images/shopping-cart-add-01.svg">
+                  </button>
+
 
                 </div>
               </div>

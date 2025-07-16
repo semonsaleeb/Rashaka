@@ -33,7 +33,7 @@ constructor(
   ngOnInit(): void {
     
         this.fetchProducts();
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
  addToCart(productId: number): void {

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { Product, ProductService, Category } from '../../../services/product';
+import { CartService } from '../../../services/cart.service';
+import { CartStateService } from '../../../services/cart-state-service';
 
 @Component({
   selector: 'app-category-products',
@@ -20,7 +22,7 @@ export class CategoryProducts implements OnInit {
   selectedCategory: number | 'all' = 'all';
   currentSlideIndex = 0;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService,   private cartService: CartService,   public cartState: CartStateService) {}
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -108,4 +110,26 @@ export class CategoryProducts implements OnInit {
   goToSlide(index: number): void {
     this.currentSlideIndex = index;
   }
+
+
+  
+   addToCart(productId: number): void {
+      this.cartService.addToCart(productId).subscribe({
+        next: (res) => {
+          console.log('Product added successfully', res);
+          this.refreshCartCount();
+          // Optionally refresh cart icon count (via shared service or manual reload)
+        },
+        error: (err) => {
+          console.error('Failed to add to cart', err);
+        }
+      });
+    }
+  refreshCartCount() {
+    this.cartService.getCart().subscribe(response => {
+      const count = response.data.items.reduce((total, item) => total + item.quantity, 0);
+      this.cartState.updateCount(count); // ✅ This triggers header update
+    });
+  }
+  
 }

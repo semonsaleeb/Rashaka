@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SwiperContainer } from 'swiper/element';
 import { register } from 'swiper/element/bundle';
 import { SwiperOptions } from 'swiper/types';
+import { DomSanitizer } from '@angular/platform-browser';
 
 // Register Swiper web components
 register();
@@ -12,39 +13,36 @@ register();
   templateUrl: './suces-story.html',
   styleUrl: './suces-story.scss'
 })
-export class SucesStory {
-  currentIndex = 0;
+export class SucesStory {currentIndex = 0;
 
   stories = [
-  {
-    id: 1,
-    src: 'assets/videos/story1.mp4',
-    poster: 'assets/images/thumb1.jpg' // Optional thumbnail
-  },
-  {
-    id: 2,
-    src: 'assets/videos/story2.mp4',
-    poster: 'assets/images/thumb2.jpg'
-  },
-  {
-    id: 3,
-    src: 'assets/videos/story3.mp4',
-    poster: 'assets/images/thumb3.jpg'
-  },
-  {
-    id: 4,
-    src: 'assets/videos/story4.mp4',
-    poster: 'assets/images/thumb4.jpg'
-  }
-];
-get groupedStories() {
-  const result = [];
-  for (let i = 0; i < this.stories.length; i += 4) {
-    result.push(this.stories.slice(i, i + 4));
-  }
-  return result;
-}
+    {
+      id: 1,
+      youtubeId: 'lgUZdInfx6U',
+      title: 'قصة نجاح ١',
+      description: 'تجربة عميل مع منتجاتنا'
+    },
+    {
+      id: 2,
+      youtubeId: 'dQw4w9WgXcQ', // Example ID - replace with real one
+      title: 'قصة نجاح ٢',
+      description: 'رحلة تحول ناجحة'
+    },
+    {
+      id: 3,
+      youtubeId: 'y6120QOlsfU', // Example ID - replace with real one
+      title: 'قصة نجاح ٣',
+      description: 'تجربة ملهمة'
+    }
+  ];
 
+  constructor(private sanitizer: DomSanitizer) {}
+
+  getSafeYoutubeUrl(id: string) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
+    );
+  }
 
   getCardClass(index: number): string {
     const total = this.stories.length;
@@ -56,6 +54,7 @@ get groupedStories() {
     if (index === next) return 'right';
     return '';
   }
+  
 
   nextSlide() {
     this.currentIndex = (this.currentIndex + 1) % this.stories.length;
@@ -63,5 +62,9 @@ get groupedStories() {
 
   prevSlide() {
     this.currentIndex = (this.currentIndex - 1 + this.stories.length) % this.stories.length;
+  }
+
+  goToSlide(index: number) {
+    this.currentIndex = index;
   }
 }

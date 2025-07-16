@@ -66,8 +66,8 @@ export class Register {
     });
   }
 
-  showPassword = false;
-showConfirmPassword = false;
+  showPassword = true;
+showConfirmPassword = true;
 
 togglePasswordVisibility() {
   this.showPassword = !this.showPassword;

@@ -110,19 +110,24 @@ export class Header implements OnInit {
     item.active = true;
   }
 
-  logout() {
-    this.auth.logout().subscribe({
-      next: () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('client');
-        this.router.navigate(['/auth']);
-      },
-      error: (err) => {
-        console.error('Logout failed', err);
-        localStorage.removeItem('token');
-        localStorage.removeItem('client');
-        this.router.navigate(['/auth']);
-      }
-    });
-  }
+logout() {
+  this.auth.logout().subscribe({
+    next: () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('client');
+      this.router.navigate(['/auth']).then(() => {
+        window.location.reload(); // ✅ Full page refresh after navigating
+      });
+    },
+    error: (err) => {
+      console.error('Logout failed', err);
+      localStorage.removeItem('token');
+      localStorage.removeItem('client');
+      this.router.navigate(['/auth']).then(() => {
+        window.location.reload(); // ✅ Also refresh on error fallback
+      });
+    }
+  });
+}
+
 }

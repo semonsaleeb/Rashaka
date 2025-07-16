@@ -233,3 +233,11 @@
   from { width: 0; }
   to { width: 100%; }
 }
+
+.custom-hover {
+  transition: all 0.3s ease;
+}
+
+.custom-hover:hover {
+  border-color: #7AD03A !important;
+}

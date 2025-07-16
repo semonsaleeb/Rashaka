@@ -8,6 +8,7 @@ import { CategoryProducts } from './pages/home/category-products/category-produc
 import { SucesStory } from './pages/home/suces-story/suces-story';
 import { Blogs } from './pages/home/blogs/blogs';
 import { CartIconComponent } from './cart-icon.component/cart-icon.component';
+import { CartPageComponent } from './cart-page.component/cart-page.component';
 
 export const routes: Routes = [
   // Home page
@@ -100,7 +101,7 @@ export const routes: Routes = [
   },
    {
     path: 'cart',
-    component: CartIconComponent
+    component: CartPageComponent
   },
 
 //   {

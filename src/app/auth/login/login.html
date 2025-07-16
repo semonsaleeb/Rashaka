@@ -1,23 +1,50 @@
-<form (ngSubmit)="login()">
+<form (ngSubmit)="login()" dir="rtl">
   <div class="mb-3">
     <label for="email">البريد الإلكتروني</label>
-    <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required />
+    <input 
+      type="email" 
+      id="email" 
+      [(ngModel)]="email" 
+      name="email" 
+      class="form-control" 
+      required 
+    />
   </div>
 
-  <div class="mb-3">
+  <div class="my-3 position-relative">
     <label for="password">كلمة المرور</label>
-    <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" required />
+    <input 
+      [type]="showPassword ? 'text' : 'password'" 
+      id="password" 
+      [(ngModel)]="password" 
+      name="password" 
+      class="form-control py-2" 
+      required 
+    />
+
+    <!-- 👁️ Eye Icon for Toggle -->
+    <span 
+      class="position-absolute top-50 start-0  ps-3" 
+      style="cursor: pointer;" 
+      (click)="togglePasswordVisibility()">
+      <i class="fas" 
+         [class.fa-eye]="showPassword" 
+         [class.fa-eye-slash]="!showPassword">
+      </i>
+    </span>
   </div>
 
-<a href="/forgot-password" class="d-block text-end text-primary mb-3"  style="text-decoration: none;">
-  هل نسيت كلمة المرور؟ <i class="fas fa-unlock"></i>
-</a>
+  <!-- Forgot Password Link -->
+  <a href="/forgot-password" class="d-block text-end text-primary mb-3" style="text-decoration: none;">
+    هل نسيت كلمة المرور؟ <i class="fas fa-unlock"></i>
+  </a>
 
-
-  <button type="submit" class="btn btn-success w-100" [disabled]="loading">
+  <!-- Submit Button -->
+  <button type="submit" class="btn custom-green-btn w-100" [disabled]="loading">
     {{ loading ? 'جاري الدخول...' : 'دخول' }}
   </button>
 
+  <!-- Error Message -->
   <div class="text-danger mt-2" *ngIf="errorMessage">
     {{ errorMessage }}
   </div>
