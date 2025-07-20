@@ -10,20 +10,39 @@
 
       <!-- Search Bar -->
       <div class="search-container flex-grow-1 mx-3" style="max-width: 500px;">
-  <div class="input-group position-relative" dir="rtl">
+ <div class="position-relative" dir="rtl">
+  <div class="input-group">
     <input 
-      type="text" 
-      class="form-control ps-5" 
-      [(ngModel)]="searchQuery" 
-      placeholder="ابحث عن منتجات"
-      (keyup.enter)="onSearch()" 
-      style="text-align: right;">
+  type="text" 
+  class="form-control ps-5" 
+  [(ngModel)]="searchQuery" 
+  placeholder="ابحث عن منتجات"
+  (input)="onSearch()"  
+  style="text-align: right;">
 
-    <!-- Icon inside input on the left side -->
+
     <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="z-index: 5;">
       <img src="assets/Images/search-01.svg">
     </span>
   </div>
+
+  <!-- Results: Absolute overlay -->
+  <div *ngIf="searchQuery" class="position-absolute w-100 bg-white border rounded shadow mt-1" style="z-index: 10;">
+    <div *ngIf="products.length > 0; else noProducts" class="p-2">
+      <div *ngFor="let product of products" class="border-bottom py-2">
+        <h5 class="mb-1" style="white-space: normal;">{{ product.name_ar }}</h5>
+        <p class="mb-1" style="white-space: normal;">{{ product.description_ar }}</p>
+        <img [src]="product.images[0]" alt="Product" width="100">
+      </div>
+    </div>
+    <ng-template #noProducts>
+      <p class="text-center text-muted py-2">لا توجد منتجات</p>
+    </ng-template>
+  </div>
+</div>
+
+
+
 </div>
 
 

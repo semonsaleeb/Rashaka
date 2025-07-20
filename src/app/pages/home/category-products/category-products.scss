@@ -253,6 +253,33 @@
 }
 
 
+
+
+/* Override btn-success */
+.btn-success {
+  background-color: #7AD03A !important;
+  border-color: #7AD03A !important;
+  border-radius: 10px !important;
+  color: black;
+  width: 10rem;
+  height: 2.5rem;
+}
+
+/* Override btn-outline-success */
+.btn-outline-success {
+    width: 12rem;
+  border-radius: 10px !important;
+
+  color: white !important;
+  border-color: #DDDDDD33 !important;
+}
+
+.btn-outline-success:hover {
+  background-color: #DDDDDD33 !important;
+  color: white !important;
+}
+
+
 .btn-circle {
   width: 35px;
   height: 35px;

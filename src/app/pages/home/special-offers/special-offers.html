@@ -6,7 +6,7 @@
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4 " dir="rtl">
         <div class="d-flex align-items-center gap-3 flex-wrap px-4">
-          <h2 class="section-title mb-0 d-flex align-items-center text-dark px-4" style="">عروض خاصة</h2>
+          <h2 class="section-title mb-0 d-flex align-items-center text-dark px-5" style="">عروض خاصة</h2>
           <div class="time-badges d-flex gap-2">
             <div class="time-badge text-center">01 <br>ثانية</div>
             <div class="time-badge text-center">06 <br>دقيقة</div>
@@ -16,8 +16,8 @@
         </div>
 
         <a [routerLink]="['/home/special-offers']"
-          class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 px-5">
-          <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل">
+          class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-1 px-5 ">
+          <img src="assets/Images/circle-arrow-up-right-02 (2).svg"  alt="عرض الكل">
           عرض الكل
         </a>
 
@@ -28,7 +28,7 @@
         <div class="carousel-inner-custom">
           <div class="carousel-item-custom" *ngFor="let group of groupedProducts; let i = index"
             [class.active]="i === currentSlideIndex">
-            <div class="row justify-content-end mx-auto " style="max-width: 1250px;">
+            <div class="row justify-content-end mx-auto  px-3" style="max-width: 1290px;">
               <div class="col-md-4 col-sm-6 mb-4 d-flex justify-content-end" *ngFor="let product of group">
                 <div class="card product-card rounded-4 border bg-white" style="width: 320px;">
                   <div class="position-relative">
@@ -96,7 +96,7 @@
 <!-- Grid Mode -->
 <div *ngIf="mode === 'grid'" class="py-5 px-5 ">
   <!-- Offers Banner -->
-  <img src="assets/Images/Offer.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4" style="max-width: 300px;">
+  <img src="assets/Images/Group 9049 (1).svg" alt="عروض" class="img-fluid d-block mx-auto mb-4" style="max-width: 300px;">
 
   <!-- Heading -->
   <h2 class="fw-bold d-flex justify-content-center flex-wrap gap-2 mb-5">العروض</h2>

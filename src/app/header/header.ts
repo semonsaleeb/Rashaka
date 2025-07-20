@@ -9,6 +9,9 @@ import { CartService } from '../services/cart.service'; // ✅ Add this
 import {  FavoriteService } from '../services/favorite.service';
 import { CartStateService } from '../services/cart-state-service';
 import { CartIconComponent } from '../cart-icon.component/cart-icon.component';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'app-header',
@@ -44,6 +47,7 @@ export class Header implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
+    private http: HttpClient,
     private favoriteService: FavoriteService,
     private cartService: CartService,             // ✅ Inject CartService
     private cartState: CartStateService           // ✅ Inject CartStateService
@@ -94,12 +98,30 @@ export class Header implements OnInit {
     console.log('Language changed to:', this.selectedLanguage);
   }
 
+   products: any[] = [];
+filteredProducts: any[] = [];
+
+ 
   onSearch() {
-    if (this.searchQuery.trim()) {
-      console.log('Searching for:', this.searchQuery);
-      // Navigate to search results if needed
+    const trimmedQuery = this.searchQuery.trim();
+
+    if (trimmedQuery.length === 0) {
+      this.products = [];
+      return;
     }
+
+    this.http.get<any>(`${environment.apiBaseUrl}/product/search?q=${encodeURIComponent(trimmedQuery)}`)
+      .subscribe({
+        next: response => {
+          this.products = response?.data || [];
+        },
+        error: err => {
+          console.error('Search error:', err);
+          this.products = [];
+        }
+      });
   }
+
 
   onWhatsAppClick() {
     window.open('https://wa.me/+966123456789', '_blank');
