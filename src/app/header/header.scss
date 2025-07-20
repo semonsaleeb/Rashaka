@@ -24,3 +24,10 @@ header{
   padding-left: .7rem !important;  /* add padding to prevent text overlap with arrow */
   padding-right: 0.5rem !important; /* remove extra right padding */
 }
+.dropdown-menu {
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}

@@ -21,12 +21,13 @@ export class SpecialOffersComponent implements OnInit {
 
   products: Product[] = [];
   filteredProducts: Product[] = [];
-  groupedProducts: Product[][] = [];
   categories: Category[] = [];
   selectedCategory: number | 'all' = 'all';
 
   isLoading = true;
   currentSlideIndex = 0;
+  visibleCards = 3;
+  cardWidthPercentage = 100 / this.visibleCards; // Each card takes 33.33% width
 
   constructor(
     private productService: ProductService,
@@ -46,12 +47,10 @@ export class SpecialOffersComponent implements OnInit {
 
   private fetchProducts(): void {
     this.isLoading = true;
-
     this.productService.getProducts().subscribe({
       next: (products) => {
         this.products = products;
         this.filteredProducts = products;
-        this.groupedProducts = this.chunkProducts(products, 3);
         this.categories = this.extractUniqueCategories(products);
         this.isLoading = false;
       },
@@ -64,7 +63,6 @@ export class SpecialOffersComponent implements OnInit {
 
   private extractUniqueCategories(products: Product[]): Category[] {
     const map = new Map<number, Category>();
-
     products.forEach(product => {
       product.categories?.forEach(category => {
         if (!map.has(category.id)) {
@@ -72,42 +70,30 @@ export class SpecialOffersComponent implements OnInit {
         }
       });
     });
-
     return Array.from(map.values());
   }
 
-  filterByCategory(categoryId: number | 'all'): void {
-    this.selectedCategory = categoryId;
-    this.currentSlideIndex = 0;
-
-    if (categoryId === 'all') {
-      this.filteredProducts = this.products;
-    } else {
-      this.filteredProducts = this.products.filter(product =>
-        product.categories?.some(c => c.id === categoryId)
-      );
-    }
-
-    this.groupedProducts = this.chunkProducts(this.filteredProducts, 3);
+ nextSlide(): void {
+  if (this.currentSlideIndex < this.products.length - this.visibleCards) {
+    this.currentSlideIndex++;
+  } else {
+    this.currentSlideIndex = 0; // ارجع لأول كارت
   }
+}
 
-  private chunkProducts(arr: Product[], size: number): Product[][] {
-    const result: Product[][] = [];
-    for (let i = 0; i < arr.length; i += size) {
-      result.push(arr.slice(i, i + size));
-    }
-    return result;
+prevSlide(): void {
+  if (this.currentSlideIndex > 0) {
+    this.currentSlideIndex--;
+  } else {
+    this.currentSlideIndex = this.products.length - this.visibleCards; // روح لآخر مجموعة تظهر 3
   }
+}
+
 
   addToCart(productId: number): void {
     this.cartService.addToCart(productId).subscribe({
-      next: (res) => {
-        console.log('Product added successfully', res);
-        this.refreshCartCount();
-      },
-      error: (err) => {
-        console.error('Failed to add to cart', err);
-      }
+      next: () => this.refreshCartCount(),
+      error: (err) => console.error('Failed to add to cart', err)
     });
   }
 
@@ -124,24 +110,10 @@ export class SpecialOffersComponent implements OnInit {
       this.router.navigate(['/auth']);
       return;
     }
-
     product.isFavorite = !product.isFavorite;
   }
 
   addToCompare(product: Product): void {
     console.log('Compare:', product);
-  }
-
-  prevSlide(): void {
-    this.currentSlideIndex =
-      (this.currentSlideIndex - 1 + this.groupedProducts.length) % this.groupedProducts.length;
-  }
-
-  nextSlide(): void {
-    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.groupedProducts.length;
-  }
-
-  goToSlide(index: number): void {
-    this.currentSlideIndex = index;
   }
 }

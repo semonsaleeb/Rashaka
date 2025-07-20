@@ -1,6 +1,6 @@
 // src/app/services/product.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
@@ -40,11 +40,25 @@ getProducts(): Observable<Product[]> {
     .pipe(map(response => response.data));
 }
 
-
-  // Get single product by ID
-  getProductById(id: number): Observable<Product> {
-    return this.http.get<Product>(this.getFullUrl(API_ENDPOINTS.products.getById(id)));
+  getOffer(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/offers`);
   }
+
+
+  
+  getProductById(id: number, token: string): Observable<Product> {
+    const headers = new HttpHeaders({
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+
+    const url = `${this.baseUrl}?product_id=${id}`;
+
+    return this.http.get<{ status: string; data: Product }>(url, { headers }).pipe(
+      map(response => response.data)
+    );
+  }
+
 
   // Get products by category
   getProductsByCategory(category: string): Observable<Product[]> {

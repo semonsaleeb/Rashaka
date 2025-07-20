@@ -10,6 +10,7 @@ import { Blogs } from './pages/home/blogs/blogs';
 import { CartIconComponent } from './cart-icon.component/cart-icon.component';
 import { CartPageComponent } from './cart-page.component/cart-page.component';
 import { Pricing } from './pages/home/pricing/pricing';
+import { ProductCard } from './product-card/product-card';
 
 export const routes: Routes = [
   // Home page
@@ -112,22 +113,8 @@ export const routes: Routes = [
     path: 'cart',
     component: CartPageComponent
   },
+  { path: 'product/:id', component: ProductCard },
 
-//   {
-//   path: 'cart',
-//   loadComponent: () =>
-//     import('./cart-icon.component/cart-icon.component').then(m => m.CartIconComponent)
-// },
-// {
-//   path: 'cart',
-//   loadComponent: () =>
-//     import('./pages/cart-page/cart-page.component').then(m => m.CartPageComponent)
-// }
-
-  // {
-  //   path: 'home/blogs',
-  //   loadComponent: () => import('./pages/home/blogs/blogs').then(m => m.Blogs)
-  // },
 
   // Fallback route
   {

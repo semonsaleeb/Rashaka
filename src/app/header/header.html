@@ -10,40 +10,36 @@
 
       <!-- Search Bar -->
       <div class="search-container flex-grow-1 mx-3" style="max-width: 500px;">
- <div class="position-relative" dir="rtl">
-  <div class="input-group">
-    <input 
-  type="text" 
-  class="form-control ps-5" 
-  [(ngModel)]="searchQuery" 
-  placeholder="ابحث عن منتجات"
-  (input)="onSearch()"  
-  style="text-align: right;">
+        <div class="position-relative" dir="rtl">
+          <div class="input-group">
+            <input type="text" class="form-control ps-5" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
+              (input)="onSearch()" style="text-align: right;">
 
 
-    <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="z-index: 5;">
-      <img src="assets/Images/search-01.svg">
-    </span>
-  </div>
+            <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="z-index: 5;">
+              <img src="assets/Images/search-01.svg">
+            </span>
+          </div>
 
-  <!-- Results: Absolute overlay -->
-  <div *ngIf="searchQuery" class="position-absolute w-100 bg-white border rounded shadow mt-1" style="z-index: 10;">
-    <div *ngIf="products.length > 0; else noProducts" class="p-2">
-      <div *ngFor="let product of products" class="border-bottom py-2">
-        <h5 class="mb-1" style="white-space: normal;">{{ product.name_ar }}</h5>
-        <p class="mb-1" style="white-space: normal;">{{ product.description_ar }}</p>
-        <img [src]="product.images[0]" alt="Product" width="100">
+          <!-- Results: Absolute overlay -->
+          <div *ngIf="searchQuery" class="position-absolute w-100 bg-white border rounded shadow mt-1"
+            style="z-index: 10;">
+            <div *ngIf="products.length > 0; else noProducts" class="p-2">
+              <div *ngFor="let product of products" class="border-bottom py-2">
+                <h5 class="mb-1" style="white-space: normal;">{{ product.name_ar }}</h5>
+                <p class="mb-1" style="white-space: normal;">{{ product.description_ar }}</p>
+                <img [src]="product.images[0]" alt="Product" width="100">
+              </div>
+            </div>
+            <ng-template #noProducts>
+              <p class="text-center text-muted py-2">لا توجد منتجات</p>
+            </ng-template>
+          </div>
+        </div>
+
+
+
       </div>
-    </div>
-    <ng-template #noProducts>
-      <p class="text-center text-muted py-2">لا توجد منتجات</p>
-    </ng-template>
-  </div>
-</div>
-
-
-
-</div>
 
 
       <!-- Top Bar -->
@@ -57,11 +53,12 @@
 
 
         <!-- If logged in -->
-         <!-- <div class="px-3 "> -->
+        <!-- <div class="px-3 "> -->
         <ng-container *ngIf="isLoggedIn">
           <div ngbDropdown class="d-inline-block ms-2">
-            <button ngbDropdownToggle class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
-               <img src="assets/Images/user-circle.svg" alt="User" width="20"> مرحباً، {{ client?.name || 'المستخدم' }}
+            <button ngbDropdownToggle
+              class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
+              <img src="assets/Images/user-circle.svg" alt="User" width="20"> مرحباً، {{ client?.name || 'المستخدم' }}
             </button>
             <div ngbDropdownMenu class="dropdown-menu-end text-end">
               <a class="dropdown-item" routerLink="/profile">
@@ -77,14 +74,15 @@
 
 
         <!-- Language Switch -->
-      <div class="language-selector d-flex align-items-center mx-2">
-  <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1 me-1">
-  <select class="form-select border-0 p-0 rtl-select" [(ngModel)]="selectedLanguage" (change)="onLanguageChange($event)">
-    <option value="العربية">العربية</option>
-    <option value="English">English</option>
-  </select>
-</div>
-<!-- </div> -->
+        <div class="language-selector d-flex align-items-center mx-2">
+          <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1 me-1">
+          <select class="form-select border-0 p-0 rtl-select" [(ngModel)]="selectedLanguage"
+            (change)="onLanguageChange($event)">
+            <option value="العربية">العربية</option>
+            <option value="English">English</option>
+          </select>
+        </div>
+        <!-- </div> -->
 
         <!-- Cart + Favorites -->
         <div class="icon-buttons d-flex gap-3 mx-1 ">
@@ -128,14 +126,74 @@
     <div class="container-fluid">
       <div class="collapse navbar-collapse d-flex">
         <!-- Navigation Items -->
-        <ul class="navbar-nav d-flex" style="margin-right: -2rem;">
-          <li *ngFor="let item of navItems" class="nav-item mx-2" [class.active]="item.active">
-            <a class="nav-link text-dark position-relative" [routerLink]="item.path" (click)="onNavItemClick(item)">
+        <ul class="navbar-nav d-flex flex-row">
+          <li class="nav-item mx-2 position-relative" *ngFor="let item of navItems">
+
+            <!-- Regular links route normally, dropdown links toggle -->
+            <a class="nav-link text-dark position-relative" [routerLink]="!item.hasDropdown ? item.path : null"
+              href="javascript:void(0)" (click)="item.hasDropdown ? toggleDropdown(item) : null">
               {{ item.label }}
               <i *ngIf="item.hasDropdown" class="fas fa-chevron-down me-1 small"></i>
             </a>
+
+            <!-- Dropdown for categories -->
+            <div *ngIf="item.hasDropdown && item.showDropdown" class="dropdown-menu show p-4" [ngStyle]="{
+       right: '-95px',
+       top: '100%',
+       zIndex: '1000',
+       minWidth: '1250px',
+     }" style="position: absolute; background-color: #fff; border: 1px solid #ddd; box-shadow: 0px 2px 10px rgba(0,0,0,0.1);">
+
+              <div class="row align-items-center">
+
+<!-- style="background-color: #F0F0F0;" -->
+
+                <!-- Right Side: Categories -->
+                <div class="col-md-6" >
+                  <div class="row" >
+                    <div class="col-6 mb-2" *ngFor="let category of categories"  dir="rtl">
+                      <a class="dropdown-item d-flex align-items-center gap-2"
+                        [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }">
+                        {{ category.name_ar }}
+                      </a>
+                    </div>
+                    <div class="col-12 text-end mt-3">
+                      <a [routerLink]="['/home/category-products']"
+                        class="btn btn-outline-dark btn-sm rounded-pill d-inline-flex align-items-center">
+                        عرض الكل
+                        <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="20"
+                          alt="Arrow Icon">
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Left Side: Image and Call to Action -->
+                <div class="col-md-6 d-flex align-items-center text-center text-md-start">
+
+
+                  <div dir="rtl">
+                    <h5 class="fw-bold">احجز فحص مجاني الآن</h5>
+                    <p class="small text-muted">
+                      نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ).
+                    </p>
+                    <button class="btn border rounded-5 d-inline-flex align-items-center mt-2"
+                      style="background-color: transparent; border-color: #00000080;" (click)="onGetStarted()">
+                      احجز الآن
+                      <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25"
+                        alt="Arrow Icon">
+                    </button>
+                  </div>
+                  <img src="assets/Images/Doctors-pana 1.svg" alt="Doctors" class="img-fluid me-3"
+                    style="max-height: 200px;" />
+                </div>
+
+              </div>
+            </div>
+
           </li>
         </ul>
+
+
 
 
         <!-- WhatsApp Button -->

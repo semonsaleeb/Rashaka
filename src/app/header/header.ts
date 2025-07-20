@@ -11,6 +11,7 @@ import { CartStateService } from '../services/cart-state-service';
 import { CartIconComponent } from '../cart-icon.component/cart-icon.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Category, ProductService } from '../services/product';
 
 
 @Component({
@@ -33,53 +34,86 @@ export class Header implements OnInit {
   client: any = null;
   favoriteCount = 0;
   cartCount = 0;
+  categories: Category[] = [];
 
   navItems = [
-    { label: 'الرئيسية', path: '/', active: false },
-    { label: 'المتجر', path: '/home/category-products', hasDropdown: true },
-    { label: 'الاشتراكات', path: '/home/Pricing', hasDropdown: false },
-    { label: 'قصص نجاح عملائنا', path: '/home/sucesStory', hasDropdown: false },
-    { label: 'الفحوصات المجانيه', path: '/blogs', hasDropdown: false },
-    { label: 'العروض', path: '/home/special-offers', hasDropdown: false },
-    { label: 'المدونة ', path: '/home/blogs', hasDropdown: false }
-  ];
+  { label: 'الرئيسية', path: '/', active: false },
+  { label: 'المتجر', path: '/home/category-products', hasDropdown: true, showDropdown: true },
+  { label: 'الاشتراكات', path: '/home/Pricing', hasDropdown: false },
+  { label: 'قصص نجاح عملائنا', path: '/home/sucesStory', hasDropdown: false },
+  { label: 'الفحوصات المجانيه', path: '/blogs', hasDropdown: false },
+  { label: 'العروض', path: '/home/special-offers', hasDropdown: false },
+  { label: 'المدونة ', path: '/home/blogs', hasDropdown: false }
+];
+
+toggleDropdown(item: any) {
+  this.navItems.forEach(i => {
+    if (i !== item && i.hasDropdown) {
+      i.showDropdown = false;
+    }
+  });
+  item.showDropdown = !item.showDropdown;
+}
+
+
 
   constructor(
     private auth: AuthService,
     private router: Router,
     private http: HttpClient,
+    private productService: ProductService,
     private favoriteService: FavoriteService,
     private cartService: CartService,             // ✅ Inject CartService
     private cartState: CartStateService           // ✅ Inject CartStateService
   ) {}
 
-  ngOnInit() {
-    this.updateCartCount(); // ✅ Initial cart count
+ ngOnInit() {
+  this.updateCartCount(); // Cart
 
-    // Subscribe to cart count
-    this.cartState.cartCount$.subscribe(count => {
-      this.cartCount = count;
-    });
+  this.cartState.cartCount$.subscribe(count => {
+    this.cartCount = count;
+  });
 
-    // Subscribe to favorite count
-    this.favoriteService.favoriteCount$.subscribe(count => {
-      this.favoriteCount = count;
-    });
+  this.favoriteService.favoriteCount$.subscribe(count => {
+    this.favoriteCount = count;
+  });
 
-    // Check login status
-    this.auth.isLoggedIn$.subscribe(status => {
-      this.isLoggedIn = status;
+  this.auth.isLoggedIn$.subscribe(status => {
+    this.isLoggedIn = status;
+    const clientData = localStorage.getItem('client');
+    this.client = (status && clientData) ? JSON.parse(clientData) : null;
+  });
 
-      if (this.isLoggedIn) {
-        const clientData = localStorage.getItem('client');
-        if (clientData) {
-          this.client = JSON.parse(clientData);
-        }
-      } else {
-        this.client = null;
-      }
-    });
+  // ✅ Load categories here
+  this.productService.getProducts().subscribe({
+    next: (products) => {
+      this.categories = this.extractUniqueCategories(products);
+    },
+    error: (err) => {
+      console.error('Failed to fetch products:', err);
+    }
+  });
+
+  // Show first dropdown
+  const defaultNavItem = this.navItems.find(i => i.hasDropdown);
+  if (defaultNavItem) {
+    this.toggleDropdown(defaultNavItem);
   }
+}
+
+extractUniqueCategories(products: any[]): Category[] {
+  const categoryMap = new Map<number, Category>();
+  products.forEach(product => {
+    if (product.categories) {
+      product.categories.forEach((category: Category) => {
+        if (category && category.id && !categoryMap.has(category.id)) {
+          categoryMap.set(category.id, category);
+        }
+      });
+    }
+  });
+  return Array.from(categoryMap.values());
+}
 
   updateCartCount(): void {
     this.cartService.getCart().subscribe({
@@ -151,5 +185,8 @@ logout() {
     }
   });
 }
-
+  onGetStarted() {
+    console.log('Get started clicked');
+    // Add your navigation logic here
+  }
 }
