@@ -126,3 +126,39 @@
     transform: translateY(-5px);
   }
 }
+
+
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
+}
+
+// Default images
+.arrow-btn.prev {
+  background-image: url("/assets/Images/left-arrow.svg");
+}
+
+.arrow-btn.next {
+  background-image: url("/assets/Images/right-arrow.svg");
+}
+
+// Hover / Active images
+.arrow-btn.prev:hover,
+.arrow-btn.prev:active {
+    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+
+}
+
+.arrow-btn.next:hover,
+.arrow-btn.next:active {
+    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+
+}

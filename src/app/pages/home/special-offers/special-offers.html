@@ -1,12 +1,12 @@
 <!-- Carousel Mode -->
-<div class="position-relative" *ngIf="mode === 'carousel'">
-  <div class="my-5 px-3" *ngIf="!isLoading">
+<div class="position-relative " *ngIf="mode === 'carousel'">
+  <div class="my-5 " *ngIf="!isLoading">
     <div class="special-offers-container mb-5">
 
       <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
-        <div class="d-flex align-items-center gap-3 flex-wrap">
-          <h2 class="section-title mb-0 d-flex align-items-center text-dark" style="margin-top: -2rem;">عروض خاصة</h2>
+      <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4 " dir="rtl">
+        <div class="d-flex align-items-center gap-3 flex-wrap px-4">
+          <h2 class="section-title mb-0 d-flex align-items-center text-dark px-4" style="">عروض خاصة</h2>
           <div class="time-badges d-flex gap-2">
             <div class="time-badge text-center">01 <br>ثانية</div>
             <div class="time-badge text-center">06 <br>دقيقة</div>
@@ -15,10 +15,12 @@
           </div>
         </div>
 
-        <button class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 p-0">
+        <a [routerLink]="['/home/special-offers']"
+          class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 px-5">
           <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل">
           عرض الكل
-        </button>
+        </a>
+
       </div>
 
       <!-- Custom Carousel -->
@@ -26,8 +28,8 @@
         <div class="carousel-inner-custom">
           <div class="carousel-item-custom" *ngFor="let group of groupedProducts; let i = index"
             [class.active]="i === currentSlideIndex">
-            <div class="row justify-content-center mx-auto px-3" style="max-width: 1200px;">
-              <div class="col-md-4 col-sm-6 mb-4 d-flex justify-content-center" *ngFor="let product of group">
+            <div class="row justify-content-end mx-auto " style="max-width: 1250px;">
+              <div class="col-md-4 col-sm-6 mb-4 d-flex justify-content-end" *ngFor="let product of group">
                 <div class="card product-card rounded-4 border bg-white" style="width: 320px;">
                   <div class="position-relative">
                     <div id="productCarousel-{{ product.id }}" class="carousel slide" data-bs-ride="carousel">
@@ -42,17 +44,17 @@
                     </div>
 
                     <!-- Buttons -->
+                    <!-- Favorite & Compare Buttons -->
                     <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-                      <button class="btn btn-light btn-sm rounded-circle border border-secondary"
-                        style="width: 36px; height: 36px;" (click)="toggleFavorite(product)">
-                        <i [class]="product.isFavorite ? 'fas fa-heart text-danger' : 'far fa-heart'"></i>
-                      </button>
+                      <button (click)="toggleFavorite(product)" class="btn-circle"
+                        [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
+                        <i class="fa-regular fa-heart"></i> </button>
 
-                      <button class="btn btn-light btn-sm rounded-circle border border-secondary"
-                        style="width: 36px; height: 36px;" (click)="addToCompare(product)">
+                      <button (click)="addToCompare(product)" class="btn-circle text-muted">
                         <i class="fas fa-random"></i>
                       </button>
                     </div>
+
                   </div>
 
                   <div class="card-body text-center p-2">
@@ -73,16 +75,13 @@
         </div>
 
         <!-- Arrows & Dots -->
-        <div class="d-flex justify-content-between align-items-center px-4 mt-4">
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-dark btn-sm rounded-circle" (click)="prevSlide()">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="btn btn-outline-dark btn-sm rounded-circle" (click)="nextSlide()">
-              <i class="fas fa-chevron-right"></i>
-            </button>
+        <div class="d-flex justify-content-between align-items-center px-5 mt-4">
+          <div class="d-flex gap-2 px-5">
+            <button class="arrow-btn prev" (click)="prevSlide()"></button>
+            <button class="arrow-btn next" (click)="nextSlide()"></button>
           </div>
-          <div class="d-flex gap-2">
+
+          <div class="d-flex gap-2 px-5">
             <button *ngFor="let group of groupedProducts; let i = index" (click)="goToSlide(i)" class="rounded-circle"
               [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
               style="width: 10px; height: 10px; border: none;">
@@ -93,24 +92,26 @@
     </div>
   </div>
 </div>
+
 <!-- Grid Mode -->
-<div *ngIf="mode === 'grid'" class="py-5 px-5 text-center" >
+<div *ngIf="mode === 'grid'" class="py-5 px-5 ">
   <!-- Offers Banner -->
-  <img src="assets/Images/Offer.svg" alt="عروض" class="img-fluid mb-4" style="max-width: 300px;">
+  <img src="assets/Images/Offer.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4" style="max-width: 300px;">
 
   <!-- Heading -->
-  <h2 class="fw-bold mb-2">العروض</h2>
-  <p class="text-muted mb-4">استمتع بأفضل الخصومات والعروضات المصممة خصيصًا لك.</p>
+  <h2 class="fw-bold d-flex justify-content-center flex-wrap gap-2 mb-5">العروض</h2>
+  <p class="text-muted d-flex justify-content-center flex-wrap gap-2 mb-5">استمتع بأفضل الخصومات والعروضات المصممة
+    خصيصًا لك.</p>
 
   <!-- Category Tabs -->
   <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
-  
+
     <button class="btn" *ngFor="let cat of categories"
       [ngClass]="{'custom-green-btn': selectedCategory === cat.id, 'btn-outline-success': selectedCategory !== cat.id}"
       (click)="filterByCategory(cat.id)">
       {{ cat.name_ar }}
     </button>
-  <button class="btn"
+    <button class="btn"
       [ngClass]="{'custom-green-btn': selectedCategory === 'all', 'btn-outline-success': selectedCategory !== 'all'}"
       (click)="filterByCategory('all')">
       الكل
@@ -118,11 +119,22 @@
   </div>
 
   <!-- Product Grid -->
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-end mx-5">
     <div class="col" *ngFor="let product of filteredProducts">
       <div class="card h-100 product-card bg-white rounded-4 border shadow-sm">
         <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
           style="height: 200px; object-fit: contain;">
+        <!-- Favorite & Compare Buttons -->
+        <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+          <button (click)="toggleFavorite(product)" class="btn-circle"
+            [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
+            <i class="fa-regular fa-heart"></i> </button>
+
+          <button (click)="addToCompare(product)" class="btn-circle text-muted">
+            <i class="fas fa-random"></i>
+          </button>
+        </div>
+
         <div class="card-body text-end px-3 pb-4">
           <h6 class="card-title fw-bold mb-2">{{ product.name_ar }}</h6>
           <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">

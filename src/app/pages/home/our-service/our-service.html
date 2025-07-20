@@ -1,15 +1,17 @@
-<div class="container w-100" style="text-align: center;" >
-    <header>
-        <h1 class=" section_title ">خدامتنا</h1>
+<div class="container w-100 px-5" style="text-align: center;">
+  <header>
+    <h1 class=" section_title ">خدامتنا</h1>
 
-    </header>
+  </header>
   <div class="row g-4">
 
     <!-- Reusable Card -->
     <div class="col-md-4" *ngFor="let card of cards">
-      <div class="card h-100 border border-2 rounded-3 text-center p-4 shadow-sm position-relative" style="min-height: 80px;">
+      <div class="card h-100 border border-2 rounded-3 text-center p-4 shadow-sm position-relative"
+        style="min-height: 80px;">
         <!-- Frame image -->
-        <img src="assets/Images/Frame 37.svg" alt="Frame" style="position: absolute; top: 0; left: 0; width: 50px; z-index: 2;">
+        <img src="assets/Images/Frame 37.svg" alt="Frame"
+          style="position: absolute; top: 0; left: 0; width: 50px; z-index: 2;">
 
         <!-- Main Icon -->
         <img [src]="card.icon" class="card-img-top mx-auto mt-3" style="width: 60px;" [alt]="card.title">
@@ -17,10 +19,13 @@
         <div class="card-body">
           <h5 class="card-title fw-bold">{{ card.title }}</h5>
           <p class="card-text">{{ card.description }}</p>
-          <button class="btn bg-light border border-black rounded-5 d-inline-flex align-items-center" (click)="onGetStarted()">
+
+          <button class="btn bg-light border border-1 rounded-5 d-inline-flex align-items-center"
+            style="border-color: #00000080;" (click)="onGetStarted()">
             احجز الآن
             <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
           </button>
+
         </div>
       </div>
     </div>

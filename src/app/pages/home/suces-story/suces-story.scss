@@ -11,9 +11,7 @@
 
   .section-title {
     font-size: 2.2rem;
-    margin-bottom: 3rem;
-    position: relative;
-    display: inline-block;
+   
     font-weight: 700;
 
     &::after {
@@ -41,7 +39,7 @@
 
 .story-card-custom {
   position: absolute;
-  width: 750px;
+  width: 700px;
   height: 450px;
   background: linear-gradient(135deg, #2EA2CC 0%, #7AD03A 100%);
   border-radius: 15px;
@@ -179,4 +177,40 @@
   .carousel-custom-wrapper {
     padding: 0;
   }
+}
+
+
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
+}
+
+// Default images
+.arrow-btn.prev {
+  background-image: url("/assets/Images/left-arrow.svg");
+}
+
+.arrow-btn.next {
+  background-image: url("/assets/Images/right-arrow.svg");
+}
+
+// Hover / Active images
+.arrow-btn.prev:hover,
+.arrow-btn.prev:active {
+    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+
+}
+
+.arrow-btn.next:hover,
+.arrow-btn.next:active {
+    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+
 }

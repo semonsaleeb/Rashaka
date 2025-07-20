@@ -1,28 +1,46 @@
 <div class="blog-container w-100" dir="rtl">
-  <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 p-3">
-    <h2 class="section-title mb-0" style="color: white;">احدث مقالات</h2>
-    <button class="btn btn-link text-white d-flex align-items-center gap-2 p-0 view-all-btn">
-      <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل" />
-      عرض الكل
-    </button>
+
+  <!-- GRID VIEW -->
+  <div *ngIf="mode === 'grid'" class="row px-3">
+    <div class="col-md-4 mb-4 p-3" *ngFor="let blog of blogs">
+      <div class="card h-100" style="border-radius: 24px;">
+        <img [src]="getSafeImage(blog.image)" class="card-img-top p-3 rounded rounded-5" [alt]="blog.title_ar"
+          (error)="blog.image = 'assets/images/fallback-blog.jpg'" style="border-radius: 24px;" />
+        <div class="card-body">
+          <h5 class="card-title">{{ blog.title_ar }}</h5>
+          <p class="card-text" [innerHTML]="parseContent(blog.content_ar) | truncate:150"></p>
+        </div>
+        <div class="card-footer bg-transparent">
+          <small class="text-muted">
+            بواسطة: {{ blog.author || 'غير معروف' }} |
+            {{ blog.created_at | date: 'dd/MM/yyyy' }}
+          </small>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Carousel -->
-  <div id="blogCarousel" class="carousel slide" data-bs-ride="carousel">
+  <!-- CAROUSEL VIEW -->
+  <div *ngIf="mode === 'carousel'" id="blogCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 p-3">
+      <h2 class="section-title mb-0" style="color: white;">احدث مقالات</h2>
+
+
+      <a [routerLink]="['/home/blogs']"
+        class="btn btn-link view-all-btn text-light d-flex align-items-center gap-2 p-0">
+        <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
+        عرض الكل
+      </a>
+    </div>
+
     <div class="carousel-inner">
-      <!-- Each carousel item contains 3 blog cards -->
       <div class="carousel-item" *ngFor="let group of groupedBlogs; let i = index" [class.active]="i === 0">
         <div class="row px-3">
           <div class="col-md-4 mb-4 p-3" *ngFor="let blog of group">
             <div class="card h-100" style="border-radius: 24px;">
-              <img
-                [src]="getSafeImage(blog.image)"
-                class="card-img-top p-3 rounded rounded-5"
-                [alt]="blog.title_ar"
-                (error)="blog.image = 'assets/images/fallback-blog.jpg'"
-                style="border-radius: 24px;"
-              />
+              <img [src]="getSafeImage(blog.image)" class="card-img-top p-3 rounded rounded-5" [alt]="blog.title_ar"
+                (error)="blog.image = 'assets/images/fallback-blog.jpg'" style="border-radius: 24px;" />
               <div class="card-body">
                 <h5 class="card-title">{{ blog.title_ar }}</h5>
                 <p class="card-text" [innerHTML]="parseContent(blog.content_ar) | truncate:150"></p>
@@ -40,42 +58,17 @@
     </div>
 
     <!-- Arrows + Indicators -->
-    <div class="d-flex justify-content-between align-items-center mt-4 px-3">
-        <!-- Indicators -->
+    <div class="d-flex justify-content-between align-items-center mt-4 px-4" *ngIf="showCarouselControls">
       <div class="carousel-indicators position-static m-0 p-0 d-flex" style="gap: 8px;">
-        <button
-          *ngFor="let group of groupedBlogs; let i = index"
-          type="button"
-          data-bs-target="#blogCarousel"
-          [attr.data-bs-slide-to]="i"
-          [class.active]="i === 0"
-          class="bg-success rounded-circle"
-          style="width: 10px; height: 10px;"
-          [attr.aria-label]="'Slide ' + (i + 1)"
-        ></button>
-      </div>
-      <!-- Arrows -->
-      <div class="d-flex gap-2">
-          <button
-          class="btn btn-outline-dark btn-sm rounded-circle"
-          type="button"
-          data-bs-target="#blogCarousel"
-          data-bs-slide="next"
-        >
-          <i class="fas fa-chevron-right"></i>
-        </button>
-        <button
-          class="btn btn-outline-dark btn-sm rounded-circle"
-          type="button"
-          data-bs-target="#blogCarousel"
-          data-bs-slide="prev"
-        >
-          <i class="fas fa-chevron-left"></i>
-        </button>
-      
+        <button *ngFor="let group of groupedBlogs; let i = index" type="button" data-bs-target="#blogCarousel"
+          [attr.data-bs-slide-to]="i" [class.active]="i === 0" class="bg-success rounded-circle"
+          style="width: 10px; height: 10px;" [attr.aria-label]="'Slide ' + (i + 1)"></button>
       </div>
 
-    
+      <div class="d-flex gap-2">
+        <button class="arrow-btn next" (click)="nextSlide()"></button>
+        <button class="arrow-btn prev" (click)="prevSlide()"></button>
+      </div>
     </div>
   </div>
 </div>

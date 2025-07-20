@@ -1,9 +1,15 @@
-@keyframes fillProgress {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
+.stats-container {
+  position: relative;
+  overflow: hidden;
 }
 
+.stats-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 7px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #7AD03A, #2EA2CC);
+}

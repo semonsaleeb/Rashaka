@@ -43,6 +43,9 @@ button img {
 button:hover img {
   transform: translateX(5px);
 }
+.custom-transparent-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
 .greenspan {
   background-color: #7AD03A;
