@@ -189,4 +189,30 @@ logout() {
     console.log('Get started clicked');
     // Add your navigation logic here
   }
+
+
+  isStoreOpen: boolean = false;
+
+  isMobileMenuOpen: boolean = false;
+
+
+isMenuOpen = false;
+// isStoreOpen = false;
+
+toggleMobileMenu() {
+  this.isMenuOpen = !this.isMenuOpen;
+  if (this.isMenuOpen) {
+    document.body.classList.add('menu-open');
+  } else {
+    document.body.classList.remove('menu-open');
+  }
+}
+
+
+closeMobileMenu() {
+  this.isMobileMenuOpen = false;
+  this.isMenuOpen = false;
+  document.body.classList.remove('menu-open');
+}
+
 }

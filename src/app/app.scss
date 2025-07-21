@@ -6,8 +6,15 @@
 }
 // Add this to your global styles
 .main-content {
-  padding-top:8rem; // Adjust this value based on your header height
+  padding-top: 0; /* default for mobile */
 }
+
+@media (min-width: 768px) {
+  .main-content {
+    padding-top: 8rem; /* for desktop only */
+  }
+}
+
 // html, body {
 //   width: 100%;
 //   max-width: 100%;

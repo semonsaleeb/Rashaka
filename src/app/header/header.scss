@@ -1,15 +1,15 @@
-header{
+header {
   font-size: 1rem;
-  height: 8rem;
   // padding-left: 120px;
   //   padding-right: 120px;
- padding: 20px 100px  20px 100px;
+  padding: 20px 90px 20px 90px;
 }
+
 [dir="rtl"] {
   text-align: right;
 }
 
-[dir="rtl"] .form-control, 
+[dir="rtl"] .form-control,
 [dir="rtl"] .form-select {
   text-align: right;
 }
@@ -20,14 +20,67 @@ header{
 }
 
 .rtl-select {
-  background-position: left center; /* move arrow to the left */
-  padding-left: .7rem !important;  /* add padding to prevent text overlap with arrow */
-  padding-right: 0.5rem !important; /* remove extra right padding */
+  background-position: left center;
+  /* move arrow to the left */
+  padding-left: .7rem !important;
+  /* add padding to prevent text overlap with arrow */
+  padding-right: 0.5rem !important;
+  /* remove extra right padding */
 }
+
 .dropdown-menu {
   min-width: 10rem;
   padding: 0.5rem 0;
   background-color: #fff;
   border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+
+@media (max-width: 991.98px) {
+  .mobile-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1050;
+      font-size: 1rem;
+
+  }
+
+  .mobile-menu {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .mobile-menu.d-none {
+    transform: translateX(100%);
+  }
+
+  .mobile-menu.d-block {
+    transform: translateX(0);
+  }
+
+  .rtl-select {
+    background-position: left center;
+    padding-left: .7rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+/* mobile-menu.component.css */
+.mobile-menu a:hover {
+  color: #198754; /* Bootstrap's success green */
+}
+.dropdown-section button {
+  border: none;
+  background: none;
+}
+.dropdown-section i {
+  font-size: 1rem;
+}
+.mobile-menu-overlay {
+  z-index: 1050; /* higher than navbar */
+  background-color: white;
+}
+body.menu-open {
+  overflow: hidden;
 }
