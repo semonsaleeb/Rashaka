@@ -1,11 +1,9 @@
-<!-- Carousel Mode -->
-<div class="position-relative" *ngIf="mode === 'carousel' && !isLoading">
+<div class="position-relative py-3" *ngIf="mode === 'carousel' && !isLoading">
   <div class="special-offers-container mb-5">
-
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
       <div class="d-flex align-items-center gap-3 flex-wrap px-4">
-        <h2 class="section-title mb-0 d-flex align-items-center text-dark px-5">عروض خاصة</h2>
+        <h2 class="section-title mb-0 d-flex align-items-center text-dark px-3">عروض خاصة</h2>
         <div class="time-badges d-flex gap-2">
           <div class="time-badge text-center">01 <br>ثانية</div>
           <div class="time-badge text-center">06 <br>دقيقة</div>
@@ -21,107 +19,98 @@
       </a>
     </div>
 
-    <!-- Carousel -->
-    <div class="position-relative overflow-hidden m-5">
-      <div class="d-flex transition-transform carousel-track"
-        [ngStyle]="{ transform: 'translateX(-' + (currentSlideIndex * 520) + 'px)' }">
-        <div class="carousel-slide p-3" *ngFor="let product of products"
-          [ngStyle]="{ 'width': cardWidthPercentage + '%' }">
-          <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
-            <div class="card h-100 product-card rounded-4 border bg-white " >
-              <!-- Carousel + Image -->
-              <div class="position-relative">
-                <div id="productCarousel-{{ product.id }}" class="carousel slide" data-bs-ride="carousel">
+    <!-- Carousel Container -->
+    <div class="carousel-wrapper" >
+      <div class="position-relative overflow-hidden mx-5 justify-content-end">
+        <div class="d-flex transition-transform carousel-track justify-content-end"
+          [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)'}">
+          <div class="carousel-slide p-3 justify-content-end" dir="rtl" *ngFor="let product of products">
+            <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
+              <div class="card h-100 product-card rounded-4 border bg-white justify-content-end">
+                <!-- Product Image -->
+                <div class="position-relative">
                   <div class="carousel-inner">
-                    <div *ngFor="let image of product.images; let j = index" class="carousel-item"
-                      [class.active]="j === 0">
+                    <div class="carousel-item active">
                       <div class="ribbon-top-right">لفترة محدودة</div>
-                      <img [src]="image" class="card-img-top p-3" [alt]="product.name"
+                      <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
                         style="height: 200px; object-fit: contain;">
                     </div>
                   </div>
+                  <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+                    <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
+                      [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
+                      <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <button (click)="addToCompare(product); $event.stopPropagation()" class="btn-circle text-muted">
+                      <i class="fas fa-random"></i>
+                    </button>
+                  </div>
                 </div>
-                <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-                  <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
-                    [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
-                    <i class="fa-regular fa-heart"></i>
-                  </button>
-                  <button (click)="addToCompare(product); $event.stopPropagation()" class="btn-circle text-muted">
-                    <i class="fas fa-random"></i>
-                  </button>
-                </div>
-              </div>
 
-              <!-- Card Body -->
-              <div class="card-body text-end  px-5" >
-                <h6 class="card-title fw-bold mb-2 " style="font-size: 15px;">{{ product.name_ar }}</h6>
-                <p class="card-text text-muted  mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
-                  {{ product.description }}
-                </p>
-                <button class="btn btn-outline-dark   btn-sm bg-white text-black rounded-5 custom-hover"
-                  (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
-                  إضافة للعربة
-                  <img src="assets/Images/shopping-cart-add-01.svg">
-                </button>
+                <!-- Card Body -->
+                <div class="card-body text-end px-5">
+                  <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ product.name_ar }}</h6>
+                  <p class="card-text text-muted mb-3 text-end" style="font-size: 15px; max-height: 40px; overflow: hidden;">
+                    {{ product.description }}
+                  </p>
+                  <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover"
+                    (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
+                    إضافة للعربة
+                    <img src="assets/Images/shopping-cart-add-01.svg">
+                  </button>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
+      </div>
 
+      <!-- Navigation -->
+<div class="d-flex flex-wrap justify-content-between align-items-center px-5 mt-4 py-3">
+       
+
+        <div class="d-flex gap-2 px-5">
+          <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
+          <button class="arrow-btn next" (click)="nextSlide()" 
+            [disabled]="currentSlideIndex >= products.length - visibleCards"></button>
+        </div>
+          <!-- Dots -->
+           <div class="d-flex gap-2">
+      <button *ngFor="let i of getDotsArray()" (click)="goToSlide(i)" class="rounded-circle"
+        [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
+        style="width: 10px; height: 10px; border: none;">
+      </button>
+    </div>
+ 
       </div>
     </div>
-
-
-
-    <!-- Arrows -->
-    <div class="d-flex justify-content-between align-items-center px-5 mt-4">
-      <div class="d-flex gap-2 px-5">
-        <button class="arrow-btn prev" (click)="prevSlide()"></button>
-        <button class="arrow-btn next" (click)="nextSlide()"></button>
-      </div>
-    </div>
-
   </div>
 </div>
 
 
+
 <!-- Grid Mode -->
-<div *ngIf="mode === 'grid'" class="py-5 px-5 ">
+<div *ngIf="mode === 'grid'" class="py-5 px-5">
   <!-- Offers Banner -->
   <img src="assets/Images/Group 9049 (1).svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
 
   <!-- Heading -->
   <h2 class="fw-bold d-flex justify-content-center flex-wrap gap-2 mb-5">العروض</h2>
-  <p class="text-muted d-flex justify-content-center flex-wrap gap-2 mb-5">استمتع بأفضل الخصومات والعروضات المصممة
-    خصيصًا لك.</p>
-
-  <!-- Category Tabs -->
-  <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
-
-    <!-- <button class="btn" *ngFor="let cat of categories"
-      [ngClass]="{'custom-green-btn': selectedCategory === cat.id, 'btn-outline-success': selectedCategory !== cat.id}"
-      (click)="filterByCategory(cat.id)">
-      {{ cat.name_ar }}
-    </button>
-    <button class="btn"
-      [ngClass]="{'custom-green-btn': selectedCategory === 'all', 'btn-outline-success': selectedCategory !== 'all'}"
-      (click)="filterByCategory('all')">
-      الكل
-    </button> -->
-  </div>
+  <p class="text-muted d-flex justify-content-center flex-wrap gap-2 mb-5">استمتع بأفضل الخصومات والعروضات المصممة خصيصًا لك.</p>
 
   <!-- Product Grid -->
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-end mx-5">
-    <div class="col" *ngFor="let product of filteredProducts">
+    <div class="col" *ngFor="let product of products">
       <div class="card h-100 product-card bg-white rounded-4 border shadow-sm">
         <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
           style="height: 200px; object-fit: contain;">
+        
         <!-- Favorite & Compare Buttons -->
         <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
           <button (click)="toggleFavorite(product)" class="btn-circle"
             [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
-            <i class="fa-regular fa-heart"></i> </button>
-
+            <i class="fa-regular fa-heart"></i>
+          </button>
           <button (click)="addToCompare(product)" class="btn-circle text-muted">
             <i class="fas fa-random"></i>
           </button>
@@ -132,8 +121,7 @@
           <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
             {{ product.description }}
           </p>
-          <button
-            class="btn btn-outline-dark w-100 btn-sm rounded-5 custom-hover d-flex align-items-center justify-content-center gap-2"
+          <button class="btn btn-outline-dark w-100 btn-sm rounded-5 custom-hover d-flex align-items-center justify-content-center gap-2"
             (click)="addToCart(product.id)">
             إضافة للعربة
             <img src="assets/Images/shopping-cart-add-01.svg" style="height: 16px;">

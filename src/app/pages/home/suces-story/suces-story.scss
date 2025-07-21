@@ -180,37 +180,33 @@
 }
 
 
-.arrow-btn {
-  width: 36px;
-  height: 36px;
-  border: none;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  transition: 0.2s;
-  padding: 0;
-  cursor: pointer;
-}
+  .arrow-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
-// Default images
-.arrow-btn.prev {
-  background-image: url("/assets/Images/left-arrow.svg");
-}
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
 
-.arrow-btn.next {
-  background-image: url("/assets/Images/right-arrow.svg");
-}
+    &:not([disabled]) {
+      border-color: #7AD03A;
+    }
+  }
 
-// Hover / Active images
-.arrow-btn.prev:hover,
-.arrow-btn.prev:active {
-    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+  .arrow-btn.prev {
+    background-image: url("/assets/Images/left-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 
-}
-
-.arrow-btn.next:hover,
-.arrow-btn.next:active {
-    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
-
-}
+  .arrow-btn.next {
+    background-image: url("/assets/Images/right-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+  }

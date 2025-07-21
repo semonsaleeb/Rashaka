@@ -1,27 +1,25 @@
 <div class="position-relative" *ngIf="mode === 'carousel'">
 
   <!-- Progress Bar -->
-  <div class="progress-bar-wrapper w-100  py-4" style="height: 8px; ">
+  <div class="progress-bar-wrapper w-100 py-4" style="height: 8px;">
     <div class="h-100 w-100" style="
       background: linear-gradient(90deg, #7AD03A 0%, #2EA2CC 100%);
       animation: fillProgress 2s ease-in-out;
-  "></div>
+    "></div>
   </div>
 
-  <div class="category-products-container  py-4" style="padding-right: 80px; padding-left: 80px;">
+  <div class="category-products-container py-4" style="padding-right: 80px; padding-left: 80px;">
     <div class="px-3" *ngIf="!isLoading">
       <div class="special-offers-container mb-5">
         <!-- Header Section -->
         <div class="header-section mb-4" dir="rtl">
           <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-            <h2 class="section-title mb-0">منتجاتنا</h2>
+            <h2 class="section-title mb-0 ">   منتجاتنا المميزة </h2>
             <a [routerLink]="['/home/category-products']"
               class="btn btn-link view-all-btn text-light d-flex align-items-center gap-2 p-0">
               <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
               عرض الكل
             </a>
-
-
           </div>
 
           <div class="category-buttons d-flex flex-wrap gap-2 py-4">
@@ -44,66 +42,65 @@
           </div>
         </div>
 
-        <!-- Carousel -->
-        <div class="position-relative ">
-          <div class="carousel-container">
-            <div class="carousel-inner-custom">
-              <div class="carousel-item-custom" *ngFor="let group of groupedProducts; let i = index"
-                [class.active]="i === currentSlideIndex">
-                <div class="product-cards-wrapper">
-                  <div class="card product-card rounded-4 " *ngFor="let product of group">
-                    <!-- Product content -->
-                    <div class="carousel slide">
-                      <div class="carousel-inner">
-                        <div *ngFor="let image of product.images; let j = index" class="carousel-item"
-                          [class.active]="j === 0">
-                          <img [src]="image" class="card-img-top p-3" [alt]="product.name">
-                        </div>
-                      </div>
-                      <!-- Favorite & Compare Buttons -->
-                      <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-                        <button (click)="toggleFavorite(product)" class="btn-circle"
-                          [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
-                          <i class="fa-regular fa-heart"></i> </button>
-
-                        <button (click)="addToCompare(product)" class="btn-circle text-muted">
-                          <i class="fas fa-random"></i>
-                        </button>
-                      </div>
-
-                      <div class="card-body text-end m-3">
-                        <h6 class="card-title">{{ product.name_ar }}</h6>
-                        <p class="card-text">{{ product.description }}</p>
-                        <button
-                          class="btn btn-outline-dark w-100 mt-2 btn-sm bg-white text-black rounded-5 custom-hover"
-                          (click)="addToCart(product.id)">
-                          إضافة للعربة
-                          <img src="assets/Images/shopping-cart-add-01.svg">
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+       <!-- Carousel Container - RTL Version -->
+<div class="position-relative carousel-wrapper" dir="rtl">
+  <div class="carousel-container">
+    <div class="d-flex transition-transform carousel-track"
+      [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
+      <div class="carousel-slide p-3" *ngFor="let product of filteredProducts">
+        <div class="card product-card rounded-4">
+          <!-- Product Image -->
+          <div class="carousel slide">
+            <div class="carousel-inner">
+              <div *ngFor="let image of product.images; let j = index" class="carousel-item"
+                [class.active]="j === 0">
+                <img [src]="image" class="card-img-top p-3" [alt]="product.name">
               </div>
             </div>
           </div>
-
-          <!-- Navigation -->
-          <div class="d-flex justify-content-between align-items-center mt-4 px-3"
-            style="margin-right: 1.5rem; margin-left: 1.5rem;">
-            <div class="d-flex gap-2">
-              <button class="arrow-btn prev" (click)="prevSlide()"></button>
-              <button class="arrow-btn next" (click)="nextSlide()"></button>
-            </div>
-            <div class="d-flex gap-2">
-              <button *ngFor="let group of groupedProducts; let i = index" (click)="goToSlide(i)" class="rounded-circle"
-                [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
-                style="width: 10px; height: 10px; border: none;">
-              </button>
-            </div>
+          
+          <!-- Favorite & Compare Buttons -->
+          <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-2">
+            <button (click)="toggleFavorite(product)" class="btn-circle"
+              [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+            <button (click)="addToCompare(product)" class="btn-circle text-muted">
+              <i class="fas fa-random"></i>
+            </button>
           </div>
 
+          <!-- Product Details -->
+          <div class="card-body text-end m-3">
+            <h6 class="card-title">{{ product.name_ar }}</h6>
+            <p class="card-text">{{ product.description }}</p>
+            <button class="btn btn-outline-dark w-100 mt-2 btn-sm bg-white text-black rounded-5 custom-hover"
+              (click)="addToCart(product.id)">
+              إضافة للعربة
+              <img src="assets/Images/shopping-cart-add-01.svg">
+            </button>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="d-flex justify-content-between align-items-center mt-4 px-3">
+   
+    <div class="d-flex gap-2">
+      <button *ngFor="let i of getDotsArray()" (click)="goToSlide(i)" class="rounded-circle"
+        [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
+        style="width: 10px; height: 10px; border: none;">
+      </button>
+    </div>
+     <div class="d-flex gap-2">
+      <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
+      <button class="arrow-btn prev" (click)="nextSlide()" 
+        [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
+    </div>
+  </div>
+</div>
       </div>
     </div>
 
@@ -112,8 +109,8 @@
       <p>جاري تحميل المنتجات...</p>
     </div>
   </div>
-
 </div>
+
 <!-- Grid Mode with Sidebar -->
 <div *ngIf="mode === 'grid'" class="container-fluid py-5 px-4">
   <div class="row" dir="rtl">

@@ -2,13 +2,15 @@ header {
   font-size: 1rem;
   // padding-left: 120px;
   //   padding-right: 120px;
-  padding: 20px 90px 20px 90px;
+  padding: 20px 90px 10px 90px;
 }
 
 [dir="rtl"] {
   text-align: right;
 }
-
+.navbar{
+  margin-right: -40px;
+}
 [dir="rtl"] .form-control,
 [dir="rtl"] .form-select {
   text-align: right;
@@ -20,11 +22,11 @@ header {
 }
 
 .rtl-select {
-  background-position: left center;
+  background-position: right center;
   /* move arrow to the left */
-  padding-left: .7rem !important;
+  padding-left: 0 !important;
   /* add padding to prevent text overlap with arrow */
-  padding-right: 0.5rem !important;
+  padding-right: 0 !important;
   /* remove extra right padding */
 }
 
@@ -44,12 +46,14 @@ header {
     top: 0;
     width: 100%;
     z-index: 1050;
-      font-size: 1rem;
+      font-size: 3rem;
 
   }
 
   .mobile-menu {
     transition: transform 0.3s ease-in-out;
+          font-size: 3rem;
+
   }
 
   .mobile-menu.d-none {

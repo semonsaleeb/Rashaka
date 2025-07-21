@@ -2,6 +2,442 @@
   background-color: #f2fff4;
 
 }
+button.rounded-circle {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
+  display: inline-block;
+}
+/* Arrow buttons styling for RTL */
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
+  
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Swapped arrow directions for RTL */
+.arrow-btn.next {
+  background-image: url("/assets/Images/right-arrow.svg");
+  
+  &:not([disabled]):hover {
+    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+  }
+}
+
+.arrow-btn.prev {
+  background-image: url("/assets/Images/left-arrow.svg");
+  
+  &:not([disabled]):hover {
+    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+  }
+}
+
+/* Dots styling */
+.rounded-circle {
+  transition: all 0.3s ease;
+  
+  &.bg-success {
+    background-color: #7AD03A !important;
+  }
+  
+  &.bg-secondary {
+    background-color: #DDDDDD !important;
+  }
+}
+.special-offers-container {
+  padding: 3rem;
+  width: 100%;
+  margin: 0 auto;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+    font-size: 2rem;
+  }
+
+  .loading,
+  .no-products {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+  }
+
+  .product-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .product-card {
+    flex: 1 1 calc(33.333% - 1rem);
+    min-width: 300px;
+    background: white;
+    border-radius: 8px;
+      text-align: end;
+
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+
+  .product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+ 
+  .product-info {
+  
+    padding: 1.5rem;
+
+    .product-name {
+        text-align: end;
+
+      text-align: end;
+      margin-right: 1rem;
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+      color: #222;
+    }
+.card-title{
+        text-align: right;
+
+}
+    .product-description {
+      text-align: right;
+      margin-right: 1rem;
+  text-align: end;
+
+      background-color: white;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .product-price {
+      margin-bottom: 1rem;
+
+      .current-price {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #e63946;
+        margin-right: 0.5rem;
+      }
+
+      .old-price {
+        font-size: 1rem;
+        text-decoration: line-through;
+        color: #999;
+      }
+    }
+
+    .view-details {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #0077b6;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: #023e8a;
+      }
+    }
+  }
+}
+
+.product-card .card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; // Show only 2 lines
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  text-align: end;
+  color: #666;
+}
+
+.product-card .card-body {
+
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-indicators {
+  margin-top: 2rem;
+  position: relative;
+}
+
+.btn-outline-success.custom-hover:hover {
+  background-color: rgb(255, 255, 255) !important;
+  color: black !important;
+  border-color: black !important;
+
+  &:hover i {
+    // color: #fff !important; // Ensure icon turns white too
+    background-color: #28a745 !important; // Bootstrap green
+
+  }
+}
+
+.btn-hover-green {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background-color: #28a745 !important; // Bootstrap green
+    border-color: #28a745 !important;
+    color: #fff !important;
+  }
+
+  &:hover i {
+    // color: #fff !important; // Ensure icon turns white too
+    background-color: #28a745 !important; // Bootstrap green
+
+  }
+}
+
+
+.ribbon-top-right {
+  position: absolute;
+  top: 20px;
+  right: -32px;
+  transform: rotate(45deg);
+  background-color: #b35400; // deep orange
+  color: white;
+  padding: 4px 35px;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.section-title {
+  line-height: 1.5;
+}
+
+
+.time-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.time-badge {
+  background-color: #081E25;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 200;
+}
+
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.carousel-inner-custom {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-item-custom {
+  display: none;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item-custom.active {
+  display: block;
+}
+
+.custom-hover {
+  transition: all 0.3s ease;
+}
+
+.custom-hover:hover {
+  border-color: #7AD03A !important;
+}
+/* In your component's CSS or global styles */
+.product-carousel {
+  margin-top: var(--header-height, 80px); /* Uses CSS variable if defined */
+  position: relative;
+  z-index: 1; /* Lower than header's z-index */
+}
+/* Your custom green style */
+.custom-green-btn {
+  background-color: #7AD03A;
+  color: black;
+  border: 2px solid #7AD03A;
+  transition: all 0.3s ease;
+}
+
+.custom-green-btn:hover {
+  background-color: white;
+  color: #7AD03A;
+  border: 2px solid #7AD03A;
+}
+
+/* Override Bootstrap btn-outline-success */
+.btn-outline-success {
+  color: #7AD03A;
+  border-color: #7AD03A;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+  background-color: #7AD03A;
+  color: black;
+  border-color: #7AD03A;
+}
+.btn-circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #E9F7DE;
+  border: 2px solid #00000033;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+
+  i {
+    background-color: transparent; /* Ensure no override */
+    color: inherit; /* Use parent color */
+  }
+
+  &:hover {
+    background-color: #d1edc2;
+  }
+}
+
+
+
+
+.carousel-track {
+  transition: transform 0.6s ease;
+}
+
+.carousel-item-wrapper {
+  flex: 0 0 calc(100% / 3); // 3 كروت في الصفحة
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.product-card {
+  width: 100%;
+}
+
+
+@media (max-width: 992px) {
+  .carousel-item-wrapper {
+    flex: 0 0 calc(100% / 2); // 2 في الموبايل أو التابلت
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-item-wrapper {
+    flex: 0 0 100%; // 1 في الموبايل
+  }
+}
+a.text-decoration-none:hover .card {
+}
+.special-offers-container {
+  .carousel-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.5s ease;
+  }
+
+  .carousel-slide {
+    flex: 0 0 calc(100% / 3);
+    max-width: calc(100% / 3);
+    padding: 0 10px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+
+
+  @media (max-width: 992px) {
+    .carousel-slide {
+      flex: 0 0 50% !important;
+      max-width: 50% !important;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .carousel-slide {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+    }
+  }
+}
+
+/* بقية الأنماط الموجودة مسبقًا تبقى كما هي */
+
+
+
+
+
+
+
+
+
+
+
+
+* {
+  background-color: #f2fff4;
+
+}
 
 .special-offers-container {
   padding: 3rem;
@@ -26,7 +462,7 @@
   .product-group {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: end;
     gap: 1rem;
 
     @media (max-width: 768px) {
@@ -60,7 +496,7 @@
   .product-info {
     text-align: right;
     margin-right: 1rem;
-    justify-content: right;
+    justify-content: end;
     padding: 1.5rem;
 
     .product-name {
@@ -302,40 +738,39 @@
 
 
 
-.arrow-btn {
-  width: 36px;
-  height: 36px;
-  border: none;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  transition: 0.2s;
-  padding: 0;
-  cursor: pointer;
-}
+  .arrow-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: 0.2s;
+    padding: 0;
+    cursor: pointer;
 
-// Default images
-.arrow-btn.prev {
-  background-image: url("/assets/Images/left-arrow.svg");
-}
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
 
-.arrow-btn.next {
-  background-image: url("/assets/Images/right-arrow.svg");
-}
+  .arrow-btn.prev {
+    background-image: url("/assets/Images/left-arrow.svg");
+    
+    &:not([disabled]) {
+      background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+    }
+  }
 
-// Hover / Active images
-.arrow-btn.prev:hover,
-.arrow-btn.prev:active {
-    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
-
-}
-
-.arrow-btn.next:hover,
-.arrow-btn.next:active {
-    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
-
-}
+  .arrow-btn.next {
+    background-image: url("/assets/Images/right-arrow.svg");
+    
+    &:not([disabled]) {
+      background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+    }
+  }
 
 .carousel-track {
   transition: transform 0.6s ease;
@@ -351,14 +786,6 @@
   width: 100%;
 }
 
-.arrow-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background-color: #ddd;
-  cursor: pointer;
-}
 
 
 @media (max-width: 992px) {
@@ -374,4 +801,10 @@
 }
 a.text-decoration-none:hover .card {
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+
+.carousel-track {
+  direction: rtl;
+  flex-direction: row-reverse;
 }
