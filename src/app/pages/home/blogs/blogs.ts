@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -6,24 +6,19 @@ import { Blog, BlogService } from '../../../services/blogs.service';
 import { AssetUtils } from '../../../utils/asset.utils';
 import { TruncatePipe } from '../../../pipes/truncate-pipe';
 
-declare const bootstrap: any;
-
 @Component({
   selector: 'app-blogs',
   standalone: true,
   imports: [CommonModule, HttpClientModule, RouterModule, TruncatePipe],
   templateUrl: './blogs.html',
-  styleUrl: './blogs.scss',
+  styleUrls: ['./blogs.scss'],
 })
-export class Blogs implements OnInit, AfterViewInit {
-@Input() mode: 'carousel' | 'grid' = 'grid';
-
+export class Blogs implements OnInit {
+  @Input() mode: 'carousel' | 'grid' = 'grid';
   blogs: Blog[] = [];
-  groupedBlogs: Blog[][] = [];
   loading = true;
-  error: string | null = null;
-  bsCarousel: any;
-  showCarouselControls = false;
+  currentSlideIndex = 0;
+  visibleCards = 3;
 
   constructor(private blogService: BlogService) {}
 
@@ -31,38 +26,17 @@ export class Blogs implements OnInit, AfterViewInit {
     this.loadBlogs();
   }
 
-  ngAfterViewInit(): void {
-    if (this.mode === 'carousel') {
-      const carouselElement = document.querySelector('#blogCarousel');
-      if (carouselElement) {
-        this.bsCarousel =
-          bootstrap.Carousel.getInstance(carouselElement) ||
-          new bootstrap.Carousel(carouselElement);
-      }
-    }
-  }
-
   loadBlogs(): void {
     this.blogService.getBlogs().subscribe({
       next: (blogs) => {
         this.blogs = blogs;
-        this.groupedBlogs = this.groupBlogs(blogs);
         this.loading = false;
-        this.showCarouselControls = this.groupedBlogs.length > 1;
       },
       error: (err) => {
-        this.error = err.message;
+        console.error('Failed to load blogs:', err);
         this.loading = false;
-      },
+      }
     });
-  }
-
-  groupBlogs(blogs: Blog[]): Blog[][] {
-    const grouped: Blog[][] = [];
-    for (let i = 0; i < blogs.length; i += 3) {
-      grouped.push(blogs.slice(i, i + 3));
-    }
-    return grouped;
   }
 
   getSafeImage(url: string): string {
@@ -80,9 +54,6 @@ export class Blogs implements OnInit, AfterViewInit {
             if (op.attributes?.bold) {
               text = `<strong>${text}</strong>`;
             }
-            if (op.attributes?.color) {
-              text = `<span style="color:${op.attributes.color}">${text}</span>`;
-            }
             return text;
           })
           .join('')
@@ -94,11 +65,24 @@ export class Blogs implements OnInit, AfterViewInit {
     }
   }
 
-  prevSlide(): void {
-    if (this.bsCarousel) this.bsCarousel.prev();
+  getDotsArray(): number[] {
+    const slideCount = Math.ceil(this.blogs.length / this.visibleCards);
+    return Array.from({ length: slideCount }, (_, i) => i);
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlideIndex = index;
   }
 
   nextSlide(): void {
-    if (this.bsCarousel) this.bsCarousel.next();
+    if (this.currentSlideIndex < this.blogs.length - this.visibleCards) {
+      this.currentSlideIndex++;
+    }
+  }
+
+  prevSlide(): void {
+    if (this.currentSlideIndex > 0) {
+      this.currentSlideIndex--;
+    }
   }
 }

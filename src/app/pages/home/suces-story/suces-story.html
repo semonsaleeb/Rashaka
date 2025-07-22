@@ -1,5 +1,5 @@
 <div class="success-stories px-5 p-5">
-  <h2 class="section-title mb-4 py-4 px-5 mx-5">قصص نجاح حقيقية من عملائنا</h2>
+  <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
 
   <div class="carousel-custom-wrapper position-relative">
     <div class="story-deck d-flex justify-content-center align-items-center">
@@ -17,8 +17,7 @@
 
 
     <!-- Custom Arrows shown only if there are more than 1 story -->
-    <div *ngIf="stories.length > 1" class="d-flex justify-content-between align-items-center mt-4 px-3"
-      >
+    <div *ngIf="stories.length > 1" class="d-flex justify-content-between  align-items-center mt-4 ">
       <!-- Arrows -->
       <div class="d-flex gap-2">
         <button class="arrow-btn prev" (click)="prevSlide()"></button>
@@ -26,10 +25,12 @@
       </div>
 
       <!-- Dots -->
-      <div class="carousel-indicators position-static m-0 p-0 d-flex" style="gap: 8px;">
-        <button *ngFor="let story of stories; let i = index" type="button" class="bg-success rounded-circle"
-          style="width: 10px; height: 10px;" [class.active]="i === currentIndex" (click)="currentIndex = i"
-          [attr.aria-label]="'Story ' + (i + 1)">
+      <div class="d-flex gap-2">
+        <button *ngFor="let story of stories; let i = index" type="button" class="dot"
+          [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
         </button>
       </div>
+
+
+
     </div>

@@ -42,8 +42,7 @@
 }
 
 .toggle-btn.active {
-  background: #7CB342;
-  color: rgb(0, 0, 0);
+  background: #7AD03A;
 }
 
 .cards-container {
@@ -62,7 +61,6 @@
   border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
-  height: 400px;
   width: 300px !important;
 
 }
@@ -72,7 +70,6 @@
   padding: 20px;
   color: rgb(0, 0, 0);
   position: relative;
-  min-height: 120px;
 }
 
 .card-bottom {
@@ -91,7 +88,7 @@
 
 .ribbon {
   background: #333;
-  color: rgb(0, 0, 0);
+  color:#7AD03A;
   padding: 5px 15px;
   border-radius: 4px;
   font-size: 12px;
@@ -195,4 +192,48 @@
   z-index: 1;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
+}
+
+.subscribe-btn {
+    border-radius: 9px;
+    padding: 8px 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.basic-btn {
+    background-color: #7AD03A; /* Or your preferred basic button color */
+    color: white;
+    border: none;
+}
+
+.other-btn {
+    background-color: transparent;
+    color: black;
+    border: 1px solid #808080;
+}
+
+/* Hover effects */
+.basic-btn:hover {
+    background-color: #7AD03A; /* Darker shade */
+}
+
+.other-btn:hover {
+    background-color: #f5f5f5;
+}
+.available-places {
+    background-color: #E3E3E3;
+    color: #333;
+    padding: 8px;
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 0 0 8px 8px;
+    font-size: 14px;
+}
+
+.card-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }

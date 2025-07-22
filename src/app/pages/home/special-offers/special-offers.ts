@@ -19,7 +19,8 @@ import { FormsModule } from '@angular/forms';
 export class SpecialOffersComponent implements OnInit {
   @Input() mode: 'carousel' | 'grid' = 'grid';
   products: Product[] = [];
-    categories: Category[] = [];
+
+  categories: Category[] = [];
 
   isLoading = true;
   currentSlideIndex = 0;
@@ -32,7 +33,7 @@ export class SpecialOffersComponent implements OnInit {
     private cartService: CartService,
     public cartState: CartStateService,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const modeFromRoute = this.route.snapshot.data['mode'];
@@ -40,19 +41,20 @@ export class SpecialOffersComponent implements OnInit {
     this.loadProducts();
   }
 
-  private loadProducts(): void {
-    this.isLoading = true;
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products = products;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load products:', err);
-        this.isLoading = false;
-      }
-    });
-  }
+ private loadProducts(): void {
+  this.isLoading = true;
+  this.productService.getOffer().subscribe({
+    next: (products) => {
+      this.products = products;
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('Failed to load products:', err);
+      this.isLoading = false;
+    }
+  });
+}
+
 
   nextSlide(): void {
     if (this.currentSlideIndex < this.products.length - this.visibleCards) {
@@ -93,8 +95,8 @@ export class SpecialOffersComponent implements OnInit {
   }
 
 
-    filteredProducts: Product[] = [];
-private fetchProducts(): void {
+  filteredProducts: Product[] = [];
+  private fetchProducts(): void {
     this.isLoading = true;
     this.productService.getProducts().subscribe({
       next: (products) => {
@@ -110,7 +112,7 @@ private fetchProducts(): void {
     });
   }
 
-    private extractUniqueCategories(products: Product[]): Category[] {
+  private extractUniqueCategories(products: Product[]): Category[] {
     const map = new Map<number, Category>();
     products.forEach(product => {
       product.categories?.forEach(category => {
@@ -123,12 +125,13 @@ private fetchProducts(): void {
   }
 
   getTotalSlides(): number {
-  return Math.ceil(this.filteredProducts.length / this.visibleCards);
-}
- getDotsArray(): number[] {
-    const slideCount = Math.ceil(this.filteredProducts.length / this.visibleCards);
+    return Math.ceil(this.filteredProducts.length / this.visibleCards);
+  }
+  getDotsArray(): number[] {
+    const slideCount = Math.ceil(this.products.length / this.visibleCards);
     return Array.from({ length: slideCount }, (_, i) => i);
   }
+
   goToSlide(index: number): void {
     this.currentSlideIndex = index;
   }

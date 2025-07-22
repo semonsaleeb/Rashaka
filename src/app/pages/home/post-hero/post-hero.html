@@ -1,16 +1,24 @@
-<div class="stats-container container bg-white rounded-3 py-4 px-md-5 px-3 text-center" dir="rtl">
+
+<img src="assets/Images/pattern.svg" style="position: absolute;
+                left: 0;
+                top:-55px;
+                height: 200px;
+                width: 100px;
+                z-index: 1;
+                 opacity: 5;     ">
+                
+                <div class="stats-container container bg-white rounded-3 py-4 px-md-5 px-3 text-center">
   <div class="row g-4">
-    <div
-      class="col-12 col-sm-6 col-md-3 position-relative"
-      *ngFor="let stat of stats; let i = index"
-    >
+    <div class="col-12 col-sm-6 col-md-3 position-relative" *ngFor="let stat of stats; let i = index"
+      [class.no-divider]="i === stats.length - 1">
+
       <div class="fs-2 fw-bold text-dark" #statNumber>0</div>
-      <div class="fs-6 text-secondary fw-medium">{{ stat.label }}</div>
+      <div class="fs-6 text-black fw-medium">
+        <h3>{{ stat.label }}</h3>
+      </div>
 
       <!-- Divider: hidden on mobile -->
-      <div 
-        *ngIf="i < stats.length - 1" 
-        class="position-absolute top-50 end-0 translate-middle-y d-none d-md-block"
+      <div *ngIf="i < stats.length - 1" class="position-absolute top-50 end-0 translate-middle-y d-none d-md-block"
         style="width: 1px; height: 60px; background-color: #e5e5e5;">
       </div>
     </div>

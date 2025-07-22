@@ -1,7 +1,3 @@
-* {
-  background-color: #f2fff4;
-
-}
 button.rounded-circle {
   width: 10px;
   height: 10px;
@@ -9,6 +5,7 @@ button.rounded-circle {
   min-height: 10px;
   display: inline-block;
 }
+
 /* Arrow buttons styling for RTL */
 .arrow-btn {
   width: 36px;
@@ -21,7 +18,7 @@ button.rounded-circle {
   transition: 0.2s;
   padding: 0;
   cursor: pointer;
-  
+
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -30,34 +27,39 @@ button.rounded-circle {
 
 /* Swapped arrow directions for RTL */
 .arrow-btn.next {
-  background-image: url("/assets/Images/right-arrow.svg");
-  
+    // background-image: url("/assets/Images/right-arrow.svg");
+
   &:not([disabled]):hover {
-    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+        background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+
   }
 }
 
 .arrow-btn.prev {
-  background-image: url("/assets/Images/left-arrow.svg");
-  
+
+  // background-image: url("/assets/Images/left-arrow.svg");
+
   &:not([disabled]):hover {
-    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+        background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+
   }
 }
 
 /* Dots styling */
 .rounded-circle {
   transition: all 0.3s ease;
-  
+
   &.bg-success {
     background-color: #7AD03A !important;
   }
-  
+
   &.bg-secondary {
     background-color: #DDDDDD !important;
   }
 }
+
 .special-offers-container {
+  background-color: #E9F7DE;
   padding: 3rem;
   width: 100%;
   margin: 0 auto;
@@ -92,9 +94,9 @@ button.rounded-circle {
   .product-card {
     flex: 1 1 calc(33.333% - 1rem);
     min-width: 300px;
-    background: white;
+    background: white !important;
     border-radius: 8px;
-      text-align: end;
+    text-align: end;
 
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -110,13 +112,13 @@ button.rounded-circle {
     height: 200px;
     object-fit: cover;
   }
- 
+
   .product-info {
-  
+
     padding: 1.5rem;
 
     .product-name {
-        text-align: end;
+      text-align: end;
 
       text-align: end;
       margin-right: 1rem;
@@ -124,14 +126,16 @@ button.rounded-circle {
       font-size: 1.2rem;
       color: #222;
     }
-.card-title{
-        text-align: right;
 
-}
+    .card-title {
+      text-align: right;
+
+    }
+
     .product-description {
       text-align: right;
       margin-right: 1rem;
-  text-align: end;
+      text-align: end;
 
       background-color: white;
       color: #666;
@@ -259,7 +263,8 @@ button.rounded-circle {
 
 .video-container {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
+  /* 16:9 aspect ratio */
   height: 0;
   overflow: hidden;
 }
@@ -272,6 +277,7 @@ button.rounded-circle {
   height: 100%;
   border-radius: 8px;
 }
+
 .carousel-inner-custom {
   position: relative;
   width: 100%;
@@ -294,12 +300,16 @@ button.rounded-circle {
 .custom-hover:hover {
   border-color: #7AD03A !important;
 }
+
 /* In your component's CSS or global styles */
 .product-carousel {
-  margin-top: var(--header-height, 80px); /* Uses CSS variable if defined */
+  margin-top: var(--header-height, 80px);
+  /* Uses CSS variable if defined */
   position: relative;
-  z-index: 1; /* Lower than header's z-index */
+  z-index: 1;
+  /* Lower than header's z-index */
 }
+
 /* Your custom green style */
 .custom-green-btn {
   background-color: #7AD03A;
@@ -326,6 +336,7 @@ button.rounded-circle {
   color: black;
   border-color: #7AD03A;
 }
+
 .btn-circle {
   width: 35px;
   height: 35px;
@@ -340,8 +351,10 @@ button.rounded-circle {
   transition: all 0.2s ease-in-out;
 
   i {
-    background-color: transparent; /* Ensure no override */
-    color: inherit; /* Use parent color */
+    background-color: transparent;
+    /* Ensure no override */
+    color: inherit;
+    /* Use parent color */
   }
 
   &:hover {
@@ -378,8 +391,9 @@ button.rounded-circle {
     flex: 0 0 100%; // 1 في الموبايل
   }
 }
-a.text-decoration-none:hover .card {
-}
+
+a.text-decoration-none:hover .card {}
+
 .special-offers-container {
   .carousel-wrapper {
     position: relative;
@@ -434,10 +448,7 @@ a.text-decoration-none:hover .card {
 
 
 
-* {
-  background-color: #f2fff4;
 
-}
 
 .special-offers-container {
   padding: 3rem;
@@ -476,7 +487,7 @@ a.text-decoration-none:hover .card {
     min-width: 300px;
     background: white;
     border-radius: 8px;
-      text-align: end;
+    text-align: end;
 
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -492,7 +503,7 @@ a.text-decoration-none:hover .card {
     height: 200px;
     object-fit: cover;
   }
- 
+
   .product-info {
     text-align: right;
     margin-right: 1rem;
@@ -500,7 +511,7 @@ a.text-decoration-none:hover .card {
     padding: 1.5rem;
 
     .product-name {
-        text-align: end;
+      text-align: end;
 
       text-align: right;
       margin-right: 1rem;
@@ -508,14 +519,16 @@ a.text-decoration-none:hover .card {
       font-size: 1.2rem;
       color: #222;
     }
-.card-title{
-        text-align: right;
 
-}
+    .card-title {
+      text-align: right;
+
+    }
+
     .product-description {
       text-align: right;
       margin-right: 1rem;
-  text-align: end;
+      text-align: end;
 
       background-color: white;
       color: #666;
@@ -645,7 +658,8 @@ a.text-decoration-none:hover .card {
 
 .video-container {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
+  /* 16:9 aspect ratio */
   height: 0;
   overflow: hidden;
 }
@@ -658,6 +672,7 @@ a.text-decoration-none:hover .card {
   height: 100%;
   border-radius: 8px;
 }
+
 .carousel-inner-custom {
   position: relative;
   width: 100%;
@@ -680,12 +695,16 @@ a.text-decoration-none:hover .card {
 .custom-hover:hover {
   border-color: #7AD03A !important;
 }
+
 /* In your component's CSS or global styles */
 .product-carousel {
-  margin-top: var(--header-height, 80px); /* Uses CSS variable if defined */
+  margin-top: var(--header-height, 80px);
+  /* Uses CSS variable if defined */
   position: relative;
-  z-index: 1; /* Lower than header's z-index */
+  z-index: 1;
+  /* Lower than header's z-index */
 }
+
 /* Your custom green style */
 .custom-green-btn {
   background-color: #7AD03A;
@@ -712,6 +731,7 @@ a.text-decoration-none:hover .card {
   color: black;
   border-color: #7AD03A;
 }
+
 .btn-circle {
   width: 35px;
   height: 35px;
@@ -726,8 +746,10 @@ a.text-decoration-none:hover .card {
   transition: all 0.2s ease-in-out;
 
   i {
-    background-color: transparent; /* Ensure no override */
-    color: inherit; /* Use parent color */
+    background-color: transparent;
+    /* Ensure no override */
+    color: inherit;
+    /* Use parent color */
   }
 
   &:hover {
@@ -738,39 +760,39 @@ a.text-decoration-none:hover .card {
 
 
 
-  .arrow-btn {
-    width: 36px;
-    height: 36px;
-    border: none;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    transition: 0.2s;
-    padding: 0;
-    cursor: pointer;
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
 
-    &[disabled] {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
+}
 
-  .arrow-btn.prev {
-    background-image: url("/assets/Images/left-arrow.svg");
-    
-    &:not([disabled]) {
-      background-image: url("/assets/Images/circle-arrow-left-03green.svg");
-    }
-  }
+.arrow-btn.prev {
+  background-image: url("/assets/Images/left-arrow.svg");
 
-  .arrow-btn.next {
-    background-image: url("/assets/Images/right-arrow.svg");
-    
-    &:not([disabled]) {
-      background-image: url("/assets/Images/circle-arrow-green-04green.svg");
-    }
+  &:not([disabled]) {
+    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
   }
+}
+
+.arrow-btn.next {
+  background-image: url("/assets/Images/right-arrow.svg");
+
+  &:not([disabled]) {
+    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+  }
+}
 
 .carousel-track {
   transition: transform 0.6s ease;
@@ -799,8 +821,9 @@ a.text-decoration-none:hover .card {
     flex: 0 0 100%; // 1 في الموبايل
   }
 }
+
 a.text-decoration-none:hover .card {
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 

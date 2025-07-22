@@ -15,7 +15,7 @@ import {
 })
 export class PostHero implements AfterViewInit {
   stats = [
-    { number: 20, suffix: '+', label: 'فرع', description: 'Branches' },
+    { number: 40, suffix: '+', label: 'فرع', description: 'Branches' },
     { number: 285, suffix: '+', label: 'منتج', description: 'Products' },
     { number: 500, suffix: '+', label: 'موظف', description: 'Employees' },
     { number: 100000, suffix: '+', label: 'عميل', description: 'Clients' }

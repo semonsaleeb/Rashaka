@@ -40,9 +40,11 @@ getProducts(): Observable<Product[]> {
     .pipe(map(response => response.data));
 }
 
-  getOffer(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/offers`);
-  }
+ getOffer(): Observable<Product[]> {
+  return this.http
+    .get<{ status: string; data: Product[] }>(`${this.baseUrl}/offers`).pipe(map(response => response.data));
+}
+
 
 
   

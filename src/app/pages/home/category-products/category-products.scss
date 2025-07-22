@@ -1,4 +1,18 @@
 
+/* Dots styling */
+.rounded-circle {
+  transition: all 0.3s ease;
+  
+  &.bg-success {
+     background-color: #7AD03A !important;
+   
+
+  }
+  
+  &.bg-secondary {
+    background-color: #DDDDDD !important;
+  }
+}
 
 .category-products-container {
   background-color: #081E25;
@@ -33,7 +47,8 @@
         font-size: 0.85rem;
         transition: all 0.3s ease;
                   background-color: #7AD03A;
-                  width: 12rem;
+                  width: 13rem;
+                  height: 40px;
 
         
         &.btn-outline-success {
@@ -89,7 +104,7 @@
       height: 200px;
       object-fit: contain;
       padding: 1rem;
-      background: #f8f9fa;
+      background: white;
     }
 
     .card-body {

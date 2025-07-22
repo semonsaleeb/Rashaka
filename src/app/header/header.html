@@ -14,7 +14,7 @@
         <div class="position-relative" dir="rtl">
           <div class="input-group">
             <input type="text" class="form-control ps-5" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
-              (input)="onSearch()" style="text-align: right;" />
+              (input)="onSearch()" style="text-align: right; font-size: 0.9rem;" />
             <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="z-index: 5;">
               <img src="assets/Images/search-01.svg" />
             </span>
@@ -66,9 +66,9 @@
         </ng-container>
 
         <!-- Language Switch -->
-        <div class="language-selector d-flex align-items-center mx-2">
+        <div class="language-selector d-flex align-items-center mx-3 ">
           <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1 me-1" />
-          <select class="form-select border-0 p-0 rtl-select" [(ngModel)]="selectedLanguage"
+          <select class="form-select border-0 p-0 rtl-select px-1" [(ngModel)]="selectedLanguage"
             (change)="onLanguageChange($event)">
             <option value="العربية">العربية</option>
             <option value="English">English</option>
@@ -159,9 +159,9 @@
         </ul>
 
         <!-- WhatsApp -->
-        <div class="ms-auto m-y2" style="position: absolute; left: 0;">
-          <button class="btn d-flex align-items-center border px-5 py-2" style="color: #25D366;">
-            <span class="ms-2">واتساب</span>
+        <div class="ms-auto m-y2 " style="position: absolute; left: 0;">
+          <button class="btn d-flex align-items-center border px-5 py-2 " style="color: #25D366;">
+            <span class="ms-2 ">واتساب</span>
             <i class="fab fa-whatsapp"></i>
           </button>
         </div>

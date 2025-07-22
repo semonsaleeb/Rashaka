@@ -1,102 +1,74 @@
-<div class="pricing-container w-100 py-5 px-5" >
+<div class="pricing-container w-100 py-5 px-5">
     <!-- Header -->
     <div class="header">
         <h2 class="title px-3">الباقات</h2>
         <br>
-        <div class="toggle-container " style="width: 25%;">
+        <div class="toggle-container" style="width: 25%;">
             <button class="toggle-btn" [class.active]="selectedPlan === 'annual'"> الاجهزة و الجلسات </button>
             <button class="toggle-btn" [class.active]="selectedPlan === 'monthly'"> النظام الاغذائي </button>
         </div>
     </div>
 
     <!-- Pricing Cards -->
-    <div class="cards-container">
-        <!-- Basic Plan (10 sessions) -->
-        <div class="card basic-card">
-            <div class="card-top">
-                <div class="ribbon-top-left" style="color: black;"> باقة الطموح </div>
+    <div class="cards-container ">
+        <!-- Loop through plans -->
+        <div class="card" [class.basic-card]="plan.type === 'basic'" 
+                        [class.premium-card]="plan.type === 'premium'" 
+                        [class.standard-card]="plan.type === 'standard'"
+                        *ngFor="let plan of plans">
+            <div class="card-top" style="margin-bottom: 0; padding-bottom: 0;">
+                <div class="ribbon-top-left"
+                    [style.background-color]="plan.type === 'basic' ? '#B4EB52' : 'transparent'"
+                    [style.color]="'black'">
+                    {{ plan.title }}
+                </div>
 
                 <img src="assets/Images/Group 9010.svg" alt="Frame"
                     style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
 
                 <div class="plan-info">
-                    <span style="color: white;">اشتراك</span>
-                    <div class="sessions justify-content-center bg-white" style=""> 35 جلسة</div>
-                    <div class="price" style="color: white;"> <span> السعر 10,000 ر . س </span></div>
+                    <span [style.color]="plan.type === 'basic' ? 'white' : 'inherit'">اشتراك</span>
+                    <div class="sessions justify-content-center"
+                        [style.background-color]="plan.type === 'basic' ? 'white' : '#1B6079'"
+                        [style.color]="plan.type === 'basic' ? 'inherit' : 'white'">
+                        {{ plan.sessions }} جلسة
+                    </div>
+                    <div class="price" [style.color]="plan.type === 'basic' ? 'white' : 'inherit'">
+                        <span> السعر {{ plan.price }} ر . س </span>
+                    </div>
                 </div>
             </div>
-            <div class="card-bottom">
-                <!-- <span style="background-color: #E3E3E3; text-align: center; " class="my-0">الباقة متاح فقط داخل الرياض.</span> -->
-                <div class="feature">
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> منتجات مجانية بقيمة /
-                        2500 ريال سعودي</span>
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> 20 جلسات شد </span>
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> 15 جلسات تكسير </span>
-
+            <div class="card-bottom" style="padding-top: 0;">
+                <!-- Available Places Section - Full width and connected -->
+                <div class="available-places"
+                
+                    style="background-color: #E3E3E3;
+                           color: #333;
+                           padding: 3px 0;
+                           text-align: center;
+                           margin: 0 -20px; /* Negative margin to extend full width */
+                           border-radius: 0;
+                           font-size: 14px;">
+                    {{ plan.availablePlaces  }}
+                </div>
+                
+                <div class="feature " style="margin-top: 16px; ">
+                    <span class="feature-label fs-6" *ngFor="let feature of plan.features">
+                        <img src="assets/Images/checkmark-circle-02.svg"> {{ feature }}
+                    </span>
                 </div>
 
-                <button class="subscribe-btn">اشتراك</button>
-            </div>
-        </div>
-
-        <!-- Premium Plan (35 sessions) -->
-        <div class="card premium-card">
-            <div class="card-top">
-                <div class="ribbon-top-left" style="background-color: transparent; color: black;"> باقة الماسية </div>
-
-                <img src="assets/Images/Group 9010.svg" alt="Frame"
-                    style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
-
-                <div class="plan-info">
-                    <span>اشتراك</span>
-                    <div class="sessions justify-content-center " style="background-color: #1B6079; color: white;"> 35 جلسة</div>
-                    <div class="price"> <span> السعر 10,000 ر . س </span></div>
-                </div>
-            </div>
-            <div class="card-bottom">
-                <div class="feature">
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> منتجات مجانية بقيمة /
-                        2500 ريال سعودي</span>
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> 20 جلسات شد </span>
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> 15 جلسات تكسير </span>
-
-                </div>
-
-<button class="subscribe-btn" style="background-color: transparent; color: black; border: 1px solid #808080; border-radius: 9px; padding: 8px 16px;">
-  اشتراك
-</button>
+                <button class="subscribe-btn" [style.background]="plan.type === 'basic' ? '#7AD03A' : 'transparent'"
+                    [style.color]="plan.type === 'basic' ? 'white' : 'black'"
+                    [style.border]="plan.type === 'basic' ? 'none' : '1px solid #808080'" 
+                    [style.border-radius]="'9px'"
+                    [style.padding]="'8px 16px'" 
+                    [style.font-weight]="'500'" 
+                    [style.cursor]="'pointer'"
+                    [style.transition]="'all 0.3s ease'">
+                    اشتراك
+                </button>
             </div>
         </div>
-
-        <!-- Standard Plan (12 sessions) -->
-        <div class="card standard-card">
-            <div class="card-top">
-                <div class="ribbon-top-left" style="background-color: transparent; color: black;"> باقة ذهبية </div>
-
-                <img src="assets/Images/Group 9010.svg" alt="Frame"
-                    style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
-
-                <div class="plan-info">
-                    <span>اشتراك</span>
-                    <div class="sessions justify-content-center " style="background-color: #1B6079;color: white;"> 35 جلسة</div>
-                    <div class="price"> <span> السعر 10,000 ر . س </span></div>
-                </div>
-            </div>
-            <div class="card-bottom">
-                <div class="feature">
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> منتجات مجانية بقيمة /
-                        2500 ريال سعودي</span>
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> 20 جلسات شد </span>
-                    <span class="feature-label"><img src="assets/Images/checkmark-circle-02.svg"> 15 جلسات تكسير </span>
-
-                </div>
-
-<button class="subscribe-btn" style="background-color: transparent; color: black; border: 1px solid #808080; border-radius: 9px; padding: 8px 16px;">
-  اشتراك
-</button>
-            </div>
-        </div>
-
-
     </div>
 </div>

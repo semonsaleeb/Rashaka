@@ -13,3 +13,6 @@
   border-radius: 5px;
   background: linear-gradient(90deg, #7AD03A, #2EA2CC);
 }
+.no-divider .position-absolute {
+  display: none !important;
+}

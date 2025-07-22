@@ -1,8 +1,12 @@
 header {
-  font-size: 1rem;
+  font-size: 1.1rem;
   // padding-left: 120px;
   //   padding-right: 120px;
   padding: 20px 90px 10px 90px;
+}
+.nav-link:hover {
+  color: #198754  !important; /* اللون الأخضر */
+  text-decoration: underline !important;
 }
 
 [dir="rtl"] {
@@ -21,14 +25,7 @@ header {
   pointer-events: none;
 }
 
-.rtl-select {
-  background-position: right center;
-  /* move arrow to the left */
-  padding-left: 0 !important;
-  /* add padding to prevent text overlap with arrow */
-  padding-right: 0 !important;
-  /* remove extra right padding */
-}
+
 
 .dropdown-menu {
   min-width: 10rem;
@@ -38,6 +35,15 @@ header {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
+select.rtl-select {
+  appearance: none;            /* Chrome, Safari */
+  -webkit-appearance: none;    /* Safari */
+  -moz-appearance: none;       /* Firefox */
+  background-repeat: no-repeat;
+  background-position: left center; /* أو حسب اتجاه اللغة */
+   background-size: 10px;
+  // padding-right: 2rem; /* تأكدي من وجود مساحة للسهم */
+}
 
 
 @media (max-width: 991.98px) {

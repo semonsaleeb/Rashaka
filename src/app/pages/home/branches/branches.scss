@@ -11,29 +11,38 @@ body {
 
 /* Section Title */
 .section-title {
-  font-size: 1.25rem;
+  font-size: 2rem;
 }
 
 /* Branch Filter Buttons */
 .branch-filters .btn {
   border-radius: 20px;
-  padding: 6px 16px;
+  padding: 6px 25px;
   font-weight: 500;
   border: 1px solid #ccc;
   color: #000;
   background-color: white;
   transition: all 0.2s ease;
+   position: relative;
+  padding-inline-start: 28px; /* space for the icon */
 }
 
 .branch-filters .btn:hover {
+  margin-right: 8px;
   background-color: #f1f1f1;
 }
 
+
 .branch-filters .btn.active {
-  background-color: #28a745;
-  color: white;
-  border-color: #28a745;
+  background-image: url('/assets/Images/location-01.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 28px;
+  border-color: #7AD03A;
+  color: #000000;
 }
+
+
 
 /* Service Card */
 .service-card {
