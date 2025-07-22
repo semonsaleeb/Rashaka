@@ -101,6 +101,7 @@
   <!-- Product Grid -->
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-end mx-5">
     <div class="col" *ngFor="let product of products">
+                  <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
       <div class="card h-100 product-card bg-white rounded-4 border shadow-sm">
         <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
           style="height: 200px; object-fit: contain;">
@@ -127,7 +128,7 @@
             <img src="assets/Images/shopping-cart-add-01.svg" style="height: 16px;">
           </button>
         </div>
-      </div>
+      </div></a>
     </div>
   </div>
 </div>

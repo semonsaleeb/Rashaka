@@ -49,6 +49,8 @@
       [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
       <div class="carousel-slide p-3" *ngFor="let product of filteredProducts">
         <div class="card product-card rounded-4">
+                   <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
+
           <!-- Product Image -->
           <div class="carousel slide">
             <div class="carousel-inner">
@@ -80,6 +82,7 @@
               <img src="assets/Images/shopping-cart-add-01.svg">
             </button>
           </div>
+          </a>
         </div>
       </div>
     </div>
@@ -185,6 +188,7 @@
       <!-- Product Grid -->
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         <div class="col" *ngFor="let product of filteredProducts">
+                      <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
           <div class="card h-100 product-card bg-white rounded-4 border shadow-sm position-relative">
 
             <!-- Product Image -->
@@ -226,7 +230,7 @@
                 <img src="assets/Images/shopping-cart-add-01.svg" style="height: 16px;" />
               </button>
             </div>
-          </div>
+          </div></a>
         </div>
       </div>
 
