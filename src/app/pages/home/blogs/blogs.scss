@@ -21,6 +21,13 @@
   color: #7AD03A;
   background-color: #7AD03A;
 }
+.two-lines-only {
+
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+  height: calc(1.4em * 2); /* اختياري للتأكد من الارتفاع */
+}
 /* Card styling */
 .card {
   height: 100%;
@@ -44,7 +51,7 @@
   }
 }
 
-/* Arrow buttons styling */
+/* Arrow buttons styling for RTL */
 .arrow-btn {
   width: 36px;
   height: 36px;
@@ -56,7 +63,7 @@
   transition: 0.2s;
   padding: 0;
   cursor: pointer;
-  
+
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -65,18 +72,25 @@
 
 /* Swapped arrow directions for RTL */
 .arrow-btn.next {
-  background-image: url("/assets/Images/right-arrow.svg");
-  
+    // background-image: url("/assets/Images/right-arrow.svg");
+            background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+
+
   &:not([disabled]):hover {
-    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+        background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+
   }
 }
 
 .arrow-btn.prev {
-  background-image: url("/assets/Images/left-arrow.svg");
-  
+
+  // background-image: url("/assets/Images/left-arrow.svg");
+          background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+
+
   &:not([disabled]):hover {
-    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+        background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+
   }
 }
 

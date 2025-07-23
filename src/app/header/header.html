@@ -10,7 +10,7 @@
       </div>
 
       <!-- Search Bar -->
-      <div class="search-container flex-grow-1 mx-3" style="max-width: 500px;">
+      <div class="search-container flex-grow-1 mx-3 border border-1 rounded-3" style="max-width: 500px; ">
         <div class="position-relative" dir="rtl">
           <div class="input-group">
             <input type="text" class="form-control ps-5" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
@@ -42,7 +42,7 @@
         <!-- If NOT logged in -->
         <a *ngIf="!isLoggedIn" routerLink="/auth"
           class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
-          <img src="assets/Images/user-circle.svg" alt="User" width="20" />
+          <img src="assets/Images/user-circle.svg" alt="User" width="25" />
           <span>تسجيل الدخول</span>
         </a>
 

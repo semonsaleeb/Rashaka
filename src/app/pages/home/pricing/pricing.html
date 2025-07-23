@@ -12,10 +12,8 @@
     <!-- Pricing Cards -->
     <div class="cards-container ">
         <!-- Loop through plans -->
-        <div class="card" [class.basic-card]="plan.type === 'basic'" 
-                        [class.premium-card]="plan.type === 'premium'" 
-                        [class.standard-card]="plan.type === 'standard'"
-                        *ngFor="let plan of plans">
+        <div class="card" [class.basic-card]="plan.type === 'basic'" [class.premium-card]="plan.type === 'premium'"
+            [class.standard-card]="plan.type === 'standard'" *ngFor="let plan of plans">
             <div class="card-top" style="margin-bottom: 0; padding-bottom: 0;">
                 <div class="ribbon-top-left"
                     [style.background-color]="plan.type === 'basic' ? '#B4EB52' : 'transparent'"
@@ -40,34 +38,35 @@
             </div>
             <div class="card-bottom" style="padding-top: 0;">
                 <!-- Available Places Section - Full width and connected -->
-                <div class="available-places"
-                
-                    style="background-color: #E3E3E3;
-                           color: #333;
-                           padding: 3px 0;
-                           text-align: center;
-                           margin: 0 -20px; /* Negative margin to extend full width */
-                           border-radius: 0;
-                           font-size: 14px;">
-                    {{ plan.availablePlaces  }}
+                <div class="available-places" [ngStyle]="{
+       'background-color': plan.availablePlaces ? '#E3E3E3' : '#B4EB52',
+       'color': '#333',
+       'padding': '3px 0',
+       'text-align': 'center',
+       'margin': '0 -20px',
+       'border-radius': '0',
+       'font-size': '14px'
+     }">
+                    {{ plan.availablePlaces }}
                 </div>
-                
-                <div class="feature " style="margin-top: 16px; ">
-                    <span class="feature-label fs-6" *ngFor="let feature of plan.features">
-                        <img src="assets/Images/checkmark-circle-02.svg"> {{ feature }}
+                <div class="feature" style="margin-top: 16px;">
+                    <span class="feature-label fs-6" style="display: block; margin-bottom: 8px;"
+                        *ngFor="let feature of plan.features">
+                        <img src="assets/Images/checkmark-circle-02.svg"> &nbsp; {{ feature }}
                     </span>
                 </div>
 
-                <button class="subscribe-btn" [style.background]="plan.type === 'basic' ? '#7AD03A' : 'transparent'"
-                    [style.color]="plan.type === 'basic' ? 'white' : 'black'"
-                    [style.border]="plan.type === 'basic' ? 'none' : '1px solid #808080'" 
-                    [style.border-radius]="'9px'"
-                    [style.padding]="'8px 16px'" 
-                    [style.font-weight]="'500'" 
-                    [style.cursor]="'pointer'"
-                    [style.transition]="'all 0.3s ease'">
-                    اشتراك
-                </button>
+<button class="subscribe-btn" 
+        [style.background]="plan.type === 'basic' ? '#7AD03A' : 'transparent'"
+        [style.color]="plan.type === 'basic' ? '#00000' : 'black'"
+        [style.border]="plan.type === 'basic' ? 'none' : '1px solid #808080'" 
+        [style.border-radius]="'9px'"
+        [style.padding]="'8px 16px'" 
+        [style.font-weight]="'500'" 
+        [style.cursor]="'pointer'"
+        [style.transition]="'all 0.3s ease'">
+        اشتراك
+</button>
             </div>
         </div>
     </div>

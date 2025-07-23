@@ -11,6 +11,7 @@ import { CartIconComponent } from './cart-icon.component/cart-icon.component';
 import { CartPageComponent } from './cart-page.component/cart-page.component';
 import { Pricing } from './pages/home/pricing/pricing';
 import { ProductCard } from './product-card/product-card';
+import { OurService } from './pages/home/our-service/our-service';
 
 export const routes: Routes = [
   // Home page
@@ -97,6 +98,10 @@ export const routes: Routes = [
    {
     path: 'home/sucesStory',
     component: SucesStory
+  },
+   {
+    path: 'home/ourService',
+    component: OurService
   },
  {
   path: 'home/special-offers',

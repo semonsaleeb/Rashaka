@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
@@ -8,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrl: './footer.scss'
 })
 export class Footer {
+
+  constructor(private viewportScroller: ViewportScroller) {}
+
+scrollToTop() {
+  this.viewportScroller.scrollToPosition([0, 0]);
+}
 
 }

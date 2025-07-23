@@ -1,82 +1,104 @@
-<footer class="footer ">
- <img src="assets/Images/pattern.svg" 
-         style="position: absolute;
+
+<!-- Border with up arrow at the top (OUTSIDE footer) -->
+<div class="footer-border-top"> 
+  <div class="curved-border"></div> 
+  <div class="up-arrow" (click)="scrollToTop()">
+    <img src="assets/Images/circle-arrow-up-02.svg">
+  </div> 
+</div>
+
+<footer class="footer my-5">
+
+  <img src="assets/Images/pattern.svg" style="position: absolute;
                 right : 0;
                 top: 0;
                 height: 180px;
-                z-index: 1;">     <div class="footer-content">
-        <!-- Contact Section -->
-        <div class="footer-section contact-section">
-           <h3>تواصل معنا</h3>
+                z-index: 1;">
+  <img src="assets/Images/Ellipse.svg" style="position: absolute;
+                left : 0;
+                top: 0;
+                height: 60px;
+                z-index: 1;
+                transform: rotate(180deg);
+                ">
+  <div class="footer-content">
+    <!-- Contact Section -->
+    <div class="footer-section contact-section">
+      <h3>تواصل معنا</h3>
 
-<div class="contact-item">
-  <span>
-    طريق الإمام النتري طريطة
-    <img src="assets/Images/location-01.svg" style="margin-right: 8px;">
-  </span>
-</div>
+      <div class="contact-item">
+        <span>
+          طريق الإمام النتري طريطة
+          <img src="assets/Images/location-01.svg" style="margin-right: 8px;">
+        </span>
+      </div>
 
-<div class="contact-item">
-  <span>
-    (+20) 1067690957
-    <img src="assets/Images/call-02.svg" style="margin-right: 8px;">
-  </span>
-</div>
+      <div class="contact-item">
+        <span>
+          (+20) 1067690957
+          <img src="assets/Images/call-02.svg" style="margin-right: 8px;">
+        </span>
+      </div>
 
 
-            <h4>مواعيد العمل</h4>
-            <p>السبت - الخميس ١١ ص إلى ١١ م</p>
-            <p>الجمعة ٩ ص إلى ٩ م</p>
+      <h4>مواعيد العمل</h4>
+      <p>السبت - الخميس ١١ ص إلى ١١ م</p>
+      <p>الجمعة ٩ ص إلى ٩ م</p>
+    </div>
+
+    <!-- Quick Links Section -->
+    <div class="footer-section links-section">
+      <h3>روابط سريعة</h3>
+      <ul>
+        <li><a href="/">الرئيسية</a></li>
+        <li><a href="home/ourService">خدماتنا</a></li>
+        <li><a href="#">البرامج والاشتراكات</a></li>
+        <li><a href="home/category-products"> منتاجاتنا </a></li>
+        <li><a href="home/sucesStory">قصص النجاح</a></li>
+      </ul>
+    </div>
+
+    <!-- Logo and Social Section -->
+    <div class="footer-section logo-section justify-content-end" dir="rtl">
+      <div class="logo-container" dir="rtl">
+        <div class="logo_img " style="text-align: right;">
+          <img src="assets/Images/logo.svg">
         </div>
+      </div>
+      <p class="tagline " dir="rtl">
+        الرشاقة السعيدة دائماً معك ويمكنك<br>
+        التواصل معنا في أي وقت
+      </p>
 
-        <!-- Quick Links Section -->
-        <div class="footer-section links-section">
-            <h3>روابط سريعة</h3>
-            <ul>
-                <li><a href="#home">الرئيسية</a></li>
-                <li><a href="#services">خدماتنا</a></li>
-                <li><a href="#programs">البرامج والاشتراكات</a></li>
-                <li><a href="#suggestions">المقترحات الصحية</a></li>
-                <li><a href="#success">قصص النجاح</a></li>
-            </ul>
+      <div class="social-section" dir="rtl">
+        <h4>تابعنا على</h4>
+        <div class="social-links">
+          <a href="#"><img src="assets/Images/facebook-01.svg" alt="Facebook" /></a>
+          <a href="#"><img src="assets/Images/instagram.svg" alt="Instagram" /></a>
+          <a href="#"><img src="assets/Images/instagram (1).svg" alt="Instagram Alt" /></a>
+          <a href="#"><img src="assets/Images/new-twitter-rectangle.svg" alt="Twitter" /></a>
         </div>
+      </div>
 
-        <!-- Logo and Social Section -->
-        <div class="footer-section logo-section justify-content-end"  dir="rtl">
-            <div class="logo-container" dir="rtl">
-                <div class="logo_img " style="text-align: right;">
-                    <img src="assets/Images/logo.svg" >
-                </div>
-            </div>
-            <p class="tagline " dir="rtl">
-                الرشاقة السعيدة دائماً معك ويمكنك<br>
-                التواصل معنا في أي وقت
-            </p>
-
-           <div class="social-section" dir="rtl">
-  <h4 >تابعنا على</h4>
-  <div class="social-links">
-    <a href="#"><img src="assets/Images/facebook-01.svg" alt="Facebook" /></a>
-    <a href="#"><img src="assets/Images/instagram.svg" alt="Instagram" /></a>
-    <a href="#"><img src="assets/Images/instagram (1).svg" alt="Instagram Alt" /></a>
-    <a href="#"><img src="assets/Images/new-twitter-rectangle.svg" alt="Twitter" /></a>
+    </div>
   </div>
-</div>
 
-        </div>
-    </div>
+  <div class="footer-bottom">
+    <p style="text-align: center !important;">جميع الحقوق محفوظة رشاقة السعيدة © 2025</p>
+  </div>
 
-    <div class="footer-bottom">
-        <p style="text-align: center !important;">جميع الحقوق محفوظة رشاقة السعيدة © 2025</p>
-    </div>
+  <!-- Decorative elements -->
 
-    <!-- Decorative elements -->
-    
- <img src="assets/Images/pattern.svg" 
-         style="position: absolute;
+  <img src="assets/Images/pattern.svg" style="position: absolute;
                 left: 0;
                 bottom: 0;
                 transform: rotate(180);
                 height: 180px;
-                z-index: 1;"> 
+                z-index: 1;">
+  <img src="assets/Images/Ellipse.svg" style="position: absolute;
+                right: 0;
+                bottom: 0;
+                transform: rotate(180);
+                height: 70px;
+                z-index: 1;">
 </footer>

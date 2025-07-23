@@ -252,3 +252,69 @@ align-items: right;
         font-size: 16px;
       }
     }
+
+
+
+.footer-border-top {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.curved-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px; /* Increased height for better curve */
+  background: linear-gradient(90deg, #7AD03A 0%, #5CB85C 100%);
+  transform: scale(0.7, 0.2); /* Adjusted scale for smoother curve */
+  border-radius:  100px 100px 0 0;
+  transform-origin: top center;
+}
+
+.up-arrow {
+  position: absolute;
+  top: 4px; /* Adjusted position */
+  left: 15%;
+  transform: translateX(-50%);
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 11;
+}
+
+.up-arrow:hover {
+  transform: translateX(-50%) translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.up-arrow img {
+  width: 64px;
+  height: 64px;
+    z-index: 11;
+
+}
+
+
+
+footer.footer {
+  margin-top: -90px; /* adjust to fit smoothly */
+  padding-top: 60px;  /* prevent content overlap */
+}
+.footer-border-top {
+  position: relative;
+  margin-bottom: -33px; /* curve overlaps */
+  z-index: 2;
+}

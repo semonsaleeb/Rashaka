@@ -1,4 +1,4 @@
-<div class="position-relative pt-5 mt-5 mb-0" *ngIf="mode === 'carousel' && !isLoading">
+<div class=" stats-container position-relative pt-5 mt-5 mb-0" *ngIf="mode === 'carousel' && !isLoading">
   <div class="special-offers-container mb-5">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
@@ -32,7 +32,7 @@
                 <div class="position-relative ">
                   <div class="carousel-inner">
                     <div class="carousel-item active">
-                      <div class="ribbon-top-right">لفترة محدودة</div>
+                      <div class="ribbon-top-right fs-6">لفترة محدودة</div>
                       <img [src]="product.images[0]" class="card-img-top p-3 mt-3" [alt]="product.name"
                         style="height: 200px; object-fit: contain;">
                     </div>

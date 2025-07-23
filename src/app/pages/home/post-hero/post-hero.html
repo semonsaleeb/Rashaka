@@ -1,13 +1,12 @@
-
 <img src="assets/Images/pattern.svg" style="position: absolute;
                 left: 0;
-                top:-55px;
-                height: 200px;
+                top:0;
+                height: 150px;
                 width: 100px;
                 z-index: 1;
                  opacity: 5;     ">
-                
-                <div class="stats-container container bg-white rounded-3 py-4 px-md-5 px-3 text-center">
+<div class="stats-container container bg-white rounded-3 py-5 px-md-5 px-3 text-center">
+
   <div class="row g-4">
     <div class="col-12 col-sm-6 col-md-3 position-relative" *ngFor="let stat of stats; let i = index"
       [class.no-divider]="i === stats.length - 1">
@@ -19,7 +18,7 @@
 
       <!-- Divider: hidden on mobile -->
       <div *ngIf="i < stats.length - 1" class="position-absolute top-50 end-0 translate-middle-y d-none d-md-block"
-        style="width: 1px; height: 60px; background-color: #e5e5e5;">
+        style="width: 1px; height: 60px; background-color: #000000;">
       </div>
     </div>
   </div>

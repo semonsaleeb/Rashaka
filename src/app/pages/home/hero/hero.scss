@@ -113,13 +113,13 @@
 }
 
 .arrow-icon img {
-  width: 18px;
-  height: 18px;
+  width: 25px;
+  height: 25px;
 }
 .gradient-border {
   border-radius: 12px; /* Bootstrap pill shape */
-  padding: 2px; /* thickness of border */
-  background: linear-gradient(140deg,  white,rgba(0, 0, 0, 0.13)); /* your gradient colors */
+  padding: 1px; /* thickness of border */
+  background: linear-gradient(90deg,  rgba(255, 255, 255, 0.87),rgba(0, 0, 0, 0.418)); /* your gradient colors */
 
   .feature-item {
     background-color: #081E25; /* match hero background */
