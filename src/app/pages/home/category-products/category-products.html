@@ -30,7 +30,8 @@
                   }">
               الكل
             </button>
-            <button *ngFor="let category of categories" (click)="filterByCategory(category.id)" class=" fw-bold" [ngClass]="{
+            <button *ngFor="let category of categories" (click)="filterByCategory(category.id)" class=" fw-bold"
+              [ngClass]="{
                     'btn': true,
                     'btn-sm': true,
                     'btn-success': selectedCategory === category.id,
@@ -75,21 +76,60 @@
                     <div class="card-body text-end m-3">
                       <h6 class="card-title fw-bold text-black">{{ product.name_ar }}</h6>
                       <p class="card-text  ">{{ product.description }}</p>
-                       <!-- Price Section -->
-                <div class="mb-2" *ngIf="product.sale_price && product.sale_price !== product.price">
-                  <p class="fw-bold text-secondary mb-1" style="font-size: 14px;">
-                    <span class="fw-bold text-success">{{ product.sale_price }} ر.س </span>
-                    <span style="text-decoration: line-through;">{{ product.price }} ر.س </span>
-                  </p>
-                </div>
-                      <button class="btn btn-outline-dark w-100 mt-2 btn-sm bg-white text-black rounded-5 custom-hover"
-                        (click)="addToCart(product.id)">
-                        <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-                        إضافة للعربة
-                        
-                      </button>
+                      <!-- Price Section -->
+                      <div class="mb-2">
+                        <p class="fw-bold mb-1" style="font-size: 14px;">
+                          <ng-container
+                            *ngIf="product.sale_price && product.sale_price !== product.price; else regularPrice">
+                            <span class="fw-bold text-success">{{ product.sale_price }} ر.س </span>
+                            <span class="text-secondary" style="text-decoration: line-through;">{{ product.price }} ر.س
+                            </span>
+                          </ng-container>
+                          <ng-template #regularPrice>
+                            <span class="fw-bold text-success">{{ product.price }} ر.س </span>
+                          </ng-template>
+                        </p>
+                      </div>
                     </div>
                   </a>
+                  <!-- Cart Interaction -->
+                  <div *ngIf="isInCart(product.id); else addToCartBtn"
+                    class="d-flex align-items-center justify-content-center  px-3  gap-2 border rounded-4 mb-3 mx-5"
+                    style="direction: rtl;">
+
+                    <!-- Quantity Controls -->
+                    <div class="d-flex align-items-center gap-2">
+
+                      <!-- Remove Button -->
+                      <button class="btn custom-remove-btn btn-sm"
+                        (click)="removeItem(product.id); $event.stopPropagation()">
+                        <img src="assets/Images/delete-02.svg">
+                      </button>
+
+                      <!-- Quantity Display -->
+                      <span class="fw-bold custom-qty-display text-center">
+                        {{ getCartItem(product.id)?.quantity }}
+                      </span>
+
+                      <!-- Increase Button -->
+                      <button class="btn custom-increase-btn btn-sm"
+                        (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                        <i class="fa-solid fa-plus"></i>
+                      </button>
+
+                    </div>
+                  </div>
+
+
+
+                  <ng-template #addToCartBtn>
+                    <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover mb-3 mx-5"
+                      (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
+                      <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
+                      إضافة للعربة
+                    </button>
+                  </ng-template>
+
                 </div>
               </div>
             </div>
@@ -106,7 +146,8 @@
             </div>
             <div class="d-flex gap-2">
               <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
-              <button class="arrow-btn prev" (click)="nextSlide()" [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
+              <button class="arrow-btn prev" (click)="nextSlide()"
+                [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
             </div>
           </div>
         </div>
@@ -199,27 +240,29 @@
         </span>
       </div>
 
-      <!-- Product Grid -->
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 my-5">
         <div class="col" *ngFor="let product of filteredProducts">
-          <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
-            <div class="card h-100 product-card bg-white rounded-4 border shadow-sm position-relative">
 
-              <!-- Product Image -->
+          <div class="card h-100 product-card bg-white rounded-4 py-3 border shadow-sm position-relative">
+
+            <!-- Product Image & Link -->
+            <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
               <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
                 style="height: 200px; object-fit: contain;" />
 
               <!-- Favorite & Compare Buttons -->
               <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
                 <button (click)="toggleFavorite(product)" class="btn-circle"
-                  [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
-                  <i class="fa-regular fa-heart"></i> </button>
+                  [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }"
+                  (click)="$event.preventDefault(); toggleFavorite(product)">
+                  <i class="fa-regular fa-heart"></i>
+                </button>
 
-                <button (click)="addToCompare(product)" class="btn-circle text-muted">
+                <button (click)="addToCompare(product)" class="btn-circle text-muted"
+                  (click)="$event.preventDefault(); addToCompare(product)">
                   <i class="fas fa-random"></i>
                 </button>
               </div>
-
 
               <!-- Product Details -->
               <div class="card-body text-end px-3 pb-4">
@@ -229,31 +272,68 @@
                 </p>
 
                 <!-- Price Section -->
-                <div class="mb-2" *ngIf="product.sale_price && product.sale_price !== product.price">
-                  <p class="fw-bold text-secondary mb-1" style="font-size: 14px;">
-                    <span class="fw-bold text-success">{{ product.sale_price }} ر.س </span>
-                    <span style="text-decoration: line-through;">{{ product.price }} ر.س </span>
+                <div class="">
+                  <p class="fw-bold mb-1" style="font-size: 14px;">
+                    <ng-container *ngIf="product.sale_price && product.sale_price !== product.price; else regularPrice">
+                      <span class="fw-bold text-success">{{ product.sale_price }} ر.س </span>
+                      <span class="text-secondary" style="text-decoration: line-through;">
+                        {{ product.price }} ر.س
+                      </span>
+                    </ng-container>
+                    <ng-template #regularPrice>
+                      <span class="fw-bold text-success">{{ product.price }} ر.س </span>
+                    </ng-template>
                   </p>
                 </div>
+              </div>
+            </a> <!-- أغلقنا الرابط هنا -->
 
-                <!-- Add to Cart -->
-                <button
-                  class="btn btn-outline-dark w-100 btn-sm rounded-5 custom-hover d-flex align-items-center justify-content-center gap-2"
-                  (click)="addToCart(product.id)">
-                  إضافة للعربة
-                  <img src="assets/Images/shopping-cart-add-01.svg" style="height: 16px;" />
+            <!-- Cart Interaction -->
+            <div *ngIf="isInCart(product.id); else addToCartBtn"
+              class="d-flex align-items-center justify-content-center px-3  gap-2 border rounded-4 mb-5  mx-4"
+              style="direction: rtl;">
+
+              <!-- Quantity Controls -->
+              <div class="d-flex align-items-center gap-2 ">
+
+                <!-- Remove Button -->
+                <button class="btn custom-remove-btn btn-sm"
+                  (click)="removeItem(product.id); $event.preventDefault(); $event.stopPropagation()">
+                  <!-- <img src="assets/Images/delete-02.svg"> -->
+                  <img src="assets/Images/delete-02.svg">
+                </button>
+
+                <!-- Quantity Display -->
+                <span class="fw-bold custom-qty-display text-center">
+                  {{ getCartItem(product.id)?.quantity }}
+                </span>
+
+                <!-- Increase Button -->
+                <button class="btn custom-increase-btn btn-sm"
+                  (click)="increaseQuantity(product.id); $event.preventDefault(); $event.stopPropagation()">
+                  <i class="fa-solid fa-plus"></i>
                 </button>
               </div>
             </div>
-          </a>
+
+            <!-- Add to Cart Button -->
+            <ng-template #addToCartBtn>
+              <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover mb-5 mx-4"
+                (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
+                <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
+                إضافة للعربة
+              </button>
+            </ng-template>
+
+          </div>
         </div>
       </div>
+
 
       <!-- No Products Found -->
       <div *ngIf="filteredProducts.length === 0" class="text-center mt-5">
         <p class="text-muted">لا توجد منتجات مطابقة للفلترة.</p>
       </div>
     </div>
+
   </div>
-  
-</div>

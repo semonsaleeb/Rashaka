@@ -54,9 +54,10 @@
 
           <div class="col-md-3 text-center">
             <div class="d-flex align-items-center gap-2">
-              <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)">−</button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)"><i class="fa-solid fa-minus"></i></button>
               <span class="mx-4">{{ item.quantity }}</span>
-              <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)">+</button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)"> <i class="fa-solid fa-plus"></i>
+</button>
             </div>
 
           </div>

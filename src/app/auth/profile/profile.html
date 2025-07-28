@@ -1,31 +1,38 @@
-<div class="container w-100 my-5" dir="rtl">
-  <h2 class="mb-4">الملف الشخصي</h2>
+<div class="w-100 my-5 px-0" dir="rtl">
+  <!-- <h2 class="mb-4 text-center">الملف الشخصي</h2> -->
 
   <div *ngIf="client; else notFound">
-    <div class="card p-4 shadow-sm text-center">
+    <div class="text-center w-100">
 
-      <!-- Profile Image or Icon -->
+      <!-- Profile Image -->
       <div class="mb-3">
-        <img
-          *ngIf="client.image; else defaultIcon"
-          [src]="client.image"
-          alt="صورة المستخدم"
-          class="rounded-circle border"
-          style="width: 100px; height: 100px; object-fit: cover;"
-        />
+        <img *ngIf="client.image; else defaultIcon" [src]="client.image" alt="صورة المستخدم"
+          class="rounded-circle border" style="width: 100px; height: 100px; object-fit: cover;" />
         <ng-template #defaultIcon>
           <i class="fas fa-user-circle text-secondary" style="font-size: 100px;"></i>
         </ng-template>
       </div>
 
-      <p><strong>الاسم:</strong> {{ client.name }}</p>
-      <p><strong>البريد الإلكتروني:</strong> {{ client.email }}</p>
-      <p><strong>رقم الهاتف:</strong> {{ client.phone }}</p>
-      <p><strong>تاريخ التسجيل:</strong> {{ client.created_at | date:'medium' }}</p>
+      <!-- Name, Email -->
+      <h5 class="mb-1">{{ client.name }}</h5>
+      <p class="text-muted mb-2">{{ client.email }}</p>
+
+      <!-- Navigation Buttons (Tabs) -->
+      <div class="nav nav-pills justify-content-center mb-4 mt-3" style="gap: 10px;">
+        <a class="btn btn-outline-success mx-5" routerLink="details" routerLinkActive="active">تفاصيل الحساب</a>
+        <a class="btn btn-outline-success mx-5" routerLink="reservations" routerLinkActive="active">الحجوزات</a>
+        <a class="btn btn-outline-success mx-5" routerLink="orders" routerLinkActive="active">الطلبات</a>
+        <a class="btn btn-outline-success mx-5" routerLink="addresses" routerLinkActive="active">العنوان</a>
+      </div>
+
+      <!-- Routed Component Shows Here -->
+      <div class="card border rounded p-3 shadow-sm w-100">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
 
   <ng-template #notFound>
-    <p class="text-danger">{{ errorMessage || 'لا يوجد بيانات لعرضها. تأكد من تسجيل الدخول.' }}</p>
+    <p class="text-danger">لا يوجد بيانات لعرضها. تأكد من تسجيل الدخول.</p>
   </ng-template>
 </div>

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Category, Product, ProductService } from '../../../services/product';
 import { AuthService } from '../../../services/auth.service';
@@ -18,10 +18,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class SpecialOffersComponent implements OnInit {
   @Input() mode: 'carousel' | 'grid' = 'grid';
+  allProducts: Product[] = [];
   products: Product[] = [];
-
   categories: Category[] = [];
+  selectedCategory: number | 'all' = 'all';
 
+  cartItems: any[] = [];
   isLoading = true;
   currentSlideIndex = 0;
   visibleCards = 3;
@@ -29,32 +31,152 @@ export class SpecialOffersComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private auth: AuthService,
-    private router: Router,
+    public router: Router,
     private cartService: CartService,
     public cartState: CartStateService,
     private route: ActivatedRoute,
+    
   ) { }
 
   ngOnInit(): void {
-    const modeFromRoute = this.route.snapshot.data['mode'];
-    if (modeFromRoute) this.mode = modeFromRoute;
-    this.loadProducts();
-  }
+  const modeFromRoute = this.route.snapshot.data['mode'];
+  if (modeFromRoute) this.mode = modeFromRoute;
 
- private loadProducts(): void {
-  this.isLoading = true;
-  this.productService.getOffer().subscribe({
-    next: (products) => {
-      this.products = products;
-      this.isLoading = false;
+  this.loadCartAndProducts();
+}
+
+private loadCartAndProducts(): void {
+  this.cartService.getCart().subscribe({
+    next: (response) => {
+      this.cartItems = response.data?.items || [];
+
+      this.productService.getOffer().subscribe({
+        next: (products) => {
+          this.allProducts = products;
+          this.products = [...products];
+          this.extractCategories(products);
+          this.isLoading = false;
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error('❌ Failed to load products:', err);
+          this.isLoading = false;
+        }
+      });
+
+      // Update cart count
+      const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      this.cartState.updateCount(total);
     },
-    error: (err) => {
-      console.error('Failed to load products:', err);
+    error: (err: HttpErrorResponse) => {
+      console.error('❌ Error loading cart:', err);
+      this.resetCartState();
       this.isLoading = false;
     }
   });
 }
 
+
+  private extractCategories(products: Product[]): void {
+    const map = new Map<number, Category>();
+    products.forEach(product => {
+      product.categories.forEach(cat => {
+        if (!map.has(cat.id)) {
+          map.set(cat.id, cat);
+        }
+      });
+    });
+    this.categories = Array.from(map.values());
+  }
+
+  filterByCategory(categoryId: number | 'all'): void {
+    if (categoryId === 'all') {
+      this.products = [...this.allProducts];
+      this.selectedCategory = 'all';
+    } else {
+      this.products = this.allProducts.filter(product =>
+        product.categories.some(c => c.id === categoryId)
+      );
+      this.selectedCategory = categoryId;
+    }
+    this.currentSlideIndex = 0;
+  }
+
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+
+  addToCart(productId: number): void {
+    if (!this.isLoggedIn()) {
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+
+    this.cartService.addToCart(productId, 1).subscribe({
+      next: () => this.loadCart(),
+      error: (err: HttpErrorResponse) => this.handleCartActionError(err)
+    });
+  }
+
+  private loadCart(): void {
+    this.cartService.getCart().subscribe({
+      next: (response) => this.handleCartResponse(response),
+      error: (err: HttpErrorResponse) => this.handleCartError(err)
+    });
+  }
+
+  private handleCartResponse(response: any): void {
+    this.cartItems = response.data?.items || [];
+    const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    this.cartState.updateCount(total);
+  }
+
+  private handleCartError(err: HttpErrorResponse): void {
+    console.error('❌ Error loading cart:', err);
+    if (err.status === 401) {
+      this.auth.logout();
+      this.resetCartState();
+      this.router.navigate(['/auth/login']);
+    } else {
+      this.resetCartState();
+    }
+  }
+
+  private resetCartState(): void {
+    this.cartItems = [];
+    this.cartState.updateCount(0);
+  }
+
+  private handleCartActionError(err: HttpErrorResponse): void {
+    console.error('❌ Cart action failed:', err);
+    if (err.status === 401) {
+      this.auth.logout();
+      this.resetCartState();
+      this.router.navigate(['/auth/login']);
+    }
+  }
+
+  toggleFavorite(product: Product): void {
+    if (!this.isLoggedIn()) {
+      alert('يرجى تسجيل الدخول أولاً لإضافة المنتج إلى المفضلة');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+    product.isFavorite = !product.isFavorite;
+  }
+
+  addToCompare(product: Product): void {
+    console.log('Compare:', product);
+  }
+
+  // Carousel
+  getDotsArray(): number[] {
+    const slideCount = Math.ceil(this.products.length / this.visibleCards);
+    return Array.from({ length: slideCount }, (_, i) => i);
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlideIndex = index;
+  }
 
   nextSlide(): void {
     if (this.currentSlideIndex < this.products.length - this.visibleCards) {
@@ -68,71 +190,34 @@ export class SpecialOffersComponent implements OnInit {
     }
   }
 
-  addToCart(productId: number): void {
-    this.cartService.addToCart(productId).subscribe({
-      next: () => this.refreshCartCount(),
-      error: (err) => console.error('Failed to add to cart', err)
+  isInCart(productId: number): boolean {
+    return this.cartItems.some(item => item.product_id === productId);
+  }
+
+  getCartItem(productId: number) {
+    return this.cartItems.find(item => item.product_id === productId);
+  }
+
+
+  increaseQuantity(productId: number) {
+    this.cartService.addToCart(productId, 1).subscribe({
+      next: () => this.loadCart(),
+      error: err => console.error(err)
     });
   }
 
-  private refreshCartCount(): void {
-    this.cartService.getCart().subscribe(response => {
-      this.cartState.updateCount(response.data.items.reduce((total, item) => total + item.quantity, 0));
+  decreaseQuantity(productId: number) {
+    this.cartService.reduceCartItem(productId).subscribe({
+      next: () => this.loadCart(),
+      error: err => console.error(err)
     });
   }
 
-  toggleFavorite(product: Product): void {
-    if (!this.auth.isLoggedIn$) {
-      alert('يرجى تسجيل الدخول أولاً لإضافة المنتج إلى المفضلة');
-      this.router.navigate(['/auth']);
-      return;
-    }
-    product.isFavorite = !product.isFavorite;
-  }
-
-  addToCompare(product: Product): void {
-    console.log('Compare:', product);
-  }
-
-
-  filteredProducts: Product[] = [];
-  private fetchProducts(): void {
-    this.isLoading = true;
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products = products;
-        this.filteredProducts = products;
-        this.categories = this.extractUniqueCategories(products);
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load products:', err);
-        this.isLoading = false;
-      }
+  removeItem(productId: number) {
+    this.cartService.removeCartItem(productId).subscribe({
+      next: () => this.loadCart(),
+      error: err => console.error(err)
     });
   }
 
-  private extractUniqueCategories(products: Product[]): Category[] {
-    const map = new Map<number, Category>();
-    products.forEach(product => {
-      product.categories?.forEach(category => {
-        if (!map.has(category.id)) {
-          map.set(category.id, category);
-        }
-      });
-    });
-    return Array.from(map.values());
-  }
-
-  getTotalSlides(): number {
-    return Math.ceil(this.filteredProducts.length / this.visibleCards);
-  }
-  getDotsArray(): number[] {
-    const slideCount = Math.ceil(this.products.length / this.visibleCards);
-    return Array.from({ length: slideCount }, (_, i) => i);
-  }
-
-  goToSlide(index: number): void {
-    this.currentSlideIndex = index;
-  }
 }

@@ -42,27 +42,28 @@
           <div class="d-flex transition-transform carousel-track"
             [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
             <div class="carousel-slide p-3" *ngFor="let blog of blogs">
-              <!-- <a [routerLink]="['/blog', blog.id]" class="text-decoration-none text-dark"> -->
-              <div class="card h-100 product-card rounded-4 border bg-white">
-                <!-- Blog Image -->
-                <div class="position-relative">
-                  <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
-                    style="height: 200px; object-fit: cover; border-radius: 25px;">
-                </div>
+                <div class="card h-100 product-card rounded-4 border bg-white">
+                  <!-- Blog Image -->
+                                 <a [routerLink]="['home/blog/', blog.id]" class="btn btn-link" >
 
-                <!-- Blog Body -->
-                <div class="card-body text-end ">
-                  <h6 class="card-title fw-bold ">{{ blog.title_ar }}</h6>
-                  <p class="card-text text-muted text-end two-lines-only"
-                    [innerHTML]="parseContent(blog.content_ar) | truncate:150">
-                  </p>
-                  <div class="text-muted small">
-                    بواسطة: {{ blog.author || 'غير معروف' }} |
-                    {{ blog.created_at | date: 'dd/MM/yyyy' }}
+                  <div class="position-relative">
+                    <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
+                      style="height: 200px; object-fit: cover; border-radius: 25px;">
+                  </div>
+              </a>
+
+                  <!-- Blog Body -->
+                  <div class="card-body text-end ">
+                    <h6 class="card-title fw-bold ">{{ blog.title_ar }}</h6>
+                    <p class="card-text text-muted text-end two-lines-only"
+                      [innerHTML]="parseContent(blog.content_ar) | truncate:150">
+                    </p>
+                    <div class="text-muted small">
+                      بواسطة: {{ blog.author || 'غير معروف' }} |
+                      {{ blog.created_at | date: 'dd/MM/yyyy' }}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!-- </a> -->
             </div>
           </div>
         </div>

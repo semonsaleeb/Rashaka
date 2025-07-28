@@ -12,6 +12,12 @@ import { CartPageComponent } from './cart-page.component/cart-page.component';
 import { Pricing } from './pages/home/pricing/pricing';
 import { ProductCard } from './product-card/product-card';
 import { OurService } from './pages/home/our-service/our-service';
+import { SingleBlog } from './single-blog/single-blog';
+import { Details } from './auth/profile/details/details';
+import { Orders } from './auth/profile/orders/orders';
+import { Reservation } from './auth/profile/reservation/reservation';
+import { Address } from './auth/profile/address/address';
+import { PlaceOrder } from './place-order/place-order';
 
 export const routes: Routes = [
   // Home page
@@ -51,10 +57,10 @@ export const routes: Routes = [
   },
 
   // Profile also directly accessible from /profile (optional mirror)
-  {
-    path: 'profile',
-    loadComponent: () => import('./auth/profile/profile').then(m => m.Profile)
-  },
+  // {
+  //   path: 'profile',
+  //   loadComponent: () => import('./auth/profile/profile').then(m => m.Profile)
+  // },
 
   // Optional direct route to login (outside /auth)
   {
@@ -120,6 +126,21 @@ export const routes: Routes = [
   },
   { path: 'product/:id', component: ProductCard },
 
+  { path: 'home/blog/:id', component: SingleBlog },
+  { path: 'placeOrder', component: PlaceOrder },
+
+
+{
+  path: 'profile',
+  component: Profile,
+  children: [
+    { path: '', redirectTo: 'details', pathMatch: 'full' },
+    { path: 'details', component: Details },
+    { path: 'reservations', component: Reservation },
+    { path: 'orders', component: Orders },
+    { path: 'addresses', component: Address }
+  ]
+},
 
   // Fallback route
   {

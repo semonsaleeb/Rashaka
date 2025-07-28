@@ -291,13 +291,8 @@ button.rounded-circle {
   display: block;
 }
 
-.custom-hover {
-  transition: all 0.3s ease;
-}
 
-.custom-hover:hover {
-  border-color: #7AD03A !important;
-}
+
 
 /* In your component's CSS or global styles */
 .product-carousel {
@@ -308,19 +303,23 @@ button.rounded-circle {
   /* Lower than header's z-index */
 }
 
-/* Your custom green style */
+/* Custom green button: default white, green on hover/active */
 .custom-green-btn {
-  background-color: #7AD03A;
-  color: black;
-  border: 2px solid #7AD03A;
+  background-color: white;
+  border-radius: 9px;
+  color: #000000;
+  border: 1px solid #CCCCCC;
   transition: all 0.3s ease;
 }
 
-.custom-green-btn:hover {
-  background-color: white;
-  color: #7AD03A;
+.custom-green-btn:hover,
+.custom-green-btn:active,
+.custom-green-btn:focus {
+  background-color: #7AD03A;
+  color: black;
   border: 2px solid #7AD03A;
 }
+
 
 /* Override Bootstrap btn-outline-success */
 .btn-outline-success {
@@ -690,9 +689,11 @@ a.text-decoration-none:hover .card {}
 }
 
 .custom-hover:hover {
-  border-color: #7AD03A !important;
+    background-color: #28a745 !important; // Bootstrap green
 }
-
+.btn-outline-secondary{
+  background-color: #462828;
+}
 /* In your component's CSS or global styles */
 .product-carousel {
   margin-top: var(--header-height, 80px);
@@ -702,19 +703,7 @@ a.text-decoration-none:hover .card {}
   /* Lower than header's z-index */
 }
 
-/* Your custom green style */
-.custom-green-btn {
-  background-color: #7AD03A;
-  color: black;
-  border: 2px solid #7AD03A;
-  transition: all 0.3s ease;
-}
 
-.custom-green-btn:hover {
-  background-color: white;
-  color: #7AD03A;
-  border: 2px solid #7AD03A;
-}
 
 /* Override Bootstrap btn-outline-success */
 .btn-outline-success {
@@ -827,4 +816,50 @@ a.text-decoration-none:hover .card {
 .carousel-track {
   direction: rtl;
   flex-direction: row-reverse;
+}
+
+
+.custom-increase-btn {
+  background-color: #E9F7DE;
+  color: #000000;
+  border-radius: 5px;
+  border: 1px solid #00000059;
+  transition: all 0.3s ease;
+
+  padding: 2px 6px;     // أصغر عرض وارتفاع للزر
+  font-size: 20px;      // لتكبير الأيقونة أو النص بداخل الزر
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;          // حجم مخصص إذا أردت مربع صغير
+  height: 25px;
+}
+.custom-increase-btn i {
+  font-size: 18px; // تكبير الأيقونة فقط
+}
+
+
+.custom-increase-btn:hover {
+  // background-color: #218838; // darker green on hover
+}
+
+.custom-remove-btn {
+  color: #D34657;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.custom-remove-btn i {
+  font-size: 18px;
+}
+
+.custom-qty-display {
+  font-size: 16px;
+  padding: 4px 12px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  min-width: 30px;
+  text-align: center;
 }

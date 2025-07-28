@@ -1,0 +1,12 @@
+<div *ngIf="isLoading" class="text-center p-5">جارٍ التحميل...</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger text-center">
+  {{ errorMessage }}
+</div>
+
+<div *ngIf="blog" class="container py-5">
+  <img [src]="blog!.image" class="img-fluid mb-4 rounded" alt="Blog Image">
+  <h1 class="mb-3">{{ blog!.title_ar }}</h1>
+  <p class="text-muted">{{ blog!.created_at }} - {{ blog!.author }}</p>
+  <div [innerHTML]="blog!.content_ar"></div>
+</div>

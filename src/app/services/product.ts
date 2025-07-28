@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
 
 export interface Product {
+  category_id: number;
   id: number;
   name: string;
   name_ar: string;

@@ -1,12 +1,13 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { Product, ProductService, Category } from '../../../services/product';
 import { CartService } from '../../../services/cart.service';
 import { CartStateService } from '../../../services/cart-state-service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-category-products',
@@ -29,6 +30,7 @@ export class CategoryProducts implements OnInit {
   priceMin: number | null = null;
   priceMax: number | null = null;
   selectedCategory: number | 'all' = 'all';
+cartItems: any[] = [];
 
   predefinedRanges = [
     { label: '0-1000', min: 0, max: 1000, selected: false },
@@ -40,11 +42,14 @@ export class CategoryProducts implements OnInit {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    public cartState: CartStateService
+    public cartState: CartStateService,
+      private auth: AuthService,               // ✅ inject auth
+  private router: Router  
   ) {}
 
   ngOnInit(): void {
     this.fetchProducts();
+      this.loadCart();
   }
 
   private fetchProducts(): void {
@@ -197,5 +202,63 @@ getTotalSlides(): number {
       this.priceMax = null;
     }
     this.applyCombinedFilters();
+  }
+
+
+private loadCart(): void {
+    this.cartService.getCart().subscribe({
+      next: (response) => this.handleCartResponse(response),
+      error: (err: HttpErrorResponse) => this.handleCartError(err)
+    });
+  }
+
+  private handleCartResponse(response: any): void {
+    this.cartItems = response.data?.items || [];
+    const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    this.cartState.updateCount(total);
+  }
+ private resetCartState(): void {
+    this.cartItems = [];
+    this.cartState.updateCount(0);
+  }
+  private handleCartError(err: HttpErrorResponse): void {
+    console.error('❌ Error loading cart:', err);
+    if (err.status === 401) {
+      this.auth.logout();
+      this.resetCartState();
+      this.router.navigate(['/auth/login']);
+    } else {
+      this.resetCartState();
+    }
+  }
+  
+  isInCart(productId: number): boolean {
+    return this.cartItems.some(item => item.product_id === productId);
+  }
+
+  getCartItem(productId: number) {
+    return this.cartItems.find(item => item.product_id === productId);
+  }
+
+
+  increaseQuantity(productId: number) {
+    this.cartService.addToCart(productId, 1).subscribe({
+      next: () => this.loadCart(),
+      error: err => console.error(err)
+    });
+  }
+
+  decreaseQuantity(productId: number) {
+    this.cartService.reduceCartItem(productId).subscribe({
+      next: () => this.loadCart(),
+      error: err => console.error(err)
+    });
+  }
+
+  removeItem(productId: number) {
+    this.cartService.removeCartItem(productId).subscribe({
+      next: () => this.loadCart(),
+      error: err => console.error(err)
+    });
   }
 }

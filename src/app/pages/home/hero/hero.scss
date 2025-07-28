@@ -117,9 +117,9 @@
   height: 25px;
 }
 .gradient-border {
-  border-radius: 12px; /* Bootstrap pill shape */
-  padding: 1px; /* thickness of border */
-  background: linear-gradient(90deg,  rgba(255, 255, 255, 0.87),rgba(0, 0, 0, 0.418)); /* your gradient colors */
+  border-radius: 10px; /* Bootstrap pill shape */
+  padding: 1.3px; /* thickness of border */
+  background: linear-gradient(90deg,  white,rgba(0, 0, 0, 0.171)); /* your gradient colors */
 
   .feature-item {
     background-color: #081E25; /* match hero background */
@@ -130,6 +130,5 @@
     display: flex;
     align-items: center;
     gap: 0.1rem;
-    backdrop-filter: blur(6px);
   }
 }

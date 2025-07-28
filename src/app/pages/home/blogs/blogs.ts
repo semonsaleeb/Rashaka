@@ -85,4 +85,9 @@ export class Blogs implements OnInit {
       this.currentSlideIndex--;
     }
   }
+  onBlogClick(id: number): void {
+  console.log('Clicked blog ID:', id);
+  // You can do more here if needed
+}
+
 }

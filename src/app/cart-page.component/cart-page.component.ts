@@ -5,6 +5,7 @@ import { CartStateService } from '../services/cart-state-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart-page.component',
@@ -26,7 +27,8 @@ export class CartPageComponent implements OnInit {
   constructor(
     private cartService: CartService,
     private cartState: CartStateService,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {
     this.token = localStorage.getItem('token') || '';
   }
@@ -92,35 +94,10 @@ export class CartPageComponent implements OnInit {
     return this.cartItems.some(item => item.sale_unit_price);
   }
 
-  placeOrder() {
-  const headers = new HttpHeaders({
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${this.token}`
-  });
+placeOrder() {
+  // Optional: perform any pre-checks or API calls here
 
-  const body = {
-    address_id: this.addressId,
-    payment_method: this.paymentMethod,
-    promocode: this.promoCode || undefined
-  };
-
-  console.log('📦 Sending order:', body);
-
-  this.http.post(`${environment.apiBaseUrl}/place-order`, body, { headers })
-    .subscribe({
-      next: (res) => {
-        console.log('✅ Order placed:', res);
-        alert('تم إتمام الطلب بنجاح!');
-      },
-      error: (err) => {
-        console.error('❌ Failed to place order', err);
-        if (err.status === 422 && err.error?.message) {
-          alert(`خطأ: ${err.error.message}`);
-        } else {
-          alert('حدث خطأ أثناء إتمام الطلب');
-        }
-      }
-    });
+  this.router.navigate(['/placeOrder']);
 }
 
 

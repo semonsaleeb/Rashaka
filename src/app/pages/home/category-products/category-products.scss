@@ -95,7 +95,6 @@
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s ease;
-    height: 100%;
 
     &:hover {
       transform: translateY(-5px);
@@ -219,3 +218,71 @@
     background-color: #d1edc2;
   }
 }
+
+
+
+.custom-increase-btn {
+  background-color: #E9F7DE;
+  color: #000000;
+  border-radius: 5px;
+  border: 1px solid #00000059;
+  transition: all 0.3s ease;
+
+  padding: 2px 6px;     // أصغر عرض وارتفاع للزر
+  font-size: 20px;      // لتكبير الأيقونة أو النص بداخل الزر
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;          // حجم مخصص إذا أردت مربع صغير
+  height: 25px;
+}
+.custom-increase-btn i {
+  font-size: 18px; // تكبير الأيقونة فقط
+}
+
+
+.custom-increase-btn:hover {
+  // background-color: #218838; // darker green on hover
+}
+
+.custom-remove-btn {
+  color: #D34657;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.custom-remove-btn i {
+  font-size: 18px;
+}
+
+.custom-qty-display {
+  font-size: 16px;
+  padding: 4px 12px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.btn-outline-success.custom-hover:hover {
+  background-color: rgb(255, 255, 255) !important;
+  color: black !important;
+  border-color: black !important;
+
+  &:hover i {
+    // color: #fff !important; // Ensure icon turns white too
+    background-color: #28a745 !important; // Bootstrap green
+
+  }
+}
+
+.custom-hover {
+  transition: all 0.3s ease;
+}
+
+.custom-hover:hover {
+    background-color: #28a745 !important; // Bootstrap green
+}
+

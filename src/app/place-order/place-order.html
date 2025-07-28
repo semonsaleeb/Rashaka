@@ -1,0 +1,61 @@
+<div class="container m-5" dir="rtl">
+  <!-- Top message -->
+  <div class="alert alert-light text-center   p-2 mb-4 ">
+    <h4 class="text-center">
+      <img src="assets/Images/Frame 9033.svg"> <span class="mx-3"> عربة التسوق </span>
+    
+
+
+    </h4>
+
+  </div>
+
+  <div class="row">
+    <!-- Right Side: Cart Items -->
+    <div class="col-6 ">
+      <h4 class="mb-4 text-end mb-3">
+        <img src="assets/Images/delivery.svg" class="my-3"><span> شحن مجاني للطلبات أكثر من </span> <strong>1000
+          ريال</strong>
+        <div class="progress border border-c" style="height: 8px; height: 12px; ">
+          <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
+            style="background-color: #2EA2CC;">
+          </div>
+        </div>
+
+      </h4>
+
+   
+    </div>
+
+    <!-- Left Side: Order Summary -->
+    <div class="col-5 p-5 text-center justify-content-center">
+      <div class="card shadow-sm border-1 rounded-4 p-5" style="background-color: #FAFAFA;">
+        <h5 class="text-end mb-3">ملخص الطلب</h5>
+
+        <!-- Promo Code -->
+        <div class="input-group mb-3">
+
+        </div>
+
+        <ul class="mb-3 text-end p-0">
+          <li class="d-flex justify-content-between py-2">
+            <span>المجموع</span>
+          </li>
+          <li class="d-flex justify-content-between py-2">
+            <span>رسوم شحن</span>
+            <span>30.00 ر.س</span>
+          </li>
+          <li class="d-flex justify-content-between fw-bold pt-3 border-top my-5">
+            <span>الإجمالي</span>
+          </li>
+
+        </ul>
+
+
+<button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">إتمام الطلب</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
