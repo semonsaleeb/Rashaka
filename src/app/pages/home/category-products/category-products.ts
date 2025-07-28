@@ -8,11 +8,13 @@ import { Product, ProductService, Category } from '../../../services/product';
 import { CartService } from '../../../services/cart.service';
 import { CartStateService } from '../../../services/cart-state-service';
 import { AuthService } from '../../../services/auth.service';
+import { Blogs } from '../blogs/blogs';
+import { Downloadapp } from '../downloadapp/downloadapp';
 
 @Component({
   selector: 'app-category-products',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Blogs, Downloadapp],
   templateUrl: './category-products.html',
   styleUrls: ['./category-products.scss']
 })

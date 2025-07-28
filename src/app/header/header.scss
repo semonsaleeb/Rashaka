@@ -4,10 +4,13 @@ header {
   //   padding-right: 120px;
   padding: 20px 90px 10px 90px;
 }
-.nav-link:hover {
-  color: #198754  !important; /* اللون الأخضر */
+.nav-link:hover,
+.nav-link:focus {
+  color: #198754 !important; /* اللون الأخضر */
   text-decoration: underline !important;
+  font-weight: 500;
 }
+
 
 [dir="rtl"] {
   text-align: right;
@@ -28,12 +31,20 @@ header {
 
 
 .dropdown-menu {
-  min-width: 10rem;
-  padding: 0.5rem 0;
+  min-width: 12rem;
+  padding: 0.7rem 0;
   background-color: #fff;
   border: 1px solid #ddd;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+
 }
+
+
+.dropdown-menu {
+  left: 110px !important; /* يحرك القائمة 10px لليمين */
+}
+
+
 
 select.rtl-select {
   appearance: none;            /* Chrome, Safari */

@@ -48,13 +48,13 @@
 
         <!-- If logged in -->
         <ng-container *ngIf="isLoggedIn">
-          <div ngbDropdown class="d-inline-block ms-2">
+          <div ngbDropdown class="d-inline-block ">
             <button ngbDropdownToggle
               class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
               <img src="assets/Images/user-circle.svg" alt="User" width="20" />
               مرحباً، {{ client?.name || 'المستخدم' }}
             </button>
-            <div ngbDropdownMenu class="dropdown-menu-end text-end">
+            <div ngbDropdownMenu class="dropdown-menu-end text-end custom-dropdown">
               <a class="dropdown-item" routerLink="/profile">
                 <i class="fas fa-id-card me-2"></i> الملف الشخصي
               </a>
@@ -108,7 +108,7 @@
         <div class="collapse navbar-collapse d-flex">
           <ul class="navbar-nav d-flex flex-row">
             <li class="nav-item  position-relative" style="margin-left: 1rem;" *ngFor="let item of navItems">
-              <a class="nav-link text-dark" [routerLink]="!item.hasDropdown ? item.path : null"
+              <a class="nav-link text-dark " [routerLink]="!item.hasDropdown ? item.path : null"
                 href="javascript:void(0)" (click)="item.hasDropdown ? toggleDropdown(item) : null">
                 {{ item.label }}
                 <i *ngIf="item.hasDropdown" class="fas fa-chevron-down  small"></i>

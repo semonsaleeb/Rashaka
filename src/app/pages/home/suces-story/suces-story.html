@@ -1,36 +1,89 @@
-<div class="success-stories px-5 p-5">
-  <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
+<div *ngIf="mode === 'carousel'">
+  <div class="success-stories px-5 p-5" style="  background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
+    <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
 
-  <div class="carousel-custom-wrapper position-relative">
-    <div class="story-deck d-flex justify-content-center align-items-center">
-      <div *ngFor="let story of stories; let i = index" class="story-card-custom" [ngClass]="getCardClass(i)">
-        <div class="youtube-embed">
-          <iframe [src]="getSafeYoutubeUrl(story.youtubeId)" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
+    <div class="carousel-custom-wrapper position-relative">
+      <div class="story-deck d-flex justify-content-center align-items-center">
+        <div *ngFor="let story of stories; let i = index" class="story-card-custom"
+          style="  background: linear-gradient(135deg, #2EA2CC 0%, #7AD03A 100%);" [ngClass]="getCardClass(i)">
+          <div class="youtube-embed">
+            <iframe [src]="getSafeYoutubeUrl(story.youtubeId)" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="video-info">
+          </div>
         </div>
-        <div class="video-info">
+      </div>
+
+
+      <!-- Custom Arrows shown only if there are more than 1 story -->
+      <div *ngIf="stories.length > 1" class="d-flex justify-content-between  align-items-center mt-4 ">
+        <!-- Arrows -->
+        <div class="d-flex gap-2">
+          <button class="arrow-btn prev" (click)="prevSlide()"></button>
+          <button class="arrow-btn next" (click)="nextSlide()"></button>
         </div>
+
+        <!-- Dots -->
+        <div class="d-flex gap-2">
+          <button *ngFor="let story of stories; let i = index" type="button" class="dot"
+            [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
+          </button>
+        </div>
+
+
+
       </div>
     </div>
+  </div>
+
+</div>
+
+<div *ngIf="mode === 'grid'">
+  <div class="success-stories px-5 p-5">
+    <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
+
+    <div class="carousel-custom-wrapper position-relative">
+      <div class="story-deck d-flex justify-content-center align-items-center">
+        <div *ngFor="let story of stories; let i = index" class="story-card-custom" [ngClass]="getCardClass(i)">
+          <div class="story-image-wrapper">
+            <!-- <div class="circle-background"></div> -->
+            <img [src]="story.image" alt="Story Image" class="story-image" />
+            <h1>{{story.title}}</h1>
+            <p>{{story.description}}</p>
+          </div>
 
 
-    <!-- Custom Arrows shown only if there are more than 1 story -->
-    <div *ngIf="stories.length > 1" class="d-flex justify-content-between  align-items-center mt-4 ">
-      <!-- Arrows -->
-      <div class="d-flex gap-2">
-        <button class="arrow-btn prev" (click)="prevSlide()"></button>
-        <button class="arrow-btn next" (click)="nextSlide()"></button>
+          <div class="video-info">
+          </div>
+        </div>
       </div>
 
-      <!-- Dots -->
-      <div class="d-flex gap-2">
-        <button *ngFor="let story of stories; let i = index" type="button" class="dot"
-          [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
-        </button>
+
+      <!-- Custom Arrows shown only if there are more than 1 story -->
+      <div *ngIf="stories.length > 1" class="d-flex justify-content-between  align-items-center mt-4 ">
+        <!-- Arrows -->
+        <div class="d-flex gap-2">
+          <button class="arrow-btn prev" (click)="prevSlide()"></button>
+          <button class="arrow-btn next" (click)="nextSlide()"></button>
+        </div>
+
+        <!-- Dots -->
+        <div class="d-flex gap-2">
+          <button *ngFor="let story of stories; let i = index" type="button" class="dot"
+            [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
+          </button>
+        </div>
+
+
+
       </div>
-
-
-
     </div>
+  </div>
+  <app-checkup></app-checkup>
+  <app-branches></app-branches>
+  <app-downloadapp></app-downloadapp>
+
+</div>

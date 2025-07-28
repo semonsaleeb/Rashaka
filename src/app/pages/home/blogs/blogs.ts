@@ -5,11 +5,12 @@ import { RouterModule } from '@angular/router';
 import { Blog, BlogService } from '../../../services/blogs.service';
 import { AssetUtils } from '../../../utils/asset.utils';
 import { TruncatePipe } from '../../../pipes/truncate-pipe';
+import { Downloadapp } from '../downloadapp/downloadapp';
 
 @Component({
   selector: 'app-blogs',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, TruncatePipe],
+  imports: [CommonModule, HttpClientModule, RouterModule, TruncatePipe, Downloadapp],
   templateUrl: './blogs.html',
   styleUrls: ['./blogs.scss'],
 })

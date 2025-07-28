@@ -155,11 +155,16 @@
       {{ category.name_ar }}
     </button>
 
-    <!-- "All" button -->
-    <button class="btn custom-green-btn px-4 py-2 " [ngClass]="{ 'active': selectedCategory === 'all' }"
-      (click)="filterByCategory('all')">
-      الكل
-    </button>
+    <!-- أضف tabindex لتجعل العنصر قابل للفوكس -->
+<button
+  #allBtn
+  class="btn custom-green-btn px-4 py-2"
+  tabindex="0"
+  [ngClass]="{ 'active': selectedCategory === 'all' }"
+  (click)="filterByCategory('all')">
+  الكل
+</button>
+
 
   </div>
 
@@ -172,7 +177,7 @@
   </p>
 
   <!-- Product Grid -->
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-end mx-5">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-end mx-5 py-4">
     <div class="col" *ngFor="let product of products">
       <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
         <div class="card h-100 product-card bg-white rounded-4 border shadow-sm">
@@ -236,4 +241,7 @@
       </a>
     </div>
   </div>
+
+  <app-blogs mode="carousel"></app-blogs>
+  <app-downloadapp></app-downloadapp>
 </div>

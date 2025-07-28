@@ -19,10 +19,14 @@
 
       <!-- Navigation Buttons (Tabs) -->
       <div class="nav nav-pills justify-content-center mb-4 mt-3" style="gap: 10px;">
-        <a class="btn btn-outline-success mx-5" routerLink="details" routerLinkActive="active">تفاصيل الحساب</a>
-        <a class="btn btn-outline-success mx-5" routerLink="reservations" routerLinkActive="active">الحجوزات</a>
-        <a class="btn btn-outline-success mx-5" routerLink="orders" routerLinkActive="active">الطلبات</a>
-        <a class="btn btn-outline-success mx-5" routerLink="addresses" routerLinkActive="active">العنوان</a>
+<a class="btn profile_btn mx-5 px-4"
+   routerLink="details"
+   routerLinkActive="active">
+   <img src="assets/Images/account-setting-03.svg" alt=""> &nbsp; تفاصيل الحساب
+</a>
+        <a class="btn profile_btn mx-5 px-4" routerLink="reservations" routerLinkActive="active" > <img src="assets/Images/invoice-01.svg" alt=""> &nbsp; الحجوزات</a>
+        <a class="btn profile_btn mx-5 px-4" routerLink="orders" routerLinkActive="active"> <img src="assets/Images/appointment-02.svg" alt=""> &nbsp; الطلبات</a>
+        <a class="btn profile_btn mx-5 px-4" routerLink="addresses" routerLinkActive="active"> <img src="assets/Images/location-05 green.svg" alt=""> &nbsp; العنوان</a>
       </div>
 
       <!-- Routed Component Shows Here -->

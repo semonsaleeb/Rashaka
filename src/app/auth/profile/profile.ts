@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 export class Profile implements OnInit {
   client: any = null;
   errorMessage: string = '';
+@ViewChild('detailsLink') detailsLink!: ElementRef;
 
   constructor(private http: HttpClient) {}
 
@@ -39,4 +40,9 @@ export class Profile implements OnInit {
       }
     });
   }
+
+  ngAfterViewInit() {
+  // تأكد من وجود العنصر
+  setTimeout(() => this.detailsLink?.nativeElement?.focus(), 0);
+}
 }

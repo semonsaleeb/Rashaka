@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Downloadapp } from '../downloadapp/downloadapp';
+import { SucesStory } from '../suces-story/suces-story';
 
 @Component({
   selector: 'app-pricing',
-  imports: [CommonModule],
+  imports: [CommonModule, Downloadapp, SucesStory],
   templateUrl: './pricing.html',
   styleUrl: './pricing.scss'
 })
 export class Pricing {
+      @Input() mode: 'carousel' | 'grid' = 'grid';
+    
   constructor() { }
 
   selectedPlan: string = 'monthly';

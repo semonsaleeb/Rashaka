@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -7,11 +7,13 @@ import { AuthService } from '../../../services/auth.service';
 import { CartService } from '../../../services/cart.service';
 import { CartStateService } from '../../../services/cart-state-service';
 import { FormsModule } from '@angular/forms';
+import { Downloadapp } from '../downloadapp/downloadapp';
+import { Blogs } from '../blogs/blogs';
 
 @Component({
   selector: 'app-special-offers',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Downloadapp, Blogs],
   templateUrl: './special-offers.html',
   styleUrls: ['./special-offers.scss'],
   providers: [ProductService]
@@ -22,6 +24,7 @@ export class SpecialOffersComponent implements OnInit {
   products: Product[] = [];
   categories: Category[] = [];
   selectedCategory: number | 'all' = 'all';
+@ViewChild('allBtn') allBtn!: ElementRef;
 
   cartItems: any[] = [];
   isLoading = true;
@@ -44,7 +47,9 @@ export class SpecialOffersComponent implements OnInit {
 
   this.loadCartAndProducts();
 }
-
+ngAfterViewInit() {
+  this.allBtn.nativeElement.focus();
+}
 private loadCartAndProducts(): void {
   this.cartService.getCart().subscribe({
     next: (response) => {
