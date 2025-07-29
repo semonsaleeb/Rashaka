@@ -18,6 +18,7 @@ import { Orders } from './auth/profile/orders/orders';
 import { Reservation } from './auth/profile/reservation/reservation';
 import { Address } from './auth/profile/address/address';
 import { PlaceOrder } from './place-order/place-order';
+import { Favorites } from './favorites/favorites';
 
 export const routes: Routes = [
   // Home page
@@ -141,6 +142,7 @@ export const routes: Routes = [
     { path: 'addresses', component: Address }
   ]
 },
+  { path: 'favorites', component: Favorites },
 
   // Fallback route
   {

@@ -10,6 +10,7 @@ import { CartStateService } from '../../../services/cart-state-service';
 import { AuthService } from '../../../services/auth.service';
 import { Blogs } from '../blogs/blogs';
 import { Downloadapp } from '../downloadapp/downloadapp';
+import { FavoriteService } from '../../../services/favorite.service';
 
 @Component({
   selector: 'app-category-products',
@@ -32,7 +33,7 @@ export class CategoryProducts implements OnInit {
   priceMin: number | null = null;
   priceMax: number | null = null;
   selectedCategory: number | 'all' = 'all';
-cartItems: any[] = [];
+  cartItems: any[] = [];
 
   predefinedRanges = [
     { label: '0-1000', min: 0, max: 1000, selected: false },
@@ -45,13 +46,17 @@ cartItems: any[] = [];
     private productService: ProductService,
     private cartService: CartService,
     public cartState: CartStateService,
-      private auth: AuthService,               // ✅ inject auth
-  private router: Router  
-  ) {}
+    private auth: AuthService,               // ✅ inject auth
+    private router: Router,
+    private favoriteService: FavoriteService,
+
+  ) { }
 
   ngOnInit(): void {
     this.fetchProducts();
-      this.loadCart();
+    this.loadCart();
+    this.loadProductsAndFavorites();
+
   }
 
   private fetchProducts(): void {
@@ -69,10 +74,10 @@ cartItems: any[] = [];
       }
     });
   }
-getTotalSlides(): number {
-  return Math.ceil(this.filteredProducts.length / this.visibleCards);
-}
- getCategoryName(id: number): string {
+  getTotalSlides(): number {
+    return Math.ceil(this.filteredProducts.length / this.visibleCards);
+  }
+  getCategoryName(id: number): string {
     const cat = this.categories.find(c => c.id === id);
     return cat ? cat.name_ar : '';
   }
@@ -89,7 +94,7 @@ getTotalSlides(): number {
   applyPriceFilter(): void {
     this.applyCombinedFilters();
   }
-    removeCategory(categoryId: number): void {
+  removeCategory(categoryId: number): void {
     this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
     this.applyCombinedFilters();
   }
@@ -155,9 +160,7 @@ getTotalSlides(): number {
     });
   }
 
-  toggleFavorite(product: Product): void {
-    product.isFavorite = !product.isFavorite;
-  }
+
 
   addToCompare(product: Product): void {
     console.log('Added to compare:', product);
@@ -207,7 +210,7 @@ getTotalSlides(): number {
   }
 
 
-private loadCart(): void {
+  private loadCart(): void {
     this.cartService.getCart().subscribe({
       next: (response) => this.handleCartResponse(response),
       error: (err: HttpErrorResponse) => this.handleCartError(err)
@@ -219,7 +222,7 @@ private loadCart(): void {
     const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
     this.cartState.updateCount(total);
   }
- private resetCartState(): void {
+  private resetCartState(): void {
     this.cartItems = [];
     this.cartState.updateCount(0);
   }
@@ -233,7 +236,7 @@ private loadCart(): void {
       this.resetCartState();
     }
   }
-  
+
   isInCart(productId: number): boolean {
     return this.cartItems.some(item => item.product_id === productId);
   }
@@ -263,4 +266,56 @@ private loadCart(): void {
       error: err => console.error(err)
     });
   }
+
+
+
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+  toggleFavorite(product: Product): void {
+    if (!this.isLoggedIn) {
+      alert('يرجى تسجيل الدخول أولاً لإضافة المنتج إلى المفضلة');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.favoriteService.toggleFavorite(product, token).subscribe({
+      next: () => {
+        product.isFavorite = !product.isFavorite;
+
+        const currentFavorites = this.favoriteService.getFavorites();
+        if (product.isFavorite) {
+          this.favoriteService.setFavorites([...currentFavorites, product]);
+        } else {
+          const updated = currentFavorites.filter(p => p.id !== product.id);
+          this.favoriteService.setFavorites(updated);
+        }
+      },
+      error: err => {
+        console.error('Error updating favorite:', err);
+      }
+    });
+  }
+
+  loadProductsAndFavorites(): void {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.productService.getProducts().subscribe(products => {
+      this.favoriteService.loadFavorites(token).subscribe(favorites => {
+        this.allProducts = products.map(product => ({
+          ...product,
+          isFavorite: favorites.some(fav => fav.id === product.id)
+        }));
+
+        this.filteredProducts = [...this.allProducts]; // initialize filtered list
+        this.favoriteService.setFavorites(favorites); // updates favorite count
+      });
+    });
+  }
+
+
 }

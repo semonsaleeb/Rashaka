@@ -63,10 +63,13 @@
 
                     <!-- Favorite & Compare Buttons -->
                     <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-                      <button (click)="toggleFavorite(product)" class="btn-circle"
-                        [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
-                        <i class="fa-regular fa-heart"></i>
+                      <button (click)="toggleFavorite(product); $event.preventDefault(); $event.stopPropagation()"
+                        class="btn-circle" [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                        <i class="fa fa-heart" style="font-size: 15px;"
+                          [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
                       </button>
+
+
                       <button (click)="addToCompare(product)" class="btn-circle text-muted">
                         <i class="fas fa-random"></i>
                       </button>
@@ -252,11 +255,13 @@
 
               <!-- Favorite & Compare Buttons -->
               <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-                <button (click)="toggleFavorite(product)" class="btn-circle"
-                  [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }"
-                  (click)="$event.preventDefault(); toggleFavorite(product)">
-                  <i class="fa-regular fa-heart"></i>
+                <button (click)="toggleFavorite(product); $event.preventDefault(); $event.stopPropagation()"
+                  class="btn-circle" [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                  <i class="fa fa-heart" style="font-size: 15px;"
+                    [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
                 </button>
+
+
 
                 <button (click)="addToCompare(product)" class="btn-circle text-muted"
                   (click)="$event.preventDefault(); addToCompare(product)">
@@ -335,7 +340,7 @@
         <p class="text-muted">لا توجد منتجات مطابقة للفلترة.</p>
       </div>
     </div>
-  <app-blogs mode="carousel"></app-blogs>
-  <app-downloadapp></app-downloadapp>
+    <app-blogs mode="carousel"></app-blogs>
+    <app-downloadapp></app-downloadapp>
 
   </div>

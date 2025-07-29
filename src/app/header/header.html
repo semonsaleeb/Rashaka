@@ -77,14 +77,18 @@
 
         <!-- Cart + Favorites -->
         <div class="icon-buttons d-flex gap-3 mx-1">
-          <div
-            class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
-            style="width: 40px; height: 40px;">
-            <img src="assets/Images/Vector.svg" alt="cart" width="20" />
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              {{ favoriteCount }}
-            </span>
-          </div>
+          <a [routerLink]="['/favorites']" class="position-relative">
+            <div
+              class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
+              style="width: 40px; height: 40px;">
+              <img src="assets/Images/Vector.svg" alt="cart" width="20" />
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ favoriteCount }}
+              </span>
+            </div>
+          </a>
+
+
 
           <a [routerLink]="['/cart']">
             <div

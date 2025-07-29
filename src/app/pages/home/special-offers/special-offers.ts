@@ -9,6 +9,7 @@ import { CartStateService } from '../../../services/cart-state-service';
 import { FormsModule } from '@angular/forms';
 import { Downloadapp } from '../downloadapp/downloadapp';
 import { Blogs } from '../blogs/blogs';
+import { FavoriteService } from '../../../services/favorite.service';
 
 @Component({
   selector: 'app-special-offers',
@@ -24,7 +25,7 @@ export class SpecialOffersComponent implements OnInit {
   products: Product[] = [];
   categories: Category[] = [];
   selectedCategory: number | 'all' = 'all';
-@ViewChild('allBtn') allBtn!: ElementRef;
+  @ViewChild('allBtn') allBtn!: ElementRef;
 
   cartItems: any[] = [];
   isLoading = true;
@@ -38,47 +39,56 @@ export class SpecialOffersComponent implements OnInit {
     private cartService: CartService,
     public cartState: CartStateService,
     private route: ActivatedRoute,
-    
+    private favoriteService: FavoriteService,
+
+
   ) { }
 
   ngOnInit(): void {
-  const modeFromRoute = this.route.snapshot.data['mode'];
-  if (modeFromRoute) this.mode = modeFromRoute;
+    const modeFromRoute = this.route.snapshot.data['mode'];
+    if (modeFromRoute) this.mode = modeFromRoute;
 
-  this.loadCartAndProducts();
-}
-ngAfterViewInit() {
-  this.allBtn.nativeElement.focus();
-}
-private loadCartAndProducts(): void {
-  this.cartService.getCart().subscribe({
-    next: (response) => {
-      this.cartItems = response.data?.items || [];
+    this.loadCartAndProducts();
+    this.loadProductsAndFavorites();
 
-      this.productService.getOffer().subscribe({
-        next: (products) => {
-          this.allProducts = products;
-          this.products = [...products];
-          this.extractCategories(products);
-          this.isLoading = false;
-        },
-        error: (err: HttpErrorResponse) => {
-          console.error('❌ Failed to load products:', err);
-          this.isLoading = false;
-        }
-      });
+  }
+  @ViewChild('myElement') myElement!: ElementRef;
 
-      // Update cart count
-      const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
-      this.cartState.updateCount(total);
-    },
-    error: (err: HttpErrorResponse) => {
-      console.error('❌ Error loading cart:', err);
-      this.resetCartState();
-      this.isLoading = false;
+  ngAfterViewInit() {
+    if (this.myElement?.nativeElement) {
+      this.myElement.nativeElement.scrollIntoView();
     }
-  });
-}
+  }
+
+  private loadCartAndProducts(): void {
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        this.cartItems = response.data?.items || [];
+
+        this.productService.getOffer().subscribe({
+          next: (products) => {
+            this.allProducts = products;
+            this.products = [...products];
+            this.extractCategories(products);
+            this.isLoading = false;
+          },
+          error: (err: HttpErrorResponse) => {
+            console.error('❌ Failed to load products:', err);
+            this.isLoading = false;
+          }
+        });
+
+        // Update cart count
+        const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+        this.cartState.updateCount(total);
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('❌ Error loading cart:', err);
+        this.resetCartState();
+        this.isLoading = false;
+      }
+    });
+  }
 
 
   private extractCategories(products: Product[]): void {
@@ -161,13 +171,53 @@ private loadCartAndProducts(): void {
   }
 
   toggleFavorite(product: Product): void {
-    if (!this.isLoggedIn()) {
+    if (!this.isLoggedIn) {
       alert('يرجى تسجيل الدخول أولاً لإضافة المنتج إلى المفضلة');
       this.router.navigate(['/auth/login']);
       return;
     }
-    product.isFavorite = !product.isFavorite;
+
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.favoriteService.toggleFavorite(product, token).subscribe({
+      next: () => {
+        product.isFavorite = !product.isFavorite;
+
+        const currentFavorites = this.favoriteService.getFavorites();
+        if (product.isFavorite) {
+          this.favoriteService.setFavorites([...currentFavorites, product]);
+        } else {
+          const updated = currentFavorites.filter(p => p.id !== product.id);
+          this.favoriteService.setFavorites(updated);
+        }
+      },
+      error: err => {
+        console.error('Error updating favorite:', err);
+      }
+    });
   }
+
+  loadProductsAndFavorites(): void {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.productService.getProducts().subscribe(products => {
+      this.productService.getProducts().subscribe(products => {
+        this.favoriteService.loadFavorites(token).subscribe(favorites => {
+          this.products = products.map(product => ({
+            ...product,
+            isFavorite: favorites.some(fav => fav.id === product.id)
+          }));
+
+          this.favoriteService.setFavorites(favorites); // updates favoriteCount
+        });
+      });
+
+    });
+  }
+
+
 
   addToCompare(product: Product): void {
     console.log('Compare:', product);

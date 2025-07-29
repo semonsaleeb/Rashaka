@@ -67,8 +67,8 @@ toggleDropdown(item: any) {
     private cartState: CartStateService           // ✅ Inject CartStateService
   ) {}
 
- ngOnInit() {
-  this.updateCartCount(); // Cart
+ngOnInit() {
+  this.updateCartCount(); // Cart count logic
 
   this.cartState.cartCount$.subscribe(count => {
     this.cartCount = count;
@@ -82,9 +82,24 @@ toggleDropdown(item: any) {
     this.isLoggedIn = status;
     const clientData = localStorage.getItem('client');
     this.client = (status && clientData) ? JSON.parse(clientData) : null;
+
+    // ✅ When logged in, load favorite list
+    if (status) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.favoriteService.loadFavorites(token).subscribe({
+          next: (favorites) => {
+            this.favoriteService.setFavorites(favorites); // 👈 updates count
+          },
+          error: (err) => {
+            console.error('Failed to load favorites:', err);
+          }
+        });
+      }
+    }
   });
 
-  // ✅ Load categories here
+  // Load categories (unrelated)
   this.productService.getProducts().subscribe({
     next: (products) => {
       this.categories = this.extractUniqueCategories(products);
@@ -94,12 +109,13 @@ toggleDropdown(item: any) {
     }
   });
 
-  // Show first dropdown
+  // Dropdown init
   const defaultNavItem = this.navItems.find(i => i.hasDropdown);
   if (defaultNavItem) {
     this.toggleDropdown(defaultNavItem);
   }
 }
+
 
 extractUniqueCategories(products: any[]): Category[] {
   const categoryMap = new Map<number, Category>();

@@ -1,0 +1,12 @@
+.counter{
+    background-color: #E9F7DE;
+    border: 1px solid #61AD29;
+}
+
+.custom-hover {
+  transition: all 0.3s ease;
+}
+
+.custom-hover:hover {
+    background-color: #28a745 !important; // Bootstrap green
+}

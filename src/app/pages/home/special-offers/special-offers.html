@@ -45,9 +45,10 @@
 
                   <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
                     <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
-                      [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
-                      <i class="fa-regular fa-heart"></i>
+                      [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                      <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
                     </button>
+
                     <button (click)="addToCompare(product); $event.stopPropagation()" class="btn-circle text-muted">
                       <i class="fas fa-random"></i>
                     </button>
@@ -156,14 +157,10 @@
     </button>
 
     <!-- أضف tabindex لتجعل العنصر قابل للفوكس -->
-<button
-  #allBtn
-  class="btn custom-green-btn px-4 py-2"
-  tabindex="0"
-  [ngClass]="{ 'active': selectedCategory === 'all' }"
-  (click)="filterByCategory('all')">
-  الكل
-</button>
+    <button #allBtn class="btn custom-green-btn px-4 py-2" tabindex="0"
+      [ngClass]="{ 'active': selectedCategory === 'all' }" (click)="filterByCategory('all')">
+      الكل
+    </button>
 
 
   </div>
@@ -186,10 +183,13 @@
 
           <!-- Favorite & Compare Buttons -->
           <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-            <button (click)="toggleFavorite(product)" class="btn-circle"
-              [ngClass]="{ 'text-danger': product.isFavorite, 'text-muted': !product.isFavorite }">
-              <i class="fa-regular fa-heart"></i>
+            <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
+              [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+              <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
             </button>
+
+
+
             <button (click)="addToCompare(product)" class="btn-circle text-muted">
               <i class="fas fa-random"></i>
             </button>
