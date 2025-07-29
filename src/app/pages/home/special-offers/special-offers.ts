@@ -199,23 +199,25 @@ export class SpecialOffersComponent implements OnInit {
   }
 
   loadProductsAndFavorites(): void {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+  const token = localStorage.getItem('token');
+  if (!token) return;
 
-    this.productService.getProducts().subscribe(products => {
-      this.productService.getProducts().subscribe(products => {
-        this.favoriteService.loadFavorites(token).subscribe(favorites => {
-          this.products = products.map(product => ({
-            ...product,
-            isFavorite: favorites.some(fav => fav.id === product.id)
-          }));
+  this.productService.getOffer().subscribe(offerProducts => {
+    this.favoriteService.loadFavorites(token).subscribe(favorites => {
+      const favoriteIds = new Set(favorites.map(fav => fav.id));
 
-          this.favoriteService.setFavorites(favorites); // updates favoriteCount
-        });
-      });
+      // Tag only offer products that are in favorites
+      this.products = offerProducts.map(product => ({
+        ...product,
+        isFavorite: favoriteIds.has(product.id)
+      }));
 
+      // Update global favorite state with ONLY offers that are favorited
+      const filteredFavorites = offerProducts.filter(p => favoriteIds.has(p.id));
+      this.favoriteService.setFavorites(filteredFavorites);
     });
-  }
+  });
+}
 
 
 

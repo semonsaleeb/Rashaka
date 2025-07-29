@@ -12,6 +12,7 @@ export interface Product {
   name_ar: string;
   description:string;
   stock: number;
+    original_price?: string;
   price: string;         // string because it's "25.00" in quotes
   sale_price: string;    // same here
   cart_quantity: number;
