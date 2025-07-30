@@ -1,42 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-// import { RouterOutlet } from '@angular/router';
-// import { Header } from './header/header';
-// import { CommonModule } from '@angular/common';
-// import { Hero } from './pages/home/hero/hero';
-// import { PostHero } from './pages/home/post-hero/post-hero';
-// import { SpecialOffersComponent } from './pages/home/special-offers/special-offers';
-// import { HttpClientModule } from '@angular/common/http';
-// import { ProductCard } from './product-card/product-card';
-// import { Product, ProductService } from './services/product';
-
-
-
-
-// @Component({
-//   selector: 'app-root',
-//   imports: [CommonModule,ProductCard, RouterOutlet, Header,Hero,PostHero, SpecialOffersComponent, HttpClientModule, ],
-//   templateUrl: './app.html',
-//   styleUrl: './app.scss'
-// })
-// export class App implements OnInit {
-//   products: Product[] = [];
-//   isLoading = true;
-
-//   constructor(private productService: ProductService) {}
-
-//   ngOnInit(): void {
-//     this.productService.getProducts().subscribe({
-//       next: (products) => {
-//         this.products = products;
-//         this.isLoading = false;
-//       },
-//       error: (error) => {
-//         console.error('Error fetching products:', error);
-//         this.isLoading = false;
-//       }
-//     });
-//   }
-// }
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
@@ -56,11 +17,12 @@ import { Blogs } from './pages/home/blogs/blogs';
 import { Downloadapp } from './pages/home/downloadapp/downloadapp';
 import { Footer } from './footer/footer';
 import { Home } from './pages/home';
+import { WelcomePopup } from './welcome-popup/welcome-popup';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Footer, Header],
+  imports: [CommonModule, RouterOutlet, Footer, Header,WelcomePopup],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

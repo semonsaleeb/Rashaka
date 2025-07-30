@@ -1,0 +1,80 @@
+.popup-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 1050;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.popup-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  direction: rtl;
+}
+
+.popup-box {
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 20px;
+  position: relative;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.qr-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.popup-text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+  margin-top: 1rem;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #a5e437;
+  border: none;
+  color: black;
+  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1;
+}
+.small-icon {
+  font-size: 20px; // or any size you want
+  font-weight: 500;
+}

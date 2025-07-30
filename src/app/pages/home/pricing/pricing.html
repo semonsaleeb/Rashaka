@@ -1,168 +1,181 @@
-<div *ngIf="mode === 'carousel'"  class="pricing-container w-100 py-5 px-5">
-    <!-- Header -->
-    <div class="header">
-        <h2 class="title px-3">الباقات</h2>
-        <br>
-        <div class="toggle-container" style="width: 25%;">
-            <button class="toggle-btn" [class.active]="selectedPlan === 'annual'"> الاجهزة و الجلسات </button>
-            <button class="toggle-btn" [class.active]="selectedPlan === 'monthly'"> النظام الاغذائي </button>
+<!-- ===========================
+     Carousel Mode
+=========================== -->
+<div *ngIf="mode === 'carousel'" class="pricing-container w-100 py-5 px-5">
+
+  <!-- Header -->
+  <div class="header text-end">
+    <h2 class="title px-3">الباقات</h2>
+    <div class="toggle-container d-flex justify-content-end align-items-end gap-2 my-4 ms-auto" style="width: 26%;"
+      dir="rtl">
+      <button class="toggle-btn" [class.active]="selectedPlan === 'session'" (click)="changePlanType('session')">
+        الاجهزة و الجلسات
+      </button>
+      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+        النظام الغذائي
+      </button>
+    </div>
+  </div>
+
+  <!-- Carousel with Arrows -->
+  <div class="d-flex align-items-center position-relative">
+
+
+    <div class="carousel-track-wrapper w-100 overflow-hidden">
+<div class="carousel-track d-flex" #carouselTrack>
+        <div class="card me-3" *ngFor="let plan of plans" [class.basic-card]="plan.styleType === 'basic'"
+          [class.premium-card]="plan.styleType === 'premium'" [class.standard-card]="plan.styleType === 'standard'">
+
+          <!-- Top -->
+          <div class="card-top">
+            <div class="ribbon-top-left"
+              [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : 'transparent'" [style.color]="'black'">
+              {{ plan.title }}
+            </div>
+            <img src="assets/Images/Group 9010.svg" alt="Frame"
+              style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
+            <div class="plan-info">
+              <span [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
+              <div class="sessions justify-content-center"
+                [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
+                [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
+                {{ plan.sessions }} جلسة
+              </div>
+              <div class="price" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+                السعر {{ plan.price }} ر . س
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom -->
+          <div class="card-bottom">
+            <div class="available-places" [ngStyle]="{
+              'background-color': plan.cities ? '#E3E3E3' : '#B4EB52',
+              'color': '#333',
+              'padding': '3px 0',
+              'text-align': 'center',
+              'margin': ' -20px',
+              'border-radius': '0',
+              'font-size': '14px'
+            }">
+              {{ plan.cities }}
+            </div>
+
+            <div class="feature mt-4 mb-0">
+              <span class="feature-label fs-6 d-block " *ngFor="let feature of plan.features">
+                <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
+              </span>
+            </div>
+
+            <button class="subscribe-btn mb-0 " (click)="subscribe(plan.id)"
+              [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
+              [style.color]="plan.styleType === 'basic' ? '#000' : 'black'"
+              [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
+              اشتراك
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
-    <!-- Pricing Cards -->
-    <div class="cards-container ">
-        <!-- Loop through plans -->
-        <div class="card" [class.basic-card]="plan.type === 'basic'" [class.premium-card]="plan.type === 'premium'"
-            [class.standard-card]="plan.type === 'standard'" *ngFor="let plan of plans">
-            <div class="card-top" style="margin-bottom: 0; padding-bottom: 0;">
-                <div class="ribbon-top-left"
-                    [style.background-color]="plan.type === 'basic' ? '#B4EB52' : 'transparent'"
-                    [style.color]="'black'">
-                    {{ plan.title }}
-                </div>
 
-                <img src="assets/Images/Group 9010.svg" alt="Frame"
-                    style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
+  </div>
 
-                <div class="plan-info">
-                    <span [style.color]="plan.type === 'basic' ? 'white' : 'inherit'">اشتراك</span>
-                    <div class="sessions justify-content-center"
-                        [style.background-color]="plan.type === 'basic' ? 'white' : '#1B6079'"
-                        [style.color]="plan.type === 'basic' ? 'inherit' : 'white'">
-                        {{ plan.sessions }} جلسة
-                    </div>
-                    <div class="price" [style.color]="plan.type === 'basic' ? 'white' : 'inherit'">
-                        <span> السعر {{ plan.price }} ر . س </span>
-                    </div>
-                </div>
-            </div>
-            <div class="card-bottom" style="padding-top: 0;">
-                <!-- Available Places Section - Full width and connected -->
-                <div class="available-places" [ngStyle]="{
-       'background-color': plan.availablePlaces ? '#E3E3E3' : '#B4EB52',
-       'color': '#333',
-       'padding': '3px 0',
-       'text-align': 'center',
-       'margin': '0 -20px',
-       'border-radius': '0',
-       'font-size': '14px'
-     }">
-                    {{ plan.availablePlaces }}
-                </div>
-                <div class="feature" style="margin-top: 16px;">
-                    <span class="feature-label fs-6" style="display: block; margin-bottom: 8px;"
-                        *ngFor="let feature of plan.features">
-                        <img src="assets/Images/checkmark-circle-02.svg"> &nbsp; {{ feature }}
-                    </span>
-                </div>
-
-<button class="subscribe-btn" 
-        [style.background]="plan.type === 'basic' ? '#7AD03A' : 'transparent'"
-        [style.color]="plan.type === 'basic' ? '#00000' : 'black'"
-        [style.border]="plan.type === 'basic' ? 'none' : '1px solid #808080'" 
-        [style.border-radius]="'9px'"
-        [style.padding]="'8px 16px'" 
-        [style.font-weight]="'500'" 
-        [style.cursor]="'pointer'"
-        [style.transition]="'all 0.3s ease'">
-        اشتراك
-</button>
-            </div>
-        </div>
+  <!-- Navigation -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center px-5 mt-4 py-3">
+    <div class="d-flex gap-2 px-4">
+      <button class="arrow-btn prev" (click)="prevSlide()"></button>
+      <button class="arrow-btn next" (click)="nextSlide()" ></button>
     </div>
+
+    <!-- Dots -->
+    <div class="d-flex gap-2 px-4">
+      <button *ngFor="let i of getDotsArray()" (click)="goToSlide(i)" class="rounded-circle"
+        [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
+        style="width: 10px; height: 10px; border: none;">
+      </button>
+    </div>
+  </div>
 </div>
 
 
-<div *ngIf="mode === 'grid'"  class="pricing-container w-100 py-5 ">
-    <!-- Header -->
-    <div class="header align-items-center">
-          <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
+<!-- ===========================
+     Grid Mode
+=========================== -->
+<div *ngIf="mode === 'grid'" class="pricing-container w-100 py-5">
 
-        <h2 class="title px-3 text-center">الاشتراكات</h2>
-        <p class="text-center">  اختر الباقة التي تناسب احتياجاتك وابدأ الآن بسهولة. </p>
-        <br>
-        
-       <div class="toggle-container d-flex justify-content-center text-center gap-2 my-4" style="width: 26%;">
-  <button class="toggle-btn"
-          [class.active]="selectedPlan === 'annual'"
-          (click)="selectedPlan = 'annual'">
-    الأجهزة و الجلسات
-  </button>
+  <!-- Header -->
+  <div class="header text-center">
+    <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
+    <h2 class="title px-3">الاشتراكات</h2>
+    <p>اختر الباقة التي تناسب احتياجاتك وابدأ الآن بسهولة.</p>
 
-  <button class="toggle-btn"
-          [class.active]="selectedPlan === 'monthly'"
-          (click)="selectedPlan = 'monthly'">
-    النظام الغذائي
-  </button>
-</div>
-
+    <div class="toggle-container d-flex justify-content-center gap-2 my-4">
+      <button class="toggle-btn" [class.active]="selectedPlan === 'session'" (click)="changePlanType('session')">
+        الاجهزة و الجلسات
+      </button>
+      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+        النظام الغذائي
+      </button>
     </div>
+  </div>
 
-    <!-- Pricing Cards -->
-    <div class="cards-container ">
-        <!-- Loop through plans -->
-        <div class="card" [class.basic-card]="plan.type === 'basic'" [class.premium-card]="plan.type === 'premium'"
-            [class.standard-card]="plan.type === 'standard'" *ngFor="let plan of plans">
-            <div class="card-top" style="margin-bottom: 0; padding-bottom: 0;">
-                <div class="ribbon-top-left"
-                    [style.background-color]="plan.type === 'basic' ? '#B4EB52' : 'transparent'"
-                    [style.color]="'black'">
-                    {{ plan.title }}
-                </div>
-
-                <img src="assets/Images/Group 9010.svg" alt="Frame"
-                    style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
-
-                <div class="plan-info">
-                    <span [style.color]="plan.type === 'basic' ? 'white' : 'inherit'">اشتراك</span>
-                    <div class="sessions justify-content-center"
-                        [style.background-color]="plan.type === 'basic' ? 'white' : '#1B6079'"
-                        [style.color]="plan.type === 'basic' ? 'inherit' : 'white'">
-                        {{ plan.sessions }} جلسة
-                    </div>
-                    <div class="price" [style.color]="plan.type === 'basic' ? 'white' : 'inherit'">
-                        <span> السعر {{ plan.price }} ر . س </span>
-                    </div>
-                </div>
+  <!-- Grid Cards -->
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 px-4">
+    <div class="col" *ngFor="let plan of plans">
+      <div class="card" [class.basic-card]="plan.styleType === 'basic'">
+        <!-- Top -->
+        <div class="card-top">
+          <div class="ribbon-top-left" [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : 'transparent'"
+            [style.color]="'black'">
+            {{ plan.title }}
+          </div>
+          <img src="assets/Images/Group 9010.svg" alt="Frame"
+            style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
+          <div class="plan-info">
+            <span [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
+            <div class="sessions justify-content-center"
+              [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
+              [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
+              {{ plan.sessions }} جلسة
             </div>
-            <div class="card-bottom" style="padding-top: 0;">
-                <!-- Available Places Section - Full width and connected -->
-                <div class="available-places" [ngStyle]="{
-       'background-color': plan.availablePlaces ? '#E3E3E3' : '#B4EB52',
-       'color': '#333',
-       'padding': '3px 0',
-       'text-align': 'center',
-       'margin': '0 -20px',
-       'border-radius': '0',
-       'font-size': '14px'
-     }">
-                    {{ plan.availablePlaces }}
-                </div>
-                <div class="feature" style="margin-top: 16px;">
-                    <span class="feature-label fs-6" style="display: block; margin-bottom: 8px;"
-                        *ngFor="let feature of plan.features">
-                        <img src="assets/Images/checkmark-circle-02.svg"> &nbsp; {{ feature }}
-                    </span>
-                </div>
-
-<button class="subscribe-btn" 
-        [style.background]="plan.type === 'basic' ? '#7AD03A' : 'transparent'"
-        [style.color]="plan.type === 'basic' ? '#00000' : 'black'"
-        [style.border]="plan.type === 'basic' ? 'none' : '1px solid #808080'" 
-        [style.border-radius]="'9px'"
-        [style.padding]="'8px 16px'" 
-        [style.font-weight]="'500'" 
-        [style.cursor]="'pointer'"
-        [style.transition]="'all 0.3s ease'">
-        اشتراك
-</button>
+            <div class="price" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+              السعر {{ plan.price }} ر . س
             </div>
+          </div>
         </div>
+
+        <!-- Bottom -->
+        <div class="card-bottom">
+          <div class="available-places" [ngStyle]="{
+            'background-color': plan.cities ? '#E3E3E3' : '#B4EB52',
+            'color': '#333',
+            'padding': '3px 0',
+            'text-align': 'center',
+            'margin': '0 -20px',
+            'border-radius': '0',
+            'font-size': '14px'
+          }">
+            {{ plan.cities }}
+          </div>
+
+          <div class="feature mt-3">
+            <span class="feature-label fs-6 d-block mb-2" *ngFor="let feature of plan.features">
+              <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
+            </span>
+          </div>
+
+          <button class="subscribe-btn mt-2" (click)="subscribe(plan.id)"
+            [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
+            [style.color]="plan.styleType === 'basic' ? '#000' : 'black'"
+            [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
+            اشتراك
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
-
+  <!-- Optional extra sections -->
   <app-suces-story></app-suces-story>
-  <app-downloadapp></app-downloadapp>
-
 </div>
-

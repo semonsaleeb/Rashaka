@@ -2,3 +2,37 @@ img {
   max-height: 400px;
   object-fit: cover;
 }
+.blog-content {
+  direction: rtl;
+  text-align: right;
+  line-height: 2;
+  li {
+    margin-bottom: 8px;
+  }
+}
+
+
+.blog-content {
+  direction: rtl;
+  text-align: right;
+  line-height: 2;
+
+  h1, h2, h3 {
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  span {
+    display: inline;
+    white-space: normal;
+  }
+
+  ul {
+    padding-right: 1.5rem;
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+

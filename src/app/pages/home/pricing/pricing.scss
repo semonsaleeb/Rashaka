@@ -6,7 +6,6 @@
 .pricing-container {
   max-width: 1200px;
   margin: 0 auto;
-  direction: rtl;
 }
 
 .header {
@@ -61,7 +60,7 @@
   border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
-  width: 300px !important;
+  width: 260px !important;
 
 }
 
@@ -82,7 +81,7 @@
 
 .ribbon-wrapper {
   position: absolute;
-  top: 10px;
+  top: 4px;
   left: 10px;
 }
 
@@ -182,8 +181,8 @@
 
 .ribbon-top-left {
   position: absolute;
-  top: 17px;
-  left: -32px;
+  top: 8px;
+  left: -25px;
   transform: rotate(315deg);
   background-color: #B4EB52; // deep orange
   color: white;
@@ -237,4 +236,118 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.scroll-carousel {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 1rem;
+
+  /* Optional scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+.scroll-carousel .card {
+  flex: 0 0 auto;
+  min-width: 220px;
+  max-width: 300px;
+}
+.carousel-track-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  direction: rtl; /* RTL fix */
+  transition: transform 0.5s ease-in-out;
+  scroll-behavior: smooth;
+  will-change: transform;
+}
+
+.carousel-track .card {
+  flex: 0 0 calc(100% / 3);
+  max-width: calc(90% / 3);
+}
+
+.carousel-track {
+  gap: 16px;
+}
+
+.carousel-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.carousel-arrow img {
+  width: 30px;
+  height: 30px;
+}
+
+
+.carousel-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.carousel-arrow img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Arrow buttons styling for RTL */
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Swapped arrow directions for RTL */
+.arrow-btn.next {
+    background-image: url("/assets/Images/right-arrow.svg");
+
+  &:not([disabled]):hover {
+        background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+
+  }
+}
+
+.arrow-btn.prev {
+
+  background-image: url("/assets/Images/left-arrow.svg");
+
+  &:not([disabled]):hover {
+        background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+
+  }
 }

@@ -4,9 +4,10 @@
   {{ errorMessage }}
 </div>
 
-<div *ngIf="blog" class="container py-5">
-  <img [src]="blog!.image" class="img-fluid mb-4 rounded" alt="Blog Image">
+<div *ngIf="blog" class="container py-5" dir="rtl">
+    <p class="text-muted">{{ blog!.created_at }} - {{ blog!.author }}</p>
+
+  <img [src]="blog!.image" class="img-fluid mb-4 rounded" width="100%" alt="Blog Image">
   <h1 class="mb-3">{{ blog!.title_ar }}</h1>
-  <p class="text-muted">{{ blog!.created_at }} - {{ blog!.author }}</p>
-  <div [innerHTML]="blog!.content_ar"></div>
+<div [innerHTML]="blogHtml" class="blog-content" dir="rtl"></div>
 </div>

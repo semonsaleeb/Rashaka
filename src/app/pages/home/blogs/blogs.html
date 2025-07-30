@@ -4,8 +4,13 @@
   <div *ngIf="mode === 'grid'" class="row px-3 py-5" style="  background-color: #ffffff;">
     <div class="col-md-4 mb-4 p-3" *ngFor="let blog of blogs">
       <div class="card h-100" style="border-radius: 24px;">
-        <img [src]="getSafeImage(blog.image)" class="card-img-top p-3 rounded rounded-5" [alt]="blog.title_ar"
-          (error)="blog.image = 'assets/images/fallback-blog.jpg'" style="border-radius: 24px;" />
+<a [routerLink]="['/home/blog', blog.id]">
+
+          <div class="position-relative">
+            <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
+              style="height: 200px; object-fit: cover; border-radius: 25px;">
+          </div>
+        </a>
         <div class="card-body">
           <h5 class="card-title">{{ blog.title_ar }}</h5>
           <p class="card-text" [innerHTML]="parseContent(blog.content_ar) | truncate:150"></p>
@@ -17,8 +22,9 @@
           </small>
         </div>
       </div>
+
     </div>
-          <app-downloadapp></app-downloadapp>
+    <app-downloadapp></app-downloadapp>
 
   </div>
 
@@ -44,28 +50,28 @@
           <div class="d-flex transition-transform carousel-track"
             [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
             <div class="carousel-slide p-3" *ngFor="let blog of blogs">
-                <div class="card h-100 product-card rounded-4 border bg-white">
-                  <!-- Blog Image -->
-                                 <a [routerLink]="['home/blog/', blog.id]" class="btn btn-link" >
+              <div class="card h-100 product-card rounded-4 border bg-white">
+                <!-- Blog Image -->
+                <a [routerLink]="['home/blog/', blog.id]" class="btn btn-link">
 
                   <div class="position-relative">
                     <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
                       style="height: 200px; object-fit: cover; border-radius: 25px;">
                   </div>
-              </a>
+                </a>
 
-                  <!-- Blog Body -->
-                  <div class="card-body text-end ">
-                    <h6 class="card-title fw-bold ">{{ blog.title_ar }}</h6>
-                    <p class="card-text text-muted text-end two-lines-only"
-                      [innerHTML]="parseContent(blog.content_ar) | truncate:150">
-                    </p>
-                    <div class="text-muted small">
-                      بواسطة: {{ blog.author || 'غير معروف' }} |
-                      {{ blog.created_at | date: 'dd/MM/yyyy' }}
-                    </div>
+                <!-- Blog Body -->
+                <div class="card-body text-end ">
+                  <h6 class="card-title fw-bold ">{{ blog.title_ar }}</h6>
+                  <p class="card-text text-muted text-end two-lines-only"
+                    [innerHTML]="parseContent(blog.content_ar) | truncate:150">
+                  </p>
+                  <div class="text-muted small">
+                    بواسطة: {{ blog.author || 'غير معروف' }} |
+                    {{ blog.created_at | date: 'dd/MM/yyyy' }}
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>

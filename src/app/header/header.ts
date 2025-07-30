@@ -1,5 +1,5 @@
 // header.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ElementRef, HostListener} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -63,8 +63,9 @@ toggleDropdown(item: any) {
     private http: HttpClient,
     private productService: ProductService,
     private favoriteService: FavoriteService,
-    private cartService: CartService,             // ✅ Inject CartService
-    private cartState: CartStateService           // ✅ Inject CartStateService
+    private cartService: CartService,             
+    private cartState: CartStateService,
+      private elementRef: ElementRef           
   ) {}
 
 ngOnInit() {
@@ -229,6 +230,18 @@ closeMobileMenu() {
   this.isMobileMenuOpen = false;
   this.isMenuOpen = false;
   document.body.classList.remove('menu-open');
+}
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent): void {
+  const clickedInsideDropdown = this.elementRef.nativeElement.contains(event.target);
+  if (!clickedInsideDropdown) {
+    this.navItems.forEach(i => {
+      if (i.hasDropdown) {
+        i.showDropdown = false;
+      }
+    });
+  }
 }
 
 }

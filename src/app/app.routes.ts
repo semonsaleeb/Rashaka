@@ -97,7 +97,7 @@ export const routes: Routes = [
     component: CategoryProducts
   },
   {
-    path: 'home/Pricing',
+    path: 'home/packages',
     component: Pricing
   },
   

@@ -116,28 +116,28 @@
   width: 25px;
   height: 25px;
 }
-
 .gradient-border {
   border-radius: 12px;
-  padding: 3px; /* Adjust thickness of border */
+  padding: 3px; /* تم تصغير السماكة من 3px إلى 2px */
   background-image: url('/assets/Images/Frame 22 (1).svg');
-  background-size: cover;
+  background-size: 100% 100%; /* التأكد من أن الخلفية تغطي المساحة بالكامل */
   background-position: center;
   background-repeat: no-repeat;
-  display: inline-block; /* Important for wrapping content */
+  display: inline-block;
+}
 
-  .feature-item {
-    background-color: #081E25;
-    border-radius: 10px;
-    // padding: 0.4rem 1rem;
-    color: #D1EBF5;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    height: 50px;
-    width: 165px;
-  }
+.feature-item {
+  background-color: #081E25;
+  border-radius: 10px;
+  color: #D1EBF5;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* لتوسيط المحتوى أفقيًا */
+  gap: 0.4rem;
+  height: 40px; /* تم تصغير الارتفاع من 50px إلى 40px */
+  width: 160px; /* تم تصغير العرض من 165px إلى 150px */
+  padding: 0.3rem 0.8rem; /* تم تصغير البادينج */
 }
 
 

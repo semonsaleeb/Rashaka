@@ -82,7 +82,8 @@
               class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
               style="width: 40px; height: 40px;">
               <img src="assets/Images/Vector.svg" alt="cart" width="20" />
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                *ngIf="isLoggedIn && favoriteCount > 0">
                 {{ favoriteCount }}
               </span>
             </div>
@@ -124,15 +125,17 @@
                 style="position: absolute; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                 <div class="row">
                   <!-- Categories -->
-                  <div class="col-md-6">
+                  <div class="col-md-6 " >
                     <div class="row">
                       <div class="col-6 mb-2" *ngFor="let category of categories" dir="rtl">
                         <a class="dropdown-item d-flex align-items-center gap-2"
-                          [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }">
+                          [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }"
+                          (click)="item.showDropdown = false">
                           {{ category.name_ar }}
                         </a>
+
                       </div>
-                      <div class="col-12 text-end mt-3">
+                      <div class="col-12 text-end mt-3 mx-3">
                         <a [routerLink]="['/home/category-products']"
                           class="btn btn-outline-dark btn-sm rounded-pill d-inline-flex align-items-center">
                           <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="20" />
