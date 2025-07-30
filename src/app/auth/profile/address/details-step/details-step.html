@@ -1,0 +1,41 @@
+<!-- المحافظة -->
+<div class="form-group mb-2">
+  <label>المحافظة</label>
+  <input type="text" class="form-control" [(ngModel)]="form.government_name" required>
+</div>
+
+<!-- المدينة -->
+<div class="form-group mb-2">
+  <label>المدينة</label>
+  <input type="text" class="form-control" [(ngModel)]="form.city_name" required>
+</div>
+
+<!-- الحي -->
+<div class="form-group mb-2">
+  <label>الحي</label>
+  <input type="text" class="form-control" [(ngModel)]="form.area_name" required>
+</div>
+
+<!-- اسم الشارع -->
+<div class="form-group mb-2">
+  <label>اسم الشارع</label>
+  <input type="text" class="form-control" [(ngModel)]="form.street_name" required>
+</div>
+
+<!-- رقم المبنى -->
+<div class="form-group mb-2">
+  <label>رقم المبنى</label>
+  <input type="text" class="form-control" [(ngModel)]="form.building_number" required>
+</div>
+
+<!-- رقم الهاتف -->
+<div class="form-group mb-2">
+  <label>رقم الهاتف</label>
+  <input type="text" class="form-control" [(ngModel)]="form.phone_number" required>
+</div>
+
+<!-- الموقع على الخريطة يأتي من component آخر (map-step) -->
+<!-- location_type يتم اختياره مسبقًا (المنزل أو العمل) -->
+
+<button class="btn btn-success w-100" (click)="submitForm()">إرسال</button>
+

@@ -1,3 +1,42 @@
-<img src="assets/Images/Location review-bro 1.svg">
-<br>
-<button class="addAdress px-4 py-2"> أضف عنوان </button>
+<!-- إذا لم تبدأ خطوات الإضافة -->
+<ng-container *ngIf="!showSteps">
+  <!-- ✅ إذا كان يوجد عناوين -->
+  <ng-container *ngIf="addressList.length > 0; else noAddress">
+  <div class="row">
+  <div *ngFor="let address of addressList" class="col-md-4 mb-4">
+    <div class="card p-3 h-100 shadow-sm">
+      <h5 class="mb-2">📍 عنوان:</h5>
+      <p class="mb-0">
+        {{ address.government_name }}, {{ address.city_name }}, {{ address.area_name }},
+        {{ address.street_name }}, عمارة {{ address.building_number }}, شقة {{ address.apartment_number }},
+        الدور {{ address.floor_number }}
+      </p>
+      <!-- <small class="text-muted">📞 {{ address.phone_number }}</small> -->
+    </div>
+  </div>
+</div>
+
+
+    <button class="btn btn-outline-primary w-100" (click)="startAddressFlow()"> إضافة عنوان جديد</button>
+  </ng-container>
+
+  <!-- ❌ لا يوجد عنوان -->
+  <ng-template #noAddress>
+    <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
+    <br>
+    <button class="addAdress px-4 py-2" (click)="startAddressFlow()"> أضف عنوان</button>
+  </ng-template>
+</ng-container>
+
+<!-- Step 1: اختر من الخريطة -->
+<ng-container *ngIf="showSteps && step === 1">
+  <app-map-step (next)="goToDetails($event)"></app-map-step>
+</ng-container>
+
+<!-- Step 2: تفاصيل العنوان -->
+<ng-container *ngIf="showSteps && step === 2">
+  <app-details-step
+    [initialData]="addressData"
+    (submit)="submitAddress($event)">
+  </app-details-step>
+</ng-container>

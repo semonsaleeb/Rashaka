@@ -39,7 +39,7 @@ export class Header implements OnInit {
   navItems = [
   { label: 'الرئيسية', path: '/', active: false },
   { label: 'المتجر', path: '/home/category-products', hasDropdown: true, showDropdown: true },
-  { label: 'الاشتراكات', path: '/home/Pricing', hasDropdown: false },
+  { label: 'الاشتراكات', path: '/home/packages', hasDropdown: false },
   { label: 'قصص نجاح عملائنا', path: '/home/sucesStory', hasDropdown: false },
   { label: 'الفحوصات المجانيه', path: '/blogs', hasDropdown: false },
   { label: 'العروض', path: '/home/special-offers', hasDropdown: false },

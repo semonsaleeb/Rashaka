@@ -1,0 +1,10 @@
+<h4 class="mb-3 text-center">اختر موقعك من الخريطة</h4>
+
+<div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc; border-radius: 10px;"></div>
+
+<select [(ngModel)]="location_type" class="form-select my-3">
+  <option value="home">المنزل</option>
+  <option value="work">العمل</option>
+</select>
+
+<button class="btn btn-success w-100" (click)="nextStep()">التالي</button>
