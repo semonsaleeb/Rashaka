@@ -60,9 +60,15 @@
   border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
-  width: 260px !important;
 
 }
+.product-card {
+  width: 100%;
+  min-height: 400px; /* زود الارتفاع */
+  padding: 20px;
+  font-size: 16px;
+}
+
 
 .card-top {
   background:linear-gradient(#E9F7DE, #D1EBF5);
@@ -181,16 +187,16 @@
 
 .ribbon-top-left {
   position: absolute;
-  top: 8px;
-  left: -25px;
-  transform: rotate(315deg);
+  top: 15px;
+  left: -28px;
+  transform: rotate(320deg);
   background-color: #B4EB52; // deep orange
   color: white;
-  padding: 4px 35px;
+  padding: 4px 60px;
   font-size: 14px;
   font-weight: bold;
   z-index: 1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
 }
 
@@ -263,8 +269,8 @@
 
 .scroll-carousel .card {
   flex: 0 0 auto;
-  min-width: 220px;
-  max-width: 300px;
+  min-width: 320px;
+  max-width: 360px;
 }
 .carousel-track-wrapper {
   overflow: hidden;
@@ -281,7 +287,7 @@
 
 .carousel-track .card {
   flex: 0 0 calc(100% / 3);
-  max-width: calc(90% / 3);
+  // max-width: calc(100% / 3);
 }
 
 .carousel-track {
@@ -334,7 +340,7 @@
 
 /* Swapped arrow directions for RTL */
 .arrow-btn.next {
-    background-image: url("/assets/Images/right-arrow.svg");
+        background-image: url("/assets/Images/circle-arrow-green-04green.svg");
 
   &:not([disabled]):hover {
         background-image: url("/assets/Images/circle-arrow-green-04green.svg");
@@ -344,10 +350,34 @@
 
 .arrow-btn.prev {
 
-  background-image: url("/assets/Images/left-arrow.svg");
+        background-image: url("/assets/Images/circle-arrow-left-03green.svg");
 
   &:not([disabled]):hover {
         background-image: url("/assets/Images/circle-arrow-left-03green.svg");
 
   }
+}
+
+/* =========================
+     pricing.scss (style)
+========================= */
+
+.card-top {
+  position: relative;
+  min-height: 120px;
+}
+
+
+.plan-info span,
+.plan-info .sessions,
+.plan-info .price {
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #000;
+  border-radius: 50%;
 }

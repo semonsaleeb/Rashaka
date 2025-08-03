@@ -123,8 +123,7 @@
 
 
         <div class="d-flex gap-2 px-4">
-          <button class="arrow-btn prev" (click)="nextSlide()"
-            [disabled]="currentSlideIndex >= products.length - visibleCards"></button>
+          <button class="arrow-btn prev" (click)="nextSlide()" [disabled]="currentSlideIndex >= products.length - visibleCards"></button>
           <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
 
         </div>

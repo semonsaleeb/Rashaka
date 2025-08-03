@@ -1,0 +1,71 @@
+<section class="about-us">
+  <div class="header-section">
+    <div class="container py-5">
+      <div class="header-content">
+        <h1 class="title">عن الرشاقة</h1>
+        <p class="subtitle">
+          المسيت شركة الرشاقة المميزية في السعودية ببحث<br>
+          لشراكتي الحتي والقطاع الخاصة بين الجامع العربي.
+        </p>
+      </div>
+    </div>
+    <div class="header-gradient"></div>
+  </div>
+
+  <div class="container">
+    <div class="stats-container">
+      <div class="stats-grid">
+        <div *ngFor="let stat of stats; let last = last" class="stat-item">
+          <div class="stat-value">{{stat.value}}</div>
+          <div class="stat-label">{{stat.label}}</div>
+          <!-- Vertical divider (not for last item) -->
+          <div *ngIf="!last" class="stat-divider"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-section px-5">
+    <div class="content-wrapper px-5">
+
+      <div class="text-content px-5">
+        <h2 class="content-title">لماذا نحن ؟ </h2>
+        <div class="content-text">
+          <p>
+            تأسست شركة الرشاقة السعيدة في المملكة العربية السعودية انطلاقا من مهمتها في نشر الوعي الصحي ونشر الثقافة
+            الغذائية الصحية في ربوع المجتمع العربي بشكل عام والمجتمع السعودي بشكل خاص . تعد التعذية الصحية هي اساس بناء
+            مجتمع يخلو من الامراض الصحية المرتبطة بزيادة الوزن مثل السكري وارتفاع ضغط الدم وغيرها . وتأكيدا على رؤية
+            المملكة 2030 اخذت الرشاقة السعيدة على عاتقها نشر الوعي الصحي والاهتمام بالرياضة والتغذية الصحية .</p>
+          <p>
+            استطاعت شركة الرشاقة السعيدة في اطار خطتها لتصحيح الوعي الصحي والتغذية المثالية ايصال رسالتها في الربع الأول
+            من عام 2016 من الوصول الي اكثر من 3000 عميل لدي الفرع الاول والثاني ومازالت تواصل رسالتها السامية وفي عام
+            2019 كان مجموع عملاء الرشاقة السعيدة يتجاوز 75000 عميل استفادوا من خدماتنا وفي عام 2023 وصل عدد فروع الرشاقة
+            الي 23 فرع حول المملكة وعدد العملاء المشتركين الي 250000 عميل بالاضافة الي مئات الااف اللذين استفادوا من
+            الخدمات المجانية.</p>
+        </div>
+      </div>
+      <div class="image-container">
+        <img src="assets/Images/Group 9039.svg" alt="About Us Image">
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row align-items-center ">
+      <!-- ✅ العمود الأول (الفروع) -->
+     
+      <div class="col-md-8 d-flex justify-content-end">
+
+        <app-branches class="mx-5 text-center" style="width: 830px;"></app-branches>
+      </div>
+
+      <!-- ✅ العمود الثاني (الصورة) -->
+      <div class="col-md-4">
+        <img src="assets/Images/Group 9038.svg" class="img-fluid" alt="Branch Image">
+      </div>
+    </div>
+
+
+  </div>
+  <app-suces-story mode="carousel"></app-suces-story>
+
+</section>

@@ -43,7 +43,10 @@ export class Header implements OnInit {
   { label: 'قصص نجاح عملائنا', path: '/home/sucesStory', hasDropdown: false },
   { label: 'الفحوصات المجانيه', path: '/blogs', hasDropdown: false },
   { label: 'العروض', path: '/home/special-offers', hasDropdown: false },
-  { label: 'المدونة ', path: '/home/blogs', hasDropdown: false }
+  { label: 'المدونة ', path: '/home/blogs', hasDropdown: false },
+  { label: 'عن رشاقة ', path: '/about_us', hasDropdown: false },
+
+  
 ];
 
 toggleDropdown(item: any) {

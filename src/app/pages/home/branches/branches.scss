@@ -1,37 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-
-* {
-  font-family: 'Cairo', sans-serif;
-}
-
+/* SCSS FILE (branches.component.scss) */
 body {
-   
   background-color: white;
 }
 
-/* Section Title */
 .section-title {
   font-size: 2rem;
 }
 
-/* Branch Filter Buttons */
+.branch-filters {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+  padding-inline: 8px;
+  direction: rtl;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.branch-filters::-webkit-scrollbar {
+  height: 6px;
+}
+
+.branch-filters::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
 .branch-filters .btn {
   border-radius: 20px;
-  padding: 6px 25px;
+  padding: 6px 25px 6px 28px;
   font-weight: 500;
   border: 1px solid #ccc;
-  color: #000;
   background-color: white;
+  color: #000;
   transition: all 0.2s ease;
-   position: relative;
-  padding-inline-start: 28px; /* space for the icon */
+  white-space: nowrap;
 }
 
 .branch-filters .btn:hover {
-  margin-right: 8px;
   background-color: #f1f1f1;
 }
-
 
 .branch-filters .btn.active {
   background-image: url('/assets/Images/location-01.svg');
@@ -39,18 +49,13 @@ body {
   background-position: right center;
   background-size: 28px;
   border-color: #7AD03A;
-  color: #000000;
 }
 
-
-
-/* Service Card */
 .service-card {
   background: #123F4F;
   border-radius: 20px;
   padding: 25px;
   color: white;
-  position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -66,85 +71,144 @@ body {
   z-index: 2;
 }
 
-.phone-number {
-  font-size: 1.1rem;
-  font-weight: 600;
-  direction: ltr;
-  text-align: right;
-}
-
 .branch-title,
-.branch-location,
-.branch-description {
+.branch-location {
   font-size: 0.95rem;
 }
 
-.branch-title {
-  color: #fff;
-}
-
-.branch-description {
-  opacity: 0.85;
-}
-
-/* Icons */
-.whatsapp-icon {
+.decorative-image {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: #25d366;
-  color: white;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
+  bottom: -40px;
+  left: -10px;
+  width: 50px;
+  z-index: 2;
+  transform: rotate(280deg);
+}
+
+.carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-track-container {
+  overflow: hidden;
+}
+
+.carousel-track {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  z-index: 3;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transition: transform 0.5s ease-in-out;
 }
 
-.network-icon {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1.5rem;
-  z-index: 3;
+.carousel-slide {
+  flex: 0 0 calc(100% / 3);
+  max-width: calc(100% / 3);
+  padding-inline: 12px;
 }
 
-/* Navigation Controls */
-.navigation-controls {
-  gap: 15px;
+/* Arrow buttons */
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
 }
 
-.nav-arrow {
-  background: rgba(0, 0, 0, 0.1);
+.arrow-btn.next {
+  background-image: url('/assets/Images/circle-arrow-green-04green.svg');
+}
+
+.arrow-btn.prev {
+  background-image: url('/assets/Images/circle-arrow-left-03green.svg');
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  color: #28a745;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
 }
 
-.nav-arrow:hover {
-  background: rgba(0, 0, 0, 0.15);
-  transform: scale(1.1);
+/* Media Queries */
+@media (max-width: 575.98px) {
+  .section-title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .carousel-slide {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .branch-filters .btn {
+    font-size: 0.85rem;
+    padding: 6px 16px;
+  }
+
+  .service-card {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .branch-title {
+    font-size: 1rem;
+  }
+
+  .branch-location {
+    font-size: 0.85rem;
+  }
+
+  .btn-sm {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+
+  .decorative-image {
+    bottom: -20px;
+    left: 0;
+    width: 40px;
+  }
+
+  .d-flex.justify-content-between.align-items-center {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 5px;
+  }
+
+  .btn-outline-light {
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+  }
 }
 
-.nav-dots .nav-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.2);
-  margin: 0 4px;
-  transition: all 0.3s ease;
-}
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .section-title {
+    font-size: 1.75rem;
+  }
 
-.nav-dot.active {
-  background: #28a745;
-  transform: scale(1.2);
+  .carousel-slide {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .branch-filters .btn {
+    font-size: 0.9rem;
+    padding: 6px 20px;
+  }
+
+  .service-card {
+    padding: 20px;
+  }
+
+  .branch-title,
+  .branch-location {
+    font-size: 0.9rem;
+  }
 }

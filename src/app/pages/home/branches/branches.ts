@@ -26,6 +26,13 @@ locations = [
   {
     phone: '966-920013458',
     image: 'assets/Images/Frame 37.svg',
+    title: 'رابع فروعنا',
+    location: 'الدمام – حي الشاطئ',
+    description: 'مركز متكامل للعناية بالشعر'
+  },
+  {
+    phone: '966-920013458',
+    image: 'assets/Images/Frame 37.svg',
     title: 'ثاني فروعنا',
     location: 'جدة – حي الروضة',
     description: 'مركز التجميل والعناية بالبشرة'
@@ -39,5 +46,46 @@ locations = [
   }
 ];
 
+branchSlideIndex = 0;
+visibleBranchCards = 3;
+
+nextSlide() {
+  if (this.branchSlideIndex > 0) {
+    this.branchSlideIndex--;
+  }
+}
+
+prevSlide() {
+  const maxSlide = this.locations.length - this.visibleBranchCards;
+  if (this.branchSlideIndex < maxSlide) {
+    this.branchSlideIndex++;
+  }
+}
+getBranchDotsArray(): number[] {
+  const totalSlides = Math.ceil(this.locations.length / this.visibleBranchCards);
+  return Array.from({ length: totalSlides }, (_, i) => i);
+}
+goToBranchSlide(index: number): void {
+  this.branchSlideIndex = index;
+}
+
+
+
+
+ngOnInit(): void {
+  this.updateVisibleBranchCards();
+  window.addEventListener('resize', this.updateVisibleBranchCards.bind(this));
+}
+
+updateVisibleBranchCards(): void {
+  const width = window.innerWidth;
+  if (width < 576) {
+    this.visibleBranchCards = 1;
+  } else if (width >= 576 && width < 768) {
+    this.visibleBranchCards = 2;
+  } else {
+    this.visibleBranchCards = 3;
+  }
+}
 
 }

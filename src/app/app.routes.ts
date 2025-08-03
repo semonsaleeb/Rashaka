@@ -19,6 +19,7 @@ import { Reservation } from './auth/profile/reservation/reservation';
 import { Address } from './auth/profile/address/address';
 import { PlaceOrder } from './place-order/place-order';
 import { Favorites } from './favorites/favorites';
+import { AboutUs } from './pages/about-us/about-us';
 
 export const routes: Routes = [
   // Home page
@@ -101,7 +102,11 @@ export const routes: Routes = [
     component: Pricing
   },
   
-
+ {
+    path: 'about_us',
+    component: AboutUs
+  },
+  
    {
     path: 'home/sucesStory',
     component: SucesStory

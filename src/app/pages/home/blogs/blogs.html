@@ -1,10 +1,10 @@
 <div class="blog-container w-100" dir="rtl">
 
   <!-- GRID VIEW -->
-  <div *ngIf="mode === 'grid'" class="row px-3 py-5" style="  background-color: #ffffff;">
+  <div *ngIf="mode === 'grid'" class="row px-3 py-5 px-5 mx-5" style="  background-color: #ffffff;">
     <div class="col-md-4 mb-4 p-3" *ngFor="let blog of blogs">
       <div class="card h-100" style="border-radius: 24px;">
-<a [routerLink]="['/home/blog', blog.id]">
+        <a [routerLink]="['/home/blog', blog.id]">
 
           <div class="position-relative">
             <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
@@ -24,7 +24,7 @@
       </div>
 
     </div>
-    <app-downloadapp></app-downloadapp>
+    <app-downloadapp dir="ltr"></app-downloadapp>
 
   </div>
 
