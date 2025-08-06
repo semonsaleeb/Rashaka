@@ -1,10 +1,51 @@
-<h4 class="mb-3 text-center">اختر موقعك من الخريطة</h4>
+<div class="p-5 m-5">
+  <h4 class="mb-3 text-center">اختر موقعك من الخريطة</h4>
 
-<div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc; border-radius: 10px;"></div>
+  <div
+    class="position-relative"
+    style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 10px;"
+  >
+    <!-- ✅ خريطة -->
+    <div id="map" style="height: 100%; width: 100%;"></div>
 
-<select [(ngModel)]="location_type" class="form-select my-3">
-  <option value="home">المنزل</option>
-  <option value="work">العمل</option>
-</select>
+    <!-- ✅ حقل البحث أعلى الخريطة -->
+    <div
+      class="position-absolute top-0 start-50 translate-middle-x p-2"
+      style="max-width: 900px; z-index: 1000; width: 100%;"
+    >
+      <div class="position-relative">
+        <button
+          class="btn position-absolute top-0 start-0 h-100 px-3 border-0 bg-transparent text-secondary"
+          (click)="searchLocation()"
+          style="z-index: 1;"
+        >
+          <i class="fas fa-search"></i>
+        </button>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          class="form-control pe-5 rounded-1"
+          placeholder="ابحث عن موقع..."
+        />
+      </div>
+    </div>
 
-<button class="btn btn-success w-100" (click)="nextStep()">التالي</button>
+    <!-- ✅ زر تحديد موقعي - أسفل يمين -->
+    <button
+      class="btn btn-outline-primary position-absolute bottom-0 end-0 m-3"
+      (click)="getCurrentLocation()"
+      style="z-index: 1000;"
+    >
+      <i class="fas fa-location-crosshairs"></i> تحديد موقعي
+    </button>
+
+    <!-- ✅ زر تأكيد الموقع - أسفل يسار -->
+    <button
+      class="btn btn-success position-absolute bottom-0 start-0 m-3"
+      (click)="nextStep()"
+      style="z-index: 1000;"
+    >
+      تأكيد الموقع
+    </button>
+  </div>
+</div>

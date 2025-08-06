@@ -82,6 +82,12 @@
 
 <!-- Step 2: تفاصيل العنوان -->
 <ng-container *ngIf="showSteps && step === 2">
-  <app-details-step [initialData]="addressData" (submit)="submitAddress($event)">
-  </app-details-step>
+ <app-details-step
+  *ngIf="client.phone"
+  [initialData]="addressData"
+  [clientPhone]="client.phone"
+  (submit)="submitAddress($event)">
+</app-details-step>
+
+
 </ng-container>

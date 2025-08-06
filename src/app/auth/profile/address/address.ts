@@ -37,18 +37,18 @@ export class Address implements OnInit {
     this.loadClientProfile(); // ✅ Use service instead of decodeToken
   }
 
-  loadClientProfile() {
-    this.clientService.getProfile().subscribe({
-      next: (res) => {
-        this.client.name = res.client.name || '';
-        this.client.phone = res.client.phone || '';
-        console.log('Client profile loaded:', this.client);
-      },
-      error: (err) => {
-        console.error('Failed to load client profile:', err);
-      }
-    });
-  }
+ loadClientProfile() {
+  this.clientService.getProfile().subscribe({
+    next: (res) => {
+      this.client = res.client;
+      console.log('✅ Client loaded:', this.client);
+    },
+    error: (err) => {
+      console.error('❌ Failed to load client profile:', err);
+    }
+  });
+}
+
 
   getFullAddress(address: any): string {
     return `${address.street_name}, ${address.area_name}, ${address.city_name}, ${address.government_name}, عمارة ${address.building_number}, شقة ${address.apartment_number}, الدور ${address.floor_number}`;
@@ -70,14 +70,26 @@ export class Address implements OnInit {
     this.step = 1;
   }
 
- goToDetails(dataFromMap: Partial<AddressData>) {
+goToDetails(dataFromMap: Partial<AddressData>) {
   this.step = 2;
 
-  this.addressData = {
-    ...this.addressData,     // ✅ يحتفظ بـ id وبقية البيانات القديمة
-    ...dataFromMap           // ✅ يدمج معها location_type و coordinate الجديدة من الخريطة
-  };
+  if (this.addressData?.id) {
+    this.addressData = {
+      ...this.addressData,
+      ...dataFromMap
+    };
+  } else {
+    this.addressData = {
+      ...dataFromMap
+    } as AddressData;
+  }
+
+  // 🔁 Force Angular to detect new input bindings
+  this.addressData = { ...this.addressData };
+  this.client = { ...this.client };
 }
+
+
 
 
   submitAddress(finalData: AddressData) {
