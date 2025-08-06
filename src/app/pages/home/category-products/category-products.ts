@@ -11,11 +11,12 @@ import { AuthService } from '../../../services/auth.service';
 import { Blogs } from '../blogs/blogs';
 import { Downloadapp } from '../downloadapp/downloadapp';
 import { FavoriteService } from '../../../services/favorite.service';
+import { ComparePopup } from '../../../compare-popup/compare-popup';
 
 @Component({
   selector: 'app-category-products',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Blogs, Downloadapp],
+  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Blogs, Downloadapp, ComparePopup],
   templateUrl: './category-products.html',
   styleUrls: ['./category-products.scss']
 })
@@ -162,9 +163,6 @@ export class CategoryProducts implements OnInit {
 
 
 
-  addToCompare(product: Product): void {
-    console.log('Added to compare:', product);
-  }
 
   // بقية الدوال كما هي
   toggleCategory(categoryId: number): void {
@@ -317,5 +315,37 @@ export class CategoryProducts implements OnInit {
     });
   }
 
+ compareProducts: any[] = [];
+  showComparePopup = false;
 
+ addToCompare(product: any) {
+  // 1. Prevent duplicate selection
+  if (this.compareProducts.find(p => p.id === product.id)) return;
+
+  // 2. Prevent adding more than 2 products
+  if (this.compareProducts.length >= 2) {
+    alert('⚠️ لا يمكن مقارنة أكثر من منتجين');
+    return;
+  }
+
+  // 3. Add product to comparison list
+  this.compareProducts.push(product);
+
+  // 4. If this is the first product added, prompt to add another
+  if (this.compareProducts.length === 1) {
+    alert('✅ تم إضافة المنتج الأول، الرجاء اختيار منتج آخر للمقارنة');
+  }
+
+  // 5. If this is the second product, show the compare popup
+  if (this.compareProducts.length === 2) {
+    this.showComparePopup = true;
+  }
+}
+
+
+
+  onCloseComparePopup() {
+    this.showComparePopup = false;
+    this.compareProducts = [];
+  }
 }

@@ -42,6 +42,28 @@
 </div>
 
 <div *ngIf="mode === 'grid'">
+
+   <div class="header-section">
+    <div class="container py-5">
+      <div class="header-content">
+        <h1 class="title">  قصص نجاح عملائنا </h1>
+        <p class="subtitle">
+          "قصص تحوّل حقيقية - إلهامك يبدأ هنا”<br>
+ابداء الان في أول خطوة نحو جسم أحلامك!        </p>
+
+   <!-- CTA Button -->
+        <button class="btn btn-success cta-button " (click)="onGetStarted()">
+          <span class=" arrow-icon">
+            <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
+          </span>
+          احجز الآن
+
+        </button>
+      </div>
+    </div>
+    <div class="header-gradient"></div>
+  </div>
+
   <div class="success-stories px-5 p-5">
     <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
 

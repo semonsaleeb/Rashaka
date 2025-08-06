@@ -1,8 +1,8 @@
-<div class="container py-4 my-5" dir="rtl">
+<div class="container py-4 my-5 text-end" dir="rtl">
   <form>
 
     <!-- معلومات الاتصال -->
-    <div class="border rounded-4 p-4 mb-4">
+    <div class="  p-4 mb-4">
       <h6 class="fw-bold mb-4">معلومات الاتصال</h6>
 
       <div class="row g-3 align-items-center">
@@ -10,14 +10,14 @@
         <!-- البريد الإلكتروني -->
         <div class="col-md-6">
           <label class="form-label">البريد الإلكتروني</label>
-          <input type="email" class="form-control rounded-0" value="Abdo5549@gmail.com" readonly>
+          <input type="email" class="form-control rounded-0" [value]="client.email" readonly>
         </div>
 
         <!-- رقم الجوال -->
         <div class="col-md-6">
           <label class="form-label">رقم الجوال</label>
           <div class="input-group">
-            <input type="text" class="form-control rounded-0" name="phone">
+            <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone">
             <button class="btn btn-outline-success rounded-0" type="button">أضف +</button>
           </div>
         </div>
@@ -26,7 +26,7 @@
     </div>
 
     <!-- معلوماتك الشخصية -->
-    <div class="border rounded-4 p-4 mb-4">
+    <div class=" p-4 mb-4">
       <h6 class="fw-bold mb-4">معلوماتك الشخصية</h6>
 
       <div class="row g-3">
@@ -35,7 +35,7 @@
         <div class="col-md-6">
           <label class="form-label">الاسم الأول</label>
           <div class="input-group">
-            <input type="text" class="form-control rounded-0" name="firstName" value="عبدالرحمن">
+            <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
             <span class="input-group-text rounded-0"><i class="fas fa-pen"></i></span>
           </div>
         </div>

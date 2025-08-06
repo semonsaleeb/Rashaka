@@ -78,4 +78,9 @@ export class SucesStory {
   goToSlide(index: number) {
     this.currentIndex = index;
   }
+
+    onGetStarted() {
+    console.log('Get started clicked');
+    // Add your navigation logic here
+  }
 }

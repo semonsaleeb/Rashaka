@@ -27,7 +27,7 @@
         <div class="d-flex align-items-center gap-2 mb-2">
           <span class="text-success fw-bold fs-5">{{ product.price }} ر.س</span>
           <span class="badge bg-secondary" *ngIf="product.categories?.length">
-            {{ product.categories[0].name }}
+            {{ product.categories[0].name_ar }}
           </span>
         </div>
 
@@ -49,7 +49,7 @@
 
         <div class="border-top pt-3">
           <h6 class="fw-bold">الوصف</h6>
-          <p class="text-muted" style="white-space: pre-line;">{{ product.description }}</p>
+          <p class="text-muted" style="white-space: pre-line;">{{ product.description_ar }}</p>
         </div>
       </div>
     </div>

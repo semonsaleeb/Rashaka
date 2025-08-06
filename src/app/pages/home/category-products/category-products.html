@@ -1,3 +1,6 @@
+<app-compare-popup *ngIf="showComparePopup" [products]="compareProducts"
+  (close)="onCloseComparePopup()"></app-compare-popup>
+
 <div class="position-relative " *ngIf="mode === 'carousel'">
 
   <img src="assets/Images/pattern.svg" style="position: absolute;
@@ -70,9 +73,9 @@
                       </button>
 
 
-                      <button (click)="addToCompare(product)" class="btn-circle text-muted">
-                        <i class="fas fa-random"></i>
-                      </button>
+                      <button (click)="addToCompare(product); $event.stopPropagation(); $event.preventDefault()"
+                        class="btn-circle text-muted">
+                        <i class="fas fa-random"></i></button>
                     </div>
 
                     <!-- Product Details -->
@@ -263,10 +266,9 @@
 
 
 
-                <button (click)="addToCompare(product)" class="btn-circle text-muted"
-                  (click)="$event.preventDefault(); addToCompare(product)">
-                  <i class="fas fa-random"></i>
-                </button>
+                 <button (click)="addToCompare(product); $event.stopPropagation(); $event.preventDefault()"
+                        class="btn-circle text-muted">
+                        <i class="fas fa-random"></i></button>
               </div>
 
               <!-- Product Details -->

@@ -26,5 +26,9 @@ import { CategoryProducts } from './category-products/category-products';
   styleUrl: './home.scss'
 })
 export class Home {
+ngOnInit(): void {
+  const token = localStorage.getItem('token'); // or 'access_token' depending on your app
+  console.log('Token:', token);
+}
 
 }
