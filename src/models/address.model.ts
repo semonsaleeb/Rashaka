@@ -1,5 +1,6 @@
 // models/address.model.ts
 export interface AddressData {
+  id: number;
   location_type: string;
   coordinate: string;
   government_name?: string;

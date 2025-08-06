@@ -67,9 +67,12 @@ export class MapStep implements AfterViewInit {
       return;
     }
 
-    this.next.emit({
-      coordinate: this.coordinate,
-      location_type: this.location_type
-    });
+    // 🟢 داخل nextStep()
+this.next.emit({
+  coordinate: this.coordinate,
+  location_type: this.location_type
+});
+
+
   }
 }

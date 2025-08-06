@@ -1,33 +1,80 @@
-<!-- إذا لم تبدأ خطوات الإضافة -->
-<ng-container *ngIf="!showSteps">
-  <!-- ✅ إذا كان يوجد عناوين -->
-  <ng-container *ngIf="addressList.length > 0; else noAddress">
-  <div class="row">
-  <div *ngFor="let address of addressList" class="col-md-4 mb-4">
-    <div class="card p-3 h-100 shadow-sm">
-      <h5 class="mb-2">📍 عنوان:</h5>
-      <p class="mb-0">
-        {{ address.government_name }}, {{ address.city_name }}, {{ address.area_name }},
-        {{ address.street_name }}, عمارة {{ address.building_number }}, شقة {{ address.apartment_number }},
-        الدور {{ address.floor_number }}
-      </p>
-      <!-- <small class="text-muted">📞 {{ address.phone_number }}</small> -->
-    </div>
-  </div>
-</div>
+<!-- ✅ قائمة العناوين -->
+<div class="px-5 mx-5 ">
+  <ng-container *ngIf="!showSteps">
+    <ng-container *ngIf="addressList.length > 0; else noAddress">
+      <div class="row">
+        <div *ngFor="let address of addressList" class="col-md-4 mb-4">
+          <div class="border border-primary rounded-3 p-3 position-relative">
 
 
-    <button class="btn btn-outline-primary w-100" (click)="startAddressFlow()"> إضافة عنوان جديد</button>
+            <!-- شارة "الرئيسي" -->
+            <div class="d-flex justify-content-between align-items-end mb-2" dir="ltr">
+
+              <!-- زر تعديل -->
+              <button class="btn btn-link p-0 me-2" (click)="editAddress(address)">
+                <i class="fas fa-pen text-secondary"></i>
+              </button>
+
+              <!-- شارة "الرئيسي" -->
+              <div class="badge bg-light text-primary border border-primary mx-2">الرئيسي</div>
+
+              <!-- عنوان -->
+              <span class="fw-bold mx-2">تفاصيل العنوان <input type="checkbox" checked
+                  class="form-check-input ms-2"></span>
+
+
+            </div>
+
+
+            <!-- الاسم -->
+            <div class="mb-2">
+              <p class="text-end text-secondary">الأسم</p>
+              <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
+            </div>
+
+
+
+
+            <!-- العنوان الكامل -->
+            <div class="mb-2">
+              <p class="text-end text-secondary"> العنوان</p>
+
+              <input type="text" class="form-control" [value]="getFullAddress(address)" readonly>
+            </div>
+
+            <div>
+              <!-- رقم الجوال -->
+              <div class="col-md-6 w-100">
+                <p class="text-end text-secondary"> رقم الجوال</p>
+
+                <div class="input-group w-100">
+
+                  <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone"
+                    [readonly]="client.phone && client.phone.trim() !== ''">
+                  <button *ngIf="!client.phone || client.phone.trim() === ''" class="btn btn-outline-success rounded-0"
+                    type="button">
+                    أضف +
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- زر إضافة عنوان جديد -->
+      <button class="btn btn-outline-success" (click)="startAddressFlow()">إضافة عنوان جديد</button>
+    </ng-container>
+
+    <!-- ❌ لا يوجد عنوان -->
+    <ng-template #noAddress>
+      <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
+      <br>
+      <button class="addAdress px-4 py-2" (click)="startAddressFlow()">أضف عنوان</button>
+    </ng-template>
   </ng-container>
-
-  <!-- ❌ لا يوجد عنوان -->
-  <ng-template #noAddress>
-    <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
-    <br>
-    <button class="addAdress px-4 py-2" (click)="startAddressFlow()"> أضف عنوان</button>
-  </ng-template>
-</ng-container>
-
+</div>
 <!-- Step 1: اختر من الخريطة -->
 <ng-container *ngIf="showSteps && step === 1">
   <app-map-step (next)="goToDetails($event)"></app-map-step>
@@ -35,8 +82,6 @@
 
 <!-- Step 2: تفاصيل العنوان -->
 <ng-container *ngIf="showSteps && step === 2">
-  <app-details-step
-    [initialData]="addressData"
-    (submit)="submitAddress($event)">
+  <app-details-step [initialData]="addressData" (submit)="submitAddress($event)">
   </app-details-step>
 </ng-container>
