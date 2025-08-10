@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Blog, BlogService } from '../services/blogs.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-single-blog',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './single-blog.html',
   styleUrl: './single-blog.scss'
 })

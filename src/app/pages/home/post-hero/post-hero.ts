@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component,
   ElementRef,
@@ -9,7 +9,7 @@ import {
 @Component({
   selector: 'app-post-hero',
   standalone: true,
-  imports: [CommonModule, ],
+  imports: [],
   templateUrl: './post-hero.html',
   styleUrl: './post-hero.scss'
 })

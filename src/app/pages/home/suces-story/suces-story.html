@@ -1,111 +1,105 @@
-<div *ngIf="mode === 'carousel'">
-  <div class="success-stories px-5 p-5" style="  background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
-    <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
-
-    <div class="carousel-custom-wrapper position-relative">
-      <div class="story-deck d-flex justify-content-center align-items-center">
-        <div *ngFor="let story of stories; let i = index" class="story-card-custom"
-          style="  background: linear-gradient(135deg, #2EA2CC 0%, #7AD03A 100%);" [ngClass]="getCardClass(i)">
-          <div class="youtube-embed">
-            <iframe [src]="getSafeYoutubeUrl(story.youtubeId)" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen>
-            </iframe>
-          </div>
-          <div class="video-info">
-          </div>
+@if (mode === 'carousel') {
+  <div>
+    <div class="success-stories px-5 p-5" style="  background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
+      <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
+      <div class="carousel-custom-wrapper position-relative">
+        <div class="story-deck d-flex justify-content-center align-items-center">
+          @for (story of stories; track story; let i = $index) {
+            <div class="story-card-custom"
+              style="  background: linear-gradient(135deg, #2EA2CC 0%, #7AD03A 100%);" [ngClass]="getCardClass(i)">
+              <div class="youtube-embed">
+                <iframe [src]="getSafeYoutubeUrl(story.youtubeId)" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+                </iframe>
+              </div>
+              <div class="video-info">
+              </div>
+            </div>
+          }
         </div>
+        <!-- Custom Arrows shown only if there are more than 1 story -->
+        @if (stories.length > 1) {
+          <div class="d-flex justify-content-between  align-items-center mt-4 ">
+            <!-- Arrows -->
+            <div class="d-flex gap-2">
+              <button class="arrow-btn prev" (click)="prevSlide()"></button>
+              <button class="arrow-btn next" (click)="nextSlide()"></button>
+            </div>
+            <!-- Dots -->
+            <div class="d-flex gap-2">
+              @for (story of stories; track story; let i = $index) {
+                <button type="button" class="dot"
+                  [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
+                </button>
+              }
+            </div>
+          </div>
+        }
       </div>
+    </div>
+  </div>
+}
 
-
-      <!-- Custom Arrows shown only if there are more than 1 story -->
-      <div *ngIf="stories.length > 1" class="d-flex justify-content-between  align-items-center mt-4 ">
-        <!-- Arrows -->
-        <div class="d-flex gap-2">
-          <button class="arrow-btn prev" (click)="prevSlide()"></button>
-          <button class="arrow-btn next" (click)="nextSlide()"></button>
-        </div>
-
-        <!-- Dots -->
-        <div class="d-flex gap-2">
-          <button *ngFor="let story of stories; let i = index" type="button" class="dot"
-            [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
+@if (mode === 'grid') {
+  <div>
+    <div class="header-section">
+      <div class="container py-5">
+        <div class="header-content">
+          <h1 class="title">  قصص نجاح عملائنا </h1>
+          <p class="subtitle">
+            "قصص تحوّل حقيقية - إلهامك يبدأ هنا”<br>
+          ابداء الان في أول خطوة نحو جسم أحلامك!        </p>
+          <!-- CTA Button -->
+          <button class="btn btn-success cta-button " (click)="onGetStarted()">
+            <span class=" arrow-icon">
+              <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
+            </span>
+            احجز الآن
           </button>
         </div>
-
-
-
       </div>
+      <div class="header-gradient"></div>
     </div>
-  </div>
-
-</div>
-
-<div *ngIf="mode === 'grid'">
-
-   <div class="header-section">
-    <div class="container py-5">
-      <div class="header-content">
-        <h1 class="title">  قصص نجاح عملائنا </h1>
-        <p class="subtitle">
-          "قصص تحوّل حقيقية - إلهامك يبدأ هنا”<br>
-ابداء الان في أول خطوة نحو جسم أحلامك!        </p>
-
-   <!-- CTA Button -->
-        <button class="btn btn-success cta-button " (click)="onGetStarted()">
-          <span class=" arrow-icon">
-            <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
-          </span>
-          احجز الآن
-
-        </button>
-      </div>
-    </div>
-    <div class="header-gradient"></div>
-  </div>
-
-  <div class="success-stories px-5 p-5">
-    <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
-
-    <div class="carousel-custom-wrapper position-relative">
-      <div class="story-deck d-flex justify-content-center align-items-center">
-        <div *ngFor="let story of stories; let i = index" class="story-card-custom" [ngClass]="getCardClass(i)">
-          <div class="story-image-wrapper">
-            <!-- <div class="circle-background"></div> -->
-            <img [src]="story.image" alt="Story Image" class="story-image" />
-            <h1>{{story.title}}</h1>
-            <p>{{story.description}}</p>
+    <div class="success-stories px-5 p-5">
+      <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
+      <div class="carousel-custom-wrapper position-relative">
+        <div class="story-deck d-flex justify-content-center align-items-center">
+          @for (story of stories; track story; let i = $index) {
+            <div class="story-card-custom" [ngClass]="getCardClass(i)">
+              <div class="story-image-wrapper">
+                <!-- <div class="circle-background"></div> -->
+                <img [src]="story.image" alt="Story Image" class="story-image" />
+                <h1>{{story.title}}</h1>
+                <p>{{story.description}}</p>
+              </div>
+              <div class="video-info">
+              </div>
+            </div>
+          }
+        </div>
+        <!-- Custom Arrows shown only if there are more than 1 story -->
+        @if (stories.length > 1) {
+          <div class="d-flex justify-content-between  align-items-center mt-4 ">
+            <!-- Arrows -->
+            <div class="d-flex gap-2">
+              <button class="arrow-btn prev" (click)="prevSlide()"></button>
+              <button class="arrow-btn next" (click)="nextSlide()"></button>
+            </div>
+            <!-- Dots -->
+            <div class="d-flex gap-2">
+              @for (story of stories; track story; let i = $index) {
+                <button type="button" class="dot"
+                  [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
+                </button>
+              }
+            </div>
           </div>
-
-
-          <div class="video-info">
-          </div>
-        </div>
-      </div>
-
-
-      <!-- Custom Arrows shown only if there are more than 1 story -->
-      <div *ngIf="stories.length > 1" class="d-flex justify-content-between  align-items-center mt-4 ">
-        <!-- Arrows -->
-        <div class="d-flex gap-2">
-          <button class="arrow-btn prev" (click)="prevSlide()"></button>
-          <button class="arrow-btn next" (click)="nextSlide()"></button>
-        </div>
-
-        <!-- Dots -->
-        <div class="d-flex gap-2">
-          <button *ngFor="let story of stories; let i = index" type="button" class="dot"
-            [class.active]="i === currentIndex" (click)="currentIndex = i" [attr.aria-label]="'Story ' + (i + 1)">
-          </button>
-        </div>
-
-
-
+        }
       </div>
     </div>
+    <app-checkup></app-checkup>
+    <app-branches></app-branches>
+    <app-downloadapp></app-downloadapp>
   </div>
-  <app-checkup></app-checkup>
-  <app-branches></app-branches>
-  <app-downloadapp></app-downloadapp>
-
-</div>
+}

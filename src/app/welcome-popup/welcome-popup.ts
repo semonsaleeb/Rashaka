@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-welcome-popup',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './welcome-popup.html',
   styleUrl: './welcome-popup.scss'
 })

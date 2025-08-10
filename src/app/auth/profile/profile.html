@@ -1,44 +1,41 @@
 <div class="w-100 my-5 px-0" dir="rtl">
   <!-- <h2 class="mb-4 text-center">الملف الشخصي</h2> -->
 
-  <div *ngIf="client; else notFound">
-    <div class="text-center w-100">
-
-      <!-- Profile Image -->
-      <div class="mb-3">
-        <img *ngIf="client.image; else defaultIcon" [src]="client.image" alt="صورة المستخدم"
-          class="rounded-circle border" style="width: 100px; height: 100px; object-fit: cover;" />
-        <ng-template #defaultIcon>
-          <i class="fas fa-user-circle text-secondary" style="font-size: 100px;"></i>
-        </ng-template>
-      </div>
-
-      <!-- Name, Email -->
-      <h5 class="mb-1">{{ client.name }}</h5>
-      <p class="text-muted mb-2">{{ client.email }}</p>
-
-
-      <!-- Navigation Buttons (Tabs) -->
-      <div class="nav nav-pills justify-content-center mb-4 mt-3" style="gap: 10px;">
-        <a class="btn profile_btn mx-5 px-4" routerLink="details" routerLinkActive="active">
-          <img src="assets/Images/account-setting-03.svg" alt=""> &nbsp; تفاصيل الحساب
-        </a>
-        <a class="btn profile_btn mx-5 px-4" routerLink="orders" routerLinkActive="active"> <img
-            src="assets/Images/invoice-01.svg" alt=""> &nbsp; الاشتراكات</a>
-        <a class="btn profile_btn mx-5 px-4" routerLink="reservations" routerLinkActive="active"> <img
-            src="assets/Images/appointment-02.svg" alt=""> &nbsp; الحجوزات</a>
-        <a class="btn profile_btn mx-5 px-4" routerLink="addresses" routerLinkActive="active"> <img
-            src="assets/Images/location-05 green.svg" alt=""> &nbsp; العنوان</a>
-      </div>
-
-      <!-- Routed Component Shows Here -->
-      <div class="card border rounded p-3 shadow-sm w-100">
-        <router-outlet></router-outlet>
+  @if (client) {
+    <div>
+      <div class="text-center w-100">
+        <!-- Profile Image -->
+        <div class="mb-3">
+          @if (client.image) {
+            <img [src]="client.image" alt="صورة المستخدم"
+              class="rounded-circle border" style="width: 100px; height: 100px; object-fit: cover;" />
+          } @else {
+            <i class="fas fa-user-circle text-secondary" style="font-size: 100px;"></i>
+          }
+        </div>
+        <!-- Name, Email -->
+        <h5 class="mb-1">{{ client.name }}</h5>
+        <p class="text-muted mb-2">{{ client.email }}</p>
+        <!-- Navigation Buttons (Tabs) -->
+        <div class="nav nav-pills justify-content-center mb-4 mt-3" style="gap: 10px;">
+          <a class="btn profile_btn mx-5 px-4" routerLink="details" routerLinkActive="active">
+            <img src="assets/Images/account-setting-03.svg" alt=""> &nbsp; تفاصيل الحساب
+          </a>
+          <a class="btn profile_btn mx-5 px-4" routerLink="orders" routerLinkActive="active"> <img
+          src="assets/Images/invoice-01.svg" alt=""> &nbsp; الاشتراكات</a>
+          <a class="btn profile_btn mx-5 px-4" routerLink="reservations" routerLinkActive="active"> <img
+          src="assets/Images/appointment-02.svg" alt=""> &nbsp; الحجوزات</a>
+          <a class="btn profile_btn mx-5 px-4" routerLink="addresses" routerLinkActive="active"> <img
+          src="assets/Images/location-05 green.svg" alt=""> &nbsp; العنوان</a>
+        </div>
+        <!-- Routed Component Shows Here -->
+        <div class="card border rounded p-3 shadow-sm w-100">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
-  </div>
-
-  <ng-template #notFound>
+  } @else {
     <p class="text-danger">لا يوجد بيانات لعرضها. تأكد من تسجيل الدخول.</p>
-  </ng-template>
+  }
+
 </div>

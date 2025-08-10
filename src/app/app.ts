@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
-import { CommonModule } from '@angular/common';
+
 import { Hero } from './pages/home/hero/hero';
 import { PostHero } from './pages/home/post-hero/post-hero';
 import { SpecialOffersComponent } from './pages/home/special-offers/special-offers';
@@ -22,7 +22,7 @@ import { WelcomePopup } from './welcome-popup/welcome-popup';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Footer, Header,WelcomePopup],
+  imports: [RouterOutlet, Footer, Header, WelcomePopup],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

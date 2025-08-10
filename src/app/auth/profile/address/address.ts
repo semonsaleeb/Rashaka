@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AddressService } from '../../../services/address.service';
 import { ClientService } from '../../../services/client.service';
 import { AddressData } from '../../../../models/address.model';
-import { CommonModule } from '@angular/common';
+
 import { DetailsStep } from './details-step/details-step';
 import { MapStep } from './map-step/map-step';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-address',
   standalone: true,
-  imports: [CommonModule, DetailsStep, MapStep, FormsModule],
+  imports: [DetailsStep, MapStep, FormsModule],
   templateUrl: './address.html',
   styleUrl: './address.scss'
 })

@@ -1,102 +1,99 @@
 <div class="blog-container w-100" dir="rtl">
 
   <!-- GRID VIEW -->
-  <div *ngIf="mode === 'grid'" class="row px-3 py-5 px-5 mx-5" style="  background-color: #ffffff;">
-    <h1 class="text-center py-4"> المدونة </h1>
-    <div class="col-md-4 mb-4 p-3" *ngFor="let blog of blogs">
-      <div class="card h-100" style="border-radius: 24px;">
-        <a [routerLink]="['/home/blog', blog.id]">
-
-          <div class="position-relative">
-            <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
-              style="height: 200px; object-fit: cover; border-radius: 25px;">
+  @if (mode === 'grid') {
+    <div class="row px-3 py-5 px-5 mx-5" style="  background-color: #ffffff;">
+      <h1 class="text-center py-4"> المدونة </h1>
+      @for (blog of blogs; track blog) {
+        <div class="col-md-4 mb-4 p-3">
+          <div class="card h-100" style="border-radius: 24px;">
+            <a [routerLink]="['/home/blog', blog.id]">
+              <div class="position-relative">
+                <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
+                  style="height: 200px; object-fit: cover; border-radius: 25px;">
+                </div>
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">{{ blog.title_ar }}</h5>
+                <p class="card-text" [innerHTML]="parseContent(blog.content_ar) | truncate:150"></p>
+              </div>
+              <div class="card-footer bg-transparent">
+                <small class="text-muted">
+                  بواسطة: {{ blog.author || 'غير معروف' }} |
+                  {{ blog.created_at | date: 'dd/MM/yyyy' }}
+                </small>
+              </div>
+            </div>
           </div>
-        </a>
-        <div class="card-body">
-          <h5 class="card-title">{{ blog.title_ar }}</h5>
-          <p class="card-text" [innerHTML]="parseContent(blog.content_ar) | truncate:150"></p>
-        </div>
-        <div class="card-footer bg-transparent">
-          <small class="text-muted">
-            بواسطة: {{ blog.author || 'غير معروف' }} |
-            {{ blog.created_at | date: 'dd/MM/yyyy' }}
-          </small>
-        </div>
+        }
+        <app-downloadapp dir="ltr"></app-downloadapp>
       </div>
+    }
 
-    </div>
-    <app-downloadapp dir="ltr"></app-downloadapp>
-
-  </div>
-
-  <div class="position-relative px-5 py-5 mb-0" style="  background-color: #081E25;"
-    *ngIf="mode === 'carousel' && !loading" dir="rtl">
-    <div class="special-offers-container mb-5">
-      <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4">
-        <div class="d-flex align-items-center gap-3 flex-wrap px-4">
-          <h2 class="section-title mb-0 d-flex align-items-center text-light px-4 fw-bold">أحدث المقالات</h2>
-        </div>
-
-        <a [routerLink]="['/home/blogs']"
-          class="btn btn-link view-all-btn text-light d-flex align-items-center gap-1 px-5">
-          <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
-          عرض الكل
-        </a>
-      </div>
-
-      <!-- Carousel Container -->
-      <div class="carousel-wrapper">
-        <div class="position-relative overflow-hidden mx-5">
-          <div class="d-flex transition-transform carousel-track"
-            [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
-            <div class="carousel-slide p-3" *ngFor="let blog of blogs">
-              <div class="card h-100 product-card rounded-4 border bg-white">
-                <!-- Blog Image -->
-                <a [routerLink]="['home/blog/', blog.id]" class="btn btn-link">
-
-                  <div class="position-relative">
-                    <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
-                      style="height: 200px; object-fit: cover; border-radius: 25px;">
-                  </div>
-                </a>
-
-                <!-- Blog Body -->
-                <div class="card-body text-end ">
-                  <h6 class="card-title fw-bold ">{{ blog.title_ar }}</h6>
-                  <p class="card-text text-muted text-end two-lines-only"
-                    [innerHTML]="parseContent(blog.content_ar) | truncate:150">
-                  </p>
-                  <div class="text-muted small">
-                    بواسطة: {{ blog.author || 'غير معروف' }} |
-                    {{ blog.created_at | date: 'dd/MM/yyyy' }}
-                  </div>
+    @if (mode === 'carousel' && !loading) {
+      <div class="position-relative px-5 py-5 mb-0" style="  background-color: #081E25;"
+        dir="rtl">
+        <div class="special-offers-container mb-5">
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4">
+            <div class="d-flex align-items-center gap-3 flex-wrap px-4">
+              <h2 class="section-title mb-0 d-flex align-items-center text-light px-4 fw-bold">أحدث المقالات</h2>
+            </div>
+            <a [routerLink]="['/home/blogs']"
+              class="btn btn-link view-all-btn text-light d-flex align-items-center gap-1 px-5">
+              <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
+              عرض الكل
+            </a>
+          </div>
+          <!-- Carousel Container -->
+          <div class="carousel-wrapper">
+            <div class="position-relative overflow-hidden mx-5">
+              <div class="d-flex transition-transform carousel-track"
+                [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
+                @for (blog of blogs; track blog) {
+                  <div class="carousel-slide p-3">
+                    <div class="card h-100 product-card rounded-4 border bg-white">
+                      <!-- Blog Image -->
+                      <a [routerLink]="['home/blog/', blog.id]" class="btn btn-link">
+                        <div class="position-relative">
+                          <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
+                            style="height: 200px; object-fit: cover; border-radius: 25px;">
+                          </div>
+                        </a>
+                        <!-- Blog Body -->
+                        <div class="card-body text-end ">
+                          <h6 class="card-title fw-bold ">{{ blog.title_ar }}</h6>
+                          <p class="card-text text-muted text-end two-lines-only"
+                            [innerHTML]="parseContent(blog.content_ar) | truncate:150">
+                          </p>
+                          <div class="text-muted small">
+                            بواسطة: {{ blog.author || 'غير معروف' }} |
+                            {{ blog.created_at | date: 'dd/MM/yyyy' }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+              <!-- Navigation -->
+              <div class="d-flex flex-wrap justify-content-between align-items-center px-5 mt-4 py-3">
+                <!-- Dots -->
+                <div class="d-flex gap-2 px-4">
+                  @for (i of getDotsArray(); track i) {
+                    <button (click)="goToSlide(i)" class="rounded-circle"
+                      [style.background-color]="currentSlideIndex === i ? '#7AD03A' : '#6c757d'"
+                      style="width: 10px; height: 10px; border: none !important;">
+                    </button>
+                  }
+                </div>
+                <div class="d-flex gap-2 px-4">
+                  <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
+                  <button class="arrow-btn prev" (click)="nextSlide()"
+                  [disabled]="currentSlideIndex >= blogs.length - visibleCards"></button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Navigation -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center px-5 mt-4 py-3">
-
-
-          <!-- Dots -->
-          <div class="d-flex gap-2 px-4">
-            <button *ngFor="let i of getDotsArray()" (click)="goToSlide(i)" class="rounded-circle"
-              [style.background-color]="currentSlideIndex === i ? '#7AD03A' : '#6c757d'"
-              style="width: 10px; height: 10px; border: none !important;">
-            </button>
-          </div>
-          <div class="d-flex gap-2 px-4">
-            <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
-            <button class="arrow-btn prev" (click)="nextSlide()"
-              [disabled]="currentSlideIndex >= blogs.length - visibleCards"></button>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  </div>
+      }

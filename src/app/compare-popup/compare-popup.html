@@ -3,41 +3,59 @@
     <button (click)="closePopup()" class="btn btn-danger btn-sm float-start">X</button>
     <h4 class="mb-4">مقارنة المنتجات</h4>
 
-    <div *ngIf="comparedData.length < 2" class="text-center">
-      <p>جاري تحميل البيانات...</p>
-    </div>
+    @if (comparedData.length < 2) {
+      <div class="text-center">
+        <p>جاري تحميل البيانات...</p>
+      </div>
+    }
 
-    <table *ngIf="comparedData.length === 2" class="table table-bordered text-center">
-      <thead>
-        <tr>
-          <th>الخاصية</th>
-          <th *ngFor="let p of comparedData">{{ p.name_ar || p.name }}</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="comparedData.length === 2">
-        <tr>
-          <td>السعر</td>
-          <td *ngFor="let p of comparedData">{{ p.sale_price || p.price }} EGP</td>
-        </tr>
-        <tr>
-          <td>الكمية في المخزون</td>
-          <td *ngFor="let p of comparedData">{{ p.stock }}</td>
-        </tr>
-        <tr>
-          <td>التقييم</td>
-          <td *ngFor="let p of comparedData">{{ p.average_rating || 'لا يوجد تقييم' }}</td>
-        </tr>
-        <tr>
-          <td>الوصف</td>
-          <td *ngFor="let p of comparedData">{{ p.description_ar || p.description }}</td>
-        </tr>
-        <tr>
-          <td>الصورة</td>
-          <td *ngFor="let p of comparedData">
-            <img [src]="p.images[0]" width="80" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    @if (comparedData.length === 2) {
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th>الخاصية</th>
+            @for (p of comparedData; track p) {
+              <th>{{ p.name_ar || p.name }}</th>
+            }
+          </tr>
+        </thead>
+        @if (comparedData.length === 2) {
+          <tbody>
+            <tr>
+              <td>السعر</td>
+              @for (p of comparedData; track p) {
+                <td>{{ p.sale_price || p.price }} EGP</td>
+              }
+            </tr>
+            <tr>
+              <td>الكمية في المخزون</td>
+              @for (p of comparedData; track p) {
+                <td>{{ p.stock }}</td>
+              }
+            </tr>
+            <tr>
+              <td>التقييم</td>
+              @for (p of comparedData; track p) {
+                <td>{{ p.average_rating || 'لا يوجد تقييم' }}</td>
+              }
+            </tr>
+            <tr>
+              <td>الوصف</td>
+              @for (p of comparedData; track p) {
+                <td>{{ p.description_ar || p.description }}</td>
+              }
+            </tr>
+            <tr>
+              <td>الصورة</td>
+              @for (p of comparedData; track p) {
+                <td>
+                  <img [src]="p.images[0]" width="80" />
+                </td>
+              }
+            </tr>
+          </tbody>
+        }
+      </table>
+    }
   </div>
 </div>

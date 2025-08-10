@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Downloadapp } from './downloadapp/downloadapp';
@@ -19,9 +19,19 @@ import { CategoryProducts } from './category-products/category-products';
 @Component({
   selector: 'app-home',
   imports: [
-    CommonModule, RouterOutlet, Downloadapp, Checkup, Pricing, Hero, OurService, 
-    Branches, SucesStory, PostHero,Blogs, SpecialOffersComponent, CategoryProducts
-  ],
+    RouterOutlet,
+    Downloadapp,
+    Checkup,
+    Pricing,
+    Hero,
+    OurService,
+    Branches,
+    SucesStory,
+    PostHero,
+    Blogs,
+    SpecialOffersComponent,
+    CategoryProducts
+],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

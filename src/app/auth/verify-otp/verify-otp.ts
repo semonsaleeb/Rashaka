@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-verify-otp',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './verify-otp.html',
   styleUrls: ['./verify-otp.scss']
 })

@@ -90,11 +90,6 @@
   transform: scale(1.2);
 }
 
-.gradient-border {
-  padding: 1px;
-  border-radius: 20px;
-  
-}
 
 .cta-button {
   background-color: #7AD03A;
@@ -116,11 +111,21 @@
   width: 25px;
   height: 25px;
 }
+
+
+.features-container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  gap: 4px; /* تحكم بالمسافة بين العناصر */
+}
+
 .gradient-border {
   border-radius: 12px;
-  padding: 3px; /* تم تصغير السماكة من 3px إلى 2px */
+  padding: 3px;
   background-image: url('/assets/Images/Frame 22 (1).svg');
-  background-size: 100% 100%; /* التأكد من أن الخلفية تغطي المساحة بالكامل */
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
   display: inline-block;
@@ -133,14 +138,42 @@
   font-size: 0.9rem;
   display: flex;
   align-items: center;
-  justify-content: center; /* لتوسيط المحتوى أفقيًا */
+  justify-content: center;
   gap: 0.4rem;
-  height: 40px; /* تم تصغير الارتفاع من 50px إلى 40px */
-  width: 160px; /* تم تصغير العرض من 165px إلى 150px */
-  padding: 0.3rem 0.8rem; /* تم تصغير البادينج */
+  height: 40px;
+  // width: 160px;
+  padding: 0.3rem 0.8rem;
+}
+.pattern-img {
+           position: absolute;
+            right: 0;
+           bottom: -110px;      
+           height: 180px;
+            width: 100px;
+            z-index: 1;
+            transform: rotate(180deg);
 }
 
 
-@media (max-width: 767.98px) {
+@media (max-width: 576px) {
+  .gradient-border {
+    margin-left: 0 !important; /* بدل المسافة الكبيرة */
+    margin-right: 0 !important; /* عشان RTL */
+  }
   
+  .feature-item {
+    gap: 4px; /* تقليل المسافة بين الأيقونة والنص */
+    font-size: 12px; /* اختيارى لو حابة تصغري النص */
+  }
+   .pattern-img {
+ position: absolute;
+            right: 0;
+           bottom: -210px !important;      
+           height: 180px;
+            width: 100px;
+            z-index: 1;
+            transform: rotate(180deg);
+  }
+
+
 }

@@ -5,12 +5,12 @@
   <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-between flex-wrap">
       <!-- Logo -->
-      <div class="logo ">
+      <div class="logo">
         <img src="assets/Images/logo.svg" alt="Happy Fitness" class="img-fluid" style="height: 50px;" />
       </div>
 
       <!-- Search Bar -->
-      <div class="search-container flex-grow-1 mx-3 border border-1 rounded-3" style="max-width: 500px; ">
+      <div class="search-container flex-grow-1 mx-3 border border-1 rounded-3" style="max-width: 500px;">
         <div class="position-relative" dir="rtl">
           <div class="input-group">
             <input type="text" class="form-control ps-5" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
@@ -21,34 +21,40 @@
           </div>
 
           <!-- Search Results -->
-          <div *ngIf="searchQuery" class="position-absolute w-100 bg-white border rounded shadow mt-1"
-            style="z-index: 10;">
-            <div *ngIf="products.length > 0; else noProducts" class="p-2">
-              <div *ngFor="let product of products" class="border-bottom py-2">
-                <h5 class="mb-1">{{ product.name_ar }}</h5>
-                <p class="mb-1">{{ product.description_ar }}</p>
-                <img [src]="product.images[0]" alt="Product" width="100" />
-              </div>
+          @if (searchQuery) {
+            <div class="position-absolute w-100 bg-white border rounded shadow mt-1" style="z-index: 10;">
+              @if (products.length > 0) {
+                <div class="p-2">
+                  @for (product of products; track product.id) {
+                    <div class="border-bottom py-2">
+                      <h5 class="mb-1">{{ product.name_ar }}</h5>
+                      <p class="mb-1">{{ product.description_ar }}</p>
+                      <img [src]="product.images[0]" alt="Product" width="100" />
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-center text-muted py-2">لا توجد منتجات</p>
+              }
             </div>
-            <ng-template #noProducts>
-              <p class="text-center text-muted py-2">لا توجد منتجات</p>
-            </ng-template>
-          </div>
+          }
         </div>
       </div>
 
       <!-- Top Bar -->
       <div class="top-bar d-flex align-items-center gap-3">
         <!-- If NOT logged in -->
-        <a *ngIf="!isLoggedIn" routerLink="/auth"
-          class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
-          <img src="assets/Images/user-circle.svg" alt="User" width="25" />
-          <span>تسجيل الدخول</span>
-        </a>
+        @if (!isLoggedIn) {
+          <a routerLink="/auth"
+            class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
+            <img src="assets/Images/user-circle.svg" alt="User" width="25" />
+            <span>تسجيل الدخول</span>
+          </a>
+        }
 
         <!-- If logged in -->
-        <ng-container *ngIf="isLoggedIn">
-          <div ngbDropdown class="d-inline-block ">
+        @if (isLoggedIn) {
+          <div ngbDropdown class="d-inline-block">
             <button ngbDropdownToggle
               class="btn bg-white text-dark d-flex align-items-center gap-2 px-3 rounded-5 border-0">
               <img src="assets/Images/user-circle.svg" alt="User" width="20" />
@@ -63,10 +69,10 @@
               </button>
             </div>
           </div>
-        </ng-container>
+        }
 
         <!-- Language Switch -->
-        <div class="language-selector d-flex align-items-center mx-3 ">
+        <div class="language-selector d-flex align-items-center mx-3">
           <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1 me-1" />
           <select class="form-select border-0 p-0 rtl-select px-1" [(ngModel)]="selectedLanguage"
             (change)="onLanguageChange($event)">
@@ -82,94 +88,100 @@
               class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
               style="width: 40px; height: 40px;">
               <img src="assets/Images/Vector.svg" alt="cart" width="20" />
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                *ngIf="isLoggedIn && favoriteCount > 0">
-                {{ favoriteCount }}
-              </span>
+              @if (isLoggedIn && favoriteCount > 0) {
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {{ favoriteCount }}
+                </span>
+              }
             </div>
           </a>
-
-
 
           <a [routerLink]="['/cart']">
             <div
               class="position-relative rounded-circle border border-success d-flex align-items-center justify-content-center"
               style="width: 40px; height: 40px;">
               <img src="assets/Images/shopping-cart-01.svg" alt="favorites" width="20" />
-              <span *ngIf="cartCount > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ cartCount }}
-              </span>
+              @if (cartCount > 0) {
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {{ cartCount }}
+                </span>
+              }
             </div>
           </a>
         </div>
       </div>
     </div>
 
-
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg bg-white mt-2  text-end" dir="rtl">
+    <nav class="navbar navbar-expand-lg bg-white mt-2 text-end" dir="rtl">
       <div class="container-fluid">
         <div class="collapse navbar-collapse d-flex">
           <ul class="navbar-nav d-flex flex-row">
-            <li class="nav-item  position-relative" style="margin-left: 1rem;" *ngFor="let item of navItems">
-              <a class="nav-link text-dark " [routerLink]="!item.hasDropdown ? item.path : null"
-                href="javascript:void(0)" (click)="item.hasDropdown ? toggleDropdown(item) : null">
-                {{ item.label }}
-                <i *ngIf="item.hasDropdown" class="fas fa-chevron-down  small"></i>
-              </a>
+            @for (item of navItems; track item.label) {
+              <li class="nav-item position-relative" style="margin-left: 1rem;">
+                <a class="nav-link text-dark" [routerLink]="!item.hasDropdown ? item.path : null"
+                  href="javascript:void(0)" (click)="item.hasDropdown ? toggleDropdown(item) : null">
+                  {{ item.label }}
+                  @if (item.hasDropdown) {
+                    <i class="fas fa-chevron-down small"></i>
+                  }
+                </a>
 
-              <!-- Dropdown Menu -->
-              <div *ngIf="item.hasDropdown && item.showDropdown" class="dropdown-menu show p-4"
-                [ngStyle]="{ right: '-95px', top: '100%', zIndex: '1000', minWidth: '1250px' }"
-                style="position: absolute; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <div class="row">
-                  <!-- Categories -->
-                  <div class="col-md-6 ">
+                <!-- Dropdown Menu -->
+                @if (item.hasDropdown && item.showDropdown) {
+                  <div class="dropdown-menu show p-4"
+                    [ngStyle]="{ right: '-95px', top: '100%', zIndex: '1000', minWidth: '1250px' }"
+                    style="position: absolute; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <div class="row">
-                      <div class="col-6 mb-2" *ngFor="let category of categories" dir="rtl">
-                        <a class="dropdown-item d-flex align-items-center gap-2"
-                          [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }"
-                          (click)="item.showDropdown = false">
-                          {{ category.name_ar }}
-                        </a>
-
+                      <!-- Categories -->
+                      <div class="col-md-6">
+                        <div class="row">
+                          @for (category of categories; track category.id) {
+                            <div class="col-6 mb-2" dir="rtl">
+                              <a class="dropdown-item d-flex align-items-center gap-2"
+                                [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }"
+                                (click)="item.showDropdown = false">
+                                {{ category.name_ar }}
+                              </a>
+                            </div>
+                          }
+                          <div class="col-12 text-end mt-3 mx-3">
+                            <a [routerLink]="['/home/category-products']"
+                              class="btn btn-outline-dark btn-sm rounded-pill d-inline-flex align-items-center">
+                              <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="20"
+                                (click)="toggleMobileMenu()" />
+                              عرض الكل
+                            </a>
+                          </div>
+                        </div>
                       </div>
-                      <div class="col-12 text-end mt-3 mx-3">
-                        <a [routerLink]="['/home/category-products']"
-                          class="btn btn-outline-dark btn-sm rounded-pill d-inline-flex align-items-center">
-                          <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="20"
-                            (click)="toggleMobileMenu()" />
-                          عرض الكل
-                        </a>
+
+                      <!-- Banner -->
+                      <div class="col-md-6 d-flex align-items-center">
+                        <div dir="rtl">
+                          <h5 class="fw-bold">احجز فحص مجاني الآن</h5>
+                          <p class="small text-muted">
+                            نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ).
+                          </p>
+                          <button class="btn border rounded-5 mt-2" (click)="onGetStarted()">
+                            <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" />
+                            احجز الآن
+                          </button>
+                        </div>
+                        <img src="assets/Images/Doctors-pana 1.svg" alt="Doctors" class="img-fluid me-3"
+                          style="max-height: 200px;" />
                       </div>
                     </div>
                   </div>
-
-                  <!-- Banner -->
-                  <div class="col-md-6 d-flex align-items-center">
-                    <div dir="rtl">
-                      <h5 class="fw-bold">احجز فحص مجاني الآن</h5>
-                      <p class="small text-muted">
-                        نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ).
-                      </p>
-                      <button class="btn border rounded-5 mt-2" (click)="onGetStarted()">
-                        <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" />
-                        احجز الآن
-                      </button>
-                    </div>
-                    <img src="assets/Images/Doctors-pana 1.svg" alt="Doctors" class="img-fluid me-3"
-                      style="max-height: 200px;" />
-                  </div>
-                </div>
-              </div>
-            </li>
+                }
+              </li>
+            }
           </ul>
 
           <!-- WhatsApp -->
-          <div class="ms-auto m-y2 " style="position: absolute; left: 0;">
-            <button class="btn d-flex align-items-center border px-5 py-2 " style="color: #25D366;">
-              <span class="ms-2 ">واتساب</span>
+          <div class="ms-auto m-y2" style="position: absolute; left: 0;">
+            <button class="btn d-flex align-items-center border px-5 py-2" style="color: #25D366;">
+              <span class="ms-2">واتساب</span>
               <i class="fab fa-whatsapp"></i>
             </button>
           </div>
@@ -180,7 +192,7 @@
 </header>
 
 <!-- Mobile Header: visible only on small screens -->
-<div class="d-block d-md-none  m-0" dir="rtl">
+<div class="d-block d-md-none m-0" dir="rtl">
   <!-- Top Header Bar -->
   <!-- Header Wrapper -->
   <div class="bg-white shadow-sm z-3 position-relative" dir="rtl">
@@ -193,22 +205,28 @@
       <div class="d-flex gap-2 align-items-center">
         <div class="position-relative">
           <img src="assets/Images/Vector.svg" alt="Fav" width="22">
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ favoriteCount }}
-          </span>
+          @if (favoriteCount > 0) {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ favoriteCount }}
+            </span>
+          }
         </div>
         <a [routerLink]="['/cart']" class="position-relative">
           <img src="assets/Images/shopping-cart-01.svg" alt="Cart" width="22">
-          <span *ngIf="cartCount > 0"
-            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ cartCount }}
-          </span>
+          @if (cartCount > 0) {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ cartCount }}
+            </span>
+          }
         </a>
 
         <!-- Menu Toggle -->
         <button class="btn p-0" (click)="toggleMobileMenu()">
-          <img *ngIf="!isMobileMenuOpen" src="assets/Images/menu.svg" alt="Menu" width="24">
-          <img *ngIf="isMobileMenuOpen" src="assets/Images/close.svg" alt="Close" width="24">
+          @if (!isMobileMenuOpen) {
+            <img src="assets/Images/menu.svg" alt="Menu" width="24">
+          } @else {
+            <img src="assets/Images/close.svg" alt="Close" width="24">
+          }
         </button>
       </div>
     </div>
@@ -225,108 +243,106 @@
         </div>
 
         <!-- Search Results -->
-        <div *ngIf="searchQuery" class="position-absolute w-100 bg-white border rounded shadow mt-1"
-          style="z-index: 10;">
-          <div *ngIf="products.length > 0; else noProducts" class="p-2">
-            <div *ngFor="let product of products" class="border-bottom py-2">
-              <h5 class="mb-1">{{ product.name_ar }}</h5>
-              <p class="mb-1">{{ product.description_ar }}</p>
-              <img [src]="product.images[0]" alt="Product" width="100" />
-            </div>
+        @if (searchQuery) {
+          <div class="position-absolute w-100 bg-white border rounded shadow mt-1" style="z-index: 10;">
+            @if (products.length > 0) {
+              <div class="p-2">
+                @for (product of products; track product.id) {
+                  <div class="border-bottom py-2">
+                    <h5 class="mb-1">{{ product.name_ar }}</h5>
+                    <p class="mb-1">{{ product.description_ar }}</p>
+                    <img [src]="product.images[0]" alt="Product" width="100" />
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="text-center text-muted py-2">لا توجد منتجات</p>
+            }
           </div>
-          <ng-template #noProducts>
-            <p class="text-center text-muted py-2">لا توجد منتجات</p>
-          </ng-template>
-        </div>
+        }
       </div>
     </div>
   </div>
 
   <!-- Overlay Menu -->
-  <div *ngIf="isMenuOpen" class="mobile-menu-overlay position-fixed top-0 start-0 w-100 h-100 bg-white shadow z-3 p-3"
-    style="overflow-y: auto;">
-    <!-- Menu Content -->
-    <!-- Close menu inside overlay -->
-    <div class="d-flex justify-content-between align-items-center p-3">
-      <h1>القائمة</h1>
-      <button class="btn w-100 text-start " (click)="toggleMobileMenu() ">
-        <img src="assets/Images/Frame 9001.svg" alt="Close" width="34" />
-      </button>
-    </div>
-    <!-- تسجيل الدخول / المستخدم -->
-    <div class="py-3 text-center">
-      <!-- If NOT logged in -->
-      <a *ngIf="!isLoggedIn" routerLink="/auth"
-        class="btn bg-white w-100 text-dark d-flex justify-content-center align-items-center gap-2 px-3 rounded-5 border border-dark">
-        <img src="assets/Images/user-circle.svg" alt="User" width="25" />
-        <span>تسجيل الدخول</span>
-      </a>
-
-      <!-- If logged in -->
-      <ng-container *ngIf="isLoggedIn">
-        <div ngbDropdown class="d-inline-block w-100 text-end mt-2" placement="bottom-start">
-          <button ngbDropdownToggle
-            class="btn fs-3 bg-white w-100 text-dark d-flex justify-content-between align-items-center gap-2 px-3  rounded-5 border border-dark">
-            <img src="assets/Images/user-circle.svg" alt="User" width="20" />
-            <span>مرحباً، {{ client?.name || 'المستخدم' }}</span>
-          </button>
-          <div ngbDropdownMenu class="dropdown-menu-center  text-start custom-dropdown w-10 ">
-            <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3 " routerLink="/profile" (click)="toggleMobileMenu()">
-              <img src="assets/Images/Frame 9050.svg"> الملف الشخصي
-            </a>
-            <button class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3" (click)="logout()">
-              <img src="assets/Images/Frame 9049.svg" (click)="toggleMobileMenu()"> تسجيل الخروج
-            </button>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-
-    <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/" (click)="toggleMobileMenu()" >الرئيسية</a>
-
-    <!-- المتجر Dropdown (Dynamic from categories array) -->
-    <div class="dropdown-section py-2 border border-1 m-2 rounded-3 p-3">
-      <button class="btn w-100 text-end d-flex justify-content-between align-items-center border-0 bg-transparent"
-        (click)="isStoreOpen = !isStoreOpen">
-        <span class="fw-bold fs-3">المتجر</span>
-        <i [class]="isStoreOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-      </button>
-
-      <div *ngIf="isStoreOpen" class="ps-2 pe-2 py-2 rounded-3 bg-light mt-2">
-        <a *ngFor="let category of categories" class=" fs-3 d-block text-end py-1 text-decoration-none text-dark"
-          [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }" (click)="toggleMobileMenu()">
-          {{ category.name_ar }}
-        </a>
-
-        <a class="d-block text-end text-success fs-3 fw-bold mt-2 text-decoration-none"
-          [routerLink]="['/home/category-products']" (click)="toggleMobileMenu()">
-          عرض الكل
-        </a>
+  @if (isMenuOpen) {
+    <div class="mobile-menu-overlay position-fixed top-0 start-0 w-100 h-100 bg-white shadow z-3 p-3"
+      style="overflow-y: auto;">
+      <!-- Menu Content -->
+      <!-- Close menu inside overlay -->
+      <div class="d-flex justify-content-between align-items-center p-3">
+        <h1>القائمة</h1>
+        <button class="btn w-100 text-start" (click)="toggleMobileMenu()">
+          <img src="assets/Images/Frame 9001.svg" alt="Close" width="34" />
+        </button>
       </div>
+      <!-- تسجيل الدخول / المستخدم -->
+      <div class="py-3 text-center">
+        @if (!isLoggedIn) {
+          <a routerLink="/auth"
+            class="btn bg-white w-100 text-dark d-flex justify-content-center align-items-center gap-2 px-3 rounded-5 border border-dark">
+            <img src="assets/Images/user-circle.svg" alt="User" width="25" />
+            <span>تسجيل الدخول</span>
+          </a>
+        } @else {
+          <div ngbDropdown class="d-inline-block w-100 text-end mt-2" placement="bottom-start">
+            <button ngbDropdownToggle
+              class="btn fs-3 bg-white w-100 text-dark d-flex justify-content-between align-items-center gap-2 px-3 rounded-5 border border-dark">
+              <img src="assets/Images/user-circle.svg" alt="User" width="20" />
+              <span>مرحباً، {{ client?.name || 'المستخدم' }}</span>
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu-center text-start custom-dropdown w-10">
+              <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3" 
+                 routerLink="/profile" (click)="toggleMobileMenu()">
+                <img src="assets/Images/Frame 9050.svg"> الملف الشخصي
+              </a>
+              <button class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3" 
+                      (click)="logout()">
+                <img src="assets/Images/Frame 9049.svg" (click)="toggleMobileMenu()"> تسجيل الخروج
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+        routerLink="/" (click)="toggleMobileMenu()">الرئيسية</a>
+
+      <!-- المتجر Dropdown (Dynamic from categories array) -->
+      <div class="dropdown-section py-2 border border-1 m-2 rounded-3 p-3">
+        <button class="btn w-100 text-end d-flex justify-content-between align-items-center border-0 bg-transparent"
+          (click)="isStoreOpen = !isStoreOpen">
+          <span class="fw-bold fs-3">المتجر</span>
+          <i [class]="isStoreOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+        </button>
+
+        @if (isStoreOpen) {
+          <div class="ps-2 pe-2 py-2 rounded-3 bg-light mt-2">
+            @for (category of categories; track category.id) {
+              <a class="fs-3 d-block text-end py-1 text-decoration-none text-dark"
+                [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }" (click)="toggleMobileMenu()">
+                {{ category.name_ar }}
+              </a>
+            }
+
+            <a class="d-block text-end text-success fs-3 fw-bold mt-2 text-decoration-none"
+              [routerLink]="['/home/category-products']" (click)="toggleMobileMenu()">
+              عرض الكل
+            </a>
+          </div>
+        }
+      </div>
+
+      <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+        routerLink="/home/blogs" (click)="toggleMobileMenu()">المدونة</a>
+      <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+        routerLink="/home/packages" (click)="toggleMobileMenu()">الأشتراكات</a>
+      <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+        routerLink="/home/sucesStory" (click)="toggleMobileMenu()">قصص نجاح عملائنا</a>
+      <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+        routerLink="/home/blogs" (click)="toggleMobileMenu()">الفحوصات المجانيه</a>
+      <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+        routerLink="/about_us" (click)="toggleMobileMenu()">عن الرشاقة</a>
     </div>
-
-
-    <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/home/blogs" (click)="toggleMobileMenu()">المدونة</a>
-       <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/home/packages" (click)="toggleMobileMenu()">الأشتراكات </a>
-         <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/home/sucesStory" (click)="toggleMobileMenu()"> قصص نجاح عملائنا </a>
-         <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/home/blogs" (click)="toggleMobileMenu()">الفحوصات المجانيه</a>
-    <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/about_us" (click)="toggleMobileMenu()">عن الرشاقة</a>
-
-
-    <!-- <div class="social-links bottom-0 align-items-center">
-          <a href="#"><img src="assets/Images/facebook-01.svg" alt="Facebook" (click)="toggleMobileMenu()"/></a>
-          <a href="#"><img src="assets/Images/instagram.svg" alt="Instagram" (click)="toggleMobileMenu()"></a>
-          <a href="#"><img src="assets/Images/instagram (1).svg" alt="Instagram Alt" (click)="toggleMobileMenu()"/></a>
-          <a href="#"><img src="assets/Images/new-twitter-rectangle.svg" alt="Twitter" (click)="toggleMobileMenu()"
- /></a>
-        </div> -->
-  </div>
-
-
+  }
 </div>

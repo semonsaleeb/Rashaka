@@ -1,94 +1,76 @@
 <!-- ✅ قائمة العناوين -->
 <div class="px-5 mx-5 ">
-  <ng-container *ngIf="!showSteps">
-    <ng-container *ngIf="addressList.length > 0; else noAddress">
+  @if (!showSteps) {
+    @if (addressList.length > 0) {
       <div class="row">
-        <div *ngFor="let address of addressList" class="col-md-4 mb-4">
-          <div class="border border-primary rounded-3 p-3 position-relative">
-
-
-            <!-- شارة "الرئيسي" -->
-            <div class="d-flex justify-content-between align-items-end mb-2" dir="ltr">
-
-              <!-- زر تعديل -->
-              <button class="btn btn-link p-0 me-2" (click)="editAddress(address)">
-                <i class="fas fa-pen text-secondary"></i>
-              </button>
-
-             <button class="btn btn-sm btn-outline-danger me-2" (click)="deleteAddress(address.id)">
-    حذف
-  </button>
-
-              <!-- عنوان -->
-              <span class="fw-bold mx-2">تفاصيل العنوان <input type="checkbox" checked
-                  class="form-check-input ms-2"></span>
-
-
-            </div>
-
-
-            <!-- الاسم -->
-            <div class="mb-2">
-              <p class="text-end text-secondary">الأسم</p>
-              <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
-            </div>
-
-
-
-
-            <!-- العنوان الكامل -->
-            <div class="mb-2">
-              <p class="text-end text-secondary"> العنوان</p>
-
-              <input type="text" class="form-control" [value]="getFullAddress(address)" readonly>
-            </div>
-
-            <div>
-              <!-- رقم الجوال -->
-              <div class="col-md-6 w-100">
-                <p class="text-end text-secondary"> رقم الجوال</p>
-
-                <div class="input-group w-100">
-
-                  <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone"
-                    [readonly]="client.phone && client.phone.trim() !== ''">
-                  <button *ngIf="!client.phone || client.phone.trim() === ''" class="btn btn-outline-success rounded-0"
-                    type="button">
-                    أضف +
-                  </button>
+        @for (address of addressList; track address) {
+          <div class="col-md-4 mb-4">
+            <div class="border border-primary rounded-3 p-3 position-relative">
+              <!-- شارة "الرئيسي" -->
+              <div class="d-flex justify-content-between align-items-end mb-2" dir="ltr">
+                <!-- زر تعديل -->
+                <button class="btn btn-link p-0 me-2" (click)="editAddress(address)">
+                  <i class="fas fa-pen text-secondary"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger me-2" (click)="deleteAddress(address.id)">
+                  حذف
+                </button>
+                <!-- عنوان -->
+                <span class="fw-bold mx-2">تفاصيل العنوان <input type="checkbox" checked
+                class="form-check-input ms-2"></span>
+              </div>
+              <!-- الاسم -->
+              <div class="mb-2">
+                <p class="text-end text-secondary">الأسم</p>
+                <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
+              </div>
+              <!-- العنوان الكامل -->
+              <div class="mb-2">
+                <p class="text-end text-secondary"> العنوان</p>
+                <input type="text" class="form-control" [value]="getFullAddress(address)" readonly>
+              </div>
+              <div>
+                <!-- رقم الجوال -->
+                <div class="col-md-6 w-100">
+                  <p class="text-end text-secondary"> رقم الجوال</p>
+                  <div class="input-group w-100">
+                    <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone"
+                      [readonly]="client.phone && client.phone.trim() !== ''">
+                      @if (!client.phone || client.phone.trim() === '') {
+                        <button class="btn btn-outline-success rounded-0"
+                          type="button">
+                          أضف +
+                        </button>
+                      }
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-
-          </div>
+          }
         </div>
-      </div>
+        <!-- زر إضافة عنوان جديد -->
+        <button class="btn btn-outline-success" (click)="startAddressFlow()">إضافة عنوان جديد</button>
+      } @else {
+        <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
+        <br>
+          <button class="btn btn-success px-4 py-2" (click)="startAddressFlow()">أضف عنوان</button>
+        }
+        <!-- ❌ لا يوجد عنوان -->
+      }
+    </div>
+    <!-- Step 1: اختر من الخريطة -->
+    @if (showSteps && step === 1) {
+      <app-map-step (next)="goToDetails($event)"></app-map-step>
+    }
 
-      <!-- زر إضافة عنوان جديد -->
-      <button class="btn btn-outline-success" (click)="startAddressFlow()">إضافة عنوان جديد</button>
-    </ng-container>
-
-    <!-- ❌ لا يوجد عنوان -->
-    <ng-template #noAddress>
-      <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
-      <br>
-      <button class="btn btn-success px-4 py-2" (click)="startAddressFlow()">أضف عنوان</button>
-    </ng-template>
-  </ng-container>
-</div>
-<!-- Step 1: اختر من الخريطة -->
-<ng-container *ngIf="showSteps && step === 1">
-  <app-map-step (next)="goToDetails($event)"></app-map-step>
-</ng-container>
-
-<!-- Step 2: تفاصيل العنوان -->
-<ng-container *ngIf="showSteps && step === 2">
- <app-details-step
-  *ngIf="client.phone"
-  [initialData]="addressData"
-  [clientPhone]="client.phone"
-  (submit)="submitAddress($event)">
-</app-details-step>
-
-
-</ng-container>
+    <!-- Step 2: تفاصيل العنوان -->
+    @if (showSteps && step === 2) {
+      @if (client.phone) {
+        <app-details-step
+          [initialData]="addressData"
+          [clientPhone]="client.phone"
+          (submit)="submitAddress($event)">
+        </app-details-step>
+      }
+    }

@@ -1,9 +1,9 @@
-import { CommonModule, ViewportScroller } from '@angular/common';
+import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './footer.html',
   styleUrl: './footer.scss'
 })

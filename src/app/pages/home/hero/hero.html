@@ -5,80 +5,92 @@
                 height: 200px;
                 width: 100px;
                 z-index: 1;">
-  <div class="container py-5">
+    <div class="container py-5">
 
-    <div class="row align-items-center">
+      <div class="row align-items-center">
 
-      <!-- Right Content Column -->
-      <div class="col-lg-6 mb-4 mb-lg-0 text-center text-lg-end" style="pading-right: 2.5rem;">
+        <!-- Right Content Column -->
+        <div class="col-lg-6 mb-4 mb-lg-0 text-center text-lg-end" style="pading-right: 2.5rem;">
 
-        <h1 class="hero-title mb-5 ">
-          <div class="highlight-wrapper">
+          <h1 class="hero-title mb-5 ">
+            <div class="highlight-wrapper">
 
-            <span class="highlight">رشاقتك هدفنا ..</span> وصحتك أولويتنا
-          </div>
-        </h1>
-        <p class="hero-description ">بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا</p>
-        <p class="hero-subtitle mb-5">اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك</p>
-        <!-- featur -->
-        <div class="d-flex flex-wrap justify-content-end text-end  my-4 m-2 mb-5">
-          <div class="gradient-border rounded-4">
-            <div class="feature-item d-flex align-items-center gap-2 ">
-              <img src="assets/Images/checkmark-square-02.svg" width="18" height="18"> فحص مجاني
+              <span class="highlight">رشاقتك هدفنا ..</span> وصحتك أولويتنا
             </div>
-          </div>
+          </h1>
+          <p class="hero-description ">بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا</p>
+          <p class="hero-subtitle mb-5">اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك</p>
+          <!-- features -->
+          <div class="d-flex flex-nowrap justify-content-start text-end my-4 mb-5 features-container"
+            style="direction: rtl; overflow-x: auto;">
 
-          <div class="gradient-border rounded-4">
-            <div class="feature-item d-flex align-items-center gap-2 ">
-              <img src="assets/Images/checkmark-square-02.svg" width="18" height="18"> متابعة السروعية
-            </div>
-          </div>
-
-          <div class="gradient-border rounded-4">
-            <div class="feature-item d-flex align-items-center gap-2 ">
-              <img src="assets/Images/checkmark-square-02.svg" width="18" height="18"> ملتجات صحية
-            </div>
-          </div>
-        </div>
-
-        <!-- CTA Button -->
-        <button class="btn btn-success cta-button " (click)="onGetStarted()">
-          <span class=" arrow-icon">
-            <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
-          </span>
-          احجز الآن
-
-        </button>
-      </div>
-
-      <!-- Left Slider Column -->
-      <div class="col-lg-6 text-center ">
-        <div class="slider-container mx-auto">
-          <div class="slider-wrapper">
-            <div class="slides d-flex" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
-              <div class="slide" *ngFor="let image of sliderImages">
-                <img [src]="image.src" [alt]="image.alt" class="slide-image">
+            <div class="gradient-border rounded-4">
+              <div class="feature-item d-flex align-items-center gap-2">
+                <img src="assets/Images/checkmark-square-02.svg"> فحص مجاني
               </div>
             </div>
+
+            <div class="gradient-border rounded-4">
+              <div class="feature-item d-flex align-items-center gap-2">
+                <img src="assets/Images/checkmark-square-02.svg"> متابعة أسبوعية
+              </div>
+            </div>
+
+            <div class="gradient-border rounded-4">
+              <div class="feature-item d-flex align-items-center gap-2">
+                <img src="assets/Images/checkmark-square-02.svg"> ملتجات صحية
+              </div>
+            </div>
+
           </div>
 
-          <!-- Slider Dots -->
-          <div class="slider-dots mt-3">
-            <span class="dot" [class.active]="i === currentSlide" *ngFor="let image of sliderImages; let i = index"
-              (click)="goToSlide(i)">
+
+
+          <!-- CTA Button desktop -->
+          <button class="btn btn-success cta-button d-none d-md-inline-block" (click)="onGetStarted()">
+            <span class="arrow-icon">
+              <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
             </span>
-          </div>
+            احجز الآن
+          </button>
         </div>
+
+        <!-- Left Slider Column -->
+        <div class="col-lg-6 text-center ">
+          <div class="slider-container mx-auto">
+            <div class="slider-wrapper">
+              <div class="slides d-flex" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
+                @for (image of sliderImages; track image) {
+                  <div class="slide">
+                    <img [src]="image.src" [alt]="image.alt" class="slide-image">
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Slider Dots -->
+            <div class="slider-dots mt-3">
+              @for (image of sliderImages; track image; let i = $index) {
+                <span class="dot" [class.active]="i === currentSlide"
+                  (click)="goToSlide(i)">
+                </span>
+              }
+            </div>
+
+          </div>
+          <!-- CTA Button mobile -->
+          <button class="btn btn-success cta-button d-inline-block d-md-none" (click)="onGetStarted()">
+            <span class="arrow-icon">
+              <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
+            </span>
+            احجز الآن
+          </button>
+        </div>
+
       </div>
 
-    </div>
-  </div>
 
-</section>
-<img src="assets/Images/pattern.svg" style="position: absolute;
-            right: 0;
-           bottom: -110px;      
-           height: 180px;
-            width: 100px;
-            z-index: 1;
-            transform: rotate(180deg);">
+    </div>
+
+  </section>
+  <img src="assets/Images/pattern.svg"  class="pattern-img">

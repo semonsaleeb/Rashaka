@@ -5,7 +5,7 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import * as L from 'leaflet';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AddressData } from '../../../../../models/address.model';
@@ -17,7 +17,7 @@ import 'leaflet/dist/images/marker-shadow.png';
 @Component({
   selector: 'app-map-step',
   standalone: true,
-  imports: [FormsModule, CommonModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule],
   templateUrl: './map-step.html',
   styleUrls: ['./map-step.scss']
 })

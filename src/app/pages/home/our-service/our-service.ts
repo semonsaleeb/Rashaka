@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-our-service',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './our-service.html',
   styleUrl: './our-service.scss'
 })

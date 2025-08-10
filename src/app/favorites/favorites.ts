@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { HttpClientModule, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ProductService } from '../services/product';
 import { AuthService } from '../services/auth.service';
@@ -15,7 +15,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Downloadapp],
+  imports: [HttpClientModule, RouterModule, FormsModule, Downloadapp],
   templateUrl: './favorites.html',
   styleUrl: './favorites.scss'
 })

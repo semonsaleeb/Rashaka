@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf, NgFor } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -15,13 +15,10 @@ import { environment } from '../../environments/environment';
   selector: 'app-product-card',
   standalone: true,
   imports: [
-    CommonModule,
     HttpClientModule,
     FormsModule,
-    RouterModule,
-    NgIf,
-    NgFor
-  ],
+    RouterModule
+],
   templateUrl: './product-card.html',
   styleUrls: ['./product-card.scss']
 })

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-forget-password',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './forgot-password.html',
   styleUrls: ['./forgot-password.scss']
 })

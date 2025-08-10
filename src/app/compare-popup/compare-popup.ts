@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-compare-popup',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [HttpClientModule],
   templateUrl: './compare-popup.html',
   styleUrls: ['./compare-popup.scss']
 })

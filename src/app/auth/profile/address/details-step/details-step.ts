@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AddressData } from '../../../../../models/address.model';
 
 @Component({
   selector: 'app-details-step',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule],
   templateUrl: './details-step.html',
   styleUrls: ['./details-step.scss']
 })

@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { Branches } from '../home/branches/branches';
 import { SucesStory } from '../home/suces-story/suces-story';
 
 @Component({
   selector: 'app-about-us',
-  imports: [CommonModule, Branches, SucesStory],
+  imports: [Branches, SucesStory],
   templateUrl: './about-us.html',
   styleUrl: './about-us.scss'
 })

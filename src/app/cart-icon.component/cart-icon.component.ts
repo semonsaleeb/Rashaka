@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CartStateService } from '../services/cart-state-service';
 import { CartService } from '../services/cart.service';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-cart-icon.component',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './cart-icon.component.html',
   styleUrl: './cart-icon.component.scss'
 })

@@ -5,21 +5,23 @@
                 width: 100px;
                 z-index: 1;
                  opacity: 5;     ">
-<div class="stats-container container bg-white rounded-3 py-5 px-md-5 px-3 text-center">
+  <div class="stats-container container bg-white rounded-3 py-5 px-md-5 px-3 text-center">
 
-  <div class="row g-4">
-    <div class="col-12 col-sm-6 col-md-3 position-relative" *ngFor="let stat of stats; let i = index"
-      [class.no-divider]="i === stats.length - 1">
-
-      <div class="fs-2 fw-bold text-dark" #statNumber>0</div>
-      <div class="fs-6 text-black fw-medium">
-        <h3>{{ stat.label }}</h3>
-      </div>
-
-      <!-- Divider: hidden on mobile -->
-      <div *ngIf="i < stats.length - 1" class="position-absolute top-50 end-0 translate-middle-y d-none d-md-block"
-        style="width: 1px; height: 60px; background-color: #000000;">
-      </div>
+    <div class="row g-4">
+      @for (stat of stats; track stat; let i = $index) {
+        <div class="col-12 col-sm-6 col-md-3 position-relative"
+          [class.no-divider]="i === stats.length - 1">
+          <div class="fs-2 fw-bold text-dark" #statNumber>0</div>
+          <div class="fs-6 text-black fw-medium">
+            <h3>{{ stat.label }}</h3>
+          </div>
+          <!-- Divider: hidden on mobile -->
+          @if (i < stats.length - 1) {
+            <div class="position-absolute top-50 end-0 translate-middle-y d-none d-md-block"
+              style="width: 1px; height: 60px; background-color: #000000;">
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
-</div>

@@ -1,51 +1,48 @@
 <!-- ===========================
-     Carousel: Plans Style
+Carousel: Plans Style
 =========================== -->
-<div *ngIf="mode === 'carousel'" class="pricing-container w-100 py-5 px-5">
-  <div class="header text-end">
-    <h2 class="title px-3">الباقات</h2>
-    <div class="toggle-container d-flex justify-content-end align-items-end gap-2 my-4 ms-auto" style="width: 26%;"
-      dir="rtl">
-      <button class="toggle-btn" [class.active]="selectedPlan === 'session'" (click)="changePlanType('session')">الأجهزة
+@if (mode === 'carousel') {
+  <div class="pricing-container w-100 py-5 px-5">
+    <div class="header text-end">
+      <h2 class="title px-3">الباقات</h2>
+      <div class="toggle-container d-flex justify-content-end align-items-end gap-2 my-4 ms-auto" style="width: 26%;"
+        dir="rtl">
+        <button class="toggle-btn" [class.active]="selectedPlan === 'session'" (click)="changePlanType('session')">الأجهزة
         و الجلسات</button>
-      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'"
+        <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'"
         (click)="changePlanType('nutrition')">النظام الغذائي</button>
+      </div>
     </div>
-  </div>
-
-  <!-- Carousel Wrapper -->
-  <div class="carousel-wrapper position-relative overflow-hidden px-5">
-
-    <!-- Carousel Track -->
-    <div class="d-flex transition-transform carousel-track justify-content-end"
-      [ngStyle]="{ transform: 'translateX(-' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
-
-      <div class="carousel-slide p-3" dir="rtl" *ngFor="let plan of plans"
-        style="flex: 0 0 calc(100% / 3); max-width: calc(100% / 3);">
-
-        <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
-          [ngClass]="plan.styleType + '-card'">
-          <!-- Card Top -->
-          <div class="card-top position-relative p-3">
-            <div class="ribbon-top-left fs-6"
-              [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">{{ plan.title }}</div>
-            <img src="assets/Images/Group 9010.svg" alt="Frame"
-              style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
-            <div class="plan-info mt-5 text-end">
-              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
-              <div class="sessions fw-bold my-2"
-                [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
-                [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
-                {{ plan.sessions }} جلسة
-              </div>
-              <div class="price fw-bold" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
-                السعر {{ plan.price }} ر.س
-              </div>
-            </div>
-          </div>
-
-          <!-- Card Bottom -->
-          <div class="card-bottom text-end px-3 pb-4">
+    <!-- Carousel Wrapper -->
+    <div class="carousel-wrapper position-relative overflow-hidden px-5">
+      <!-- Carousel Track -->
+      <div class="d-flex transition-transform carousel-track justify-content-end"
+        [ngStyle]="{ transform: 'translateX(-' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
+        @for (plan of plans; track plan) {
+          <div class="carousel-slide p-3" dir="rtl"
+            style="flex: 0 0 calc(100% / 3); max-width: calc(100% / 3);">
+            <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
+              [ngClass]="plan.styleType + '-card'">
+              <!-- Card Top -->
+              <div class="card-top position-relative p-3">
+                <div class="ribbon-top-left fs-6"
+                [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">{{ plan.title }}</div>
+                <img src="assets/Images/Group 9010.svg" alt="Frame"
+                  style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
+                  <div class="plan-info mt-5 text-end">
+                    <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
+                    <div class="sessions fw-bold my-2"
+                      [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
+                      [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
+                      {{ plan.sessions }} جلسة
+                    </div>
+                    <div class="price fw-bold" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+                      السعر {{ plan.price }} ر.س
+                    </div>
+                  </div>
+                </div>
+                <!-- Card Bottom -->
+                <div class="card-bottom text-end px-3 pb-4">
             <div class="available-places" [ngStyle]="{
               'background-color': plan.cities ? '#E3E3E3' : '#B4EB52',
               'color': '#333',
@@ -55,111 +52,106 @@
               'border-radius': '0',
               'font-size': '14px'
             }">
-              {{ plan.cities }}
+                    {{ plan.cities }}
+                  </div>
+                  <div class="feature mt-4 mb-3">
+                    @for (feature of isExpanded(plan.id) ? plan.features : plan.features.slice(0, 3); track feature) {
+                      <span class="feature-label fs-6 d-block mb-1"
+                        >
+                        <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
+                      </span>
+                    }
+                    <!-- Read More/Less Button -->
+                    @if (plan.features.length > 3) {
+                      <button class="btn btn-link p-0 mt-2 text-decoration-underline"
+                        (click)="toggleExpand(plan.id)">
+                        {{ isExpanded(plan.id) ? 'عرض أقل' : 'عرض المزيد' }}
+                      </button>
+                    }
+                  </div>
+                  <button class="subscribe-btn w-100 rounded-3 py-2" (click)="subscribe(plan.id)"
+                    [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
+                    [style.color]="plan.styleType === 'basic' ? '#000' : '#000'"
+                    [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
+                    اشتراك
+                  </button>
+                </div>
+              </div>
             </div>
-
-            <div class="feature mt-4 mb-3">
-              <span class="feature-label fs-6 d-block mb-1"
-                *ngFor="let feature of isExpanded(plan.id) ? plan.features : plan.features.slice(0, 3)">
-                <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
-              </span>
-
-              <!-- Read More/Less Button -->
-              <button class="btn btn-link p-0 mt-2 text-decoration-underline" *ngIf="plan.features.length > 3"
-                (click)="toggleExpand(plan.id)">
-                {{ isExpanded(plan.id) ? 'عرض أقل' : 'عرض المزيد' }}
+          }
+        </div>
+        <!-- Navigation -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center  mt-4 py-3">
+          <div class="d-flex gap-2 px-4">
+            <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= plans.length - visibleCards "></button>
+            <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0" ></button>
+          </div>
+          <!-- Dots -->
+          <div class="d-flex gap-2 px-4">
+            @for (i of getDotsArray(); track i) {
+              <button (click)="goToSlide(i)" class="rounded-circle"
+                [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
+                style="width: 10px; height: 10px; border: none;">
               </button>
-            </div>
-
-
-            <button class="subscribe-btn w-100 rounded-3 py-2" (click)="subscribe(plan.id)"
-              [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
-              [style.color]="plan.styleType === 'basic' ? '#000' : '#000'"
-              [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
-              اشتراك
-            </button>
+            }
           </div>
         </div>
-
       </div>
     </div>
-
-   <!-- Navigation -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center  mt-4 py-3">
-    <div class="d-flex gap-2 px-4">
-      <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= plans.length - visibleCards "></button>
-      <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0" ></button>
-    </div>
-
-    <!-- Dots -->
-    <div class="d-flex gap-2 px-4">
-      <button *ngFor="let i of getDotsArray()" (click)="goToSlide(i)" class="rounded-circle"
-        [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
-        style="width: 10px; height: 10px; border: none;">
-      </button>
-    </div>
-  </div>
-   
-  </div>
-</div>
+  }
 
 
 
 
-<!-- ===========================
-     Grid Mode
-=========================== -->
-<div *ngIf="mode === 'grid'" class="pricing-container w-100 py-5" >
-
-  <!-- Header -->
-  <div class="header text-center">
-    <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
-    <h2 class="title px-3">الاشتراكات</h2>
-    <p>اختر الباقة التي تناسب احتياجاتك وابدأ الآن بسهولة.</p>
-
-<div class="toggle-container d-flex justify-content-center gap-2 my-4 w-25 mx-auto">
-      <button class="toggle-btn" [class.active]="selectedPlan === 'session'" (click)="changePlanType('session')">
-        الاجهزة و الجلسات
-      </button>
-      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
-        النظام الغذائي
-      </button>
-    </div>
-  </div>
-
- <!-- Carousel Wrapper -->
-  <div class="carousel-wrapper position-relative overflow-hidden px-5">
-
-    <!-- Carousel Track -->
-    <div class="d-flex transition-transform carousel-track justify-content-end"
-      [ngStyle]="{ transform: 'translateX(-' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
-
-      <div class="carousel-slide p-3" dir="rtl" *ngFor="let plan of plans"
-        style="flex: 0 0 calc(100% / 3); max-width: calc(100% / 3);">
-
-        <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
-          [ngClass]="plan.styleType + '-card'">
-          <!-- Card Top -->
-          <div class="card-top position-relative p-3">
-            <div class="ribbon-top-left fs-6"
-              [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">{{ plan.title }}</div>
-            <img src="assets/Images/Group 9010.svg" alt="Frame"
-              style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
-            <div class="plan-info mt-5 text-end">
-              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
-              <div class="sessions fw-bold my-2"
-                [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
-                [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
-                {{ plan.sessions }} جلسة
-              </div>
-              <div class="price fw-bold" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
-                السعر {{ plan.price }} ر.س
-              </div>
-            </div>
-          </div>
-
-          <!-- Card Bottom -->
-          <div class="card-bottom text-end px-3 pb-4">
+  <!-- ===========================
+  Grid Mode
+  =========================== -->
+  @if (mode === 'grid') {
+    <div class="pricing-container w-100 py-5" >
+      <!-- Header -->
+      <div class="header text-center">
+        <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
+        <h2 class="title px-3">الاشتراكات</h2>
+        <p>اختر الباقة التي تناسب احتياجاتك وابدأ الآن بسهولة.</p>
+        <div class="toggle-container d-flex justify-content-center gap-2 my-4 w-25 mx-auto">
+          <button class="toggle-btn" [class.active]="selectedPlan === 'session'" (click)="changePlanType('session')">
+            الاجهزة و الجلسات
+          </button>
+          <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+            النظام الغذائي
+          </button>
+        </div>
+      </div>
+      <!-- Carousel Wrapper -->
+      <div class="carousel-wrapper position-relative overflow-hidden px-5">
+        <!-- Carousel Track -->
+        <div class="d-flex transition-transform carousel-track justify-content-end"
+          [ngStyle]="{ transform: 'translateX(-' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
+          @for (plan of plans; track plan) {
+            <div class="carousel-slide p-3" dir="rtl"
+              style="flex: 0 0 calc(100% / 3); max-width: calc(100% / 3);">
+              <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
+                [ngClass]="plan.styleType + '-card'">
+                <!-- Card Top -->
+                <div class="card-top position-relative p-3">
+                  <div class="ribbon-top-left fs-6"
+                  [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">{{ plan.title }}</div>
+                  <img src="assets/Images/Group 9010.svg" alt="Frame"
+                    style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
+                    <div class="plan-info mt-5 text-end">
+                      <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
+                      <div class="sessions fw-bold my-2"
+                        [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
+                        [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
+                        {{ plan.sessions }} جلسة
+                      </div>
+                      <div class="price fw-bold" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+                        السعر {{ plan.price }} ر.س
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Card Bottom -->
+                  <div class="card-bottom text-end px-3 pb-4">
             <div class="available-places" [ngStyle]="{
               'background-color': plan.cities ? '#E3E3E3' : '#B4EB52',
               'color': '#333',
@@ -169,53 +161,52 @@
               'border-radius': '0',
               'font-size': '14px'
             }">
-              {{ plan.cities }}
+                      {{ plan.cities }}
+                    </div>
+                    <div class="feature mt-4 mb-3">
+                      @for (feature of isExpanded(plan.id) ? plan.features : plan.features.slice(0, 3); track feature) {
+                        <span class="feature-label fs-6 d-block mb-1"
+                          >
+                          <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
+                        </span>
+                      }
+                      <!-- Read More/Less Button -->
+                      @if (plan.features.length > 3) {
+                        <button class="btn btn-link p-0 mt-2 text-decoration-underline"
+                          (click)="toggleExpand(plan.id)">
+                          {{ isExpanded(plan.id) ? 'عرض أقل' : 'عرض المزيد' }}
+                        </button>
+                      }
+                    </div>
+                    <button class="subscribe-btn w-100 rounded-3 py-2" (click)="subscribe(plan.id)"
+                      [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
+                      [style.color]="plan.styleType === 'basic' ? '#000' : '#000'"
+                      [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
+                      اشتراك
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <!-- Navigation -->
+          <div class="d-flex flex-wrap justify-content-between align-items-center  mt-4 py-3">
+            <div class="d-flex gap-2 px-4">
+              <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= plans.length - visibleCards "></button>
+              <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0" ></button>
             </div>
-
-            <div class="feature mt-4 mb-3">
-              <span class="feature-label fs-6 d-block mb-1"
-                *ngFor="let feature of isExpanded(plan.id) ? plan.features : plan.features.slice(0, 3)">
-                <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
-              </span>
-
-              <!-- Read More/Less Button -->
-              <button class="btn btn-link p-0 mt-2 text-decoration-underline" *ngIf="plan.features.length > 3"
-                (click)="toggleExpand(plan.id)">
-                {{ isExpanded(plan.id) ? 'عرض أقل' : 'عرض المزيد' }}
-              </button>
+            <!-- Dots -->
+            <div class="d-flex gap-2 px-4">
+              @for (i of getDotsArray(); track i) {
+                <button (click)="goToSlide(i)" class="rounded-circle"
+                  [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
+                  style="width: 10px; height: 10px; border: none;">
+                </button>
+              }
             </div>
-
-
-            <button class="subscribe-btn w-100 rounded-3 py-2" (click)="subscribe(plan.id)"
-              [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
-              [style.color]="plan.styleType === 'basic' ? '#000' : '#000'"
-              [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
-              اشتراك
-            </button>
           </div>
         </div>
-
+        <!-- Optional extra sections -->
+        <app-suces-story ></app-suces-story>
       </div>
-    </div>
-
-   <!-- Navigation -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center  mt-4 py-3">
-    <div class="d-flex gap-2 px-4">
-      <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= plans.length - visibleCards "></button>
-      <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0" ></button>
-    </div>
-
-    <!-- Dots -->
-    <div class="d-flex gap-2 px-4">
-      <button *ngFor="let i of getDotsArray()" (click)="goToSlide(i)" class="rounded-circle"
-        [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
-        style="width: 10px; height: 10px; border: none;">
-      </button>
-    </div>
-  </div>
-   
-  </div>
-
-  <!-- Optional extra sections -->
-  <app-suces-story ></app-suces-story>
-</div>
+    }

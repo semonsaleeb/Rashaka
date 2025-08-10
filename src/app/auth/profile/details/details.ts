@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
 import { Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './details.html',
   styleUrls: ['./details.scss']
 })

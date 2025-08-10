@@ -6,28 +6,26 @@
   <div class="row g-4">
 
     <!-- Reusable Card -->
-    <div class="col-md-4" *ngFor="let card of cards">
-      <div class="card  border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative"
-        style=" z-index: 2;">
-        <!-- Frame image -->
-        <img src="assets/Images/Frame 37.svg" alt="Frame"
-          style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);">
-
-        <!-- Main Icon -->
-        <img [src]="card.icon" class="card-img-top mx-auto mt-3" style="width: 60px;" [alt]="card.title">
-
-        <div class="card-body">
-          <h5 class="card-title fw-bold">{{ card.title }}</h5>
-          <p class="card-text">{{ card.description }}</p>
-
-          <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" (click)="onGetStarted()">
-        احجز الآن
-        <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
-</button>
-
+    @for (card of cards; track card) {
+      <div class="col-md-4">
+        <div class="card  border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative"
+          style=" z-index: 2;">
+          <!-- Frame image -->
+          <img src="assets/Images/Frame 37.svg" alt="Frame"
+            style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);">
+            <!-- Main Icon -->
+            <img [src]="card.icon" class="card-img-top mx-auto mt-3" style="width: 60px;" [alt]="card.title">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">{{ card.title }}</h5>
+              <p class="card-text">{{ card.description }}</p>
+              <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" (click)="onGetStarted()">
+                احجز الآن
+                <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      }
 
+    </div>
   </div>
-</div>

@@ -1,13 +1,18 @@
-<div *ngIf="isLoading" class="text-center p-5">جارٍ التحميل...</div>
+@if (isLoading) {
+  <div class="text-center p-5">جارٍ التحميل...</div>
+}
 
-<div *ngIf="errorMessage" class="alert alert-danger text-center">
-  {{ errorMessage }}
-</div>
+@if (errorMessage) {
+  <div class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+}
 
-<div *ngIf="blog" class="container py-5" dir="rtl">
+@if (blog) {
+  <div class="container py-5" dir="rtl">
     <p class="text-muted">{{ blog!.created_at }} - {{ blog!.author }}</p>
-
-  <img [src]="blog!.image" class="img-fluid mb-4 rounded" width="100%" alt="Blog Image">
-  <h1 class="mb-3">{{ blog!.title_ar }}</h1>
-<div [innerHTML]="blogHtml" class="blog-content" dir="rtl"></div>
-</div>
+    <img [src]="blog!.image" class="img-fluid mb-4 rounded" width="100%" alt="Blog Image">
+    <h1 class="mb-3">{{ blog!.title_ar }}</h1>
+    <div [innerHTML]="blogHtml" class="blog-content" dir="rtl"></div>
+  </div>
+}

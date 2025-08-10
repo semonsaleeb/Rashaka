@@ -3,108 +3,102 @@
   <div class="alert alert-light text-center   p-2 mb-4 ">
     <h4 class="text-center">
       <img src="assets/Images/Frame 9033.svg"> <span class="mx-3"> عربة التسوق </span><span
-        class="badge bg-success rounded-pill">{{ totalCartItemsCount }}</span>
+    class="badge bg-success rounded-pill">{{ totalCartItemsCount }}</span>
 
 
-    </h4>
+  </h4>
 
-  </div>
+</div>
 
-  <div class="row">
-    <!-- Right Side: Cart Items -->
-    <div class="col-6 ">
-      <h4 class="mb-4 text-end mb-3">
-        <img src="assets/Images/delivery.svg" class="my-3"><span> شحن مجاني للطلبات أكثر من </span> <strong>1000
-          ريال</strong>
-        <div class="progress border border-c" style="height: 8px; height: 12px; ">
-          <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
-            style="background-color: #2EA2CC;">
-          </div>
+<div class="row">
+  <!-- Right Side: Cart Items -->
+  <div class="col-6 ">
+    <h4 class="mb-4 text-end mb-3">
+      <img src="assets/Images/delivery.svg" class="my-3"><span> شحن مجاني للطلبات أكثر من </span> <strong>1000
+    ريال</strong>
+    <div class="progress border border-c" style="height: 8px; height: 12px; ">
+      <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
+        style="background-color: #2EA2CC;">
+      </div>
+    </div>
+
+  </h4>
+
+  @for (item of cartItems; track item) {
+    <div class=" card mb-3 shadow-sm border-1 rounded-4 py-3"
+      style="background-color: #FAFAFA;">
+      <div class="row g-0 align-items-center">
+        <div class="col-md-2 text-center p-2">
+          <img [src]="item.images[0]" class="img-fluid rounded-3" style="max-height: 90px;">
         </div>
-
-      </h4>
-
-      <div *ngFor="let item of cartItems" class=" card mb-3 shadow-sm border-1 rounded-4 py-3"
-        style="background-color: #FAFAFA;">
-        <div class="row g-0 align-items-center">
-          <div class="col-md-2 text-center p-2">
-            <img [src]="item.images[0]" class="img-fluid rounded-3" style="max-height: 90px;">
-          </div>
-
-          <div class="col-md-6">
-            <div class="card-body text-end">
-              <h3 class="card-title mb-2 fw-bold">{{ item.product_name }}</h3>
-              <div>
-                <ng-container *ngIf="item.sale_unit_price; else noSale">
-                  <span class="fw-bold text-success ms-2 mb-2">{{ item.sale_unit_price }} ر.س</span>
-                  <br>
-                  <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
-                </ng-container>
-                <ng-template #noSale>
-                  <span class="fw-bold">{{ item.unit_price }} ر.س</span>
-                </ng-template>
+        <div class="col-md-6">
+          <div class="card-body text-end">
+            <h3 class="card-title mb-2 fw-bold">{{ item.product_name }}</h3>
+            <div>
+              @if (item.sale_unit_price) {
+                <span class="fw-bold text-success ms-2 mb-2">{{ item.sale_unit_price }} ر.س</span>
                 <br>
-                <button class="btn btn-outline-secondary btn-sm ms-3" (click)="removeItem(item.product_id)"> <i
-                    class="fa-solid fa-trash"></i> &nbsp; إزلة </button>
-                <!-- <button class="btn btn-outline-secondary btn-sm ms-3" (click)="removeItem(item.product_id)">  <img src="assets/Images/Frame 9036.svg">  &nbsp; إزلة </button> -->
-
+                  <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
+                } @else {
+                  <span class="fw-bold">{{ item.unit_price }} ر.س</span>
+                }
+                <br>
+                  <button class="btn btn-outline-secondary btn-sm ms-3" (click)="removeItem(item.product_id)"> <i
+                  class="fa-solid fa-trash"></i> &nbsp; إزلة </button>
+                  <!-- <button class="btn btn-outline-secondary btn-sm ms-3" (click)="removeItem(item.product_id)">  <img src="assets/Images/Frame 9036.svg">  &nbsp; إزلة </button> -->
+                </div>
               </div>
             </div>
-          </div>
-
-          <div class="col-md-3 text-center">
-            <div class="d-flex align-items-center gap-2">
-              <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)"><i class="fa-solid fa-minus"></i></button>
-              <span class="mx-4">{{ item.quantity }}</span>
-              <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)"> <i class="fa-solid fa-plus"></i>
-</button>
+            <div class="col-md-3 text-center">
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)"><i class="fa-solid fa-minus"></i></button>
+                <span class="mx-4">{{ item.quantity }}</span>
+                <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)"> <i class="fa-solid fa-plus"></i>
+              </button>
             </div>
-
           </div>
-
-
         </div>
-        
       </div>
-          <div  class=" card    rounded-4 ">
-    <img src="assets/Images/Frame 1000006182.svg" >
+    }
+    <div  class=" card    rounded-4 ">
+      <img src="assets/Images/Frame 1000006182.svg" >
     </div>
 
-    </div>
+  </div>
 
-    <!-- Left Side: Order Summary -->
-    <div class="col-5 p-5 text-center justify-content-center">
-      <div class="card shadow-sm border-1 rounded-4 p-5" style="background-color: #FAFAFA;">
-        <h5 class="text-end mb-3">ملخص الطلب</h5>
+  <!-- Left Side: Order Summary -->
+  <div class="col-5 p-5 text-center justify-content-center">
+    <div class="card shadow-sm border-1 rounded-4 p-5" style="background-color: #FAFAFA;">
+      <h5 class="text-end mb-3">ملخص الطلب</h5>
 
-        <!-- Promo Code -->
-        <div class="input-group mb-3">
-          <input type="text" class="form-control text-end rounded-0" placeholder="ادخل الكود" [(ngModel)]="promoCode">
-<button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">تطبيق</button>
+      <!-- Promo Code -->
+      <div class="input-group mb-3">
+        <input type="text" class="form-control text-end rounded-0" placeholder="ادخل الكود" [(ngModel)]="promoCode">
+        <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">تطبيق</button>
 
-        </div>
-
-        <ul class="mb-3 text-end p-0">
-          <li class="d-flex justify-content-between py-2">
-            <span>المجموع</span>
-            <span>{{ totalPrice | number: '1.2-2' }} ر.س</span>
-          </li>
-          <li class="d-flex justify-content-between py-2">
-            <span>رسوم شحن</span>
-            <span>30.00 ر.س</span>
-          </li>
-          <li class="d-flex justify-content-between fw-bold pt-3 border-top my-5">
-            <span>الإجمالي</span>
-            <span>{{ (totalSalePrice || totalPrice) + 30 | number: '1.2-2' }} ر.س</span>
-          </li>
-
-        </ul>
-
-
-<button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">إتمام الطلب</button>
       </div>
+
+      <ul class="mb-3 text-end p-0">
+        <li class="d-flex justify-content-between py-2">
+          <span>المجموع</span>
+          <span>{{ totalPrice | number: '1.2-2' }} ر.س</span>
+        </li>
+        <li class="d-flex justify-content-between py-2">
+          <span>رسوم شحن</span>
+          <span>30.00 ر.س</span>
+        </li>
+        <li class="d-flex justify-content-between fw-bold pt-3 border-top my-5">
+          <span>الإجمالي</span>
+          <span>{{ (totalSalePrice || totalPrice) + 30 | number: '1.2-2' }} ر.س</span>
+        </li>
+
+      </ul>
+
+
+      <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">إتمام الطلب</button>
     </div>
   </div>
+</div>
 
 
 </div>

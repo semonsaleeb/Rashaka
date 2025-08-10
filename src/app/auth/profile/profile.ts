@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { RouterModule } from '@angular/router';
@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule],
+  imports: [HttpClientModule, RouterModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss']
 })

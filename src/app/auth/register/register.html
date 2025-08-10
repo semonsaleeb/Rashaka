@@ -1,106 +1,120 @@
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-4" dir="rtl">
   <div class="mb-3">
     <label class="form-label">الأسم:</label>
-    <input type="text" 
-           formControlName="name" 
-           class="form-control"
-           [class.is-invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
-    <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="invalid-feedback">
-      يرجى إدخال الاسم الكامل
+    <input type="text"
+      formControlName="name"
+      class="form-control"
+      [class.is-invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+      @if (registerForm.get('name')?.invalid && registerForm.get('name')?.touched) {
+        <div class="invalid-feedback">
+          يرجى إدخال الاسم الكامل
+        </div>
+      }
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label class="form-label">البريد الإلكتروني:</label>
-    <input type="email" 
-           formControlName="email" 
-           class="form-control"
-           [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-    <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="invalid-feedback">
-      يرجى إدخال بريد إلكتروني صحيح
-    </div>
-  </div>
+    <div class="mb-3">
+      <label class="form-label">البريد الإلكتروني:</label>
+      <input type="email"
+        formControlName="email"
+        class="form-control"
+        [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+        @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+          <div class="invalid-feedback">
+            يرجى إدخال بريد إلكتروني صحيح
+          </div>
+        }
+      </div>
 
-  <div class="mb-3">
-    <label class="form-label">رقم الهاتف:</label>
-    <input type="tel" 
-           formControlName="phone" 
-           class="form-control"
-           [class.is-invalid]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
-    <div *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched" class="invalid-feedback">
-      يرجى إدخال رقم هاتف صحيح
-    </div>
-  </div>
+      <div class="mb-3">
+        <label class="form-label">رقم الهاتف:</label>
+        <input type="tel"
+          formControlName="phone"
+          class="form-control"
+          [class.is-invalid]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+          @if (registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
+            <div class="invalid-feedback">
+              يرجى إدخال رقم هاتف صحيح
+            </div>
+          }
+        </div>
 
- <!-- كلمة المرور -->
-<div class="mb-3">
-  <label class="form-label">كلمة المرور:</label>
-  <div class="position-relative" dir="rtl">
-    <input 
-      [type]="showPassword ? 'text' : 'password'" 
-      formControlName="password" 
-      class="form-control ps-5"
-      [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-      placeholder="كلمة المرور">
+        <!-- كلمة المرور -->
+        <div class="mb-3">
+          <label class="form-label">كلمة المرور:</label>
+          <div class="position-relative" dir="rtl">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="form-control ps-5"
+              [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+              placeholder="كلمة المرور">
 
-    <span 
-      class="position-absolute top-50 start-0 translate-middle-y ps-3"
-      style="cursor: pointer;"
-      (click)="togglePasswordVisibility()">
-      <i class="fas" 
-         [class.fa-eye]="showPassword" 
-         [class.fa-eye-slash]="!showPassword">
-      </i>
-    </span>
-  </div>
+              <span
+                class="position-absolute top-50 start-0 translate-middle-y ps-3"
+                style="cursor: pointer;"
+                (click)="togglePasswordVisibility()">
+                <i class="fas"
+                  [class.fa-eye]="showPassword"
+                  [class.fa-eye-slash]="!showPassword">
+                </i>
+              </span>
+            </div>
 
-  <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="invalid-feedback text-end d-block">
-    كلمة المرور يجب أن تكون على الأقل 6 أحرف
-  </div>
-</div>
+            @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+              <div class="invalid-feedback text-end d-block">
+                كلمة المرور يجب أن تكون على الأقل 6 أحرف
+              </div>
+            }
+          </div>
 
-<!-- تأكيد كلمة المرور -->
-<div class="mb-4">
-  <label class="form-label">تأكيد كلمة المرور:</label>
-  <div class="position-relative" dir="rtl">
-    <!-- تأكيد كلمة المرور -->
-<input 
-  [type]="showConfirmPassword ? 'text' : 'password'" 
-  formControlName="password_confirmation" 
-  class="form-control ps-5"
-  [class.is-invalid]="registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched"
-  placeholder="تأكيد كلمة المرور">
-
-
-    <span 
-      class="position-absolute top-50 start-0 translate-middle-y ps-3"
-      style="cursor: pointer;"
-      (click)="toggleConfirmPasswordVisibility()">
-      <i class="fas" 
-         [class.fa-eye]="showConfirmPassword" 
-         [class.fa-eye-slash]="!showConfirmPassword">
-      </i>
-    </span>
-  </div>
-
- <div *ngIf="registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched" class="invalid-feedback text-end d-block">
-  كلمات المرور غير متطابقة
-</div>
+          <!-- تأكيد كلمة المرور -->
+          <div class="mb-4">
+            <label class="form-label">تأكيد كلمة المرور:</label>
+            <div class="position-relative" dir="rtl">
+              <!-- تأكيد كلمة المرور -->
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                formControlName="password_confirmation"
+                class="form-control ps-5"
+                [class.is-invalid]="registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched"
+                placeholder="تأكيد كلمة المرور">
 
 
-</div>
+                <span
+                  class="position-absolute top-50 start-0 translate-middle-y ps-3"
+                  style="cursor: pointer;"
+                  (click)="toggleConfirmPasswordVisibility()">
+                  <i class="fas"
+                    [class.fa-eye]="showConfirmPassword"
+                    [class.fa-eye-slash]="!showConfirmPassword">
+                  </i>
+                </span>
+              </div>
+
+              @if (registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched) {
+                <div class="invalid-feedback text-end d-block">
+                  كلمات المرور غير متطابقة
+                </div>
+              }
 
 
-  <button type="submit" 
-          class="btn custom-green-btn w-100 py-2" 
-          [disabled]="loading || registerForm.invalid">
-    {{ loading ? 'جارٍ إنشاء الحساب...' : 'إنشاء حساب' }}
-  </button>
+            </div>
 
-  <div *ngIf="successMessage" class="alert alert-success mt-3 text-center">
-    {{ successMessage }}
-  </div>
-  <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
-    {{ errorMessage }}
-  </div>
-</form>
+
+            <button type="submit"
+              class="btn custom-green-btn w-100 py-2"
+              [disabled]="loading || registerForm.invalid">
+              {{ loading ? 'جارٍ إنشاء الحساب...' : 'إنشاء حساب' }}
+            </button>
+
+            @if (successMessage) {
+              <div class="alert alert-success mt-3 text-center">
+                {{ successMessage }}
+              </div>
+            }
+            @if (errorMessage) {
+              <div class="alert alert-danger mt-3 text-center">
+                {{ errorMessage }}
+              </div>
+            }
+          </form>

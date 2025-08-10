@@ -1,57 +1,59 @@
-<div class="container py-4" *ngIf="!isLoading && product" dir="rtl">
-  <div class="row g-4">
-    <!-- Product Image + Thumbnails -->
-    <div class="col-md-5">
-      <div class="border rounded-4 p-3 bg-white text-center">
-        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div *ngFor="let image of product.images; let i = index" class="carousel-item" [class.active]="i === 0">
-              <img [src]="image" class="img-fluid" style="height: 300px; object-fit: contain;" />
+@if (!isLoading && product) {
+  <div class="container py-4" dir="rtl">
+    <div class="row g-4">
+      <!-- Product Image + Thumbnails -->
+      <div class="col-md-5">
+        <div class="border rounded-4 p-3 bg-white text-center">
+          <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              @for (image of product.images; track image; let i = $index) {
+                <div class="carousel-item" [class.active]="i === 0">
+                  <img [src]="image" class="img-fluid" style="height: 300px; object-fit: contain;" />
+                </div>
+              }
             </div>
           </div>
-        </div>
-        <div class="d-flex justify-content-center gap-2 mt-2">
-          <img *ngFor="let image of product.images"
-               [src]="image"
-               class="img-thumbnail"
-               style="width: 60px; height: 60px; object-fit: contain;" />
+          <div class="d-flex justify-content-center gap-2 mt-2">
+            @for (image of product.images; track image) {
+              <img
+                [src]="image"
+                class="img-thumbnail"
+                style="width: 60px; height: 60px; object-fit: contain;" />
+            }
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Product Info -->
-    <div class="col-md-7">
-      <div class="border rounded-4 p-4 bg-white h-100 d-flex flex-column">
-        <h4 class="fw-bold">{{ product.name_ar }}</h4>
-
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <span class="text-success fw-bold fs-5">{{ product.price }} ر.س</span>
-          <span class="badge bg-secondary" *ngIf="product.categories?.length">
-            {{ product.categories[0].name_ar }}
-          </span>
-        </div>
-
-        <div class="mb-3">
-          <span class="text-warning">★</span> {{ product.name }} 
-          <small class="text-muted">({{ product.stock }} متوفر)</small>
-        </div>
-
-        <div class="d-flex gap-2 mb-3">
-          <button class="btn btn-success rounded-pill px-4" (click)="addToCart()">
-            إضافة للعربة
-            <img src="assets/Images/shopping-cart-add-01.svg" class="ms-2" width="20" />
-          </button>
-
-          <button class="btn btn-outline-secondary rounded-circle" (click)="toggleFavorite()">
-            <i [class]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'"></i>
-          </button>
-        </div>
-
-        <div class="border-top pt-3">
-          <h6 class="fw-bold">الوصف</h6>
-          <p class="text-muted" style="white-space: pre-line;">{{ product.description_ar }}</p>
+      <!-- Product Info -->
+      <div class="col-md-7">
+        <div class="border rounded-4 p-4 bg-white h-100 d-flex flex-column">
+          <h4 class="fw-bold">{{ product.name_ar }}</h4>
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="text-success fw-bold fs-5">{{ product.price }} ر.س</span>
+            @if (product.categories?.length) {
+              <span class="badge bg-secondary">
+                {{ product.categories[0].name_ar }}
+              </span>
+            }
+          </div>
+          <div class="mb-3">
+            <span class="text-warning">★</span> {{ product.name }}
+            <small class="text-muted">({{ product.stock }} متوفر)</small>
+          </div>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-success rounded-pill px-4" (click)="addToCart()">
+              إضافة للعربة
+              <img src="assets/Images/shopping-cart-add-01.svg" class="ms-2" width="20" />
+            </button>
+            <button class="btn btn-outline-secondary rounded-circle" (click)="toggleFavorite()">
+              <i [class]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'"></i>
+            </button>
+          </div>
+          <div class="border-top pt-3">
+            <h6 class="fw-bold">الوصف</h6>
+            <p class="text-muted" style="white-space: pre-line;">{{ product.description_ar }}</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+}
