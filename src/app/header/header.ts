@@ -1,8 +1,6 @@
 // header.ts
-import { Component, OnInit , ElementRef, HostListener} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnInit , ElementRef, HostListener, inject} from '@angular/core';
+
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../services/auth.service';
 import { CartService } from '../services/cart.service'; // ✅ Add this
@@ -12,16 +10,17 @@ import { CartIconComponent } from '../cart-icon.component/cart-icon.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Category, ProductService } from '../services/product';
+import { Router, RouterLink, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    NgbDropdownModule,
+  
+    NgbDropdownModule,RouterModule ,CommonModule, FormsModule,RouterLink,
     
   ],
   templateUrl: './header.html',
@@ -35,7 +34,10 @@ export class Header implements OnInit {
   favoriteCount = 0;
   cartCount = 0;
   categories: Category[] = [];
+ private router = inject(Router);
+ private elementRef = inject(ElementRef);
 
+ 
   navItems = [
   { label: 'الرئيسية', path: '/', active: false },
   { label: 'المتجر', path: '/home/category-products', hasDropdown: true, showDropdown: true },
@@ -62,13 +64,11 @@ toggleDropdown(item: any) {
 
   constructor(
     private auth: AuthService,
-    private router: Router,
     private http: HttpClient,
     private productService: ProductService,
     private favoriteService: FavoriteService,
     private cartService: CartService,             
     private cartState: CartStateService,
-      private elementRef: ElementRef           
   ) {}
 
 ngOnInit() {
@@ -234,17 +234,44 @@ closeMobileMenu() {
   this.isMenuOpen = false;
   document.body.classList.remove('menu-open');
 }
+closeAllDropdowns() {
+  this.navItems.forEach(i => i.showDropdown = false);
+  this.isStoreOpen = false; // also close the store dropdown if open
+}
+
+onNavClick(event: MouseEvent, item: any): void {
+  if (item.hasDropdown) {
+    event.preventDefault(); // stop default link behavior
+    event.stopPropagation(); // stop bubbling
+    this.toggleDropdown(item);
+  } else {
+    this.closeAllDropdowns();
+  }
+}
+
+handleNavClick(item: any): void {
+  if (item.hasDropdown) {
+    this.toggleDropdown(item);
+  }
+  this.closeAllDropdowns();
+}
 
 @HostListener('document:click', ['$event'])
 onDocumentClick(event: MouseEvent): void {
-  const clickedInsideDropdown = this.elementRef.nativeElement.contains(event.target);
-  if (!clickedInsideDropdown) {
+  const clickedInside = this.elementRef.nativeElement.contains(event.target);
+
+  if (!clickedInside) {
+    // Close nav dropdowns
     this.navItems.forEach(i => {
       if (i.hasDropdown) {
         i.showDropdown = false;
       }
     });
+
+    // Close store dropdown
+    this.isStoreOpen = false;
   }
 }
+
 
 }

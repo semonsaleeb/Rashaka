@@ -15,7 +15,7 @@ import { ComparePopup } from '../../../compare-popup/compare-popup';
 @Component({
   selector: 'app-special-offers',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Downloadapp, Blogs, ComparePopup],
+  imports: [CommonModule, RouterModule, FormsModule, Downloadapp, Blogs, ComparePopup],
   templateUrl: './special-offers.html',
   styleUrls: ['./special-offers.scss'],
   providers: [ProductService]

@@ -16,3 +16,16 @@ border-radius: 0 0 50px 50px;
 .no-divider .position-absolute {
   display: none !important;
 }
+/* Divider between two items in the same row */
+@media (max-width: 767px) {
+  .stat-item:nth-child(odd) {
+    border-right: 1px solid #000; /* dark vertical line */
+  }
+}
+
+/* On desktop, keep your original vertical dividers */
+@media (min-width: 768px) {
+  .stat-item:not(:last-child) {
+    border-right: 1px solid #000;
+  }
+}

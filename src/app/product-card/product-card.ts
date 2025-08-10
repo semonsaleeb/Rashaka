@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Product, ProductService } from '../services/product';
 import { AuthService } from '../services/auth.service';
@@ -10,12 +8,13 @@ import { CartService } from '../services/cart.service';
 import { CartStateService } from '../services/cart-state-service';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [
-    HttpClientModule,
     FormsModule,
     RouterModule
 ],
@@ -25,13 +24,12 @@ import { environment } from '../../environments/environment';
 export class ProductCard implements OnInit {
   product!: Product;
   isLoading = true;
-
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   constructor(
-    private route: ActivatedRoute,
     private http: HttpClient,
     private productService: ProductService,
     private auth: AuthService,
-    private router: Router,
     private cartService: CartService,
     public cartState: CartStateService
   ) {}

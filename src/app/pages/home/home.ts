@@ -40,5 +40,21 @@ ngOnInit(): void {
   const token = localStorage.getItem('token'); // or 'access_token' depending on your app
   console.log('Token:', token);
 }
+showComparePopup = false;
+  compareProducts: any[] = [];
 
+  // // Add/remove products to compare
+  // addToCompare(product: any) {
+  //   if (!this.compareProducts.some(p => p.id === product.id)) {
+  //     this.compareProducts.push(product);
+  //   }
+  // }
+
+  // removeFromCompare(productId: string) {
+  //   this.compareProducts = this.compareProducts.filter(p => p.id !== productId);
+  // }
+
+  // onCloseComparePopup() {
+  //   this.showComparePopup = false;
+  // }
 }
