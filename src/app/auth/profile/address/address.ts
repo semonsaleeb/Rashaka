@@ -50,9 +50,22 @@ export class Address implements OnInit {
 }
 
 
-  getFullAddress(address: any): string {
-    return `${address.street_name}, ${address.area_name}, ${address.city_name}, ${address.government_name}, عمارة ${address.building_number}, شقة ${address.apartment_number}, الدور ${address.floor_number}`;
-  }
+  // getFullAddress(address: any): string {
+  //   return `${address.street_name}, ${address.area_name}, ${address.city_name}, ${address.government_name}, عمارة ${address.building_number}, شقة ${address.apartment_number}, الدور ${address.floor_number}`;
+  // }
+getFullAddress(address: any): string {
+  const parts = [
+    address.street_name,
+    address.area_name,
+    address.city_name,
+    address.government_name,
+    address.building_number ? 'عمارة ' + address.building_number : '',
+    address.apartment_number ? 'شقة ' + address.apartment_number : '',
+    address.floor_number ? 'الدور ' + address.floor_number : ''
+  ];
+
+  return parts.filter(part => part && part.trim() !== '').join(', ');
+}
 
   fetchAddresses() {
     this.addressService.getAllAddresses().subscribe({
@@ -165,6 +178,22 @@ editAddress(address: AddressData) {
     phone_number: address.phone_number || '',
     comment: address.comment || ''
   };
+}
+
+
+deleteAddress(addressId: number) {
+  if (confirm('هل أنت متأكد من حذف هذا العنوان؟')) {
+    this.addressService.deleteAddress(addressId).subscribe({
+      next: (res) => {
+        alert('تم حذف العنوان بنجاح');
+        this.fetchAddresses(); // إعادة تحميل العناوين بعد الحذف
+      },
+      error: (err) => {
+        console.error('❌ خطأ أثناء حذف العنوان:', err);
+        alert('فشل حذف العنوان');
+      }
+    });
+  }
 }
 
 

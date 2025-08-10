@@ -56,10 +56,10 @@
             </button>
             <div ngbDropdownMenu class="dropdown-menu-end text-end custom-dropdown">
               <a class="dropdown-item" routerLink="/profile">
-                <i class="fas fa-id-card me-2"></i> الملف الشخصي
+                <img src="assets/Images/Frame 9050.svg"> الملف الشخصي
               </a>
               <button class="dropdown-item text-danger" (click)="logout()">
-                <i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج
+                <img src="assets/Images/Frame 9049.svg"> تسجيل الخروج
               </button>
             </div>
           </div>
@@ -125,7 +125,7 @@
                 style="position: absolute; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                 <div class="row">
                   <!-- Categories -->
-                  <div class="col-md-6 " >
+                  <div class="col-md-6 ">
                     <div class="row">
                       <div class="col-6 mb-2" *ngFor="let category of categories" dir="rtl">
                         <a class="dropdown-item d-flex align-items-center gap-2"
@@ -138,7 +138,8 @@
                       <div class="col-12 text-end mt-3 mx-3">
                         <a [routerLink]="['/home/category-products']"
                           class="btn btn-outline-dark btn-sm rounded-pill d-inline-flex align-items-center">
-                          <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="20" />
+                          <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="20"
+                            (click)="toggleMobileMenu()" />
                           عرض الكل
                         </a>
                       </div>
@@ -249,39 +250,83 @@
     <div class="d-flex justify-content-between align-items-center p-3">
       <h1>القائمة</h1>
       <button class="btn w-100 text-start " (click)="toggleMobileMenu() ">
-        <img src="assets/Images/close.svg" alt="Close" width="24" />
+        <img src="assets/Images/Frame 9001.svg" alt="Close" width="34" />
       </button>
     </div>
-    <a class="d-block py-2 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/">الرئيسية</a>
+    <!-- تسجيل الدخول / المستخدم -->
+    <div class="py-3 text-center">
+      <!-- If NOT logged in -->
+      <a *ngIf="!isLoggedIn" routerLink="/auth"
+        class="btn bg-white w-100 text-dark d-flex justify-content-center align-items-center gap-2 px-3 rounded-5 border border-dark">
+        <img src="assets/Images/user-circle.svg" alt="User" width="25" />
+        <span>تسجيل الدخول</span>
+      </a>
+
+      <!-- If logged in -->
+      <ng-container *ngIf="isLoggedIn">
+        <div ngbDropdown class="d-inline-block w-100 text-end mt-2" placement="bottom-start">
+          <button ngbDropdownToggle
+            class="btn fs-3 bg-white w-100 text-dark d-flex justify-content-between align-items-center gap-2 px-3  rounded-5 border border-dark">
+            <img src="assets/Images/user-circle.svg" alt="User" width="20" />
+            <span>مرحباً، {{ client?.name || 'المستخدم' }}</span>
+          </button>
+          <div ngbDropdownMenu class="dropdown-menu-center  text-start custom-dropdown w-10 ">
+            <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3 " routerLink="/profile" (click)="toggleMobileMenu()">
+              <img src="assets/Images/Frame 9050.svg"> الملف الشخصي
+            </a>
+            <button class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3" (click)="logout()">
+              <img src="assets/Images/Frame 9049.svg" (click)="toggleMobileMenu()"> تسجيل الخروج
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/" (click)="toggleMobileMenu()" >الرئيسية</a>
 
     <!-- المتجر Dropdown (Dynamic from categories array) -->
     <div class="dropdown-section py-2 border border-1 m-2 rounded-3 p-3">
       <button class="btn w-100 text-end d-flex justify-content-between align-items-center border-0 bg-transparent"
         (click)="isStoreOpen = !isStoreOpen">
-        <span class="fw-bold">المتجر</span>
+        <span class="fw-bold fs-3">المتجر</span>
         <i [class]="isStoreOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
       </button>
 
       <div *ngIf="isStoreOpen" class="ps-2 pe-2 py-2 rounded-3 bg-light mt-2">
-        <a *ngFor="let category of categories" class="d-block text-end py-1 text-decoration-none text-dark"
-          [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }">
+        <a *ngFor="let category of categories" class=" fs-3 d-block text-end py-1 text-decoration-none text-dark"
+          [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }" (click)="toggleMobileMenu()">
           {{ category.name_ar }}
         </a>
 
-        <a class="d-block text-end text-success fw-bold mt-2 text-decoration-none"
-          [routerLink]="['/home/category-products']">
+        <a class="d-block text-end text-success fs-3 fw-bold mt-2 text-decoration-none"
+          [routerLink]="['/home/category-products']" (click)="toggleMobileMenu()">
           عرض الكل
         </a>
       </div>
     </div>
 
 
-    <a class="d-block py-2 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/blogs">المدونة</a>
-    <a class="d-block py-2 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/about">من نحن</a>
-    <a class="d-block py-2 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/contact">اتصل بنا</a>
+    <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/home/blogs" (click)="toggleMobileMenu()">المدونة</a>
+       <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/home/packages" (click)="toggleMobileMenu()">الأشتراكات </a>
+         <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/home/sucesStory" (click)="toggleMobileMenu()"> قصص نجاح عملائنا </a>
+         <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/home/blogs" (click)="toggleMobileMenu()">الفحوصات المجانيه</a>
+    <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/about_us" (click)="toggleMobileMenu()">عن الرشاقة</a>
+
+
+    <!-- <div class="social-links bottom-0 align-items-center">
+          <a href="#"><img src="assets/Images/facebook-01.svg" alt="Facebook" (click)="toggleMobileMenu()"/></a>
+          <a href="#"><img src="assets/Images/instagram.svg" alt="Instagram" (click)="toggleMobileMenu()"></a>
+          <a href="#"><img src="assets/Images/instagram (1).svg" alt="Instagram Alt" (click)="toggleMobileMenu()"/></a>
+          <a href="#"><img src="assets/Images/new-twitter-rectangle.svg" alt="Twitter" (click)="toggleMobileMenu()"
+ /></a>
+        </div> -->
   </div>
+
+
 </div>

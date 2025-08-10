@@ -11,7 +11,11 @@ header {
   font-weight: 500;
 }
 
-
+ .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
 [dir="rtl"] {
   text-align: right;
 }

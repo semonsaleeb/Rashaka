@@ -15,8 +15,9 @@
                 <i class="fas fa-pen text-secondary"></i>
               </button>
 
-              <!-- شارة "الرئيسي" -->
-              <div class="badge bg-light text-primary border border-primary mx-2">الرئيسي</div>
+             <button class="btn btn-sm btn-outline-danger me-2" (click)="deleteAddress(address.id)">
+    حذف
+  </button>
 
               <!-- عنوان -->
               <span class="fw-bold mx-2">تفاصيل العنوان <input type="checkbox" checked
@@ -71,7 +72,7 @@
     <ng-template #noAddress>
       <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
       <br>
-      <button class="addAdress px-4 py-2" (click)="startAddressFlow()">أضف عنوان</button>
+      <button class="btn btn-success px-4 py-2" (click)="startAddressFlow()">أضف عنوان</button>
     </ng-template>
   </ng-container>
 </div>

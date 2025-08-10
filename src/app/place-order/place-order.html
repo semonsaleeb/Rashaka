@@ -1,61 +1,146 @@
-<div class="container m-5" dir="rtl">
-  <!-- Top message -->
-  <div class="alert alert-light text-center   p-2 mb-4 ">
+<div class="container my-5" dir="rtl">
+  <!-- عنوان الصفحة -->
+  <div class="alert alert-light text-center p-2 mb-4">
     <h4 class="text-center">
-      <img src="assets/Images/Frame 9033.svg"> <span class="mx-3"> عربة التسوق </span>
-    
-
-
+      <img src="assets/Images/Frame 9033.svg" class="me-2">
+      <span>عربة التسوق</span>
     </h4>
-
   </div>
 
-  <div class="row">
-    <!-- Right Side: Cart Items -->
-    <div class="col-6 ">
-      <h4 class="mb-4 text-end mb-3">
-        <img src="assets/Images/delivery.svg" class="my-3"><span> شحن مجاني للطلبات أكثر من </span> <strong>1000
-          ريال</strong>
-        <div class="progress border border-c" style="height: 8px; height: 12px; ">
-          <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
-            style="background-color: #2EA2CC;">
+  <div class="row g-4">
+    <!-- العمود الأيمن: نموذج البيانات -->
+    <div class="col-lg-7">
+      <form>
+        <!-- معلومات الاتصال -->
+        <h5 class="mb-3">معلومات الاتصال</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">البريد الإلكتروني</label>
+            <input type="email" class="form-control" placeholder="example@email.com">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">رقم الجوال</label>
+            <input type="tel" class="form-control" placeholder="+966xxxxxxxxx">
           </div>
         </div>
 
-      </h4>
-
-   
-    </div>
-
-    <!-- Left Side: Order Summary -->
-    <div class="col-5 p-5 text-center justify-content-center">
-      <div class="card shadow-sm border-1 rounded-4 p-5" style="background-color: #FAFAFA;">
-        <h5 class="text-end mb-3">ملخص الطلب</h5>
-
-        <!-- Promo Code -->
-        <div class="input-group mb-3">
-
+        <!-- عنوان الشحن -->
+        <h5 class="mt-4 mb-3">عنوان الشحن واستخدامه للطلب</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">المدينة</label>
+            <input type="text" class="form-control" placeholder="الرياض">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">المنطقة</label>
+            <input type="text" class="form-control" placeholder="ادخل العنوان">
+          </div>
         </div>
 
-        <ul class="mb-3 text-end p-0">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">الرمز البريدي / ZIP</label>
+            <input type="text" class="form-control" placeholder="الرمز البريدي">
+          </div>
+
+          <!-- حفظ العنوان -->
+          <div class="col-md-6 mt-5 my-2">
+
+            <input class="form-check-input mx-3 " type="checkbox" id="saveAddress">
+            <label class="form-check-label" for="saveAddress">
+              حفظ العنوان
+            </label>
+          </div>
+        </div>
+        <!-- ملاحظات -->
+        <h5 class="mt-4 mb-3">ملاحظات حول الطلب</h5>
+        <textarea class="form-control mb-3" rows="5" placeholder="أدخل ملاحظاتك (اختياري)"></textarea>
+
+        <!-- اختيار طريقة الدفع -->
+        <h5 class="mt-4 mb-3">اختيار طريقة الدفع</h5>
+        <div class="border rounded p-3 mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="payment" id="card" checked>
+            <label class="form-check-label" for="card">
+              الدفع عن طريق البطاقة
+            </label>
+          </div>
+
+          <!-- بيانات البطاقة -->
+          <div class="row mt-3 g-2">
+            <div class="col-md-6">
+              <input type="text" class="form-control" placeholder="رقم البطاقة">
+            </div>
+            <div class="col-md-3">
+              <input type="text" class="form-control" placeholder="MM/YY">
+            </div>
+            <div class="col-md-3">
+              <input type="text" class="form-control" placeholder="CVC">
+            </div>
+          </div>
+        </div>
+
+        <!-- خيارات دفع أخرى -->
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" name="payment" id="tabby">
+          <label class="form-check-label" for="tabby">
+            قسّم الفاتورة مع تابي
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="payment" id="cash">
+          <label class="form-check-label" for="cash">
+            الدفع عند الاستلام
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <!-- العمود الأيسر: ملخص الطلب -->
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-1 rounded-4 p-4" style="background-color: #FAFAFA;">
+        <h5 class="text-end mb-4">طلباتك</h5>
+
+        <!-- المنتجات -->
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <div class="d-flex align-items-center">
+            <img src="assets/Images/product1.png" alt="product" style="width: 50px; height: 50px;">
+            <span class="ms-2">عبوة ايس بيري 20 عبوة</span>
+          </div>
+          <span>320.00 ر.س</span>
+        </div>
+
+        <!-- كود الخصم -->
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="ادخل كود الخصم">
+          <button class="btn btn-success">تطبيق</button>
+        </div>
+
+        <!-- المجموع -->
+        <ul class="list-unstyled text-end mb-4">
           <li class="d-flex justify-content-between py-2">
             <span>المجموع</span>
+            <span>460.00 ر.س</span>
           </li>
           <li class="d-flex justify-content-between py-2">
             <span>رسوم شحن</span>
             <span>30.00 ر.س</span>
           </li>
-          <li class="d-flex justify-content-between fw-bold pt-3 border-top my-5">
+          <li class="d-flex justify-content-between fw-bold pt-3 border-top">
             <span>الإجمالي</span>
+            <span>480.00 ر.س</span>
           </li>
-
         </ul>
 
+        <div class="form-check text-end mb-3">
+          <input class="form-check-input" type="checkbox" id="terms">
+          <label class="form-check-label" for="terms">
+            لقد قرأت ووافقت على <a href="#">الشروط والأحكام</a>
+          </label>
+        </div>
 
-<button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">إتمام الطلب</button>
+        <button class="btn btn-success w-100 fw-bold">إتمام الطلب</button>
       </div>
     </div>
   </div>
-
-
 </div>
