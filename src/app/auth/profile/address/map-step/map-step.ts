@@ -10,9 +10,12 @@ import * as L from 'leaflet';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AddressData } from '../../../../../models/address.model';
 
-import 'leaflet/dist/images/marker-icon.png';
-import 'leaflet/dist/images/marker-icon-2x.png';
-import 'leaflet/dist/images/marker-shadow.png';
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
+  iconUrl: 'assets/leaflet/marker-icon.png',
+  shadowUrl: 'assets/leaflet/marker-shadow.png',
+});
 
 @Component({
   selector: 'app-map-step',
