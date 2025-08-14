@@ -4,22 +4,60 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-interface CartItem {
+export interface CartItem {
   id: number;
   product_id: number;
-  product_name: string;
-  quantity: number;
-  unit_price: number;
-  sale_unit_price: number | null;
-  total_price: number;
-  total_sale_price: number | null;
-  stock: number;
+  product_name: string; 
+  product_name_ar:string;     
+  name: string;              
+  name_ar: string;          
+  description: string;      
+  image: string;            
+  images: string[];          
+
+  price: number;             
+  sale_price: number | null; 
+  unit_price:string;
+  sale_unit_price: string;   
+  final_price: number;       
+  line_total: number;        
+  total_price?: string;     
+  total_sale_price?: string; 
+
+  quantity: number;          
+  stock_quantity?: number;   
+  stock?: number;            
+  isFavorite?: boolean;      
 }
 
-interface CartResponse {
+export interface CartResponse {
   items: CartItem[];
-  cart_total: number;
-  sale_cart_total: number;
+  totalPrice: number;
+  totalQuantity: number;
+  totalSalePrice?: number;
+}
+
+
+
+export interface PlaceOrderResponse {
+  status: string;
+  message: string;
+  order_id: number;
+  address_id: number;
+  payment_method: string;
+  order_status: string;
+  total_price: number;
+  discount: number;
+  promocode: string | null;
+  items: any[];
+}
+
+export interface PromoResponse {
+  success: boolean;
+  original_total: number;
+  discount_amount: number;
+  new_total: number;
+  promocode: string;
 }
 
 @Injectable({
@@ -64,6 +102,24 @@ export class CartService {
     return this.http.post(
       `${this.apiUrl}/cart/remove`,
       { product_id: productId },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // ✅ Place order
+  placeOrder(address_id: number, payment_method: string, promocode?: string): Observable<PlaceOrderResponse> {
+    return this.http.post<PlaceOrderResponse>(
+      `${this.apiUrl}/place-order`,
+      { address_id, payment_method, promocode },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // ✅ Apply promocode
+  applyPromocode(promocode: string, total_price: number): Observable<PromoResponse> {
+    return this.http.post<PromoResponse>(
+      `${this.apiUrl}/client/order/apply-promocode`,
+      { promocode, total_price },
       { headers: this.getHeaders() }
     );
   }

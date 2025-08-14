@@ -1,11 +1,46 @@
-.container{
-    margin-bottom: 80px;
-    margin-top: 40px;
+.container {
+  margin-bottom: 80px;
+  margin-top: 40px;
 }
 
-.section_title{
-//   margin-right: 60px;
-//   color: white;
+.section_title {
   text-align: right;
-    font-family: 'Almarai', sans-serif  !important;
+  font-family: 'Almarai', sans-serif !important;
+}
+
+/* أسهم التنقل */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1); /* يخلي الأسهم واضحة */
+}
+
+/* المؤشرات (الدوائر) */
+.carousel-indicators {
+  bottom: -30px; /* نزولها تحت شوية علشان تبان */
+  z-index: 10;
+}
+
+.carousel-indicators {
+  position: static; /* يخليهم خارج الكاروسيل */
+  margin-top: 20px; /* المسافة بين الكارت والـ dots */
+  display: flex;
+  justify-content: center;
+  gap: 8px; /* مسافة بين كل dot والتانية */
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: #BABABA;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.carousel-indicators .active {
+  background-color: #7AD03A !important;
+  width: 60px ;
+  height: 15px;
+  padding: 3px 4px;
+  border-radius: 9999px;  
+    margin-top: 1px;
+
 }

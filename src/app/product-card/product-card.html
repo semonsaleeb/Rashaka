@@ -29,7 +29,7 @@
           <h4 class="fw-bold">{{ product.name_ar }}</h4>
           <div class="d-flex align-items-center gap-2 mb-2">
             <span class="text-success fw-bold fs-5">{{ product.price }} ر.س</span>
-            @if (product.categories?.length) {
+            @if (product.categories.length) {
               <span class="badge bg-secondary">
                 {{ product.categories[0].name_ar }}
               </span>

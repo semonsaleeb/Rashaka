@@ -1,0 +1,14 @@
+<div class="branches container" dir="rtl">
+  <h5>اختيار الفرع</h5>
+
+  <select class="form-select mb-3" [(ngModel)]="selectedBranchId">
+    <option [ngValue]="null">-- اختر فرع --</option>
+    @for (center of centers; track center.id) {
+      <option [ngValue]="center.id">{{ center.name }}</option>
+    }
+  </select>
+
+  <button class="btn btn-success" (click)="goNext()" [disabled]="!selectedBranchId">
+    التالي
+  </button>
+</div>

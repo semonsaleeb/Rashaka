@@ -1,28 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../services/cart.service';
+import {
+  CartService,
+  PromoResponse as ServicePromoResponse,
+  PlaceOrderResponse,
+  CartResponse,
+  CartItem
+} from '../services/cart.service';
 import { CartStateService } from '../services/cart-state-service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../environments/environment';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cart-page.component',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule ],
   templateUrl: './cart-page.component.html',
   styleUrls: ['./cart-page.component.scss']
 })
 export class CartPageComponent implements OnInit {
   progressValue = 60;
-  cartItems: any[] = [];
-  totalPrice = 0;
-  totalSalePrice = 0;
+  cartItems: CartItem[] = [];
+  totalPrice: number = 0;             // original total (no sale)
+  totalSalePrice: number | null = 0;  // final total after sales/promos
   addressId: number = 1;
   paymentMethod: string = 'cash';
   promoCode: string = '';
   token: string = '';
+isLoading = false;
 
   constructor(
     private cartService: CartService,
@@ -37,87 +43,126 @@ export class CartPageComponent implements OnInit {
     this.loadCart();
   }
 
-  loadCart() {
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        this.cartItems = response.data.items;
-
-        this.totalPrice = this.cartItems.reduce(
-          (sum, item) => sum + item.quantity * parseFloat(item.unit_price),
-          0
-        );
-
-        this.totalSalePrice = this.cartItems.reduce(
-          (sum, item) =>
-            sum +
-            (item.sale_unit_price
-              ? item.quantity * parseFloat(item.sale_unit_price)
-              : item.quantity * parseFloat(item.unit_price)),
-          0
-        );
-
-        const totalQuantity = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        this.cartState.updateCount(totalQuantity);
-      },
-      error: (err) => {
-        console.error('Error loading cart', err);
-      }
-    });
+  // helper: safe number conversion
+  private toNumber(value: any): number {
+    const n = Number(value);
+    return isNaN(n) ? 0 : n;
   }
+
+loadCart() {
+  this.cartService.getCart().subscribe({
+    next: (response) => {
+      const data: CartResponse = response?.data || {
+        items: [],
+        totalPrice: 0,
+        totalQuantity: 0
+      };
+
+      const items: CartItem[] = Array.isArray(data.items) ? data.items : [];
+
+      let totalPrice = 0;
+      let totalSalePrice = 0;
+      let totalQuantity = 0;
+
+      this.cartItems = items.map((item) => {
+        console.log('Cart Item:', item);
+
+        const unitPriceNum = parseFloat(item.unit_price) || 0;
+        const saleUnitPriceNum = parseFloat(item.sale_unit_price) || 0;
+        const finalPrice = saleUnitPriceNum > 0 ? saleUnitPriceNum : unitPriceNum;
+
+        // المجموع العادي
+        totalPrice += unitPriceNum * item.quantity;
+
+        // المجموع المخفض (ولو مفيش تخفيض يحسب العادي)
+        totalSalePrice += finalPrice * item.quantity;
+
+        totalQuantity += item.quantity;
+
+        return {
+          ...item,
+          nameAr: item.product_name_ar || 'منتج بدون اسم',
+          unitPriceNum,
+          saleUnitPriceNum,
+          finalPrice
+        };
+      });
+
+      this.totalPrice = totalPrice;
+      this.totalSalePrice = totalSalePrice; // دايمًا هيكون فيه قيمة حتى لو مفيش عرض
+      this.progressValue = Math.min(
+        (this.totalSalePrice / 1000) * 100,
+        100
+      );
+    },
+    error: (err) => {
+      console.error('Error loading cart:', err);
+    }
+  });
+}
+
+
+
 
   increaseQuantity(productId: number) {
     this.cartService.addToCart(productId, 1).subscribe({
       next: () => this.loadCart(),
-      error: err => console.error(err)
+      error: (err) => console.error(err)
     });
   }
 
   decreaseQuantity(productId: number) {
     this.cartService.reduceCartItem(productId).subscribe({
       next: () => this.loadCart(),
-      error: err => console.error(err)
+      error: (err) => console.error(err)
     });
   }
 
   removeItem(productId: number) {
     this.cartService.removeCartItem(productId).subscribe({
       next: () => this.loadCart(),
-      error: err => console.error(err)
+      error: (err) => console.error(err)
     });
   }
 
   get totalCartItemsCount(): number {
-    return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    return this.cartItems.reduce(
+      (sum, item) => sum + (item.quantity || 0),
+      0
+    );
   }
 
   hasDiscount(): boolean {
-    return this.cartItems.some(item => item.sale_unit_price);
+    return this.cartItems.some(
+      (item) => !!item.sale_price && item.sale_price > 0
+    );
   }
 
-placeOrder() {
-  // Optional: perform any pre-checks or API calls here
+  placeOrder() {
+      this.router.navigate(['/placeOrder']);
 
-  this.router.navigate(['/placeOrder']);
-}
-
+   
+  }
 
   applyPromoCode() {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${this.token}`
-    });
+    if (!this.promoCode || this.promoCode.trim() === '') {
+      alert('أدخل كود الخصم أولًا');
+      return;
+    }
 
-    const body = {
-      promocode: this.promoCode,
-      total_price: this.totalPrice
-    };
+    const currentTotalToSend =
+      this.totalPrice || this.totalSalePrice || 0;
 
-    this.http.post<PromoResponse>(`${environment.apiBaseUrl}/order/apply-promocode`, body, { headers })
+    this.cartService
+      .applyPromocode(this.promoCode, currentTotalToSend)
       .subscribe({
-        next: (res) => {
+        next: (res: ServicePromoResponse) => {
           if (res.success) {
-            this.totalSalePrice = res.new_total;
-            alert(`تم تطبيق الكود: ${res.promocode}`);
+            this.totalSalePrice = this.toNumber(res.new_total);
+            this.totalPrice = this.toNumber(res.original_total);
+            alert(
+              `تم تطبيق الكود: ${res.promocode} - خصم ${res.discount_amount}`
+            );
           } else {
             alert('رمز الخصم غير صالح');
           }
@@ -128,13 +173,4 @@ placeOrder() {
         }
       });
   }
-}
-
-// Define the response structure
-interface PromoResponse {
-  success: boolean;
-  original_total: number;
-  discount_amount: number;
-  new_total: number;
-  promocode: string;
 }

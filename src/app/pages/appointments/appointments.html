@@ -1,0 +1,70 @@
+<div class="container py-4">
+  <h4 class="fw-bold text-success text-center py-4">
+    الآن تقدر تسوي الفحص الشامل وتتعرف على تفاصيل جسمك
+  </h4>
+  <p class="text-muted text-center">
+    احصل على فحص و استشارة لاكتشاف الدهون و شد الترهلات و ازالة السيلوليت
+  </p>
+
+  <div class="row mt-4">
+    <!-- Left side -->
+    <div class="col-md-8">
+      @switch (step) {
+        @case (1) {
+          <app-branch (next)="goToStep(2)"></app-branch>
+        }
+        @case (2) {
+          <app-spicialist (prev)="goToStep(1)" (next)="goToStep(3)"></app-spicialist>
+        }
+        @case (3) {
+          <app-confirm (prev)="goToStep(2)"></app-confirm>
+        }
+      }
+    </div>
+
+    <!-- Right side (steps indicator) -->
+    <div class="col-md-4" dir="rtl">
+      <div class="card p-3 rounded-4 shadow-sm">
+
+        <!-- Step 1 -->
+        <div class="mb-4 d-flex align-items-start" [class.text-success]="step >= 1">
+          <i class="bi bi-geo-alt fs-4 me-3"></i>
+          <div>
+           
+            <h6>  <img src="assets/Images/Frame 1000005990.svg" alt="Step 1"> اختر الفرع الأقرب لك </h6>
+            <p class="text-muted small mb-0">
+              ابحث عن أقرب فرع لموقعك الجغرافي
+              اختر الفرع الأنسب لتسهيل حضورك للجلسة
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="mb-4 d-flex align-items-start" [class.text-success]="step >= 2">
+          <i class="bi bi-person fs-4 me-3"></i>
+          <div>
+           
+            <h6>  <img src="assets/Images/Frame 1000005991.svg" alt="Step 2"> اختر الأخصائي و المعاد</h6>
+            <p class="text-muted small mb-0">
+              اختر الأخصائي المناسب لحالتك الصحية <br>
+              حدد الوقت المتاح والمناسب لك
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="d-flex align-items-start" [class.text-success]="step >= 3">
+          <i class="bi bi-check2-circle fs-4 me-3"></i>
+          <div>
+            
+            <h6> <img src="assets/Images/Frame 1000005992.svg" alt="Step 3"> تأكيد الحجز</h6>
+            <p class="text-muted small mb-0">
+              راجع تفاصيل الحجز الخاصة بك
+              قم بتأكيد الحجز لإكمال العملية
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

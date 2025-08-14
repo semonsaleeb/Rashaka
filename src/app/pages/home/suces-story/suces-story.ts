@@ -52,6 +52,8 @@ export class SucesStory {
   getSafeYoutubeUrl(id: string) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
+
+      
     );
   }
 

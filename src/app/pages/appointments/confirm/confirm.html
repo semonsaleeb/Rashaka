@@ -1,0 +1,45 @@
+<div class="container confirm-booking-step" dir="rtl">
+  <div class="row g-4">
+    <!-- العمود الأيسر: تفاصيل الحجز -->
+    <div class="col-md-6 border border-1 py-3 rounded">
+      <div class="booking-card p-3 rounded shadow-sm">
+        <div class="specialist-card d-flex align-items-center p-2 rounded mb-3 border">
+          <input type="checkbox" checked class="form-check-input me-2" />
+          <div>
+            <h6 class="mb-1">{{ bookingData.specialist?.name }}</h6>
+            <div class="stars text-warning mb-1">★★★★★</div>
+          </div>
+        </div>
+
+        <ul class="list-unstyled mb-3">
+          <li><i class="bi bi-building"></i> الفرع: {{ bookingData.center?.name }}</li>
+          <li><i class="bi bi-telephone"></i> {{ bookingData.center?.phone }}</li>
+          <li><i class="bi bi-calendar-event"></i> {{ bookingData.date }}</li>
+          <li><i class="bi bi-clock"></i> من: {{ bookingData.start }} إلى {{ bookingData.end }}</li>
+        </ul>
+
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-secondary" (click)="prev.emit()">السابق</button>
+          <button class="btn btn-success" (click)="confirmBooking()">تأكيد الحجز</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Popup Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4" style="border-radius: 12px;">
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+<div style="text-align: center;">
+  <img src="assets/Images/Authentication-cuate 1.svg" alt="نجاح الحجز" class="mb-3" style="width:300px;">
+</div>      <h5 class="fw-bold">تم حجز موعدك بنجاح!</h5>
+      <p class="text-muted small">سيتم ارسال تفاصيل الحجز إلى بريدك الإلكتروني، ويمكنك متابعة حجوزاتك من صفحة الحساب.</p>
+      <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal" (click)="goHome()">العودة إلى الرئيسية</button>
+        <button class="btn btn-success flex-fill" (click)="goToReservations()">عرض الحجز</button>
+      </div>
+    </div>
+  </div>
+</div>

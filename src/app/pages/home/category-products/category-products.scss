@@ -14,11 +14,12 @@
   }
 }
 .position-relative{
+ 
   margin-top: -50px;
 }
 .category-products-container {
   background-color: #081E25;
-  padding: 2rem 0;
+  padding: 2rem 6rem;
   width: 100%;
 
   .header-section {
@@ -286,3 +287,17 @@
     background-color: #28a745 !important; // Bootstrap green
 }
 
+@media (max-width: 768px) {
+  .category-buttons.mobile-scroll {
+    flex-wrap: nowrap;       /* تمنع النزول تحت بعض */
+    overflow-x: auto;        /* سكرول أفقي */
+    -webkit-overflow-scrolling: touch; /* سكرول ناعم في الموبايل */
+  }
+
+  .category-buttons.mobile-scroll button {
+    flex: 0 0 auto;    
+  }
+   .left-pattern {
+    display: none !important;
+  }
+}

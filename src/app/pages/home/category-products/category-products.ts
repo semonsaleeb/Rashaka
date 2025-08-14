@@ -16,7 +16,7 @@ import { ComparePopup } from '../../../compare-popup/compare-popup';
 @Component({
   selector: 'app-category-products',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Blogs, Downloadapp, ComparePopup],
+  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Downloadapp, ComparePopup],
   templateUrl: './category-products.html',
   styleUrls: ['./category-products.scss']
 })
@@ -54,11 +54,30 @@ export class CategoryProducts implements OnInit {
   ) { }
 
   ngOnInit(): void {
+      this.updateVisibleCards();
+  window.addEventListener('resize', this.updateVisibleCards.bind(this));
+    this.checkIfMobile();
+  window.addEventListener('resize', () => this.checkIfMobile());
     this.fetchProducts();
     this.loadCart();
     this.loadProductsAndFavorites();
 
   }
+
+  updateVisibleCards() {
+  if (window.innerWidth <= 768) { // mobile breakpoint
+    this.visibleCards = 1;
+  } else if (window.innerWidth <= 1024) { // tablet
+    this.visibleCards = 2;
+  } else {
+    this.visibleCards = 4; // desktop
+  }
+}
+isMobile = false;
+checkIfMobile() {
+  this.isMobile = window.innerWidth <= 768;
+}
+
 
   private fetchProducts(): void {
     this.isLoading = true;
@@ -148,11 +167,14 @@ export class CategoryProducts implements OnInit {
 
   // Cart Functions
   addToCart(productId: number): void {
-    this.cartService.addToCart(productId).subscribe({
-      next: () => this.refreshCartCount(),
-      error: (err) => console.error('Failed to add to cart', err)
-    });
-  }
+  this.cartService.addToCart(productId).subscribe({
+    next: () => {
+      this.loadCart(); // ✅ هيحدّث cartItems فوراً
+    },
+    error: (err) => console.error('Failed to add to cart', err)
+  });
+}
+
 
   refreshCartCount(): void {
     this.cartService.getCart().subscribe(response => {

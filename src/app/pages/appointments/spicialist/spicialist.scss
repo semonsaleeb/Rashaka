@@ -1,0 +1,115 @@
+.specialist-step {
+  direction: rtl;
+  .section-title {
+    font-size: 16px;
+    margin: 15px 0 10px;
+    font-weight: bold;
+  }
+
+  /* كارد الأخصائي */
+  .specialist-cards {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      padding: 10px;
+      min-width: 180px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: border 0.3s;
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+        .info {
+          flex: 1;
+          h4 {
+            font-size: 14px;
+            margin: 0;
+          }
+          .stars {
+            font-size: 12px;
+            color: #ffc107;
+          }
+        }
+        .check {
+          color: #28a745;
+          font-weight: bold;
+        }
+      }
+      &.selected {
+        border-color: #28a745;
+        background: #f0fff4;
+      }
+    }
+  }
+
+  /* الأوقات */
+  .time-slots {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    .time-slot {
+      border: 1px solid #ccc;
+      padding: 8px 15px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+      &.selected {
+        background: #e6f7ff;
+        border-color: #17a2b8;
+      }
+    }
+  }
+
+  /* الأزرار */
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    button {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .prev {
+      background: #f1f1f1;
+    }
+    .next {
+      background: #28a745;
+      color: #fff;
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+.date-picker-container {
+  max-width: 350px;
+  margin: auto;
+}
+
+input[type="date"] {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="date"]:hover {
+  background-color: #f8f9fa;
+  border-color: #0d6efd;
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.25);
+}

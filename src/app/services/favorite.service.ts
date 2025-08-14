@@ -70,4 +70,12 @@ loadFavorites(token: string): Observable<Product[]> {
     return this.favorites;
   }
 
+
+  clearFavorites(token: string): Observable<any> {
+  const url = `${this.apiUrl}/clear`;
+  const headers = this.getAuthHeaders(token);
+
+  return this.http.delete(url, { headers });
+}
+
 }

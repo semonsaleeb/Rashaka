@@ -15,13 +15,13 @@ import { ComparePopup } from '../../../compare-popup/compare-popup';
 @Component({
   selector: 'app-special-offers',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, Downloadapp, Blogs, ComparePopup],
+  imports: [CommonModule, RouterModule, FormsModule, Downloadapp, ComparePopup],
   templateUrl: './special-offers.html',
   styleUrls: ['./special-offers.scss'],
   providers: [ProductService]
 })
 export class SpecialOffersComponent implements OnInit {
-  @Input() mode: 'carousel' | 'grid' = 'grid';
+  @Input() mode: 'carousel' | 'grid' |'mobile' = 'grid';
   allProducts: Product[] = [];
   products: Product[] = [];
   categories: Category[] = [];
@@ -46,6 +46,9 @@ export class SpecialOffersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+      this.updateVisibleCards();
+        window.addEventListener('resize', this.updateVisibleCards.bind(this));
+
     const modeFromRoute = this.route.snapshot.data['mode'];
     if (modeFromRoute) this.mode = modeFromRoute;
 
@@ -254,6 +257,14 @@ export class SpecialOffersComponent implements OnInit {
     this.compareProducts = [];
   }
 
+updateVisibleCards() {
+  if (window.innerWidth <= 768) { // mobile breakpoint
+    this.visibleCards = 1;
+  } else if (window.innerWidth <= 1024) { // tablet
+    this.visibleCards = 2;
+  } else {
+    this.visibleCards = 4; // desktop
+  }}
 
   // Carousel
   getDotsArray(): number[] {

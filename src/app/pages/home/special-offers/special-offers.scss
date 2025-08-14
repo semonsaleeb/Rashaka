@@ -27,10 +27,10 @@ button.rounded-circle {
 
 /* Swapped arrow directions for RTL */
 .arrow-btn.next {
-    // background-image: url("/assets/Images/right-arrow.svg");
+  // background-image: url("/assets/Images/right-arrow.svg");
 
   &:not([disabled]):hover {
-        background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
 
   }
 }
@@ -40,7 +40,7 @@ button.rounded-circle {
   // background-image: url("/assets/Images/left-arrow.svg");
 
   &:not([disabled]):hover {
-        background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
 
   }
 }
@@ -65,7 +65,7 @@ button.rounded-circle {
   left: 0;
   width: 100%;
   height: 12px;
-// border-radius: 0 0 50px 50px;
+  // border-radius: 0 0 50px 50px;
   background: linear-gradient(90deg, #7AD03A, #2EA2CC);
 }
 
@@ -97,6 +97,9 @@ button.rounded-circle {
     gap: 1rem;
 
     @media (max-width: 768px) {
+      .success-storie{
+  height: 500px;
+}
       flex-direction: column;
       align-items: center;
     }
@@ -252,10 +255,12 @@ button.rounded-circle {
 .time-badge {
   background-color: #081E25;
   color: white;
-  padding: 8px 12px;
+  // padding: 0 12px;
   border-radius: 6px;
   font-size: 13px;
   font-weight: 200;
+  height: 45px;
+  width: 45px;
 }
 
 
@@ -637,19 +642,7 @@ a.text-decoration-none:hover .card {}
 }
 
 
-.time-badges {
-  display: flex;
-  gap: 8px;
-}
 
-.time-badge {
-  background-color: #081E25;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 200;
-}
 
 
 .video-container {
@@ -689,11 +682,13 @@ a.text-decoration-none:hover .card {}
 }
 
 .custom-hover:hover {
-    background-color: #28a745 !important; // Bootstrap green
+  background-color: #28a745 !important; // Bootstrap green
 }
-.btn-outline-secondary{
+
+.btn-outline-secondary {
   background-color: #462828;
 }
+
 /* In your component's CSS or global styles */
 .product-carousel {
   margin-top: var(--header-height, 80px);
@@ -826,15 +821,16 @@ a.text-decoration-none:hover .card {
   border: 1px solid #00000059;
   transition: all 0.3s ease;
 
-  padding: 2px 6px;     // أصغر عرض وارتفاع للزر
-  font-size: 20px;      // لتكبير الأيقونة أو النص بداخل الزر
+  padding: 2px 6px; // أصغر عرض وارتفاع للزر
+  font-size: 20px; // لتكبير الأيقونة أو النص بداخل الزر
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25px;          // حجم مخصص إذا أردت مربع صغير
+  width: 25px; // حجم مخصص إذا أردت مربع صغير
   height: 25px;
 }
+
 .custom-increase-btn i {
   font-size: 18px; // تكبير الأيقونة فقط
 }
@@ -862,4 +858,148 @@ a.text-decoration-none:hover .card {
   border-radius: 20px;
   min-width: 30px;
   text-align: center;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .header-offers,
+  .header-title-time,
+  .view-all-btn {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Time badges under title on mobile */
+  .header-title-time {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+
+  .product-card {
+    min-width: 180px !important;
+  }
+
+
+}
+
+/* Padding لليمين والشمال للديسكتوب فقط */
+@media (min-width: 768px) {
+  .desktop-padding {
+    // padding: 6rem;
+    padding-left: 6rem;
+    padding-right: 6rem;
+  }
+  .productGrid{
+  padding-right: 80px;
+  padding-left: 80px;
+}
+}
+
+
+
+/* Custom styles for mobile */
+.btn-circle-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #eee;
+}
+
+.custom-green-btn {
+  background-color: #f1f8f1;
+  border: 1px solid #e1e8e1;
+  color: #000000;
+}
+
+.custom-green-btn.active {
+  background-color: #7AD03A;
+  color: rgb(0, 0, 0);
+}
+
+/* Hide scrollbar for categories */
+.d-flex::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+@media (max-width: 768px) {
+
+  .category-scroll {
+    flex-wrap: nowrap;              /* يمنع النزول تحت بعض */
+    overflow-x: auto;               /* يضيف سكرول أفقي */
+    -webkit-overflow-scrolling: touch; /* سكرول ناعم في الموبايل */
+    justify-content: flex-start !important; /* يبدأ من اليمين */
+    padding-bottom: 5px;            /* مسافة صغيرة تحت الأزرار */
+  }
+
+  .category-scroll button {
+    flex: 0 0 auto;                 /* كل زر ياخذ عرضه فقط */
+  }
+}
+@media (max-width: 576px) {
+  .product-card {
+    width: 100% !important;
+  }
+}
+@media (max-width: 576px) {
+  .product-card {
+    margin: 0 !important;
+    transform: none !important;
+  }
+}
+@media (max-width: 576px) {
+  .py-5.px-5 {
+    min-height: 120vh; // أو أي قيمة مناسبة حسب التصميم
+  }
+}
+
+@media (max-width: 768px) {
+  .special-offers {
+    min-height: 120vh; // ارتفاع أطول زي التصميم
+    padding: 1rem !important;
+  }
+
+  .carousel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .product-image {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover;
+  }
+
+  .product-info {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  /* إخفاء الأسهم */
+  .carousel-arrow {
+    display: none !important;
+  }
+
+  /* الدوتس في النص */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
 }

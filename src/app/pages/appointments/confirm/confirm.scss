@@ -1,0 +1,31 @@
+.confirm-booking-step {
+  .booking-card {
+    background: #fff;
+    border-radius: 10px;
+  }
+
+  .specialist-card {
+    background: #f8f9fa;
+  }
+
+  .steps-card {
+    background: #f8fcf8;
+    border: 1px solid #e6f0e6;
+  }
+
+  .step {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .step:last-child {
+    border-bottom: none;
+  }
+
+  .completed h6 {
+    color: #28a745;
+  }
+}

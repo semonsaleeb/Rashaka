@@ -20,6 +20,8 @@ export interface Product {
   images: string[];
   categories: Category[];
   isFavorite?: boolean;  // optional if you're using a favorites system
+  price_before: string;
+  price_after:string;
 }
 export interface Category {
   id: number;

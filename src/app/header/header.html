@@ -195,7 +195,7 @@
 </header>
 
 <!-- Mobile Header: visible only on small screens -->
-<div class="d-block d-md-none m-0" dir="rtl">
+<div class="d-block d-md-none fixed-top m-0" dir="rtl">
   <!-- Top Header Bar -->
   <!-- Header Wrapper -->
   <div class="bg-white shadow-sm z-3 position-relative" dir="rtl">
@@ -282,8 +282,8 @@
     <!-- تسجيل الدخول / المستخدم -->
     <div class="py-3 text-center">
       @if (!isLoggedIn) {
-      <a routerLink="/auth"
-        class="btn bg-white w-100 text-dark d-flex justify-content-center align-items-center gap-2 px-3 rounded-5 border border-dark">
+      <a routerLink="/auth" 
+        class="btn bg-white w-100 text-dark d-flex justify-content-center align-items-center gap-2 px-3 rounded-5 border border-dark"  (click)="toggleMobileMenu()">
         <img src="assets/Images/user-circle.svg" alt="User" width="25" />
         <span>تسجيل الدخول</span>
       </a>

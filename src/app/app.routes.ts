@@ -1,13 +1,12 @@
 import { Routes } from '@angular/router';
 
-// Lazy-loaded standalone components
+// Standalone Components
 import { Auth } from './auth/auth';
-import { Profile } from './auth/profile/profile'; // standalone
+import { Profile } from './auth/profile/profile';
 import { SpecialOffersComponent } from './pages/home/special-offers/special-offers';
 import { CategoryProducts } from './pages/home/category-products/category-products';
 import { SucesStory } from './pages/home/suces-story/suces-story';
 import { Blogs } from './pages/home/blogs/blogs';
-import { CartIconComponent } from './cart-icon.component/cart-icon.component';
 import { CartPageComponent } from './cart-page.component/cart-page.component';
 import { Pricing } from './pages/home/pricing/pricing';
 import { ProductCard } from './product-card/product-card';
@@ -20,6 +19,9 @@ import { Address } from './auth/profile/address/address';
 import { PlaceOrder } from './place-order/place-order';
 import { Favorites } from './favorites/favorites';
 import { AboutUs } from './pages/about-us/about-us';
+import { PackagePricingOrder } from './package-pricing-order/package-pricing-order';
+import { Branches } from './pages/home/branches/branches';
+import { Appointments } from './pages/appointments/appointments';
 
 export const routes: Routes = [
   // Home page
@@ -28,131 +30,63 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home').then(m => m.Home)
   },
 
-  // Auth wrapper (optional: use this if you want nested auth routes)
+  // Authentication Routes
   {
     path: 'auth',
     component: Auth,
     children: [
-      {
-        path: 'login',
-        loadComponent: () => import('./auth/login/login').then(m => m.Login)
-      },
-      {
-        path: 'register',
-        loadComponent: () => import('./auth/register/register').then(m => m.Register)
-      },
-      {
-        path: 'forgot-password',
-        loadComponent: () => import('./auth/forgot-password/forgot-password').then(m => m.ForgotPassword)
-      },
-      {
-        path: 'verify-otp',
-        loadComponent: () => import('./auth/verify-otp/verify-otp').then(m => m.VerifyOtp)
-      },
-      {
-        path: 'reset-password',
-        loadComponent: () => import('./auth/reset-password/reset-password').then(m => m.ResetPassword)
-      }
-
-
+      { path: 'login', loadComponent: () => import('./auth/login/login').then(m => m.Login) },
+      { path: 'register', loadComponent: () => import('./auth/register/register').then(m => m.Register) },
+      { path: 'forgot-password', loadComponent: () => import('./auth/forgot-password/forgot-password').then(m => m.ForgotPassword) },
+      { path: 'verify-otp', loadComponent: () => import('./auth/verify-otp/verify-otp').then(m => m.VerifyOtp) },
+      { path: 'reset-password', loadComponent: () => import('./auth/reset-password/reset-password').then(m => m.ResetPassword) },
+      { path: 'reset-password-done', loadComponent: () => import('./auth/reset-password-done/reset-password-done').then(m => m.ResetPasswordDone) }
     ]
   },
 
-  // Profile also directly accessible from /profile (optional mirror)
-  // {
-  //   path: 'profile',
-  //   loadComponent: () => import('./auth/profile/profile').then(m => m.Profile)
-  // },
+  // Direct access to some auth pages (optional)
+  { path: 'login', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: 'forgot-password', loadComponent: () => import('./auth/forgot-password/forgot-password').then(m => m.ForgotPassword) },
+  { path: 'verify-otp', loadComponent: () => import('./auth/verify-otp/verify-otp').then(m => m.VerifyOtp) },
+  { path: 'reset-password', loadComponent: () => import('./auth/reset-password/reset-password').then(m => m.ResetPassword) },
+  { path: 'reset-password-done', loadComponent: () => import('./auth/reset-password-done/reset-password-done').then(m => m.ResetPasswordDone) },
 
-  // Optional direct route to login (outside /auth)
+  // Profile Routes
   {
-    path: 'login',
-    redirectTo: 'auth/login',
-    pathMatch: 'full'
+    path: 'profile',
+    component: Profile,
+    children: [
+      { path: '', redirectTo: 'details', pathMatch: 'full' },
+      { path: 'details', component: Details },
+      { path: 'reservations', component: Reservation },
+      { path: 'orders', component: Orders },
+      { path: 'addresses', component: Address }
+    ]
   },
-  {
-    path: 'forgot-password',
-    loadComponent: () => import('./auth/forgot-password/forgot-password').then(m => m.ForgotPassword)
-  },
-   {
-        path: 'verify-otp',
-        loadComponent: () => import('./auth/verify-otp/verify-otp').then(m => m.VerifyOtp)
-      },
-       {
-        path: 'reset-password',
-        loadComponent: () => import('./auth/reset-password/reset-password').then(m => m.ResetPassword)
-      },
-{
-  path: 'reset-password-done',
-  loadComponent: () => import('./auth/reset-password-done/reset-password-done')
-    .then(m => m.ResetPasswordDone)
-}
-,
 
-
-      
-
-  // Category Products
-  {
-    path: 'home/category-products',
-    component: CategoryProducts
-  },
-  {
-    path: 'home/packages',
-    component: Pricing
-  },
-  
- {
-    path: 'about_us',
-    component: AboutUs
-  },
-  
-   {
-    path: 'home/sucesStory',
-    component: SucesStory
-  },
-   {
-    path: 'home/ourService',
-    component: OurService
-  },
- {
-  path: 'home/special-offers',
-  component: SpecialOffersComponent,
-  data: { mode: 'grid' }
-}
-
-,
-  {
-    path: 'home/blogs',
-    component: Blogs
-  },
-   {
-    path: 'cart',
-    component: CartPageComponent
-  },
-  { path: 'product/:id', component: ProductCard },
-
+  // Shop & Content Pages
+  { path: 'home/category-products', component: CategoryProducts },
+  { path: 'home/packages', component: Pricing },
+  { path: 'home/sucesStory', component: SucesStory },
+  { path: 'home/ourService', component: OurService },
+  { path: 'home/special-offers', component: SpecialOffersComponent, data: { mode: 'grid' } },
+  { path: 'home/blogs', component: Blogs },
   { path: 'home/blog/:id', component: SingleBlog },
+    { path: 'home/branches', component: Branches },
+
+
+  // Cart & Favorites
+  { path: 'cart', component: CartPageComponent },
+  { path: 'product/:id', component: ProductCard },
   { path: 'placeOrder', component: PlaceOrder },
-
-
-{
-  path: 'profile',
-  component: Profile,
-  children: [
-    { path: '', redirectTo: 'details', pathMatch: 'full' },
-    { path: 'details', component: Details },
-    { path: 'reservations', component: Reservation },
-    { path: 'orders', component: Orders },
-    { path: 'addresses', component: Address }
-  ]
-},
   { path: 'favorites', component: Favorites },
+  { path: 'package-pricing-order', component: PackagePricingOrder },
+  // Other Pages
+  { path: 'about_us', component: AboutUs },
+  { path: 'reservation', component: Appointments },
+{ path: 'reservation/:id', component: Appointments },
 
-  // Fallback route
-  {
-    path: '**',
-    redirectTo: ''
-  }
   
+  // Fallback
+  { path: '**', redirectTo: '' }
 ];

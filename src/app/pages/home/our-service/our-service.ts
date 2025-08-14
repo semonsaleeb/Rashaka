@@ -1,14 +1,11 @@
-
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-our-service',
-  imports: [],
   templateUrl: './our-service.html',
-  styleUrl: './our-service.scss'
+  styleUrls: ['./our-service.scss']
 })
 export class OurService {
-
   cards = [
     {
       icon: 'assets/Images/22. Stethoscope.svg',
@@ -29,6 +26,6 @@ export class OurService {
 
   onGetStarted() {
     console.log('Get started clicked');
-    // Add your navigation logic here
+    // هنا ممكن تضيف التنقل أو أي أكشن
   }
 }

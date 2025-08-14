@@ -1,43 +1,42 @@
 @if (showComparePopup) {
-  <app-compare-popup 
-    [products]="compareProducts" 
-    (close)="onCloseComparePopup()">
-  </app-compare-popup>
+<app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()">
+</app-compare-popup>
 }
 
 
 @if (mode === 'carousel' && !isLoading) {
-<div class="stats-container position-relative pt-5 mt-5 mb-0">
-  <div class="special-offers-container mb-5">
+<div class="stats-container position-relative pt-5 mt-5  mb-0 " >
+  <div class="special-offers-container mb-5 desktop-padding">
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center flex-wrap px-4 mb-4" dir="rtl">
-      <div class="d-flex align-items-center gap-3 flex-wrap px-4">
-        <h2 class="section-title mb-0 d-flex align-items-center text-dark px-3 fw-bold">عروض خاصة</h2>
-        <div class="time-badges d-flex gap-2">
-          <div class="time-badge text-center">01 <br>ثانية</div>
-          <div class="time-badge text-center">06 <br>دقيقة</div>
-          <div class="time-badge text-center">33 <br>ساعة</div>
-          <div class="time-badge text-center">16 <br>يوم</div>
-        </div>
-      </div>
-
-      <a [routerLink]="['/home/special-offers']"
-        class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-1 px-5">
-        <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل">
-        عرض الكل
-      </a>
+   <div class="d-flex justify-content-between  flex-wrap header-offers mb-4" dir="rtl">
+  <div class="d-flex  gap-3 flex-wrap header-title-time">
+    <h2 class="section-title mb-0 d-flex  text-end text-dark fw-bold">عروض خاصة</h2>
+    <div class="time-badges d-flex gap-2">
+      <div class="time-badge p-1 text-center">01 <br>ثانية</div>
+      <div class="time-badge p-1 text-center">06 <br>دقيقة</div>
+      <div class="time-badge p-1 text-center">33 <br>ساعة</div>
+      <div class="time-badge p-1 text-center">16 <br>يوم</div>
     </div>
+  </div>
+
+  <a [routerLink]="['/home/special-offers']"
+     class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-1 mb-5">
+    <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل">
+    عرض الكل
+  </a>
+</div>
+
 
     <!-- Carousel Container -->
     <div class="carousel-wrapper">
-      <div class="position-relative overflow-hidden mx-5 justify-content-end">
+      <div class="position-relative overflow-hidden  justify-content-end">
         <div class="d-flex transition-transform carousel-track justify-content-end"
-          [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100/visibleCards)) + '%)'}">
+          [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100 / visibleCards)) + '%)'}">
 
           @for (product of products; track product.id) {
           <div class="carousel-slide p-3 justify-content-end" dir="rtl">
 
-            <div class="text-decoration-none text-dark bg-white" (click)="router.navigate(['/product', product.id])"
+            <div class="text-decoration-none text-dark " (click)="router.navigate(['/product', product.id])"
               style="cursor: pointer;">
 
               <div class="card h-100 product-card rounded-4 border-1 bg-white justify-content-end mb-3"
@@ -65,7 +64,7 @@
                     </button>
                   </div>
                 </div>
-               
+
                 <!-- Card Body -->
                 <div class="card-body text-end px-5">
                   <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ product.name_ar }}</h6>
@@ -130,11 +129,10 @@
           <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
         </div>
         <!-- Dots -->
-        <div class="d-flex gap-2 px-4">
+        <div class="d-flex gap-2 px-4" dir="rtl">
           @for (i of getDotsArray(); track i) {
-          <button (click)="goToSlide(i)" class="rounded-circle"
-            [class.bg-success]="currentSlideIndex === i" [class.bg-secondary]="currentSlideIndex !== i"
-            style="width: 10px; height: 10px; border: none;">
+          <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex === i"
+            [class.bg-secondary]="currentSlideIndex !== i" style="width: 10px; height: 10px; border: none;">
           </button>
           }
         </div>
@@ -150,21 +148,24 @@
   <!-- Offers Banner -->
   <img src="assets/Images/Group 9049 (1).svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
 
-  <div class="d-flex justify-content-center flex-wrap gap-3 mb-4">
-    <!-- Category buttons -->
-    @for (category of categories; track category.id) {
+ <div class="d-flex justify-content-center gap-3 mb-4 category-scroll">
+  <!-- Category buttons -->
+  @for (category of categories; track category.id) {
     <button class="btn custom-green-btn px-4 py-2"
-      [ngClass]="{ 'active': selectedCategory === category.id }" (click)="filterByCategory(category.id)">
+      [ngClass]="{ 'active': selectedCategory === category.id }"
+      (click)="filterByCategory(category.id)">
       {{ category.name_ar }}
     </button>
-    }
+  }
 
-    <!-- أضف tabindex لتجعل العنصر قابل للفوكس -->
-    <button #allBtn class="btn custom-green-btn px-4 py-2" tabindex="0"
-      [ngClass]="{ 'active': selectedCategory === 'all' }" (click)="filterByCategory('all')">
-      الكل
-    </button>
-  </div>
+  <!-- زر الكل -->
+  <button #allBtn class="btn custom-green-btn px-4 py-2" tabindex="0"
+    [ngClass]="{ 'active': selectedCategory === 'all' }"
+    (click)="filterByCategory('all')">
+    الكل
+  </button>
+</div>
+
 
   <!-- Heading -->
   <h2 class="fw-bold d-flex justify-content-center flex-wrap gap-2 mb-5">العروض</h2>
@@ -172,58 +173,152 @@
     استمتع بأفضل الخصومات والعروضات المصممة خصيصًا لك.
   </p>
 
-  <!-- Product Grid -->
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-end mx-5 py-4">
+<!-- Product Grid -->
+<div class="row row-cols-2 row-cols-md-3 g-4 justify-content-end  py-4 productGrid">
+  @for (product of products; track product.id) {
+  <div class="col">
+    <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
+      <div class="card h-100 product-card bg-white rounded-4 border shadow-sm">
+        <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
+          style="height: 200px; object-fit: contain;">
+
+        <!-- Favorite & Compare Buttons -->
+        <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+          <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
+            [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+            <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+          </button>
+
+          <button (click)="addToCompare(product)" class="btn-circle text-muted">
+            <i class="fas fa-random"></i>
+          </button>
+        </div>
+
+        <div class="card-body text-end px-3 pb-4">
+          <h6 class="card-title fw-bold mb-2">{{ product.name_ar }}</h6>
+          <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
+            {{ product.description }}
+          </p>
+
+          @if (isInCart(product.id)) {
+          <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4"
+            style="direction: rtl;">
+            <!-- Quantity Controls -->
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn custom-remove-btn btn-sm" (click)="removeItem(product.id); $event.stopPropagation()">
+                <img src="assets/Images/delete-02.svg">
+              </button>
+              <span class="fw-bold custom-qty-display text-center">
+                {{ getCartItem(product.id)?.quantity }}
+              </span>
+              <button class="btn custom-increase-btn btn-sm"
+                (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          } @else {
+          <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5  custom-hover"
+            (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
+            <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
+            إضافة للعربة
+          </button>
+          }
+        </div>
+      </div>
+    </a>
+  </div>
+  }
+</div>
+
+  <app-downloadapp></app-downloadapp>
+</div>
+}
+
+<!-- Mobile Mode -->
+@if (mode === 'mobile') {
+<div class="py-3 px-3">
+  <!-- Offers Banner - Mobile optimized -->
+  <img src="assets/Images/Group 9049 (1).svg" alt="عروض" class="img-fluid d-block mx-auto mb-3" style="max-height: 120px;">
+
+  <!-- Scrollable Categories - Horizontal scroll for mobile -->
+  <div class="d-flex overflow-x-auto pb-2 mb-3" style="scrollbar-width: none; -ms-overflow-style: none;">
+    <div class="d-flex flex-nowrap gap-2">
+      @for (category of categories; track category.id) {
+      <button class="btn custom-green-btn px-3 py-1 flex-shrink-0" 
+              [ngClass]="{ 'active': selectedCategory === category.id }"
+              (click)="filterByCategory(category.id)">
+        {{ category.name_ar }}
+      </button>
+      }
+      
+      <button class="btn custom-green-btn px-3 py-1 flex-shrink-0"
+              [ngClass]="{ 'active': selectedCategory === 'all' }" 
+              (click)="filterByCategory('all')">
+        الكل
+      </button>
+    </div>
+  </div>
+
+  <!-- Heading - Mobile optimized -->
+  <h2 class="fw-bold text-center mb-3" style="font-size: 1.5rem;">العروض</h2>
+  <p class="text-muted text-center mb-4" style="font-size: 0.9rem;">
+    استمتع بأفضل الخصومات والعروضات المصممة خصيصًا لك.
+  </p>
+
+  <!-- Product Grid - 2 columns for mobile -->
+  <div class="row row-cols-2 g-3 px-2">
     @for (product of products; track product.id) {
     <div class="col">
       <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
-        <div class="card h-100 product-card bg-white rounded-4 border shadow-sm">
-          <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
-            style="height: 200px; object-fit: contain;">
+        <div class="card h-100 product-card bg-white rounded-3 border shadow-sm">
+          <!-- Product Image - Mobile optimized -->
+          <img [src]="product.images[0]" class="card-img-top p-2" [alt]="product.name"
+               style="height: 150px; object-fit: contain;">
 
-          <!-- Favorite & Compare Buttons -->
-          <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-            <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
-              [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+          <!-- Favorite & Compare Buttons - Smaller for mobile -->
+          <div class="position-absolute top-0 start-0 p-1 d-flex flex-column gap-1">
+            <button (click)="toggleFavorite(product); $event.stopPropagation()" 
+                    class="btn-circle-sm"
+                    [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
               <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
             </button>
 
-            <button (click)="addToCompare(product)" class="btn-circle text-muted">
-              <i class="fas fa-random"></i>
+            <button (click)="addToCompare(product)" class="btn-circle-sm text-muted">
+              <i class="fas fa-random" style="font-size: 0.8rem;"></i>
             </button>
           </div>
-         
-          <div class="card-body text-end px-3 pb-4">
-            <h6 class="card-title fw-bold mb-2">{{ product.name_ar }}</h6>
-            <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
+
+          <div class="card-body text-end px-2 pb-3">
+            <h6 class="card-title fw-bold mb-1" style="font-size: 0.9rem;">{{ product.name_ar }}</h6>
+            <p class="card-text text-muted mb-2" style="font-size: 0.75rem; max-height: 36px; overflow: hidden;">
               {{ product.description }}
             </p>
-            
+
             @if (isInCart(product.id)) {
-            <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4"
-              style="direction: rtl;">
-              <!-- Quantity Controls -->
-              <div class="d-flex align-items-center gap-2">
-                <!-- Remove Button -->
-                <button class="btn custom-remove-btn btn-sm" (click)="removeItem(product.id); $event.stopPropagation()">
-                  <img src="assets/Images/delete-02.svg">
+            <div class="d-flex align-items-center justify-content-center px-2 mt-1 gap-1 border rounded-3"
+                 style="direction: rtl;">
+              <!-- Quantity Controls - Mobile optimized -->
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn custom-remove-btn btn-xs" 
+                        (click)="removeItem(product.id); $event.stopPropagation()">
+                  <img src="assets/Images/delete-02.svg" style="width: 14px;">
                 </button>
-                <!-- Quantity Display -->
-                <span class="fw-bold custom-qty-display text-center">
+                <span class="fw-bold custom-qty-display text-center" style="font-size: 0.8rem;">
                   {{ getCartItem(product.id)?.quantity }}
                 </span>
-                <!-- Increase Button -->
-                <button class="btn custom-increase-btn btn-sm"
-                  (click)="increaseQuantity(product.id); $event.stopPropagation()">
-                  <i class="fa-solid fa-plus"></i>
+                <button class="btn custom-increase-btn btn-xs"
+                        (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                  <i class="fa-solid fa-plus" style="font-size: 0.7rem;"></i>
                 </button>
               </div>
             </div>
             } @else {
-            <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover"
-              (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
-              <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-              إضافة للعربة
+            <button class="btn btn-outline-dark btn-xs bg-white text-black rounded-4 custom-hover"
+                    style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+                    (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
+              <img src="assets/Images/shopping-cart-add-01.svg" style="width: 14px;" class="px-1">
+              إضافة
             </button>
             }
           </div>
@@ -233,7 +328,8 @@
     }
   </div>
 
-  <app-blogs mode="carousel"></app-blogs>
-  <app-downloadapp></app-downloadapp>
+  <!-- Mobile-optimized components -->
+  <!-- <app-blogs mode="mobile-carousel"></app-blogs> -->
+  <app-downloadapp mobile="true"></app-downloadapp>
 </div>
 }

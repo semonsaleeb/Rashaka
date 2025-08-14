@@ -10,125 +10,92 @@
   <div class="row g-4">
     <!-- العمود الأيمن: نموذج البيانات -->
     <div class="col-lg-7">
-      <form>
+      <form (ngSubmit)="placeOrder()">
         <!-- معلومات الاتصال -->
-        <h5 class="mb-3">معلومات الاتصال</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">البريد الإلكتروني</label>
-            <input type="email" class="form-control" placeholder="example@email.com">
+        <h5>معلومات الاتصال</h5>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label>البريد الإلكتروني</label>
+            <input type="email" class="form-control" [(ngModel)]="userEmail" name="email" [readonly]="isLoggedIn" required>
           </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">رقم الجوال</label>
-            <input type="tel" class="form-control" placeholder="+966xxxxxxxxx">
-          </div>
-        </div>
-
-        <!-- عنوان الشحن -->
-        <h5 class="mt-4 mb-3">عنوان الشحن واستخدامه للطلب</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">المدينة</label>
-            <input type="text" class="form-control" placeholder="الرياض">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">المنطقة</label>
-            <input type="text" class="form-control" placeholder="ادخل العنوان">
+          <div class="col-md-6">
+            <label>رقم الجوال</label>
+            <input type="tel" class="form-control" [(ngModel)]="userPhone" name="phone" [readonly]="isLoggedIn" required>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">الرمز البريدي / ZIP</label>
-            <input type="text" class="form-control" placeholder="الرمز البريدي">
-          </div>
-
-          <!-- حفظ العنوان -->
-          <div class="col-md-6 mt-5 my-2">
-
-            <input class="form-check-input mx-3 " type="checkbox" id="saveAddress">
-            <label class="form-check-label" for="saveAddress">
-              حفظ العنوان
-            </label>
-          </div>
+        <!-- اختيار عنوان الشحن -->
+        <h5>عنوان الشحن واستخدامه للطلب</h5>
+        <div class="d-flex mb-3 align-items-center" style="gap: 10px;">
+          <select class="form-select flex-grow-1 w-50" 
+                  [(ngModel)]="selectedAddressId" 
+                  name="address" 
+                  (change)="onAddressChange()" 
+                  required>
+            <option value="" disabled selected>اختر عنوان الشحن</option>
+            @for (addr of addresses; track addr.id) {
+              <option [value]="addr.id">
+                {{ addr.city_name }} - {{ addr.area_name }} - {{ addr.zip || '' }}
+              </option>
+            }
+          </select>
+          <button type="button" class="btn btn-outline-primary" (click)="navigateToAddAddress()">
+            إضافة عنوان جديد
+          </button>
         </div>
-        <!-- ملاحظات -->
-        <h5 class="mt-4 mb-3">ملاحظات حول الطلب</h5>
-        <textarea class="form-control mb-3" rows="5" placeholder="أدخل ملاحظاتك (اختياري)"></textarea>
 
         <!-- اختيار طريقة الدفع -->
-        <h5 class="mt-4 mb-3">اختيار طريقة الدفع</h5>
-        <div class="border rounded p-3 mb-3">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="payment" id="card" checked>
-            <label class="form-check-label" for="card">
-              الدفع عن طريق البطاقة
-            </label>
+        <div class="mb-3">
+          <div>
+            <input type="radio" id="payment_credit_card" name="paymentMethod" value="credit_card" [(ngModel)]="paymentMethod" />
+            <label for="payment_credit_card">الدفع عن طريق ماي فاتورة (بطاقة ائتمان)</label>
           </div>
-
-          <!-- بيانات البطاقة -->
-          <div class="row mt-3 g-2">
-            <div class="col-md-6">
-              <input type="text" class="form-control" placeholder="رقم البطاقة">
-            </div>
-            <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="MM/YY">
-            </div>
-            <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="CVC">
-            </div>
+          <div>
+            <input type="radio" id="payment_cash" name="paymentMethod" value="cash" [(ngModel)]="paymentMethod" />
+            <label for="payment_cash">الدفع نقدًا</label>
           </div>
-        </div>
-
-        <!-- خيارات دفع أخرى -->
-        <div class="form-check mb-2">
-          <input class="form-check-input" type="radio" name="payment" id="tabby">
-          <label class="form-check-label" for="tabby">
-            قسّم الفاتورة مع تابي
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="payment" id="cash">
-          <label class="form-check-label" for="cash">
-            الدفع عند الاستلام
-          </label>
         </div>
       </form>
     </div>
 
     <!-- العمود الأيسر: ملخص الطلب -->
     <div class="col-lg-5">
-      <div class="card shadow-sm border-1 rounded-4 p-4" style="background-color: #FAFAFA;">
+      <div class="card border-1 rounded-4 p-3" style="background-color: #FAFAFA;">
         <h5 class="text-end mb-4">طلباتك</h5>
 
         <!-- المنتجات -->
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <div class="d-flex align-items-center">
-            <img src="assets/Images/product1.png" alt="product" style="width: 50px; height: 50px;">
-            <span class="ms-2">عبوة ايس بيري 20 عبوة</span>
-          </div>
-          <span>320.00 ر.س</span>
+        <div class="mb-3">
+          @for (item of cartItems; track item.id) {
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <img [src]="item.image || (item.images?.[0] || 'assets/default.png')" 
+                   alt="{{ item.product_name }}"
+                   class="me-2 mx-2"
+                   style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+              <span class="flex-grow-1">
+                {{ item.product_name }} × {{ item.quantity }}
+              </span>
+              <span>
+                {{ (item.sale_unit_price ? item.sale_unit_price : item.unit_price) * item.quantity | number : '1.2-2' }} ر.س
+              </span>
+            </div>
+          }
         </div>
 
         <!-- كود الخصم -->
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="ادخل كود الخصم">
-          <button class="btn btn-success">تطبيق</button>
+          <input type="text" class="form-control rounded-0" placeholder="ادخل كود الخصم" [(ngModel)]="promoCode">
+          <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">تطبيق</button>
         </div>
 
         <!-- المجموع -->
         <ul class="list-unstyled text-end mb-4">
           <li class="d-flex justify-content-between py-2">
-            <span>المجموع</span>
-            <span>460.00 ر.س</span>
-          </li>
-          <li class="d-flex justify-content-between py-2">
             <span>رسوم شحن</span>
-            <span>30.00 ر.س</span>
-          </li>
+            <span>{{ shippingFee | number : '1.2-2' }} ر.س</span>
+          </li> 
           <li class="d-flex justify-content-between fw-bold pt-3 border-top">
             <span>الإجمالي</span>
-            <span>480.00 ر.س</span>
+            <span>{{ (totalSalePrice + shippingFee) | number : '1.2-2' }} ر.س</span>
           </li>
         </ul>
 
@@ -139,7 +106,7 @@
           </label>
         </div>
 
-        <button class="btn btn-success w-100 fw-bold">إتمام الطلب</button>
+        <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">إتمام الطلب</button>
       </div>
     </div>
   </div>

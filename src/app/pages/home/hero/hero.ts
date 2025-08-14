@@ -1,5 +1,6 @@
 
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
@@ -22,8 +23,10 @@ export class Hero {
     { src: 'assets/Images/536783.png', alt: 'صورة الصحة 4' }
   ];
   
-  constructor() { }
-
+  constructor(private router: Router) { }
+navigateToReservation() {
+  this.router.navigate(['/reservation']);
+}
   nextSlide() {
     this.currentSlide = (this.currentSlide + 1) % this.sliderImages.length;
   }

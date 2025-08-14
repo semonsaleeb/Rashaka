@@ -161,4 +161,27 @@ removeFromFavorites(product: Product): void {
     this.cartItems = [];
     this.cartState.updateCount(0);
   }
+
+  clearAllFavorites(): void {
+  if (!this.isLoggedIn()) {
+    this.router.navigate(['/auth/login']);
+    return;
+  }
+
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  if (!confirm('هل أنت متأكد من مسح جميع المفضلة؟')) return;
+
+  this.favoriteService.clearFavorites(token).subscribe({
+    next: () => {
+      this.favorites = [];
+      this.favoriteService.setFavorites([]);
+    },
+    error: (err) => {
+      console.error('Error clearing favorites:', err);
+    }
+  });
+}
+
 }
