@@ -143,23 +143,7 @@ padding-right: 3rem;
   }
 }
 
-@media (max-width: 768px) {
-  .success-stories {
-    padding: 3rem 1rem;
-  }
 
-  .story-deck {
-    height: auto;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-
-
-  .carousel-custom-wrapper {
-    padding: 0;
-  }
-}
 
 /* Arrow buttons styling for RTL */
 .arrow-btn {
@@ -437,62 +421,23 @@ padding-right: 3rem;
 }
 
 
+/* ✅ موبايل فقط */
 @media (max-width: 768px) {
-  .section-title {
-    font-size: 1.1rem;
-    text-align: end;
-  }
-
   .story-card-custom {
-    position: absolute;
     width: 100%;
-    height: auto; /* ارتفاع مرن حسب المحتوى */
-    transition: all 0.5s ease;
-    z-index: 0;
-    opacity: 0;
-    transform: scale(0.9);
+    max-width: 100%;   /* ياخد كل العرض في الموبايل */
+    margin: 0 auto;    /* يتوسّط */
   }
 
-  .story-card-custom.center {
-    opacity: 1;
-    transform: scale(1);
-    z-index: 2;
+  .youtube-embed {
+    width: 100%;
+    height: 350px;     /* 👈 ارتفاع الفيديو */
   }
 
-  .story-card-custom.left {
-    transform: translateX(-100%) scale(0.9);
-    opacity: 0.7;
-    z-index: 1;
-  }
-
-  .story-card-custom.right {
-    transform: translateX(100%) scale(0.9);
-    opacity: 0.7;
-    z-index: 1;
-  }
-
-  .carousel-custom-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* بعد الكروت لحد الأسهم */
-  .custom-arrow {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-  }
-
-  /* بعد الأسهم لحد النقاط */
-  .custom-dots {
-    margin-top: 2rem;
-  }
-
-  /* المسافة بين عنوان القسم وبداية الكروت */
-  .success-stories {
-    padding-bottom: 2rem; /* تقدر تغيريها لو حابة */
+  .youtube-embed iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
   }
 }
 

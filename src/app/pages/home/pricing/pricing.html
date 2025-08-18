@@ -9,26 +9,41 @@ Carousel Mode
 <div class="pricing-container w-100 py-5 px-5">
   <div class="header text-end">
     <h2 class="title px-3">الباقات</h2>
-    <div class="toggle-container d-flex justify-content-end align-items-end gap-2 my-4 ms-auto" style="width: 26%;"
-      dir="rtl">
-      <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">الأجهزة
-        و الجلسات</button>
-      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'"
-        (click)="changePlanType('nutrition')">النظام الغذائي</button>
+
+    <div class="d-flex justify-content-between align-items-center my-4 flex-wrap" dir="rtl">
+      <!-- Toggle buttons -->
+      <div class="toggle-container d-flex gap-2">
+        <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
+          الأجهزة و الجلسات
+        </button>
+        <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+          النظام الغذائي
+        </button>
+      </div>
+
+      <!-- Link -->
+      <a [routerLink]="['/home/packages']"
+        class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 p-0">
+        <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل" width="25px">
+        عرض الكل
+
+      </a>
     </div>
   </div>
+
 
   @if (plans.length > 0) {
   <!-- Carousel Wrapper -->
   <div class="carousel-wrapper position-relative overflow-hidden px-5">
     <div class="d-flex transition-transform carousel-track justify-content-end"
-      [ngStyle]="{ transform: 'translateX(-' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
+      [ngStyle]="{transform: 'translateX(-' + (currentSlideIndex * (105/visibleCards)) + '%)'}">
       @for (plan of plans; track plan) {
-      <div class="carousel-slide p-3" dir="rtl" style="flex: 0 0 calc(100% / 3); max-width: calc(100% / 3);">
+      <div class="carousel-slide " dir="rtl" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
+        [style.max-width]="'calc(100% / ' + visibleCards + ')'">
         <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
           [ngClass]="plan.styleType + '-card'">
           <!-- Card Top -->
-          <div class="card-top position-relative p-3">
+          <div class="card-top position-relative ">
             <div class="ribbon-top-left fs-6"
               [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">{{ plan.title }}</div>
             <img src="assets/Images/Group 9010.svg" alt="Frame"
@@ -95,16 +110,20 @@ Carousel Mode
 
     <!-- Navigation -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 py-3">
-      <div class="d-flex gap-2 px-4">
+      <div class="d-flex gap-2 px-4 d-none d-md-flex">
         <button class="arrow-btn prev" (click)="scrollRight()"
           [disabled]="currentSlideIndex >= plans.length - visibleCards"></button>
         <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
       </div>
+
       <!-- Dots -->
       <div class="d-flex gap-2 px-4">
         @for (i of getDotsArray(); track i) {
-        <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex === i"
-          [class.bg-secondary]="currentSlideIndex !== i" style="width: 10px; height: 10px; border: none;"></button>
+        <button (click)="goToSlide(i)" class="rounded-circle"
+          [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
+          style="width: 10px; height: 10px; border: none;">
+        </button>
+
         }
       </div>
     </div>
@@ -121,27 +140,30 @@ Carousel Mode
 Grid Mode
 =========================== -->
 @if (mode === 'grid') {
-<div class="pricing-container w-100 py-5">
+<div class="pricing-container w-100 py-5 mt-5" dir="rtl">
   <!-- Header -->
   <div class="header text-center">
     <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
     <h2 class="title px-3">الاشتراكات</h2>
     <p>اختر الباقة التي تناسب احتياجاتك وابدأ الآن بسهولة.</p>
-    <div class="toggle-container d-flex justify-content-center gap-2 my-4 w-25 mx-auto">
-      <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">الأجهزة
-        و الجلسات</button>
-      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'"
-        (click)="changePlanType('nutrition')">النظام الغذائي</button>
+    <div class="toggle-container d-flex gap-2">
+      <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
+        الأجهزة و الجلسات
+      </button>
+      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+        النظام الغذائي
+      </button>
     </div>
   </div>
 
   @if (plans.length > 0) {
   <!-- Grid Wrapper -->
-  <div class="carousel-wrapper position-relative overflow-hidden px-5">
+  <div class="carousel-wrapper position-relative overflow-hidden px-5 ">
     <div class="d-flex transition-transform carousel-track justify-content-end"
-      [ngStyle]="{ transform: 'translateX(-' + (currentSlideIndex * (100/visibleCards)) + '%)' }">
+      [ngStyle]="{transform: 'translateX(-' + (currentSlideIndex * (105/visibleCards)) + '%)'}">
       @for (plan of plans; track plan) {
-      <div class="carousel-slide p-3" dir="rtl" style="flex: 0 0 calc(100% / 3); max-width: calc(100% / 3);">
+      <div class="carousel-slide p-3" dir="rtl" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
+        [style.max-width]="'calc(100% / ' + visibleCards + ')'">
         <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
           [ngClass]="plan.styleType + '-card'">
 
@@ -213,19 +235,23 @@ Grid Mode
 
     <!-- Navigation -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 py-3">
-      <div class="d-flex gap-2 px-4">
-        <button class="arrow-btn prev" (click)="scrollRight()"
-          [disabled]="currentSlideIndex >= plans.length - visibleCards"></button>
-        <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
-      </div>
       <!-- Dots -->
-      <div class="d-flex gap-2 px-4">
-        @for (i of getDotsArray(); track i) {
-        <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex === i"
-          [class.bg-secondary]="currentSlideIndex !== i" style="width: 10px; height: 10px; border: none;">
-        </button>
-        }
-      </div>
+   <div class="d-flex gap-2 justify-content-center align-items-center mt-3">
+  @for (i of getDotsArray(); track i) {
+    <button 
+      (click)="goToSlide(i)" 
+      class="dot-btn"
+      [ngClass]="{'active-dot': currentSlideIndex === i}">
+    </button>
+  }
+</div>
+
+
+    <div class="d-flex gap-2 px-4 d-none d-md-flex">
+  <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
+  <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= plans.length - visibleCards"></button>
+</div>
+
     </div>
   </div>
   } @else {
@@ -234,11 +260,14 @@ Grid Mode
     <p class="fs-5 fw-semibold">لا يوجد باقات حاليا لـ {{selectedPlan}}</p>
   </div>
   }
+  <!-- <div class="px-0">
+<app-suces-story style="margin:0; padding:0; display:block;"></app-suces-story>
+</div> -->
+
 </div>
 }
 
 <!-- Optional Extra Section -->
-<app-suces-story></app-suces-story>
 
 
 @if (showPopup) {
@@ -289,30 +318,28 @@ Grid Mode
           </div>
 
           <div class="feature mt-4 mb-3">
-        @for (feature of isPopupExpanded 
-        ? (selectedPlanForPopup?.features ?? []) 
-        : (selectedPlanForPopup?.features ?? []).slice(0, 3); track feature) {
-  <span class="feature-label fs-6 d-block mb-1">
-    <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
-  </span>
-}
-           @if ((selectedPlanForPopup?.features?.length ?? 0) > 3) {
-  <button class="btn btn-link p-0 mt-2 text-decoration-underline"
-    (click)="isPopupExpanded = !isPopupExpanded">
-    {{ isPopupExpanded ? 'عرض أقل' : 'عرض المزيد' }}
-  </button>
-}
+            @for (feature of isPopupExpanded
+            ? (selectedPlanForPopup?.features ?? [])
+            : (selectedPlanForPopup?.features ?? []).slice(0, 3); track feature) {
+            <span class="feature-label fs-6 d-block mb-1">
+              <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
+            </span>
+            }
+            @if ((selectedPlanForPopup?.features?.length ?? 0) > 3) {
+            <button class="btn btn-link p-0 mt-2 text-decoration-underline"
+              (click)="isPopupExpanded = !isPopupExpanded">
+              {{ isPopupExpanded ? 'عرض أقل' : 'عرض المزيد' }}
+            </button>
+            }
 
 
           </div>
 
           <div class="d-flex gap-2">
             <button class="btn btn-outline-secondary w-50" (click)="closePopup()">إلغاء</button>
-           <button 
-  class="btn btn-success w-50" 
-  (click)="goToOrder(selectedPlanForPopup!)">
-  تأكيد
-</button>
+            <button class="btn btn-success w-50" (click)="goToOrder(selectedPlanForPopup!)">
+              تأكيد
+            </button>
 
 
           </div>

@@ -1,9 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { SucesStory } from '../suces-story/suces-story';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-our-service',
   templateUrl: './our-service.html',
-  styleUrls: ['./our-service.scss']
+  styleUrls: ['./our-service.scss'],
+  standalone:true,
+  imports: [CommonModule, RouterModule],
 })
 export class OurService {
   cards = [

@@ -22,11 +22,16 @@
   margin: 0;
 }
 
+/* =========================
+   Toggle Buttons
+========================= */
+
 .toggle-container {
   display: flex;
   background: #f0f0f0;
   border-radius: 25px;
   padding: 3px;
+  width: fit-content;
 }
 
 .toggle-btn {
@@ -38,10 +43,72 @@
   font-size: 14px;
   transition: all 0.3s ease;
   color: #000000;
+  font-weight: 500;
 }
 
 .toggle-btn.active {
   background: #7AD03A;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* =========================
+   Mobile Enhancements
+========================= */
+@media (max-width: 768px) {
+  .toggle-container {
+    width: 100%;
+    justify-content: space-between;
+    padding: 4px;
+    border-radius: 15px;
+  }
+
+  .toggle-btn {
+    flex: 1;                 /* ياخدوا مساحة متساوية */
+    padding: 12px 0;         /* زر أطول */
+    font-size: 16px;         /* خط أكبر */
+    border-radius: 12px;     /* أقل دوران عشان شكل عصري */
+  }
+
+  .toggle-btn.active {
+    background: #7AD03A;
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+.dot-btn {
+  width: 10px;
+  height: 10px;
+  border: none;
+  background-color: #ccc;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  &.active-dot {
+    background-color: #7AD03A !important;
+    width: 40px;
+    height: 12px;
+    border-radius: 30px; // أفضل من 10% عشان تكون بيضاوية مظبوطة
+    align-self: center; // يضمن إنها في النص مع الباقي
+  }
+}
+
+@media (max-width: 767px) {
+  .dot-btn {
+    margin: 0 auto;
+  }
+}
+
+.dot-active {
+  background-color: #7AD03A !important;
+}
+.dot-inactive {
+  background-color: #ccc !important; /* رمادي خفيف */
 }
 
 .cards-container {
@@ -285,10 +352,25 @@
   will-change: transform;
 }
 
-.carousel-track .card {
-  flex: 0 0 calc(100% / 3);
-  // max-width: calc(100% / 3);
-}
+// .carousel-track .card {
+//   flex: 0 0 calc(100% / 3);
+//   max-width: calc(100% / 3);
+// }
+
+// @media (max-width: 1199px) {
+//   .carousel-track .card {
+//     flex: 0 0 50%;
+//     max-width: 50%;
+//   }
+// }
+
+// @media (max-width: 768px) {
+//   .carousel-track .card {
+//     flex: 0 0 100%;
+//     max-width: 100%;
+//   }
+//}
+
 
 .carousel-track {
   gap: 16px;

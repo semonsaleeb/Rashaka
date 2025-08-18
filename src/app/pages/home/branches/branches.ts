@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-branches',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './branches.html',
   styleUrl: './branches.scss'
 })
@@ -72,6 +73,7 @@ goToBranchSlide(index: number): void {
 
 
 
+
 ngOnInit(): void {
   this.updateVisibleBranchCards();
   window.addEventListener('resize', this.updateVisibleBranchCards.bind(this));
@@ -79,13 +81,21 @@ ngOnInit(): void {
 
 updateVisibleBranchCards(): void {
   const width = window.innerWidth;
+
   if (width < 576) {
-    this.visibleBranchCards = 1;
+    this.visibleBranchCards = 1;   // موبايل
   } else if (width >= 576 && width < 768) {
-    this.visibleBranchCards = 2;
+    this.visibleBranchCards = 2;   // تابلت
   } else {
-    this.visibleBranchCards = 3;
+    this.visibleBranchCards = 3;   // لابتوب وديسكتوب
   }
+}
+
+
+
+getMaxBranchSlideIndex(): number {
+  // عدد السلايدز - عدد الكروت الظاهرة
+  return Math.max(0, this.locations.length - this.visibleBranchCards);
 }
 
 }

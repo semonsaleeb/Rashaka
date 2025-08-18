@@ -6,15 +6,18 @@
 
 <!-- Carousel Mode -->
 @if (mode === 'carousel') {
-<div class="position-relative ">
+<div class="position-relative">
 
   <!-- Left Pattern -->
   <img src="assets/Images/pattern.svg" class="left-pattern"
     style="position: absolute; left: 0; top: 20px; height: 200px; width: 100px; z-index: 1;">
 
+  <!-- الخلفية تاخد العرض كله -->
   <div class="category-products-container py-5">
-    @if (!isLoading) {
-    <div class="">
+    
+    <!-- المحتوى الداخلي مع padding -->
+    <div class="px-3">
+      @if (!isLoading) {
       <div class="special-offers-container mb-5">
 
         <!-- Header Section -->
@@ -31,11 +34,11 @@
           <!-- Category Buttons -->
           <div class="category-buttons d-flex gap-2 py-3" [ngClass]="{'mobile-scroll': isMobile}">
             <button (click)="filterByCategory('all')" class="fw-bold" [ngClass]="{
-            'btn': true,
-            'btn-sm': true,
-            'btn-success': selectedCategory === 'all',
-            'btn-outline-success': selectedCategory !== 'all'
-          }">
+              'btn': true,
+              'btn-sm': true,
+              'btn-success': selectedCategory === 'all',
+              'btn-outline-success': selectedCategory !== 'all'
+            }">
               الكل
             </button>
 
@@ -57,8 +60,8 @@
         <div class="position-relative carousel-wrapper my-3" dir="rtl">
           <div class="carousel-container">
             <div class="d-flex transition-transform carousel-track" [ngStyle]="{
-       transform: 'translateX(+' + (currentSlideIndex * (isMobile ? (100 / visibleCards) : (130 / visibleCards))) + '%)'
-     }">
+                transform: 'translateX(+' + (currentSlideIndex * (isMobile ? (100 / visibleCards) : (130 / visibleCards))) + '%)'
+              }">
               @for (product of filteredProducts; track product.id) {
               <div class="carousel-slide p-3">
                 <div class="card product-card rounded-4">
@@ -107,70 +110,79 @@
                   </a>
 
                   <!-- Cart Controls -->
-                 <!-- الزر أو كنترول الكمية -->
-              <div class="mb-5 mt-3 mx-5">
-                @if (isInCart(product.id)) {
-                <div class="d-flex align-items-center justify-content-center px-3 gap-2 border rounded-4"
-                  style="direction: rtl;">
-                  <div class="d-flex align-items-center gap-2">
-                    <button class="btn custom-remove-btn btn-sm"
-                      (click)="removeItem(product.id); $event.stopPropagation(); $event.preventDefault()">
-                      <img src="assets/Images/delete-02.svg">
+                  <div class="py-4 mx-2">
+                    @if (isInCart(product.id)) {
+                    <div class="d-flex align-items-center justify-content-center  gap-2 border rounded-4"
+                      style="direction: rtl;">
+                      <div class="d-flex align-items-center gap-2">
+                        <button class="btn custom-remove-btn btn-sm"
+                          (click)="removeItem(product.id); $event.stopPropagation(); $event.preventDefault()">
+                          <img src="assets/Images/delete-02.svg">
+                        </button>
+                        <span class="fw-bold custom-qty-display text-center">{{ getCartItem(product.id)?.quantity
+                          }}</span>
+                        <button class="btn custom-increase-btn btn-sm"
+                          (click)="increaseQuantity(product.id); $event.stopPropagation(); $event.preventDefault()">
+                          <i class="fa-solid fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    } @else {
+                    <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover w-100"
+                      (click)="addToCart(product.id); $event.stopPropagation(); $event.preventDefault()">
+                      <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
+                      إضافة للعربة
                     </button>
-                    <span class="fw-bold custom-qty-display text-center">{{ getCartItem(product.id)?.quantity }}</span>
-                    <button class="btn custom-increase-btn btn-sm"
-                      (click)="increaseQuantity(product.id); $event.stopPropagation(); $event.preventDefault()">
-                      <i class="fa-solid fa-plus"></i>
-                    </button>
+                    }
                   </div>
-                </div>
-                } @else {
-                <button
-                  class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 mb-3   custom-hover w-100 mt-2"
-                  (click)="addToCart(product.id); $event.stopPropagation(); $event.preventDefault()">
-                  <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-                  إضافة للعربة
-                </button>
-                }
-              </div>
                 </div>
               </div>
               }
             </div>
           </div>
 
-          <!-- Navigation -->
-          <div class="d-flex justify-content-between align-items-center mt-4 px-3">
-            <div class="d-flex gap-2">
-              @for (i of getDotsArray(); track i) {
-              <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex === i"
-                [class.bg-secondary]="currentSlideIndex !== i" style="width: 10px; height: 10px; border: none;">
-              </button>
-              }
-            </div>
-            <div class="d-flex gap-2">
-              <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
-              <button class="arrow-btn prev" (click)="nextSlide()"
-                [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
-            </div>
-          </div>
+<!-- Navigation -->
+<div class="d-flex align-items-center justify-content-between mt-4">
+
+  <!-- Dots -->
+  <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0">
+    @for (i of getDotsArray(); track i) {
+      <button (click)="goToSlide(i)" class="rounded-circle"
+        [class.bg-success]="currentSlideIndex === i"
+        [class.bg-secondary]="currentSlideIndex !== i"
+        style="width: 10px; height: 10px; border: none;">
+      </button>
+    }
+  </div>
+
+  <!-- Arrows (desktop only) -->
+  <div class="d-flex gap-2 d-none d-md-flex">
+    <button class="arrow-btn next" (click)="nextSlide()" [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
+      <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
+
+  </div>
+
+</div>
+
+
         </div>
       </div>
+      } @else {
+      <!-- Loading -->
+      <div class="loading-spinner">
+        <div class="spinner-border text-success" role="status"></div>
+        <p>جاري تحميل المنتجات...</p>
+      </div>
+      }
     </div>
-    } @else {
-    <!-- Loading -->
-    <div class="loading-spinner">
-      <div class="spinner-border text-success" role="status"></div>
-      <p>جاري تحميل المنتجات...</p>
-    </div>
-    }
   </div>
 
   <!-- Right Pattern -->
   <img src="assets/Images/pattern.svg"
-    style="position: absolute; right: 0; bottom: 0; height: 180px; width: 100px; z-index: 1; transform: rotate(180deg);">
+    style="position: absolute; right: 0; bottom: 0; height: 150px; width: 100px; z-index: 1; transform: rotate(180deg);">
 </div>
 }
+
 
 <!-- Grid Mode -->
 @if (mode === 'grid') {
@@ -281,9 +293,9 @@
               </div>
 
               <!-- الزر أو كنترول الكمية -->
-              <div class="mb-5 mt-3 mx-5">
+              <div class="py-4">
                 @if (isInCart(product.id)) {
-                <div class="d-flex align-items-center justify-content-center px-3 gap-2 border rounded-4"
+                <div class="d-flex align-items-center justify-content-center  gap-2 border rounded-4"
                   style="direction: rtl;">
                   <div class="d-flex align-items-center gap-2">
                     <button class="btn custom-remove-btn btn-sm"
@@ -298,8 +310,7 @@
                   </div>
                 </div>
                 } @else {
-                <button
-                  class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 mb-3   custom-hover w-100 mt-2"
+                <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5    custom-hover w-100 "
                   (click)="addToCart(product.id); $event.stopPropagation(); $event.preventDefault()">
                   <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
                   إضافة للعربة

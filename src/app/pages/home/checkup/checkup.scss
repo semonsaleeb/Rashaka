@@ -8,6 +8,39 @@ body {
   background-color: #E9F7DE;
 
 }
+.custom-btn {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  width: auto;          /* في الديسكتوب */
+  margin-left: auto;
+}
+
+.custom-device-img {
+  max-width: 100%;   /* افتراضي على الديسكتوب */
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .custom-device-img {
+    max-width: 80% !important;  
+    display: block;             /* عشان نقدر نتحكم في المارجن */
+    margin-left: -30px;         /* تحريك الصورة شمال */
+    /* أو بدل كده */
+    /* transform: translateX(-10%); */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .custom-btn {
+    width: 35% !important;        /* يملى الشاشة كلها */
+    font-size: 1.2rem !important;  /* خط مناسب للموبايل */
+    padding-left: 1rem;            /* padding أصغر شوية */
+    padding-right: 1rem;
+  }
+}
+
+
 
 .left-bg {
   background-image: url('/assets/Images/Rectangle 5921.png');
@@ -92,8 +125,8 @@ button:hover img {
   }
 
   .btn {
-    width: 100px !important;
-    font-size: 0.9rem !important;
+    // width: 100px !important;
+    // font-size: 0.9rem !important;
   }
 
   .p-5 {

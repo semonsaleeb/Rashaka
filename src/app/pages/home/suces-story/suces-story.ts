@@ -1,61 +1,76 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SwiperContainer } from 'swiper/element';
-import { register } from 'swiper/element/bundle';
-import { SwiperOptions } from 'swiper/types';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Downloadapp } from '../downloadapp/downloadapp';
 import { Checkup } from '../checkup/checkup';
 import { Branches } from '../branches/branches';
+import { RouterModule } from '@angular/router';
 
-// Register Swiper web components
-register();
 @Component({
   selector: 'app-suces-story',
-  imports: [CommonModule, Downloadapp, Checkup, Branches ],
+  imports: [CommonModule, Downloadapp, Checkup, Branches, RouterModule],
   templateUrl: './suces-story.html',
   styleUrl: './suces-story.scss'
 })
 export class SucesStory {
-    @Input() mode: 'carousel' | 'grid' = 'grid';
+      @Input() mode: 'carousel' | 'grid' = 'grid';
 
-  
+  isMobile = false;
   currentIndex = 0;
 
-  stories = [
+stories = [
   {
-    id: 1,
-    youtubeId: 'abc123',
+   id: 1,
+    localVideo: 'assets/Images/فيديو اعلان فحص الجلسات.mp4',
+    type: 'local',
     title: 'قصة نجاح ١',
     description: 'تجربة رائعة',
     image: 'assets/Images/Group 9025.svg'
   },
   {
     id: 2,
-    youtubeId: 'def456',
+    localVideo: 'assets/Images/ام محمد.MP4',
+    type: 'local',
     title: 'قصة نجاح ٢',
     description: 'نتائج مبهرة',
     image: 'assets/Images/Group 9025.svg'
   },
-  {
-    id: 3,
+  // {
+  //   id: 3,
+  //   localVideo: 'assets/Images/تجارب ابطال الرشاقة السعيدة.mp4',
+  //   type: 'local',
+  //   title: 'قصة نجاح ٣',
+  //   description: 'تجربة ملهمة',
+  //   image: 'assets/Images/Group 9025.svg'
+  // },
+    {
+    id: 4,
     youtubeId: 'y6120QOlsfU',
-    title: 'قصة نجاح ٣',
-    description: 'تجربة ملهمة',
+    type: 'youtube',
+    title: 'قصة نجاح ٢',
+    description: 'نتائج مبهرة',
     image: 'assets/Images/Group 9025.svg'
   }
 ];
 
 
-  constructor(private sanitizer: DomSanitizer) {}
 
-  getSafeYoutubeUrl(id: string) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(
-      `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
-
-      
-    );
+  constructor(private sanitizer: DomSanitizer) {
+    this.checkScreenSize();
   }
+
+  @HostListener('window:resize')
+  checkScreenSize() {
+    this.isMobile = window.innerWidth <= 768;
+  }
+
+getSafeYoutubeUrl(id: string | undefined) {
+  if (!id) return ''; // أو ممكن ترجع null
+  return this.sanitizer.bypassSecurityTrustResourceUrl(
+    `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
+  );
+}
+
 
   getCardClass(index: number): string {
     const total = this.stories.length;
@@ -67,22 +82,27 @@ export class SucesStory {
     if (index === next) return 'right';
     return '';
   }
-  
 
-  nextSlide() {
-    this.currentIndex = (this.currentIndex + 1) % this.stories.length;
-  }
 
-  prevSlide() {
-    this.currentIndex = (this.currentIndex - 1 + this.stories.length) % this.stories.length;
+// لو عايز تحرك يمين/شمال برضه
+nextSlide() {
+  if (this.currentIndex < this.stories.length - 1) {
+    this.currentIndex++;
+  } else {
+    this.currentIndex = 0; // يرجع لأول فيديو
   }
+}
+
+prevSlide() {
+  if (this.currentIndex > 0) {
+    this.currentIndex--;
+  } else {
+    this.currentIndex = this.stories.length - 1; // آخر فيديو
+  }
+}
+
 
   goToSlide(index: number) {
     this.currentIndex = index;
-  }
-
-    onGetStarted() {
-    console.log('Get started clicked');
-    // Add your navigation logic here
   }
 }

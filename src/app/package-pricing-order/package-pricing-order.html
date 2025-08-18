@@ -1,97 +1,102 @@
 <div class="container my-5" dir="rtl">
     <!-- عنوان الصفحة -->
     <div class="alert alert-light text-center p-3 mb-4" style="border-radius: 12px;">
-        <h4 class="text-center m-0">
+        <!-- <h4 class="text-center m-0">
             <img src="assets/Images/Frame 9033.svg" class="me-2" style="height: 40px;">
             <span>الاستراتيجيات</span>
-        </h4>
+        </h4> -->
     </div>
 
-    <div class="row g-4" *ngIf="!isLoading; else loadingTemplate">
+  <div class="row g-4">
 
-        <!-- العمود الأيسر: معلومات إضافية -->
-        <div class="col-lg-7">
-            <div class="card border-0 rounded-0 p-4 shadow-sm" style="background-color: #FAFAFA;">
-                <h5 class="text-end mb-4 fw-bold" style="color: #198754;">الأشتراكات</h5>
+  <!-- العمود الأيسر: معلومات إضافية -->
+  <div class="col-lg-7">
+    <div class="card border-0 rounded-0 p-4 shadow-sm" style="background-color: #FAFAFA;">
+      <h5 class="text-end mb-4 fw-bold" style="color: #198754;">الأشتراكات</h5>
 
-                <!-- رسالة التأكيد -->
-                <div class="alert alert-info mb-4" style="border-radius: 10px;">
-                    <p class="mb-0">تنبيه: بعد الاشتراك من خلال الموقع، يجب زيارة أقرب فرع لتأكيد الاشتراك وتفعيله.</p>
-                </div>
+      <!-- رسالة التأكيد -->
+      <div class="alert alert-info mb-4" style="border-radius: 10px;">
+        <p class="mb-0">تنبيه: بعد الاشتراك من خلال الموقع، يجب زيارة أقرب فرع لتأكيد الاشتراك وتفعيله.</p>
+      </div>
 
-                <!-- اختيار طريقة الدفع -->
-                <div class="mb-3">
-                    <h6 class="mb-3 fw-bold" style="color: #000000;">اختيار طريقة الدفع</h6>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" id="payment_credit_card" name="paymentMethod"
-                            value="credit_card" [(ngModel)]="paymentMethod">
-                        <label class="form-check-label" for="payment_credit_card">الدفع عن طريق ماي فاتورة (بطاقة
-                            ائتمان)</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" id="payment_cash" name="paymentMethod" value="cash"
-                            [(ngModel)]="paymentMethod">
-                        <label class="form-check-label" for="payment_cash">الدفع نقدًا</label>
-                    </div>
-                </div>
-            </div>
+      <!-- اختيار طريقة الدفع -->
+      <div class="mb-3">
+        <h6 class="mb-3 fw-bold" style="color: #000000;">اختيار طريقة الدفع</h6>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" id="payment_credit_card" name="paymentMethod"
+            value="credit_card" [(ngModel)]="paymentMethod">
+          <label class="form-check-label" for="payment_credit_card">
+            الدفع عن طريق ماي فاتورة (بطاقة ائتمان)
+          </label>
         </div>
-
-        <!-- العمود الأيمن: تفاصيل الباقة -->
-        <div class="col-lg-5" *ngIf="selectedPackage">
-            <div class="card p-4 rounded-4 shadow-sm" style="background-color: #FAFAFA;">
-                <!-- معلومات الباقة -->
-                <div class="mb-4">
-                    <h5 class="text-primary mb-2 fw-bold  text-dark"> الأشتراك في باقة {{ selectedPackage.title }}</h5>
-                    <div class="alert border border-1 rounded-3 w-25 py-1 mb-0">
-                        <p>{{ selectedPackage.sessions }} شهر</p>
-                    </div>
-                </div>
-
-                <!-- كود الخصم -->
-                <div class="input-group mb-4">
-                    <input type="text" class="form-control rounded-0" placeholder="ادخل كود الخصم"
-                        [(ngModel)]="promoCode">
-                    <button class="btn rounded-0" style="background-color: #7AD03A; color: rgb(0, 0, 0);"
-                        (click)="applyDiscount()">تطبيق</button>
-                </div>
-
-                <!-- المجموع -->
-                <ul class="list-unstyled text-end mb-4">
-                    <li class="d-flex justify-content-between py-2">
-                        <span>سعر الباقة</span>
-                        <span>{{ selectedPackage.price | number:'1.2-2' }} ر.س</span>
-                    </li>
-                    <li class="d-flex justify-content-between py-2" *ngIf="discountApplied">
-                        <span>الخصم</span>
-                        <span>-{{ discountAmount | number:'1.2-2' }} ر.س</span>
-                    </li>
-                    <li class="d-flex justify-content-between fw-bold pt-3 border-top">
-                        <span>الإجمالي</span>
-                        <span>{{ totalPrice | number:'1.2-2' }} ر.س</span>
-                    </li>
-                </ul>
-
-                <!-- تأكيد الاستراتيجيات -->
-                <div class="mb-3 form-check">
-                    <input type="checkbox" id="terms" [(ngModel)]="agreeToTerms" class="form-check-input">
-                    <label for="terms" class="form-check-label">لقد قرأت ووافقت على <a href="#">الشروط
-                            والأحكام</a></label>
-                </div>
-
-                <!-- زر الاشتراك -->
-                <button class="btn w-100 fw-bold py-3"
-                    style="background-color: #7AD03A; color: #030303; font-size: 1.1rem;"
-                    (click)="confirmSubscription()">
-                    تأكيد الاشتراك
-                </button>
-
-
-
-
-            </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" id="payment_cash" name="paymentMethod"
+            value="cash" [(ngModel)]="paymentMethod">
+          <label class="form-check-label" for="payment_cash">الدفع نقدًا</label>
         </div>
+      </div>
     </div>
+  </div>
+
+  <!-- العمود الأيمن: تفاصيل الباقة -->
+  @if (selectedPackage) {
+    <div class="col-lg-5">
+      <div class="card p-4 rounded-4 shadow-sm" style="background-color: #FAFAFA;">
+        <!-- معلومات الباقة -->
+        <div class="mb-4">
+          <h5 class="text-primary mb-2 fw-bold text-dark">
+            الأشتراك في باقة {{ selectedPackage.title }}
+          </h5>
+          <div class="alert border border-1 rounded-3 w-25 py-1 mb-0">
+            <p>{{ selectedPackage.sessions }} شهر</p>
+          </div>
+        </div>
+
+        <!-- كود الخصم -->
+        <div class="input-group mb-4">
+          <input type="text" class="form-control rounded-0" placeholder="ادخل كود الخصم"
+            [(ngModel)]="promoCode">
+          <button class="btn rounded-0" style="background-color: #7AD03A; color: rgb(0, 0, 0);"
+            (click)="applyDiscount()">تطبيق</button>
+        </div>
+
+        <!-- المجموع -->
+        <ul class="list-unstyled text-end mb-4">
+          <li class="d-flex justify-content-between py-2">
+            <span>سعر الباقة</span>
+            <span>{{ selectedPackage.price | number:'1.2-2' }} ر.س</span>
+          </li>
+          @if (discountApplied) {
+            <li class="d-flex justify-content-between py-2">
+              <span>الخصم</span>
+              <span>-{{ discountAmount | number:'1.2-2' }} ر.س</span>
+            </li>
+          }
+          <li class="d-flex justify-content-between fw-bold pt-3 border-top">
+            <span>الإجمالي</span>
+            <span>{{ totalPrice | number:'1.2-2' }} ر.س</span>
+          </li>
+        </ul>
+
+        <!-- تأكيد الشروط -->
+        <div class="mb-3 form-check">
+          <input type="checkbox" id="terms" [(ngModel)]="agreeToTerms" class="form-check-input">
+          <label for="terms" class="form-check-label">
+            لقد قرأت ووافقت على <a href="#">الشروط والأحكام</a>
+          </label>
+        </div>
+
+        <!-- زر الاشتراك -->
+        <button class="btn w-100 fw-bold py-3"
+          style="background-color: #7AD03A; color: #030303; font-size: 1.1rem;"
+          (click)="confirmSubscription()">
+          تأكيد الاشتراك
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
 </div>
 
 <!-- Template للتحميل -->

@@ -71,7 +71,7 @@ button.rounded-circle {
 
 .special-offers-container {
   background-color: #E9F7DE;
-  padding: 3rem;
+  padding: 4rem;
   width: 100%;
   margin: 0 auto;
 
@@ -394,7 +394,6 @@ button.rounded-circle {
   }
 }
 
-a.text-decoration-none:hover .card {}
 
 .special-offers-container {
   .carousel-wrapper {
@@ -430,6 +429,9 @@ a.text-decoration-none:hover .card {}
   }
 
   @media (max-width: 576px) {
+    .special-offers-container {
+    padding: 2rem;
+  }
     .carousel-slide {
       flex: 0 0 100% !important;
       max-width: 100% !important;

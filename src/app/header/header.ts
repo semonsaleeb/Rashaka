@@ -7,7 +7,7 @@ import { CartService } from '../services/cart.service'; // ✅ Add this
 import {  FavoriteService } from '../services/favorite.service';
 import { CartStateService } from '../services/cart-state-service';
 import { CartIconComponent } from '../cart-icon.component/cart-icon.component';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Category, ProductService } from '../services/product';
 import { Router, RouterLink, RouterModule } from '@angular/router';
@@ -136,15 +136,20 @@ extractUniqueCategories(products: any[]): Category[] {
 }
 
   updateCartCount(): void {
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        const count = response.data.items.reduce((total, item) => total + item.quantity, 0);
-        this.cartState.updateCount(count);
-      },
-      error: (err) => {
-        console.error('Error fetching cart count:', err);
-      }
-    });
+  this.cartService.getCart().subscribe({
+  next: (response) => {
+    this.cartCount = response.data.totalQuantity;
+  },
+  error: (err: HttpErrorResponse) => {
+    const apiMessage = err?.error?.message;
+    if (err.status === 401 || apiMessage === 'Unauthenticated.') {
+      this.cartCount = 0; // reset
+    } else {
+      console.error('Error fetching cart count:', err);
+    }
+  }
+});
+
   }
 
   onLanguageChange(event: any) {

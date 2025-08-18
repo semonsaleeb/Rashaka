@@ -6,7 +6,41 @@
 }
 
 .custom-green-btn:hover {
-  background-color: white;
-  color: #7AD03A;
+  background-color: rgb(0, 0, 0);
+  color: #000000;
   border: 2px solid #7AD03A;
+}
+
+.custom-green-btn {
+  background-color: #7AD03A;
+  color: black;
+  border: 2px solid #7AD03A;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.custom-green-btn:hover {
+  background-color: white;
+  color: #000000;
+  border: 2px solid #7AD03A;
+}
+
+/* تحسين الموبايل */
+@media (max-width: 768px) {
+  .card-body h6 {
+    font-size: 14px;
+  }
+
+  .card-body .small {
+    font-size: 12px;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .progress {
+    height: 8px;
+  }
 }

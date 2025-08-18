@@ -286,6 +286,11 @@
 .custom-hover:hover {
     background-color: #28a745 !important; // Bootstrap green
 }
+@media (max-width: 768px) {
+  .dots-wrapper {
+    justify-content: center !important;
+  }
+}
 
 @media (max-width: 768px) {
   .category-buttons.mobile-scroll {

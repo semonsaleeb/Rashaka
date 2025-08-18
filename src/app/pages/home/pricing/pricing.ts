@@ -2,19 +2,19 @@ import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewInit } from '
 import { CommonModule } from '@angular/common';
 import { PricingService } from '../../../services/pricing.service';
 import { SucesStory } from '../suces-story/suces-story';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Plan } from '../../../../models/plan.model';
 
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule, SucesStory],
+  imports: [CommonModule, RouterModule],
   templateUrl: './pricing.html',
   styleUrls: ['./pricing.scss']
 })
 export class Pricing implements OnInit, AfterViewInit {
   @Input() mode: 'carousel' | 'grid' = 'grid';
-  selectedPlan: string = 'sessions';
+  selectedPlan: string = 'nutrition';
   plans: Plan[] = [];                     // <-- استخدم Plan[]
   groupedPlans: Plan[][] = [];            // <-- مصفوفة مصفوفات Plans
   isLoading = false;
@@ -23,16 +23,19 @@ export class Pricing implements OnInit, AfterViewInit {
   activeSubscription: any = null;
   subscribedPlanId: number | null = null;
   isPopupExpanded = false;
-
+  visibleCards=3;
   @ViewChild('carouselInner') carouselInner!: ElementRef;
 
   constructor(
     private pricingService: PricingService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    
   ) { }
 
 ngOnInit() {
+     this.updateVisibleCards();
+  window.addEventListener('resize', () => this.updateVisibleCards());
   this.route.queryParams.subscribe(params => {
     const openPopup = params['openPopup'] === 'true';
     const pkgId = Number(params['id']);
@@ -41,6 +44,15 @@ ngOnInit() {
   });
 }
 
+updateVisibleCards() {
+  if (window.innerWidth < 768) {
+    this.visibleCards = 1; // موبايل
+  } else if (window.innerWidth < 1200) {
+    this.visibleCards = 2; // تابلت
+  } else {
+    this.visibleCards = 3; // ديسكتوب
+  }
+}
 loadPackages(pkgId?: number, openPopup?: boolean): void {
   this.isLoading = true;
   this.pricingService.getPackages(this.selectedPlan).subscribe({
@@ -117,9 +129,12 @@ loadPackages(pkgId?: number, openPopup?: boolean): void {
     }
   }
 
-  getDotsArray(): number[] {
-    return Array.from({ length: this.groupedPlans.length }, (_, i) => i);
-  }
+getDotsArray() {
+  const total = Math.max(1, this.plans.length - this.visibleCards + 1);
+  return Array(total).fill(0).map((_, i) => i);
+}
+
+
 
   changePlanType(type: string): void {
     this.selectedPlan = type;
@@ -145,7 +160,6 @@ loadPackages(pkgId?: number, openPopup?: boolean): void {
   }
 
   @ViewChild('carouselTrack', { static: false }) carouselTrack!: ElementRef;
-  visibleCards: number = 3;
 
   scrollLeft(): void {
     if (this.currentSlideIndex > 0) {

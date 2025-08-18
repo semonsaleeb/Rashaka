@@ -20,7 +20,7 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./cart-page.component.scss']
 })
 export class CartPageComponent implements OnInit {
-  progressValue = 60;
+  progressValue = 80;
   cartItems: CartItem[] = [];
   totalPrice: number = 0;             // original total (no sale)
   totalSalePrice: number | null = 0;  // final total after sales/promos

@@ -83,12 +83,15 @@ export class CartService {
     );
   }
 
-  getCart(): Observable<{ status: string; data: CartResponse }> {
-    return this.http.get<{ status: string; data: CartResponse }>(
-      `${this.apiUrl}/cart`,
-      { headers: this.getHeaders() }
-    );
-  }
+getCart(): Observable<{ status: string; data: CartResponse }> {
+  return this.http.get<{ status: string; data: CartResponse }>(
+    `${this.apiUrl}/cart`,
+    {
+      headers: this.getHeaders().set('Accept', 'application/json')
+    }
+  );
+}
+
 
   reduceCartItem(productId: number): Observable<any> {
     return this.http.post(

@@ -154,6 +154,11 @@
             transform: rotate(180deg);
 }
 
+@media (max-width: 768px) {
+  .col-lg-6.text-center.text-lg-end {
+    padding-top: 10rem;
+  }
+}
 
 @media (max-width: 576px) {
   .gradient-border {

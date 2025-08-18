@@ -30,17 +30,16 @@
 
 .carousel-indicators [data-bs-target] {
   background-color: #BABABA;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; /* العادية تبقى دايرة */
+  border: none;
 }
 
 .carousel-indicators .active {
   background-color: #7AD03A !important;
-  width: 60px ;
-  height: 15px;
-  padding: 3px 4px;
-  border-radius: 9999px;  
-    margin-top: 1px;
-
+  width: 40px;        /* عريض */
+  height: 12px;       /* أنحف */
+  border-radius: 50px; /* يديكِ مستطيل مستقيم من النص وأطراف مدورة */
+  margin-top: 2px;
 }

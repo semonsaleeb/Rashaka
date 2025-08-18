@@ -6,21 +6,23 @@
   <!-- Desktop Grid -->
   <div class="row g-4 d-none d-md-flex">
     @for (card of cards; track card) {
-      <div class="col-md-4">
-        <div class="card border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative" style="z-index: 2;">
-          <img src="assets/Images/Frame 37.svg" alt="Frame"
-            style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);">
-          <img [src]="card.icon" class="card-img-top mx-auto mt-3" style="width: 60px;" [alt]="card.title">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">{{ card.title }}</h5>
-            <p class="card-text">{{ card.description }}</p>
-            <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" (click)="onGetStarted()">
+    <div class="col-md-4">
+      <div class="card border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative"
+        style="z-index: 2;">
+        <img src="assets/Images/Frame 37.svg" alt="Frame"
+          style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);">
+        <img [src]="card.icon" class="card-img-top mx-auto mt-3" style="width: 60px;" [alt]="card.title">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{ card.title }}</h5>
+          <p class="card-text">{{ card.description }}</p>
+          <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3"
+              [routerLink]="['/reservation']">
               احجز الآن
               <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
             </button>
-          </div>
         </div>
       </div>
+    </div>
     }
   </div>
 
@@ -30,35 +32,34 @@
     <!-- Slides -->
     <div class="carousel-inner">
       @for (card of cards; let i = $index; track card) {
-        <div class="carousel-item" [class.active]="i === 0">
-          <div class="card border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative mx-auto" style="max-width: 90%; z-index: 2;">
-            <img src="assets/Images/Frame 37.svg" alt="Frame"
-              style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);">
-            <img [src]="card.icon" class="card-img-top mx-auto mt-3" style="width: 60px;" [alt]="card.title">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">{{ card.title }}</h5>
-              <p class="card-text">{{ card.description }}</p>
-              <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" (click)="onGetStarted()">
-                احجز الآن
-                <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
-              </button>
-            </div>
+      <div class="carousel-item" [class.active]="i === 0">
+        <div class="card border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative mx-auto"
+          style="max-width: 90%; z-index: 2;">
+          <img src="assets/Images/Frame 37.svg" alt="Frame"
+            style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);">
+          <img [src]="card.icon" class="card-img-top mx-auto mt-3" style="width: 60px;" [alt]="card.title">
+          <div class="card-body">
+            <h5 class="card-title fw-bold">{{ card.title }}</h5>
+            <p class="card-text">{{ card.description }}</p>
+            <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3"
+              [routerLink]="['/reservation']">
+              احجز الآن
+              <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
+            </button>
+
           </div>
         </div>
+      </div>
       }
     </div>
 
-<!-- Indicators -->
-<div class="carousel-indicators">
-  @for (card of cards; let i = $index; track card) {
-    <button type="button"
-            data-bs-target="#servicesCarousel"
-            [attr.data-bs-slide-to]="i"
-            [class.active]="i === 0"
-            [attr.aria-current]="i === 0 ? 'true' : null"
-            [attr.aria-label]="'Slide ' + (i+1)"></button>
-  }
-</div>
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+      @for (card of cards; let i = $index; track card) {
+      <button type="button" data-bs-target="#servicesCarousel" [attr.data-bs-slide-to]="i" [class.active]="i === 0"
+        [attr.aria-current]="i === 0 ? 'true' : null" [attr.aria-label]="'Slide ' + (i+1)"></button>
+      }
+    </div>
 
 
     <!-- Controls -->

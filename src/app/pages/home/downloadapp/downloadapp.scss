@@ -60,3 +60,53 @@
     top: -60px;
   }
 }
+
+
+// .mobile-design h3 {
+//   font-size: 1.2rem;
+//   line-height: 1.6;
+// }
+
+// .mobile-design span {
+//   font-size: 0.95rem;
+// }
+@media (max-width: 767px) {
+  .mobile-design {
+    display: block !important;
+  }
+}
+@media (max-width: 767px) {
+  .gradient-top-bottom-border {
+    position: relative;
+    border: 2px solid #D3F1C5;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: linear-gradient(90deg, #7AD03A 0%, #2EA2CC 100%);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      z-index: 1;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: linear-gradient(90deg, #7AD03A 0%, #2EA2CC 100%);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      z-index: 1;
+    }
+  }
+}
