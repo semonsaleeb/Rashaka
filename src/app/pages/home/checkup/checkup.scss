@@ -9,8 +9,8 @@ body {
 
 }
 .custom-btn {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   width: auto;          /* في الديسكتوب */
   margin-left: auto;
 }
@@ -33,10 +33,10 @@ body {
 
 @media (max-width: 768px) {
   .custom-btn {
-    width: 35% !important;        /* يملى الشاشة كلها */
+    // width: 35% !important;        /* يملى الشاشة كلها */
     font-size: 1.2rem !important;  /* خط مناسب للموبايل */
-    padding-left: 1rem;            /* padding أصغر شوية */
-    padding-right: 1rem;
+    padding-left: 3rem;            /* padding أصغر شوية */
+    padding-right: 3rem;
   }
 }
 
@@ -131,5 +131,14 @@ button:hover img {
 
   .p-5 {
     padding: 1rem !important;
+  }
+}
+
+
+
+@media (max-width: 767px) {
+  .mobile-padding {
+    padding: 2rem !important;   /* كل الجوانب */
+    padding-top: 2rem !important;
   }
 }

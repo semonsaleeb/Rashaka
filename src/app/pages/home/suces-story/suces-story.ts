@@ -105,4 +105,30 @@ prevSlide() {
   goToSlide(index: number) {
     this.currentIndex = index;
   }
+
+
+
+  // component.ts
+touchStartX = 0;
+touchEndX = 0;
+
+onTouchStart(event: TouchEvent) {
+  this.touchStartX = event.changedTouches[0].screenX;
+}
+
+onTouchEnd(event: TouchEvent) {
+  this.touchEndX = event.changedTouches[0].screenX;
+  this.handleSwipe();
+}
+
+handleSwipe() {
+  const swipeDistance = this.touchStartX - this.touchEndX;
+  if (swipeDistance > 50) {
+    this.nextSlide(); // سحب لليسار
+  }
+  if (swipeDistance < -50) {
+    this.prevSlide(); // سحب لليمين
+  }
+}
+
 }

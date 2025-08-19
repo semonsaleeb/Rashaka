@@ -26,6 +26,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   filteredProducts: Product[] = [];
   categories: Category[] = [];
   selectedCategories: number[] = [];
+  progressValue = 80;
 
   isLoading = true;
   currentSlideIndex = 0;
@@ -392,4 +393,33 @@ export class CategoryProducts implements OnInit, OnDestroy {
     this.showComparePopup = false;
     this.compareProducts = [];
   }
+
+
+
+  touchStartX = 0;
+touchEndX = 0;
+
+onTouchStart(event: TouchEvent): void {
+  this.touchStartX = event.changedTouches[0].screenX;
+}
+
+onTouchEnd(event: TouchEvent): void {
+  this.touchEndX = event.changedTouches[0].screenX;
+  this.handleSwipe();
+}
+
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) { // عتبة عشان ما يعتبرش اللمسة العادية Swipe
+    if (swipeDistance > 0) {
+      // 👉 Swipe يمين → روح للسابق
+      this.nextSlide();
+    } else {
+      // 👈 Swipe شمال → روح للي بعده
+      this.prevSlide();
+    }
+  }
+}
+
 }

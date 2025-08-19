@@ -411,7 +411,7 @@ button.rounded-circle {
   .carousel-slide {
     flex: 0 0 calc(100% / 3);
     max-width: calc(100% / 3);
-    padding: 0 10px;
+    // padding: 0 10px;
     box-sizing: border-box;
     transition: all 0.3s ease;
 
@@ -430,7 +430,7 @@ button.rounded-circle {
 
   @media (max-width: 576px) {
     .special-offers-container {
-    padding: 2rem;
+    padding: 1rem;
   }
     .carousel-slide {
       flex: 0 0 100% !important;
@@ -455,7 +455,7 @@ button.rounded-circle {
 
 
 .special-offers-container {
-  padding: 3rem;
+  padding: 2rem;
   width: 100%;
   margin: 0 auto;
 
@@ -484,6 +484,9 @@ button.rounded-circle {
       flex-direction: column;
       align-items: center;
     }
+      .special-offers-container {
+    padding: 1rem;
+  }
   }
 
   .product-card {
@@ -688,7 +691,7 @@ button.rounded-circle {
 }
 
 .btn-outline-secondary {
-  background-color: #462828;
+  // background-color: #462828;
 }
 
 /* In your component's CSS or global styles */
@@ -783,7 +786,7 @@ button.rounded-circle {
 
 .carousel-item-wrapper {
   flex: 0 0 calc(100% / 3); // 3 كروت في الصفحة
-  padding: 0 12px;
+  // padding: 0 12px;
   box-sizing: border-box;
 }
 

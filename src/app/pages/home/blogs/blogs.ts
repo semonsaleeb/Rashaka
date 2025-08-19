@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -24,7 +24,28 @@ export class Blogs implements OnInit {
   constructor(private blogService: BlogService) {}
 
   ngOnInit(): void {
+    this.setVisibleCards();
     this.loadBlogs();
+  }
+
+  /** 🔥 يغيّر عدد الكروت حسب حجم الشاشة */
+  @HostListener('window:resize')
+  onResize() {
+    this.setVisibleCards();
+  }
+
+  setVisibleCards(): void {
+    if (window.innerWidth < 576) {
+      this.visibleCards = 1; // موبايل
+    } else if (window.innerWidth < 992) {
+      this.visibleCards = 2; // تابلت
+    } else {
+      this.visibleCards = 3; // ديسكتوب
+    }
+    // لو الكاروسيل واقف على سلايد مش موجود بعد التغيير يرجعه
+    if (this.currentSlideIndex > this.blogs.length - this.visibleCards) {
+      this.currentSlideIndex = Math.max(0, this.blogs.length - this.visibleCards);
+    }
   }
 
   loadBlogs(): void {
@@ -86,9 +107,36 @@ export class Blogs implements OnInit {
       this.currentSlideIndex--;
     }
   }
+
   onBlogClick(id: number): void {
-  console.log('Clicked blog ID:', id);
-  // You can do more here if needed
+    console.log('Clicked blog ID:', id);
+  }
+
+
+  touchStartX = 0;
+touchEndX = 0;
+
+onTouchStart(event: TouchEvent): void {
+  this.touchStartX = event.changedTouches[0].screenX;
+}
+
+onTouchEnd(event: TouchEvent): void {
+  this.touchEndX = event.changedTouches[0].screenX;
+  this.handleSwipe();
+}
+
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) { // عتبة عشان ما يعتبرش اللمسة العادية Swipe
+    if (swipeDistance > 0) {
+      // 👉 Swipe يمين → روح للسابق
+      this.nextSlide();
+    } else {
+      // 👈 Swipe شمال → روح للي بعده
+      this.prevSlide();
+    }
+  }
 }
 
 }

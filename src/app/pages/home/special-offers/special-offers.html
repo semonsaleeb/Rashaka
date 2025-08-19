@@ -31,13 +31,13 @@
     <div class="carousel-wrapper">
       <div class="position-relative overflow-hidden  justify-content-end">
         <div class="d-flex transition-transform carousel-track justify-content-end"
-          [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100 / visibleCards)) + '%)'}">
+          [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (100 / visibleCards)) + '%)'}"
+          (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
 
           @for (product of products; track product.id) {
-          <div class="carousel-slide  justify-content-end" dir="rtl">
+          <div class="carousel-slide  justify-content-end px-2" dir="rtl">
 
             <div class="text-decoration-none text-dark" [routerLink]="['/product', product.id]"
-
               style="cursor: pointer;">
 
               <div class="card h-100 product-card rounded-4 border-1 bg-white justify-content-end mb-3"
@@ -67,7 +67,7 @@
                 </div>
 
                 <!-- Card Body -->
-                <div class="card-body text-end px-3">
+                <div class="card-body mx-lg-3 text-end px-3">
                   <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ product.name_ar }}</h6>
                   <p class="card-text text-muted mb-3 text-end"
                     style="font-size: 15px; max-height: 40px; overflow: hidden;">
@@ -108,11 +108,15 @@
                     </div>
                   </div>
                   } @else {
-                  <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover"
-                    (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
-                    <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-                    إضافة للعربة
+                  <button class="btn btn-outline-dark btn-xs bg-white text-black rounded-4 custom-hover"
+                    style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+                    (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()"
+                    data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+                                  إضافة الي العربة
+                    <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+
                   </button>
+
                   }
                 </div>
               </div>
@@ -200,7 +204,7 @@
             </button>
           </div>
 
-          <div class="card-body text-end px-3 pb-4">
+          <div class="card-body text-end px-3 mx-lg-3 pb-4">
             <h6 class="card-title fw-bold mb-2">{{ product.name_ar }}</h6>
             <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
               {{ product.description }}
@@ -234,11 +238,15 @@
               </div>
             </div>
             } @else {
-            <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5  custom-hover"
-              (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
-              <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-              إضافة للعربة
+            <button class="btn btn-outline-dark btn-xs bg-white text-black rounded-4 custom-hover"
+              style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+              (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()"
+              data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+                            إضافة الي العربة
+              <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+
             </button>
+
             }
           </div>
         </div>
@@ -253,9 +261,9 @@
 
 <!-- Mobile Mode -->
 @if (mode === 'mobile') {
-<div class="py-3 px-3">
+<div class="py-5 ">
   <!-- Offers Banner - Mobile optimized -->
-  <img src="assets/Images/Group 9049 (1).svg" alt="عروض" class="img-fluid d-block mx-auto mb-3"
+  <img src="assets/Images/Group 9049 (1).svg" alt="عروض" class="img-fluid d-block mx-auto mb-3 mt-5"
     style="max-height: 120px;">
 
   <!-- Scrollable Categories - Horizontal scroll for mobile -->
@@ -303,7 +311,7 @@
             </button>
           </div>
 
-          <div class="card-body text-end px-2 pb-3">
+          <div class="card-body mx-lg-3 text-end px-2 pb-3">
             <h6 class="card-title fw-bold mb-1" style="font-size: 0.9rem;">{{ product.name_ar }}</h6>
             <p class="card-text text-muted mb-2" style="font-size: 0.75rem; max-height: 36px; overflow: hidden;">
               {{ product.description }}
@@ -329,10 +337,13 @@
             } @else {
             <button class="btn btn-outline-dark btn-xs bg-white text-black rounded-4 custom-hover"
               style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
-              (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()">
-              <img src="assets/Images/shopping-cart-add-01.svg" style="width: 14px;" class="px-1">
-              إضافة
+              (click)="addToCart(product.id); $event.preventDefault(); $event.stopPropagation()"
+              data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+              
+              إضافة الي العربة
+            <img src="assets/Images/shopping-cart-add-01.svg" style="width: 2ch;" class="px-1">
             </button>
+
             }
           </div>
         </div>
@@ -346,3 +357,73 @@
   <app-downloadapp mobile="true"></app-downloadapp>
 </div>
 }
+
+
+
+<div class="offcanvas offcanvas-end" dir="rtl" tabindex="-1" id="cartSidebar" aria-labelledby="cartSidebarLabel">
+  <div class="offcanvas-header">
+    <h5 id="cartSidebarLabel" class="fw-bold">🛒 سلة المشتريات</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="إغلاق"></button>
+  </div>
+  <div class="offcanvas-body">
+
+    <!-- العرض اللي إنتي كتباه -->
+    <div class="col-12">
+      <h6 class="mb-4 text-end">
+        <img src="assets/Images/delivery.svg" class="me-2" style="max-height: 22px;">
+        <span> شحن مجاني للطلبات أكثر من </span>
+        <strong>1000 ريال</strong>
+      </h6>
+
+      <div class="progress border border-c mb-3" style="height: 10px;">
+        <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
+          [attr.aria-valuenow]="progressValue" aria-valuemin="0" aria-valuemax="100" style="background-color: #2EA2CC;">
+        </div>
+      </div>
+
+      @for (item of cartItems; track item) {
+      <div class="card mb-3 shadow-sm border-1 rounded-4 p-2" style="background-color: #FAFAFA;">
+        <div class="row g-2 align-items-center">
+          <div class="col-3 text-center">
+            <img [src]="item.images[0]" class="img-fluid rounded-3" style="max-height: 70px;">
+          </div>
+          <div class="col-9">
+            <div class="card-body mx-lg-3 text-end p-2">
+              <h6 class="card-title fw-bold">{{ item.product_name_ar }}</h6>
+              <div class="small">
+                @if (item.sale_unit_price) {
+                <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} ر.س</span>
+                <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
+                } @else {
+                <span class="fw-bold">{{ item.unit_price }} ر.س</span>
+                }
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between mt-2">
+                <button class="btn btn-outline-danger btn-sm" (click)="removeItem(item.product_id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+                <div class="d-flex align-items-center gap-2 ">
+                  <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <span>{{ item.quantity }}</span>
+                  <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- زر الذهاب لعربة التسوق -->
+    <a routerLink="/cart" class="btn btn-success w-100 mt-3">
+      <i class="fa-solid fa-cart-shopping me-2"></i> الذهاب إلى السلة
+    </a>
+
+  </div>
+</div>

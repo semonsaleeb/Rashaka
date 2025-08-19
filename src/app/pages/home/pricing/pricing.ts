@@ -235,4 +235,34 @@ getDotsArray() {
       queryParams: { openPopup: 'true', id: pkg.id }
     });
   }
+
+
+
+  touchStartX = 0;
+touchEndX = 0;
+
+onTouchStart(event: TouchEvent): void {
+  this.touchStartX = event.changedTouches[0].screenX;
+}
+
+onTouchEnd(event: TouchEvent): void {
+  this.touchEndX = event.changedTouches[0].screenX;
+  this.handleSwipe();
+}
+
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) { 
+    if (swipeDistance > 0) {
+      // 👉 Swipe يمين → السابق
+      this.scrollLeft();
+    } else {
+      // 👈 Swipe شمال → التالي
+      this.scrollRight();
+    }
+  }
+}
+
+
 }
