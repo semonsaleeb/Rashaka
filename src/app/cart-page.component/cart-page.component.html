@@ -3,7 +3,7 @@
   <!-- إذا كانت العربة فارغة -->
   @if (cartItems.length === 0) {
   <div class="text-center">
-    <div class="align-items-center mt-4">
+    <div class="align-items-center mt-5 py-5 ">
       <img src="assets/Images/Add to Cart-cuate 1.svg" alt="" class="img-fluid" style="max-width: 200px;">
     </div>
     <h4 class="mt-3">عربة التسوق فارغة!</h4>
@@ -16,7 +16,8 @@
     </button>
   </div>
   } @else {
-  <!-- محتوى العربة إذا كانت تحتوي على منتجات -->
+
+  <!-- محتوى العربة -->
   <div class=" text-center p-2 mb-4 py-5">
     <h5 class="text-center d-flex justify-content-center align-items-center gap-2">
       <img src="assets/Images/Frame 9033.svg" class="img-fluid" style="max-height: 28px;">
@@ -33,21 +34,32 @@
         <span> شحن مجاني للطلبات أكثر من </span>
         <strong>1000 ريال</strong>
       </h6>
+
       <div class="progress border border-c mb-3" style="height: 10px;">
         <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
           [attr.aria-valuenow]="progressValue" aria-valuemin="0" aria-valuemax="100" style="background-color: #2EA2CC;">
         </div>
       </div>
 
-      @for (item of cartItems; track item) {
+      @for (item of cartItems; track trackByFn($index, item)) {
       <div class="card mb-3 shadow-sm border-1 rounded-4 p-2" style="background-color: #FAFAFA;">
         <div class="row g-2 align-items-center">
+
+          <!-- صورة المنتج -->
           <div class="col-3 text-center">
+            @if (item.images && item.images.length > 0) {
             <img [src]="item.images[0]" class="img-fluid rounded-3" style="max-height: 70px;">
+            } @else {
+            <img src="assets/Images/placeholder.png" class="img-fluid rounded-3" style="max-height: 70px;">
+            }
           </div>
+
+          <!-- تفاصيل المنتج -->
           <div class="col-9">
             <div class="card-body text-end p-2">
               <h6 class="card-title fw-bold">{{ item.product_name_ar }}</h6>
+
+              <!-- السعر -->
               <div class="small">
                 @if (item.sale_unit_price) {
                 <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} ر.س</span>
@@ -56,8 +68,9 @@
                 <span class="fw-bold">{{ item.unit_price }} ر.س</span>
                 }
               </div>
-              <div class="d-flex align-items-center justify-content-between mt-2">
 
+              <!-- أزرار التحكم -->
+              <div class="d-flex align-items-center justify-content-between mt-2">
                 <button class="btn btn-outline-danger btn-sm" (click)="removeItem(item.product_id)">
                   <i class="fa-solid fa-trash"></i>
                 </button>
@@ -73,6 +86,7 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
       }
@@ -89,6 +103,7 @@
           <button class="btn custom-green-btn rounded-0">تطبيق</button>
         </div>
 
+        <!-- الأسعار -->
         <ul class="mb-3 text-end p-0 small">
           <li class="d-flex justify-content-between py-2">
             <span>المجموع</span>
@@ -119,7 +134,45 @@
           </li>
         </ul>
 
-        <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">إتمام الطلب</button>
+        @if (!token) {
+        <button class="btn custom-green-btn w-100 fw-bold" data-bs-toggle="modal" data-bs-target="#authModal">
+          إتمام الطلب
+        </button>
+        } @else {
+        <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">
+          إتمام الطلب
+        </button>
+        }
+
+        <!-- Popup Modal -->
+        <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 p-3">
+              <!-- Close button -->
+              <div class="d-flex justify-content-end">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+              </div>
+
+              <!-- صورة -->
+              <div class="text-center mb-3">
+                <img src="assets/Images/Enter OTP-cuate 1.svg" alt="Login Illustration" style="max-width: 200px;">
+              </div>
+
+              <!-- العنوان -->
+              <h5 class="text-center fw-bold mb-2">يرجى تسجيل الدخول أو إنشاء حساب جديد للمتابعة.</h5>
+
+              <!-- الأزرار -->
+              <div class="d-flex justify-content-center gap-3 mt-3">
+                <button class="btn btn-outline-secondary px-4" (click)="goToRegister()" data-bs-dismiss="modal">
+                  إنشاء الحساب
+                </button>
+                <button class="btn btn-success px-4" (click)="goToLogin()" data-bs-dismiss="modal">
+                  تسجيل الدخول
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

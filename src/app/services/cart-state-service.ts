@@ -17,8 +17,10 @@ export class CartStateService {
   private cartCountSource = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCountSource.asObservable();
 
-
-
+ private cartCountSubject = new BehaviorSubject<number>(0);
+  setCartCount(count: number): void {
+    this.cartCountSubject.next(count);
+  }
   
   updateCount(count: number): void {
     this.cartCountSource.next(count);

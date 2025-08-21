@@ -11,7 +11,6 @@ import { CartStateService } from '../../../services/cart-state-service';
 import { FavoriteService } from '../../../services/favorite.service';
 
 import { Downloadapp } from '../downloadapp/downloadapp';
-import { Blogs } from '../blogs/blogs';
 import { ComparePopup } from '../../../compare-popup/compare-popup';
 
 @Component({
@@ -31,18 +30,19 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   categories: Category[] = [];
   selectedCategory: number | 'all' = 'all';
-  progressValue = 80;
 
   cartItems: any[] = [];
   isLoading = true;
 
   currentSlideIndex = 0;
   visibleCards = 3;
+  progressValue = 80;
 
   compareProducts: Product[] = [];
   showComparePopup = false;
 
-  resizeListener = this.updateVisibleCards.bind(this);
+  private resizeListener = this.updateVisibleCards.bind(this);
+  private GUEST_CART_KEY = 'guest_cart';
 
   constructor(
     private productService: ProductService,
@@ -75,22 +75,32 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
 
   /** ------------------- CART + PRODUCTS ------------------- */
   private loadCartAndProducts(): void {
+    if (!this.isLoggedIn()) {
+      this.cartItems = this.loadGuestCart();
+      this.refreshCartCount();
+      this.loadProducts();
+      return;
+    }
+
     this.cartService.getCart().subscribe({
       next: (response) => {
         this.cartItems = response.data?.items || [];
         this.refreshCartCount();
-
-        this.productService.getOffer().subscribe({
-          next: (products) => {
-            this.allProducts = products;
-            this.products = [...products];
-            this.extractCategories(products);
-            this.isLoading = false;
-          },
-          error: (err) => this.handleHttpError('❌ Failed to load products:', err)
-        });
+        this.loadProducts();
       },
       error: (err) => this.handleCartError(err)
+    });
+  }
+
+  private loadProducts(): void {
+    this.productService.getOffer().subscribe({
+      next: (products) => {
+        this.allProducts = products;
+        this.products = [...products];
+        this.extractCategories(products);
+        this.isLoading = false;
+      },
+      error: (err) => this.handleHttpError('❌ Failed to load products:', err)
     });
   }
 
@@ -131,7 +141,6 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
       next: () => {
         product.isFavorite = !product.isFavorite;
         const favorites = this.favoriteService.getFavorites();
-
         this.favoriteService.setFavorites(
           product.isFavorite
             ? [...favorites, product]
@@ -145,16 +154,13 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   loadProductsAndFavorites(): void {
     this.productService.getOffer().subscribe(offerProducts => {
       const token = localStorage.getItem('token');
-
       if (token) {
         this.favoriteService.loadFavorites(token).subscribe(favorites => {
           const favoriteIds = new Set(favorites.map(f => f.id));
-
           this.products = offerProducts.map(p => ({
             ...p,
             isFavorite: favoriteIds.has(p.id)
           }));
-
           this.favoriteService.setFavorites(
             offerProducts.filter(p => favoriteIds.has(p.id))
           );
@@ -171,7 +177,6 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     if (this.compareProducts.length >= 2) return;
 
     this.compareProducts.push(product);
-
     if (this.compareProducts.length === 2) {
       this.showComparePopup = true;
     }
@@ -183,27 +188,83 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   }
 
   /** ------------------- CART ACTIONS ------------------- */
-  addToCart(productId: number): void {
+  private loadGuestCart(): any[] {
+    const cart = localStorage.getItem(this.GUEST_CART_KEY);
+    return cart ? JSON.parse(cart) : [];
+  }
+
+  private saveGuestCart(cart: any[]): void {
+    localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+    this.cartItems = cart; // ⬅️ تحديث مباشر
+    this.refreshCartCount();
+  }
+
+  addToCart(product: Product, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     if (!this.isLoggedIn()) {
-      this.router.navigate(['/auth/login']);
+      const cart = this.loadGuestCart();
+      const existing = cart.find(i => i.product_id === product.id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          product_id: product.id,
+          quantity: 1,
+          product_name_ar: product.name_ar,
+          unit_price: product.price_before || product.price || product.original_price,
+          sale_unit_price: product.price_after || product.price || product.sale_price,
+          images: product.images
+        });
+      }
+
+      this.saveGuestCart(cart);
       return;
     }
 
-    this.cartService.addToCart(productId, 1).subscribe({
+    this.cartService.addToCart(product.id, 1).subscribe({
       next: () => this.loadCart(),
       error: (err) => this.handleCartActionError(err)
     });
   }
 
-  increaseQuantity(productId: number) {
+  increaseQuantity(productId: number): void {
+    if (!this.isLoggedIn()) {
+      const cart = this.loadGuestCart();
+      const item = cart.find(i => i.product_id === productId);
+      if (item) item.quantity++;
+      this.saveGuestCart(cart);
+      return;
+    }
     this.cartService.addToCart(productId, 1).subscribe({ next: () => this.loadCart() });
   }
 
-  decreaseQuantity(productId: number) {
+  decreaseQuantity(productId: number): void {
+    if (!this.isLoggedIn()) {
+      let cart = this.loadGuestCart();
+      const item = cart.find(i => i.product_id === productId);
+      if (item) {
+        item.quantity--;
+        if (item.quantity <= 0) {
+          cart = cart.filter(i => i.product_id !== productId);
+        }
+      }
+      this.saveGuestCart(cart);
+      return;
+    }
     this.cartService.reduceCartItem(productId).subscribe({ next: () => this.loadCart() });
   }
 
-  removeItem(productId: number) {
+  removeItem(productId: number): void {
+    if (!this.isLoggedIn()) {
+      const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
+      this.saveGuestCart(cart);
+      return;
+    }
     this.cartService.removeCartItem(productId).subscribe({ next: () => this.loadCart() });
   }
 
@@ -218,15 +279,18 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   }
 
   private refreshCartCount(): void {
-    const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const total = this.isLoggedIn()
+      ? this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
+      : this.loadGuestCart().reduce((sum, item) => sum + (item.quantity || 0), 0);
+
     this.cartState.updateCount(total);
   }
 
   /** ------------------- CAROUSEL ------------------- */
   updateVisibleCards(): void {
-    if (window.innerWidth <= 768) this.visibleCards = 1;       // mobile
-    else if (window.innerWidth <= 1024) this.visibleCards = 2; // tablet
-    else this.visibleCards = 4;                                // desktop
+    if (window.innerWidth <= 768) this.visibleCards = 1;
+    else if (window.innerWidth <= 1024) this.visibleCards = 2;
+    else this.visibleCards = 4;
   }
 
   getDotsArray(): number[] {
@@ -285,33 +349,24 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     this.cartState.updateCount(0);
   }
 
-
-  
-
-
+  /** ------------------- SWIPE ------------------- */
   touchStartX = 0;
-touchEndX = 0;
+  touchEndX = 0;
 
-onTouchStart(event: TouchEvent): void {
-  this.touchStartX = event.changedTouches[0].screenX;
-}
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
 
-onTouchEnd(event: TouchEvent): void {
-  this.touchEndX = event.changedTouches[0].screenX;
-  this.handleSwipe();
-}
+  onTouchEnd(event: TouchEvent): void {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.handleSwipe();
+  }
 
-handleSwipe(): void {
-  const swipeDistance = this.touchEndX - this.touchStartX;
-
-  if (Math.abs(swipeDistance) > 50) { // عتبة عشان ما يعتبرش اللمسة العادية Swipe
-    if (swipeDistance > 0) {
-      // 👉 Swipe يمين → روح للسابق
-      this.nextSlide();
-    } else {
-      // 👈 Swipe شمال → روح للي بعده
-      this.prevSlide();
+  handleSwipe(): void {
+    const swipeDistance = this.touchEndX - this.touchStartX;
+    if (Math.abs(swipeDistance) > 50) {
+      if (swipeDistance > 0) this.nextSlide();
+      else this.prevSlide();
     }
   }
-}
 }

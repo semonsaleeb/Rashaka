@@ -10,10 +10,10 @@ export interface Product {
   id: number;
   name: string;
   name_ar: string;
-  description:string;
-  description_ar:string;
+  description: string;
+  description_ar: string;
   stock: number;
-    original_price?: string;
+  original_price?: string;
   price: string;         // string because it's "25.00" in quotes
   sale_price: string;    // same here
   cart_quantity: number;
@@ -21,7 +21,7 @@ export interface Product {
   categories: Category[];
   isFavorite?: boolean;  // optional if you're using a favorites system
   price_before: string;
-  price_after:string;
+  price_after: string;
 }
 export interface Category {
   id: number;
@@ -39,20 +39,20 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   // Get all products
-getProducts(): Observable<Product[]> {
-  return this.http
-    .get<{ status: string; data: Product[] }>(this.getFullUrl(API_ENDPOINTS.products.getAll))
-    .pipe(map(response => response.data));
-}
+  getProducts(): Observable<Product[]> {
+    return this.http
+      .get<{ status: string; data: Product[] }>(this.getFullUrl(API_ENDPOINTS.products.getAll))
+      .pipe(map(response => response.data));
+  }
 
- getOffer(): Observable<Product[]> {
-  return this.http
-    .get<{ status: string; data: Product[] }>(`${this.baseUrl}/offers`).pipe(map(response => response.data));
-}
+  getOffer(): Observable<Product[]> {
+    return this.http
+      .get<{ status: string; data: Product[] }>(`${this.baseUrl}/offers`).pipe(map(response => response.data));
+  }
 
 
 
-  
+
   getProductById(id: number, token: string): Observable<Product> {
     const headers = new HttpHeaders({
       Accept: 'application/json',

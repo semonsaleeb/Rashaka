@@ -59,14 +59,14 @@ export interface PromoResponse {
   new_total: number;
   promocode: string;
 }
-
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
   private apiUrl = environment.apiBaseUrl;
+  private localKey = 'guest_cart'; // 👈 مفتاح التخزين المحلي
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private getHeaders() {
     const token = localStorage.getItem('token');
@@ -76,6 +76,63 @@ export class CartService {
     });
   }
 
+  /** ----------------- LOCAL STORAGE ----------------- */
+  private loadGuestCart(): CartItem[] {
+    const data = localStorage.getItem(this.localKey);
+    return data ? JSON.parse(data) : [];
+  }
+
+  private saveGuestCart(items: CartItem[]) {
+    localStorage.setItem(this.localKey, JSON.stringify(items));
+  }
+
+getGuestCart(): CartResponse {
+  const items = this.loadGuestCart();
+
+  const totalPrice = items.reduce((sum, i) => {
+    const unitPriceNum = parseFloat(i.unit_price as any) || 0;
+    return sum + unitPriceNum * i.quantity;
+  }, 0);
+
+  const totalSalePrice = items.reduce((sum, i) => {
+    const finalPriceNum = parseFloat(i.final_price as any) || 0;
+    return sum + finalPriceNum * i.quantity;
+  }, 0);
+
+  const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
+
+  return { items, totalPrice, totalSalePrice, totalQuantity };
+}
+
+
+  addGuestItem(product: CartItem) {
+    const cart = this.loadGuestCart();
+    const existing = cart.find(i => i.product_id === product.product_id);
+    if (existing) {
+      existing.quantity += product.quantity;
+    } else {
+      cart.push(product);
+    }
+    this.saveGuestCart(cart);
+  }
+
+  updateGuestQuantity(productId: number, quantity: number) {
+    const cart = this.loadGuestCart();
+    const item = cart.find(i => i.product_id === productId);
+    if (item) item.quantity = Math.max(1, quantity);
+    this.saveGuestCart(cart);
+  }
+
+  removeGuestItem(productId: number) {
+    const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
+    this.saveGuestCart(cart);
+  }
+
+  clearGuestCart() {
+    localStorage.removeItem(this.localKey);
+  }
+
+  /** ----------------- API (للي عامل Login) ----------------- */
   addToCart(productId: number, quantity: number = 1): Observable<any> {
     return this.http.post(`${this.apiUrl}/cart/add`, 
       { product_id: productId, quantity },
@@ -83,47 +140,30 @@ export class CartService {
     );
   }
 
-getCart(): Observable<{ status: string; data: CartResponse }> {
-  return this.http.get<{ status: string; data: CartResponse }>(
-    `${this.apiUrl}/cart`,
-    {
-      headers: this.getHeaders().set('Accept', 'application/json')
-    }
-  );
-}
-
+  getCart(): Observable<{ status: string; data: CartResponse }> {
+    return this.http.get<{ status: string; data: CartResponse }>(
+      `${this.apiUrl}/cart`,
+      { headers: this.getHeaders().set('Accept', 'application/json') }
+    );
+  }
 
   reduceCartItem(productId: number): Observable<any> {
-    return this.http.post(
-      `${this.apiUrl}/cart/reduce`,
-      { product_id: productId },
-      { headers: this.getHeaders() }
-    );
+    return this.http.post(`${this.apiUrl}/cart/reduce`, { product_id: productId },
+      { headers: this.getHeaders() });
   }
 
   removeCartItem(productId: number): Observable<any> {
-    return this.http.post(
-      `${this.apiUrl}/cart/remove`,
-      { product_id: productId },
-      { headers: this.getHeaders() }
-    );
+    return this.http.post(`${this.apiUrl}/cart/remove`, { product_id: productId },
+      { headers: this.getHeaders() });
   }
 
-  // ✅ Place order
   placeOrder(address_id: number, payment_method: string, promocode?: string): Observable<PlaceOrderResponse> {
-    return this.http.post<PlaceOrderResponse>(
-      `${this.apiUrl}/place-order`,
-      { address_id, payment_method, promocode },
-      { headers: this.getHeaders() }
-    );
+    return this.http.post<PlaceOrderResponse>(`${this.apiUrl}/place-order`,
+      { address_id, payment_method, promocode }, { headers: this.getHeaders() });
   }
 
-  // ✅ Apply promocode
   applyPromocode(promocode: string, total_price: number): Observable<PromoResponse> {
-    return this.http.post<PromoResponse>(
-      `${this.apiUrl}/client/order/apply-promocode`,
-      { promocode, total_price },
-      { headers: this.getHeaders() }
-    );
+    return this.http.post<PromoResponse>(`${this.apiUrl}/client/order/apply-promocode`,
+      { promocode, total_price }, { headers: this.getHeaders() });
   }
 }
