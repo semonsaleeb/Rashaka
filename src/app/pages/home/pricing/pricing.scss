@@ -48,7 +48,7 @@
 
 .toggle-btn.active {
   background: #7AD03A;
-  color: #fff;
+  color: #000000;
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
@@ -73,7 +73,7 @@
 
   .toggle-btn.active {
     background: #7AD03A;
-    color: #fff;
+    color: #000000;
     font-weight: 600;
   }
 }
@@ -277,7 +277,7 @@
 
 .basic-btn {
     background-color: #7AD03A; /* Or your preferred basic button color */
-    color: white;
+    color: rgb(0, 0, 0);
     border: none;
 }
 
@@ -337,7 +337,7 @@
 .scroll-carousel .card {
   flex: 0 0 auto;
   min-width: 320px;
-  max-width: 360px;
+  // max-width: 360px;
 }
 .carousel-track-wrapper {
   overflow: hidden;

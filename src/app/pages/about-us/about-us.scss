@@ -217,3 +217,13 @@
     }
   }
 }
+/* الخط العمودي بين كل اتنين على الموبايل */
+
+
+/* على الشاشات الأكبر (4 في الصف) */
+@media (min-width: 768px) {
+  .stats-container .stat-item:nth-child(4n+1),
+  .stats-container .stat-item:nth-child(4n+2),
+  .stats-container .stat-item:nth-child(4n+3) {
+  }
+}

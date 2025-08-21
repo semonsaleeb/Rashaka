@@ -86,6 +86,8 @@ updateVisibleBranchCards(): void {
     this.visibleBranchCards = 1;   // موبايل
   } else if (width >= 576 && width < 768) {
     this.visibleBranchCards = 2;   // تابلت
+    } else if (width >= 576 && width < 992) {
+    this.visibleBranchCards = 2;   // tablet
   } else {
     this.visibleBranchCards = 3;   // لابتوب وديسكتوب
   }

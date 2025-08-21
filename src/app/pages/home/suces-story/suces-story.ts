@@ -35,22 +35,22 @@ stories = [
     description: 'نتائج مبهرة',
     image: 'assets/Images/Group 9025.svg'
   },
-  // {
-  //   id: 3,
-  //   localVideo: 'assets/Images/تجارب ابطال الرشاقة السعيدة.mp4',
-  //   type: 'local',
-  //   title: 'قصة نجاح ٣',
-  //   description: 'تجربة ملهمة',
-  //   image: 'assets/Images/Group 9025.svg'
-  // },
-    {
-    id: 4,
-    youtubeId: 'y6120QOlsfU',
-    type: 'youtube',
-    title: 'قصة نجاح ٢',
-    description: 'نتائج مبهرة',
+  {
+    id: 3,
+    localVideo: 'assets/Images/تجارب ابطال الرشاقة السعيدة.mp4',
+    type: 'local',
+    title: 'قصة نجاح ٣',
+    description: 'تجربة ملهمة',
     image: 'assets/Images/Group 9025.svg'
-  }
+  },
+  //   {
+  //   id: 4,
+  //   youtubeId: 'y6120QOlsfU',
+  //   type: 'youtube',
+  //   title: 'قصة نجاح ٢',
+  //   description: 'نتائج مبهرة',
+  //   image: 'assets/Images/Group 9025.svg'
+  // }
 ];
 
 

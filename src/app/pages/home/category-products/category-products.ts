@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
@@ -66,6 +66,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
     private auth: AuthService,
     private router: Router,
     private favoriteService: FavoriteService,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
   ) { }
 
   // ---------- lifecycle ----------
@@ -75,7 +77,16 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
     this.fetchProductsAndFavorites();
     this.loadCart();
+
+    // ✅ تحديث السلة عند فتح الـ offcanvas
+    const offcanvasEl = document.getElementById('cartSidebar');
+    if (offcanvasEl) {
+      offcanvasEl.addEventListener('shown.bs.offcanvas', () => {
+        this.loadCart();   // يجيب أحدث نسخة من cartItems
+      });
+    }
   }
+
 
   ngOnDestroy(): void {
     window.removeEventListener('resize', this.resizeHandler);
@@ -270,58 +281,75 @@ export class CategoryProducts implements OnInit, OnDestroy {
     });
   }
 
-private resizeListener = this.updateVisibleCards.bind(this);
-private GUEST_CART_KEY = 'guest_cart';
+  private resizeListener = this.updateVisibleCards.bind(this);
+  private GUEST_CART_KEY = 'guest_cart';
 
-// ✅ handle error
-private handleCartActionError(err: HttpErrorResponse): void {
-  console.error('❌ Cart action failed:', err);
-  if (err.status === 401) {
-    this.auth.logout();
-    this.resetCartState();
-    this.router.navigate(['/auth/login']);
+  // ✅ handle error
+  private handleCartActionError(err: HttpErrorResponse): void {
+    console.error('❌ Cart action failed:', err);
+    if (err.status === 401) {
+      this.auth.logout();
+      this.resetCartState();
+      this.router.navigate(['/auth/login']);
+    }
   }
-}
 
-private resetCartState(): void {
-  this.cartItems = [];
-  this.cartState.updateCount(0);
-}
+  private resetCartState(): void {
+    this.cartItems = [];
+    this.cartState.updateCount(0);
+  }
 
-// ✅ Guest Cart Helpers
-private loadGuestCart(): CartViewItem[] {
-  const cart = localStorage.getItem(this.GUEST_CART_KEY);
-  return cart ? JSON.parse(cart) : [];
-}
+  // ✅ Guest Cart Helpers
+  private loadGuestCart(): CartViewItem[] {
+    const cart = localStorage.getItem(this.GUEST_CART_KEY);
+    return cart ? JSON.parse(cart) : [];
+  }
 
-private saveGuestCart(cart: CartViewItem[]): void {
-  localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
-  this.cartItems = cart; // تحديث مباشر
-  this.refreshCartCount();
-}
+  saveGuestCart(cart: CartViewItem[]): void {
+    localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+    this.cartItems = [...cart]; // force new reference
+    this.refreshCartCount();
+    this.saveGuestCart(cart);
+    console.log("💾 Guest cart saved:", cart);
 
-private refreshCartCount(): void {
-  const total = this.isLoggedIn()
-    ? this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
-    : this.loadGuestCart().reduce((sum, item) => sum + (item.quantity || 0), 0);
+    this.cartItems = cart;
+    this.updateCartTotals();
+    this.cdr.detectChanges(); // ✅ يجبر UI يتحدث فورًا
+    return;
+  }
+  trackByProductId(index: number, product: any) {
+    return product.id;
+  }
 
-  this.cartState.updateCount(total);
-}
 
-// ✅ تحديث الإجماليات
-private updateCartTotals(): void {
-  this.subtotal = this.cartItems.reduce(
-    (sum, item) => sum + (item.sale_unit_price || item.unit_price) * item.quantity,
-    0
-  );
-  this.total = this.subtotal - this.discount;
-  const count = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  this.cartState.updateCount(count);
-}
 
-// ---- addToCart
+
+  private refreshCartCount(): void {
+    const total = this.isLoggedIn()
+      ? this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
+      : this.loadGuestCart().reduce((sum, item) => sum + (item.quantity || 0), 0);
+
+    this.cartState.updateCount(total);
+  }
+
+  // ✅ تحديث الإجماليات
+  private updateCartTotals(): void {
+    this.subtotal = this.cartItems.reduce(
+      (sum, item) => sum + (item.sale_unit_price || item.unit_price) * item.quantity,
+      0
+    );
+    this.total = this.subtotal - this.discount;
+    const count = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    this.cartState.updateCount(count);
+  }
+
+  // ---- addToCart
+
 addToCart(product: Product, event?: Event): void {
-  if (event) { event.preventDefault(); event.stopPropagation(); }
+  if (event) { 
+    event.preventDefault(); 
+    event.stopPropagation(); 
+  }
 
   console.log("🛒 addToCart called with product:", product);
 
@@ -355,11 +383,14 @@ addToCart(product: Product, event?: Event): void {
       console.log("✨ Added new item:", newItem);
     }
 
-    this.saveGuestCart(cart);
-    console.log("💾 Guest cart saved:", cart);
+    // ✅ نخلي التحديث يحصل جوه Angular Zone + نعمل detectChanges
+    this.ngZone.run(() => {
+      this.saveGuestCart(cart);
+      this.cartItems = [...cart];   // نسخة جديدة عشان Angular يdetect التغيير
+      this.updateCartTotals();
+      this.cdr.detectChanges();     // ✅ يجبر UI يتحدث فورًا
+    });
 
-    this.cartItems = cart;
-    this.updateCartTotals();
     return;
   }
 
@@ -373,111 +404,113 @@ addToCart(product: Product, event?: Event): void {
   });
 }
 
-// ---- loadCart
-loadCart(): void {
-  if (!this.isLoggedIn()) {
-    this.cartItems = this.loadGuestCart();
-    console.log("📥 Loaded guest cart:", this.cartItems);
-    this.updateCartTotals();
-    return;
-  }
 
-  this.cartService.getCart().subscribe({
-    next: (response) => {
-      console.log("📥 API cart response:", response);
-      this.handleCartResponse(response);
+
+  // ---- loadCart
+  loadCart(): void {
+    if (!this.isLoggedIn()) {
+      this.cartItems = this.loadGuestCart();
+      console.log("📥 Loaded guest cart:", this.cartItems);
       this.updateCartTotals();
-    },
-    error: (err) => this.handleCartActionError(err)
-  });
-}
-
-// ---- handleCartResponse (تحويل CartItem -> CartViewItem)
-private handleCartResponse(response: any): void {
-  this.cartItems = response.items.map((item: CartItem) => ({
-    id: item.id,
-    product_id: item.product_id,
-    name: item.product_name || item.name || '',
-    product_name_ar: item.product_name_ar || item.name_ar || '',
-    nameAr: item.name_ar || '',
-    quantity: item.quantity,
-    unit_price: Number(item.price) || 0,
-    sale_unit_price: Number(item.sale_price) || Number(item.price) || 0,
-    finalPrice: Number(item.final_price) || 0,
-    images: item.image ? [item.image] : []
-  }));
-
-  console.log("🔄 handleCartResponse mapped items:", this.cartItems);
-}
-
-// ✅ إزالة منتج
-removeItem(productId: number, event?: Event): void {
-  if (event) { event.preventDefault(); event.stopPropagation(); }
-
-  if (!this.isLoggedIn()) {
-    let cart = this.loadGuestCart().filter(i => i.product_id !== productId);
-    this.saveGuestCart(cart);
-    this.loadCart();
-    return;
-  }
-
-  this.cartService.removeCartItem(productId).subscribe({
-    next: () => this.loadCart(),
-    error: (err) => this.handleCartActionError(err)
-  });
-}
-
-// ✅ زيادة الكمية
-increaseQuantity(productId: number, event?: Event): void {
-  if (event) { event.preventDefault(); event.stopPropagation(); }
-
-  if (!this.isLoggedIn()) {
-    let cart = this.loadGuestCart();
-    const item = cart.find(i => i.product_id === productId);
-    if (item) {
-      item.quantity += 1;
-      item.finalPrice = item.quantity * (item.sale_unit_price || item.unit_price);
+      return;
     }
-    this.saveGuestCart(cart);
-    this.loadCart();
-    return;
+
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        console.log("📥 API cart response:", response);
+        this.handleCartResponse(response);
+        this.updateCartTotals();
+      },
+      error: (err) => this.handleCartActionError(err)
+    });
   }
 
-  this.cartService.addToCart(productId, 1).subscribe({
-    next: () => this.loadCart(),
-    error: (err) => this.handleCartActionError(err)
-  });
-}
+  // ---- handleCartResponse (تحويل CartItem -> CartViewItem)
+  private handleCartResponse(response: any): void {
+    this.cartItems = response.items.map((item: CartItem) => ({
+      id: item.id,
+      product_id: item.product_id,
+      name: item.product_name || item.name || '',
+      product_name_ar: item.product_name_ar || item.name_ar || '',
+      nameAr: item.name_ar || '',
+      quantity: item.quantity,
+      unit_price: Number(item.price) || 0,
+      sale_unit_price: Number(item.sale_price) || Number(item.price) || 0,
+      finalPrice: Number(item.final_price) || 0,
+      images: item.image ? [item.image] : []
+    }));
 
-// ✅ تقليل الكمية
-decreaseQuantity(productId: number): void {
-  if (!this.isLoggedIn()) {
-    let cart = this.loadGuestCart();
-    const item = cart.find(i => i.product_id === productId);
-    if (item) {
-      item.quantity -= 1;
-      if (item.quantity <= 0) cart = cart.filter(i => i.product_id !== productId);
-      else item.finalPrice = item.quantity * (item.sale_unit_price || item.unit_price);
+    console.log("🔄 handleCartResponse mapped items:", this.cartItems);
+  }
+
+  // ✅ إزالة منتج
+  removeItem(productId: number, event?: Event): void {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+
+    if (!this.isLoggedIn()) {
+      let cart = this.loadGuestCart().filter(i => i.product_id !== productId);
+      this.saveGuestCart(cart);
+      this.loadCart();
+      return;
     }
-    this.saveGuestCart(cart);
-    this.loadCart();
-    return;
+
+    this.cartService.removeCartItem(productId).subscribe({
+      next: () => this.loadCart(),
+      error: (err) => this.handleCartActionError(err)
+    });
   }
 
-  this.cartService.reduceCartItem(productId).subscribe({
-    next: () => this.loadCart(),
-    error: (err) => this.handleCartActionError(err)
-  });
-}
+  // ✅ زيادة الكمية
+  increaseQuantity(productId: number, event?: Event): void {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
 
-// ✅ مساعدات
-isInCart(productId: number): boolean {
-  return this.cartItems.some(item => item.product_id === productId);
-}
+    if (!this.isLoggedIn()) {
+      let cart = this.loadGuestCart();
+      const item = cart.find(i => i.product_id === productId);
+      if (item) {
+        item.quantity += 1;
+        item.finalPrice = item.quantity * (item.sale_unit_price || item.unit_price);
+      }
+      this.saveGuestCart(cart);
+      this.loadCart();
+      return;
+    }
 
-getCartItem(productId: number) {
-  return this.cartItems.find(item => item.product_id === productId);
-}
+    this.cartService.addToCart(productId, 1).subscribe({
+      next: () => this.loadCart(),
+      error: (err) => this.handleCartActionError(err)
+    });
+  }
+
+  // ✅ تقليل الكمية
+  decreaseQuantity(productId: number): void {
+    if (!this.isLoggedIn()) {
+      let cart = this.loadGuestCart();
+      const item = cart.find(i => i.product_id === productId);
+      if (item) {
+        item.quantity -= 1;
+        if (item.quantity <= 0) cart = cart.filter(i => i.product_id !== productId);
+        else item.finalPrice = item.quantity * (item.sale_unit_price || item.unit_price);
+      }
+      this.saveGuestCart(cart);
+      this.loadCart();
+      return;
+    }
+
+    this.cartService.reduceCartItem(productId).subscribe({
+      next: () => this.loadCart(),
+      error: (err) => this.handleCartActionError(err)
+    });
+  }
+
+  // ✅ مساعدات
+  isInCart(productId: number): boolean {
+    return this.cartItems.some(item => item.product_id === productId);
+  }
+
+  getCartItem(productId: number) {
+    return this.cartItems.find(item => item.product_id === productId);
+  }
 
 
 

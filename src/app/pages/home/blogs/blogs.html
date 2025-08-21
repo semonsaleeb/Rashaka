@@ -32,29 +32,29 @@
 
   @if (mode === 'carousel' && !loading) {
   <div class="position-relative px-lg-5 py-5 mb-0" style="  background-color: #081E25;" dir="rtl">
-    <div class="special-offers-container mb-5">
+    <div class="special-offers-container mb-5 ">
       <!-- Header -->
-     <div class="d-flex justify-content-between align-items-center px-4 mb-4">
-  <!-- العنوان -->
-  <h2 class="section-title mb-0 text-light fw-bold">أحدث المقالات</h2>
+      <div class="d-flex justify-content-between align-items-center px-3 mb-4">
+        <!-- العنوان -->
+        <h2 class="section-title mb-0 text-light fw-bold px-4">أحدث المقالات</h2>
 
-  <!-- الزر -->
-  <a [routerLink]="['/home/blogs']"
-    class="btn btn-link view-all-btn text-light d-flex align-items-center gap-1">
-    <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
-    عرض الكل
-  </a>
-</div>
+        <!-- الزر -->
+        <a [routerLink]="['/home/blogs']"
+          class="btn btn-link view-all-btn px-3 text-light d-flex align-items-center gap-1">
+          <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
+          عرض الكل
+        </a>
+      </div>
 
       <!-- Carousel Container -->
-      <div class="carousel-wrapper">
-        <div class="position-relative overflow-hidden mx-5">
-          <div class="d-flex transition-transform carousel-track"
+      <div class="carousel-wrapper px-5">
+        <div class="position-relative overflow-hidden  mx-lg-5">
+          <div class="d-flex transition-transform  carousel-track"
             [ngStyle]="{ transform: 'translateX(+' + (currentSlideIndex * (100/visibleCards)) + '%)' }"
             (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
 
             @for (blog of blogs; track blog) {
-            <div class="carousel-slide p-3">
+            <div class="carousel-slide p-3 px-lg-2">
               <div class="card h-100 product-card rounded-4 border bg-white">
                 <!-- Blog Image -->
                 <a [routerLink]="['home/blog/', blog.id]" class="btn btn-link">
@@ -80,9 +80,10 @@
           </div>
         </div>
         <!-- Navigation -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center px-5 mt-4 py-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center px-5 mt-4 py-3">
+
           <!-- Dots -->
-          <div class="d-flex gap-2 px-4">
+          <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 px-4 mb-3 mb-md-0">
             @for (i of getDotsArray(); track i) {
             <button (click)="goToSlide(i)" class="rounded-5"
               [style.background-color]="currentSlideIndex === i ? '#7AD03A' : '#ccc'"
@@ -90,6 +91,8 @@
             </button>
             }
           </div>
+
+          <!-- Arrows -->
           <div class="d-flex gap-2 px-4 d-none d-md-flex">
             <button class="arrow-btn next" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
             <button class="arrow-btn prev" (click)="nextSlide()"
@@ -97,6 +100,7 @@
           </div>
 
         </div>
+
       </div>
     </div>
   </div>

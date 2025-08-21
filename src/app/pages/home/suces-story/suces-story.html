@@ -26,12 +26,12 @@
         <div class="story-deck d-flex justify-content-center align-items-center">
           @for (story of stories; track story; let i = $index) {
           <div class="story-card-custom" [ngClass]="getCardClass(i)">
-            <div class="youtube-embed" *ngIf="story.type === 'youtube'">
+            <!-- <div class="youtube-embed" *ngIf="story.type === 'youtube'">
               <iframe [src]="getSafeYoutubeUrl(story.youtubeId)" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
               </iframe>
-            </div>
+            </div> -->
 
             <div class="youtube-embed" *ngIf="story.type === 'local'">
               <video width="100%" height="450px" controls preload="none" [attr.poster]="story.image">
@@ -72,12 +72,12 @@
         <div class="story-deck d-flex justify-content-center align-items-center">
           @for (story of stories; track story; let i = $index) {
           <div class="story-card-custom" [ngClass]="getCardClass(i)">
-            <div class="youtube-embed" *ngIf="story.type === 'youtube'">
+            <!-- <div class="youtube-embed" *ngIf="story.type === 'youtube'">
               <iframe [src]="getSafeYoutubeUrl(story.youtubeId)" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
               </iframe>
-            </div>
+            </div> -->
 
             <div class="youtube-embed" *ngIf="story.type === 'local'">
               <video width="100%" height="450px" controls preload="none" [attr.poster]="story.image">
