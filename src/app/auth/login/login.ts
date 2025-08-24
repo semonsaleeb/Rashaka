@@ -25,33 +25,40 @@ export class Login {
 
   constructor(private http: HttpClient, private router: Router,   private authService: AuthService, private cartService: CartService,private cartState: CartStateService,) {}
 
- login() {
+
+  
+login() {
   this.errorMessage = '';
   this.loading = true;
 
-  const payload = { email: this.email, password: this.password };
-  const headers = new HttpHeaders({ Accept: 'application/json' });
+  const credentials = { email: this.email, password: this.password };
 
-  this.http.post<any>(`${environment.apiBaseUrl}/login`, payload, { headers }).subscribe({
+  // Use AuthService login method
+  this.authService.login(credentials).subscribe({
     next: (res) => {
       if (res.token && res.client) {
         // ✅ Store token and client info
         this.authService.setLogin(res.token, res.client);
 
-        // ✅ Update cart count
+        // ✅ Merge guest cart (pass CartService)
+        this.authService.mergeGuestCartAfterLogin(this.cartService);
+
+        // ✅ Update cart count after merge
         this.cartService.getCart().subscribe({
           next: (cartResponse) => {
-            const count = cartResponse.data.items.reduce((total: number, item: any) => total + item.quantity, 0);
+            const count = cartResponse.data.items.reduce(
+              (total: number, item: any) => total + item.quantity,
+              0
+            );
             this.cartState.updateCount(count);
           },
           error: (err) => console.error('Error fetching cart after login', err)
         });
 
-        // ✅ Optionally refresh favorite count
-        // this.favoriteService.loadFavorites(); // if your service supports this
-
-        // ✅ Navigate to profile
-        this.router.navigate(['/profile']);
+        // ✅ Redirect to previous page or default to home
+        const redirect = localStorage.getItem('redirectAfterLogin') || '/';
+        localStorage.removeItem('redirectAfterLogin');
+        this.router.navigateByUrl(redirect);
       } else {
         this.errorMessage = 'بيانات تسجيل الدخول غير صحيحة.';
       }
@@ -64,6 +71,9 @@ export class Login {
     }
   });
 }
+
+
+
 
 
 

@@ -209,13 +209,20 @@ export class CartPageComponent implements OnInit {
   }
 
   // ================== Place Order ==================
-  placeOrder() {
-    if (!this.token) {
-      this.showLoginPopup = true; // اطلب تسجيل الدخول
-      return;
-    }
-    this.router.navigate(['/placeOrder']);
+ placeOrder() {
+  if (!this.token) {
+    // احفظ الصفحة الحالية للعودة لها بعد تسجيل الدخول
+    localStorage.setItem('redirectAfterLogin', this.router.url);
+
+    // عرض popup تسجيل الدخول
+    this.showLoginPopup = true;
+    return;
   }
+
+  // المستخدم مسجل دخول → اذهب لصفحة الطلب
+  this.router.navigate(['/placeOrder']);
+}
+
 
   // ================== Promo ==================
   applyPromoCode() {
@@ -252,7 +259,8 @@ export class CartPageComponent implements OnInit {
   // ================== Popup Actions ==================
   goToLogin() {
     this.showLoginPopup = false;
-    this.router.navigate(['/auth/login']);
+    localStorage.setItem('redirectAfterLogin', this.router.url);
+    this.router.navigate(['/login']);
   }
 
   goToRegister() {

@@ -274,3 +274,8 @@ body {
     font-size: 0.9rem;
   }
 }
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .tablet-text {
+    font-size: 0.5rem !important; // أو أي قيمة مناسبة
+  }
+}

@@ -93,24 +93,19 @@ Carousel Mode
               }
             </div>
 
-           <!-- زر الاشتراك أو تم الاشتراك -->
-@if (subscribedPlanId !== plan.id) {
-  <button 
-    class="subscribe-btn w-100 rounded-3 py-2"
-    (click)="handleSubscribe(plan)"
-    [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'" 
-    [style.color]="'#000'"
-    [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
-    اشتراك
-  </button>
-} @else {
-  <div 
-    class="subscribed-text w-100 rounded-3 py-2 text-center fw-bold" 
-    [style.background]="'#E3E3E3'" 
-    [style.color]="'#000'">
-    تم الاشتراك
-  </div>
-}
+            <!-- زر الاشتراك أو تم الاشتراك -->
+            @if (subscribedPlanId !== plan.id) {
+            <button class="subscribe-btn w-100 rounded-3 py-2" (click)="handleSubscribe(plan)"
+              [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'" [style.color]="'#000'"
+              [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
+              اشتراك
+            </button>
+            } @else {
+            <div class="subscribed-text w-100 rounded-3 py-2 text-center fw-bold" [style.background]="'#E3E3E3'"
+              [style.color]="'#000'">
+              تم الاشتراك
+            </div>
+            }
 
           </div>
 
@@ -120,26 +115,26 @@ Carousel Mode
     </div>
 
     <!-- Navigation -->
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 py-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 py-3">
 
-  <!-- Arrows (تظهر بس من md وفوق) -->
-  <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
-    <button class="arrow-btn prev" (click)="scrollRight()"
-      [disabled]="currentSlideIndex >= plans.length - visibleCards"></button>
-    <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
-  </div>
+      <!-- Arrows (تظهر بس من md وفوق) -->
+      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
+        <button class="arrow-btn prev" (click)="scrollRight()"
+          [disabled]="currentSlideIndex >= plans.length - visibleCards"></button>
+        <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
+      </div>
 
-  <!-- Dots -->
-  <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0" dir="rtl">
-    @for (i of getDotsArray(); track i) {
-      <button (click)="goToSlide(i)" class="rounded-circle"
-        [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
-        style="width: 10px; height: 10px; border: none;">
-      </button>
-    }
-  </div>
+      <!-- Dots -->
+      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0" dir="rtl">
+        @for (i of getDotsArray(); track i) {
+        <button (click)="goToSlide(i)" class="rounded-circle"
+          [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
+          style="width: 10px; height: 10px; border: none;">
+        </button>
+        }
+      </div>
 
-</div>
+    </div>
 
   </div>
   } @else {
@@ -157,8 +152,8 @@ Grid Mode
 <div class="pricing-container w-100 py-5 mt-5" dir="rtl">
   <!-- Header -->
   <div class="header text-center">
-    <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4">
-    <h2 class="title px-lg-3">الاشتراكات</h2>
+    <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4 pt-5">
+    <h2 class="title px-lg-3 ">الاشتراكات</h2>
     <p>اختر الباقة التي تناسب احتياجاتك وابدأ الآن بسهولة.</p>
     <div class="toggle-container d-flex gap-2">
       <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
@@ -283,7 +278,13 @@ Grid Mode
 
 
 @if (showPopup) {
-<div class="popup-overlay" dir="rtl">
+  <div class="popup-overlay" dir="rtl">
+    <div class="popup-card-wrapper">
+      <button class="close-btn" (click)="showPopup = false">×</button>
+
+      <!-- ✅ لو عامل login -->
+      @if (isLoggedIn) {
+        <div class="popup-overlay" dir="rtl">
   <div class="popup-card-wrapper">
     <button class="close-btn" (click)="closePopup()">×</button>
 
@@ -349,7 +350,7 @@ Grid Mode
 
           <div class="d-flex gap-2">
             <button class="btn btn-outline-secondary w-50" (click)="closePopup()">إلغاء</button>
-            <button class="btn btn-success w-50" (click)="goToOrder(selectedPlanForPopup!)">
+            <button class="btn  w-50" style="background-color: #7AD03A; color: black;" (click)="goToOrder(selectedPlanForPopup!)">
               تأكيد
             </button>
 
@@ -359,5 +360,22 @@ Grid Mode
       </div>
     </div>
   </div>
-</div>
+</div>س
+      }
+
+      <!-- ❌ لو مش عامل login -->
+      @else {
+        <div class="p-4 text-center">
+          <img src="assets/Images/Enter OTP-cuate 1.svg" alt="Login Illustration" style="max-width: 200px;">
+          <h5 class="mb-3">يرجى تسجيل الدخول</h5>
+          <p class="text-muted">يجب تسجيل الدخول أو إنشاء حساب جديد لمتابعة الاشتراك.</p>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn  w-50" style="background-color: #7AD03A; color: black;" (click)="goToLogin()">تسجيل الدخول</button>
+            <button class="btn btn-outline-secondary w-50" (click)="goToRegister()">إنشاء حساب</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
 }

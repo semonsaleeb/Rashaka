@@ -1,8 +1,8 @@
-<section class="about-us">
+<section class="about-us  ">
   <div class="header-section">
     <div class="container py-5">
       <div class="header-content">
-        <h1 class="title">عن الرشاقة</h1>
+        <h1 class="title mt-5 pt-5">عن الرشاقة</h1>
         <p class="subtitle">
           المسيت شركة الرشاقة المميزية في السعودية ببحث<br>
           لشراكتي الحتي والقطاع الخاصة بين الجامع العربي.
@@ -52,18 +52,20 @@
     </div>
   </div>
   <div class="container">
-    <div class="row align-items-center ">
+    <div class="row align-items-center">
       <!-- ✅ العمود الأول (الفروع) -->
+      <div class="col-md-9 d-flex justify-content-end">
+        <app-branches class="mx-auto text-center w-100" style="max-width: 1000px;" [forceVisibleCards]="2">
+        </app-branches>
 
-      <div class="col-md-8 d-flex justify-content-end">
-<app-branches class="mx-auto text-center w-100" style="max-width: 1000px;"></app-branches>
       </div>
 
       <!-- ✅ العمود الثاني (الصورة) -->
-      <div class="col-md-4">
+      <div class="col-md-3">
         <img src="assets/Images/Group 9038.svg" class="img-fluid" alt="Branch Image">
       </div>
     </div>
+
 
 
   </div>

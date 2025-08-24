@@ -307,16 +307,30 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
   saveGuestCart(cart: CartViewItem[]): void {
     localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
-    this.cartItems = [...cart]; // force new reference
-    this.refreshCartCount();
-    this.saveGuestCart(cart);
-    console.log("💾 Guest cart saved:", cart);
-
-    this.cartItems = cart;
-    this.updateCartTotals();
-    this.cdr.detectChanges(); // ✅ يجبر UI يتحدث فورًا
-    return;
+    this.cartItems = [...cart];
+    this.cdr.detectChanges();
   }
+
+
+  
+  logGuestCartBeforeOpen(): void {
+    const cart = this.loadGuestCart();
+    console.log("📥 Guest cart BEFORE opening offcanvas:", cart);
+  }
+
+  // 2️⃣ Function to log guest cart after opening offcanvas
+  logGuestCartAfterOpen(): void {
+    const offcanvasEl = document.getElementById('cartSidebar');
+    if (offcanvasEl) {
+      offcanvasEl.addEventListener('shown.bs.offcanvas', () => {
+        const cart = this.loadGuestCart();
+        console.log("📤 Guest cart AFTER opening offcanvas:", cart);
+        this.loadCart(); // refresh cart UI if needed
+      });
+    }
+  }
+
+
   trackByProductId(index: number, product: any) {
     return product.id;
   }
@@ -345,64 +359,66 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
   // ---- addToCart
 
-addToCart(product: Product, event?: Event): void {
-  if (event) { 
-    event.preventDefault(); 
-    event.stopPropagation(); 
-  }
-
-  console.log("🛒 addToCart called with product:", product);
-
-  if (!this.isLoggedIn()) {
-    let cart: CartViewItem[] = this.loadGuestCart();
-    console.log("📦 Current guest cart before add:", cart);
-
-    const existing = cart.find(item => item.product_id === product.id);
-
-    const unitPrice = Number(product.price_before) || Number(product.price) || 0;
-    const saleUnitPrice = Number(product.price_after) || Number(product.price) || 0;
-
-    if (existing) {
-      existing.quantity += 1;
-      existing.finalPrice = existing.quantity * (existing.sale_unit_price || existing.unit_price);
-      console.log("🔄 Updated existing item:", existing);
-    } else {
-      const newItem: CartViewItem = {
-        id: Date.now(),
-        product_id: product.id,
-        name: product.name,
-        product_name_ar: product.name_ar,
-        nameAr: product.name_ar,
-        quantity: 1,
-        unit_price: unitPrice,
-        sale_unit_price: saleUnitPrice,
-        finalPrice: saleUnitPrice,
-        images: product.images || []
-      };
-      cart.push(newItem);
-      console.log("✨ Added new item:", newItem);
+  addToCart(product: Product, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
 
-    // ✅ نخلي التحديث يحصل جوه Angular Zone + نعمل detectChanges
-    this.ngZone.run(() => {
-      this.saveGuestCart(cart);
-      this.cartItems = [...cart];   // نسخة جديدة عشان Angular يdetect التغيير
-      this.updateCartTotals();
-      this.cdr.detectChanges();     // ✅ يجبر UI يتحدث فورًا
+    console.log("🛒 addToCart called with product:", product);
+
+    if (!this.isLoggedIn()) {
+      let cart: CartViewItem[] = this.loadGuestCart();
+      console.log("📦 Current guest cart before add:", cart);
+
+      const existing = cart.find(item => item.product_id === product.id);
+
+      const unitPrice = Number(product.price_before) || Number(product.price) || 0;
+      const saleUnitPrice = Number(product.price_after) || Number(product.sale_price) || 0;
+
+      if (existing) {
+        existing.quantity += 1;
+        existing.finalPrice = existing.quantity * (existing.sale_unit_price || existing.unit_price);
+        console.log("🔄 Updated existing item:", existing);
+      } else {
+        const newItem: CartViewItem = {
+          id: Date.now(),
+          product_id: product.id,
+          name: product.name,
+          product_name_ar: product.name_ar,
+          nameAr: product.name_ar,
+          quantity: 1,
+          price: String(unitPrice),
+          unit_price: unitPrice,
+          sale_unit_price: saleUnitPrice,
+          sale_price: String(saleUnitPrice),
+          finalPrice: saleUnitPrice,
+          images: product.images || []
+        };
+        cart.push(newItem);
+        console.log("✨ Added new item:", newItem);
+      }
+
+      // ✅ نخلي التحديث يحصل جوه Angular Zone + نعمل detectChanges
+      this.ngZone.run(() => {
+        this.saveGuestCart(cart);
+        this.cartItems = [...cart];   // نسخة جديدة عشان Angular يdetect التغيير
+        this.updateCartTotals();
+        this.cdr.detectChanges();     // ✅ يجبر UI يتحدث فورًا
+      });
+
+      return;
+    }
+
+    // ✅ لو المستخدم مسجل دخول
+    this.cartService.addToCart(product.id, 1).subscribe({
+      next: () => {
+        console.log("✅ Product added to API cart:", product.id);
+        this.loadCart();
+      },
+      error: (err) => this.handleCartActionError(err)
     });
-
-    return;
   }
-
-  // ✅ لو المستخدم مسجل دخول
-  this.cartService.addToCart(product.id, 1).subscribe({
-    next: () => {
-      console.log("✅ Product added to API cart:", product.id);
-      this.loadCart();
-    },
-    error: (err) => this.handleCartActionError(err)
-  });
-}
 
 
 
@@ -426,22 +442,32 @@ addToCart(product: Product, event?: Event): void {
   }
 
   // ---- handleCartResponse (تحويل CartItem -> CartViewItem)
-  private handleCartResponse(response: any): void {
-    this.cartItems = response.items.map((item: CartItem) => ({
+private handleCartResponse(response: any): void {
+  const items = Array.isArray(response.data?.cartItems) ? response.data.cartItems : [];
+
+  this.cartItems = items.map((item: CartItem) => {
+    const unitPrice = Number(item.price) || 0;
+    const salePrice = Number(item.sale_price);
+    const finalUnitPrice = !isNaN(salePrice) && salePrice > 0 ? salePrice : unitPrice;
+
+    return {
       id: item.id,
       product_id: item.product_id,
       name: item.product_name || item.name || '',
       product_name_ar: item.product_name_ar || item.name_ar || '',
       nameAr: item.name_ar || '',
       quantity: item.quantity,
-      unit_price: Number(item.price) || 0,
-      sale_unit_price: Number(item.sale_price) || Number(item.price) || 0,
+      unit_price: unitPrice,
+      sale_unit_price: finalUnitPrice,
       finalPrice: Number(item.final_price) || 0,
       images: item.image ? [item.image] : []
-    }));
+    };
+  });
 
-    console.log("🔄 handleCartResponse mapped items:", this.cartItems);
-  }
+  console.log("🔄 handleCartResponse mapped items:", this.cartItems);
+}
+
+
 
   // ✅ إزالة منتج
   removeItem(productId: number, event?: Event): void {
@@ -594,5 +620,11 @@ addToCart(product: Product, event?: Event): void {
   goToSlide(index: number): void {
     const maxIndex = Math.max(0, this.getTotalSlides() - 1);
     this.currentSlideIndex = Math.min(Math.max(index, 0), maxIndex);
+  }
+
+
+  openSidebar() {
+    const modal = new (window as any).bootstrap.Modal(document.getElementById('filtersModal'));
+    modal.show();
   }
 }

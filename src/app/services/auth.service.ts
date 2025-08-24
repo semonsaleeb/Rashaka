@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { CartViewItem } from '../../models/CartViewItem';
+import { CartService } from './cart.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -68,6 +70,22 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+mergeGuestCartAfterLogin(cartService: CartService): void {
+  const guestCart: CartViewItem[] = JSON.parse(localStorage.getItem('guest_cart') || '[]');
+  if (!guestCart || guestCart.length === 0) return;
+
+  guestCart.forEach(item => {
+    cartService.addToCart(item.product_id, item.quantity).subscribe({
+      next: () => {},
+      error: (err) => console.error('Failed to merge guest cart:', err)
+    });
+  });
+
+  localStorage.removeItem('guest_cart');
+}
+
+
+  
   /**
    * getter للحالة الحالية
    */

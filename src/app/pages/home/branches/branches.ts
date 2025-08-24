@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 export class Branches {
 branches: string[] = ['الخبر', 'الدمام', 'الأحساء', 'جدة', 'القصيم', 'الخرج', 'الرياض'];
 selectedBranch: string = 'الرياض';
+  @Input() forceVisibleCards: number | null = null;
 
 selectBranch(branch: string): void {
   this.selectedBranch = branch;
@@ -74,24 +75,34 @@ goToBranchSlide(index: number): void {
 
 
 
-ngOnInit(): void {
-  this.updateVisibleBranchCards();
-  window.addEventListener('resize', this.updateVisibleBranchCards.bind(this));
-}
+  ngOnInit(): void {
+    this.updateVisibleBranchCards();
+    window.addEventListener('resize', this.updateVisibleBranchCards.bind(this));
+  }
 
-updateVisibleBranchCards(): void {
+ updateVisibleBranchCards(): void {
   const width = window.innerWidth;
 
   if (width < 576) {
-    this.visibleBranchCards = 1;   // موبايل
-  } else if (width >= 576 && width < 768) {
+    // 👈 في الموبايل دايمًا كارت واحد حتى لو forceVisibleCards موجود
+    this.visibleBranchCards = 1;
+    return;
+  }
+
+  if (this.forceVisibleCards !== null) {
+    this.visibleBranchCards = this.forceVisibleCards; // 👈 استخدم القيمة اللي جاية من الأب
+    return;
+  }
+
+  // 👇 الافتراضي لو مفيش force
+  if (width >= 576 && width < 992) {
     this.visibleBranchCards = 2;   // تابلت
-    } else if (width >= 576 && width < 992) {
-    this.visibleBranchCards = 2;   // tablet
   } else {
-    this.visibleBranchCards = 3;   // لابتوب وديسكتوب
+    this.visibleBranchCards = 3;   // ديسكتوب
   }
 }
+
+
 
 
 

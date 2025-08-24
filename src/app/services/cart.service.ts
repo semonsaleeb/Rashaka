@@ -7,27 +7,27 @@ import { environment } from '../../environments/environment';
 export interface CartItem {
   id: number;
   product_id: number;
-  product_name: string; 
-  product_name_ar:string;     
-  name: string;              
-  name_ar: string;          
-  description: string;      
-  image: string;            
-  images: string[];          
+  product_name: string;
+  product_name_ar: string;
+  name: string;
+  name_ar: string;
+  description: string;
+  image: string;
+  images: string[];
 
-  price: number;             
-  sale_price: number | null; 
-  unit_price:string;
-  sale_unit_price: string;   
-  final_price: number;       
-  line_total: number;        
-  total_price?: string;     
-  total_sale_price?: string; 
-
-  quantity: number;          
-  stock_quantity?: number;   
-  stock?: number;            
-  isFavorite?: boolean;      
+  price: string;
+  sale_price: string | null;
+  unit_price: string;
+  sale_unit_price: string;
+  final_price: string;
+  line_total: number;
+  total_price?: string;
+  total_sale_price?: string;
+  description_ar?: string;
+  quantity: number;
+  stock_quantity?: number;
+  stock?: number;
+  isFavorite?: boolean;
 }
 
 export interface CartResponse {
@@ -66,7 +66,7 @@ export class CartService {
   private apiUrl = environment.apiBaseUrl;
   private localKey = 'guest_cart'; // 👈 مفتاح التخزين المحلي
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getHeaders() {
     const token = localStorage.getItem('token');
@@ -86,24 +86,35 @@ export class CartService {
     localStorage.setItem(this.localKey, JSON.stringify(items));
   }
 
-getGuestCart(): CartResponse {
-  const items = this.loadGuestCart();
+  getGuestCart(): CartResponse {
+    const items = this.loadGuestCart();
 
-  const totalPrice = items.reduce((sum, i) => {
-    const unitPriceNum = parseFloat(i.unit_price as any) || 0;
-    return sum + unitPriceNum * i.quantity;
-  }, 0);
+    const totalPrice = items.reduce((sum, i) => {
+      const unitPriceNum = parseFloat(i.unit_price as any) || 0;
+      return sum + unitPriceNum * i.quantity;
+    }, 0);
 
-  const totalSalePrice = items.reduce((sum, i) => {
-    const finalPriceNum = parseFloat(i.final_price as any) || 0;
-    return sum + finalPriceNum * i.quantity;
-  }, 0);
+    const totalSalePrice = items.reduce((sum, i) => {
+      const finalPriceNum = parseFloat(i.final_price as any) || 0;
+      return sum + finalPriceNum * i.quantity;
+    }, 0);
 
-  const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
+    const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
 
-  return { items, totalPrice, totalSalePrice, totalQuantity };
-}
+    return { items, totalPrice, totalSalePrice, totalQuantity };
+  }
 
+  /** ----------------- COUNT HELPERS ----------------- */
+  getGuestCartCount(): number {
+    const items = this.loadGuestCart();
+    return items.reduce((sum, i) => sum + i.quantity, 0);
+  }
+
+  getCartCount(): number {
+    // حالياً بيرجع عدد الـ guest cart
+    // تقدر تطوره بعدين إنه يشيك لو فيه user logged in يجيب العدد من API
+    return this.getGuestCartCount();
+  }
 
   addGuestItem(product: CartItem) {
     const cart = this.loadGuestCart();
@@ -134,7 +145,7 @@ getGuestCart(): CartResponse {
 
   /** ----------------- API (للي عامل Login) ----------------- */
   addToCart(productId: number, quantity: number = 1): Observable<any> {
-    return this.http.post(`${this.apiUrl}/cart/add`, 
+    return this.http.post(`${this.apiUrl}/cart/add`,
       { product_id: productId, quantity },
       { headers: this.getHeaders() }
     );

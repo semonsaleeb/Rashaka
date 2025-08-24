@@ -9,7 +9,7 @@
 }
 
 @if (blog) {
-  <div class="container py-5" dir="rtl">
+  <div class="container py-5 mt-5 pt-5" dir="rtl">
     <p class="text-muted">{{ blog!.created_at }} - {{ blog!.author }}</p>
     <img [src]="blog!.image" class="img-fluid mb-4 rounded" width="100%" alt="Blog Image">
     <h1 class="mb-3">{{ blog!.title_ar }}</h1>

@@ -182,7 +182,7 @@ export class Pricing implements OnInit, AfterViewInit {
     return this.expandedPlans.includes(planId);
   }
 
-  selectedPlanForPopup: Plan | null = null;
+selectedPlanForPopup: Plan | null = null;
   showPopup: boolean = false;
 
   openPopup(plan: Plan) {
@@ -237,14 +237,12 @@ export class Pricing implements OnInit, AfterViewInit {
     });
   }
 
-  handleSubscribe(plan: Plan) {
-    if (!this.auth.isLoggedIn()) {
-      const modal = new bootstrap.Modal(document.getElementById('authModal')!);
-      modal.show();
-    } else {
-      this.openPopup(plan);
-    }
-  }
+handleSubscribe(plan: Plan) {
+  this.selectedPlanForPopup = plan;
+  this.showPopup = true;
+}
+
+
 
   touchStartX = 0;
   touchEndX = 0;
