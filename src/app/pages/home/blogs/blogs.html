@@ -2,7 +2,7 @@
 
   <!-- GRID VIEW -->
   @if (mode === 'grid') {
-  <div class="row px-3 py-5 px-5 mx-lg-5" style="  background-color: #ffffff;">
+  <div class="row px-lg-3 py-5  mx-lg-5" style="  background-color: #ffffff;">
     <h1 class="text-center py-4"> المدونة </h1>
     @for (blog of blogs; track blog) {
     <div class="col-md-4 mb-4 p-3">
@@ -31,23 +31,23 @@
   }
 
   @if (mode === 'carousel' && !loading) {
-  <div class="position-relative px-lg-5 py-5 mb-0" style="  background-color: #081E25;" dir="rtl">
+  <div class="position-relative px-lg-5 px-3 py-5 mb-0" style="  background-color: #081E25;" dir="rtl">
     <div class="special-offers-container mb-5 ">
       <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center px-3 mb-4">
+      <div class="d-flex justify-content-between align-items-center px-lg-3 mb-4">
         <!-- العنوان -->
-        <h2 class="section-title mb-0 text-light fw-bold px-4">أحدث المقالات</h2>
+        <h2 class="section-title mb-0 text-light fw-bold px-lg-5 px-2">أحدث المقالات</h2>
 
         <!-- الزر -->
         <a [routerLink]="['/home/blogs']"
-          class="btn btn-link view-all-btn px-3 text-light d-flex align-items-center gap-1">
+          class="btn btn-link view-all-btn px-lg-5 px-4 text-light d-flex fs-5 align-items-center gap-1">
           <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
           عرض الكل
         </a>
       </div>
 
       <!-- Carousel Container -->
-      <div class="carousel-wrapper px-5">
+      <div class="carousel-wrapper px-lg-3">
         <div class="position-relative overflow-hidden  mx-lg-5">
           <div class="d-flex transition-transform  carousel-track"
             [ngStyle]="{ transform: 'translateX(+' + (currentSlideIndex * (100/visibleCards)) + '%)' }"
@@ -80,10 +80,10 @@
           </div>
         </div>
         <!-- Navigation -->
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center px-5 mt-4 py-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center px-lg-5 mt-4 py-3">
 
           <!-- Dots -->
-          <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 px-4 mb-3 mb-md-0">
+          <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 px-lg-4 mb-3 mb-md-0">
             @for (i of getDotsArray(); track i) {
             <button (click)="goToSlide(i)" class="rounded-5"
               [style.background-color]="currentSlideIndex === i ? '#7AD03A' : '#ccc'"

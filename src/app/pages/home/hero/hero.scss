@@ -18,20 +18,28 @@
   z-index: 1;
 }
 
+.hero-section {
+  position: relative;
+  overflow: hidden; /* يمنع الصورة من الخروج */
+}
+
 .highlight::before {
   content: "";
   position: absolute;
-  top: -50px;
-  left: -150px;
-  width: 230%;
-  height: 230%;
+  top: -40px;
+  left: 0;
+  right: -30px;  /* يغطي المساحة أفقياً */
+  margin: 0 auto;
+  width: 120%;
+  height: 200%;
   background-image: url('/assets/Images/Bubble%20Ellipse.svg');
-  background-size: contain;
+  background-size: cover; /* يخليها تغطي */
   background-repeat: no-repeat;
   background-position: center;
   z-index: 0;
   pointer-events: none;
 }
+
 
 
 .hero-description, .hero-subtitle {

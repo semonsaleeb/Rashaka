@@ -22,7 +22,19 @@ export interface Product {
   isFavorite?: boolean;  // optional if you're using a favorites system
   price_before: string;
   price_after: string;
+average_rating?: number ;
+ reviews?: Review[];
 }
+
+export interface Review {
+  id: number;
+  client_name: string;
+  client_id: number;
+  rating: number; // 1-5
+  comment: string;
+  created_at: string;
+}
+
 export interface Category {
   id: number;
   name: string;
@@ -53,18 +65,23 @@ export class ProductService {
 
 
 
-  getProductById(id: number, token: string): Observable<Product> {
-    const headers = new HttpHeaders({
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`
-    });
+getProductById(id: number, token: string): Observable<Product> {
+  const headers = new HttpHeaders({
+    Accept: 'application/json',
+    Authorization: `Bearer ${token}`
+  });
 
-    const url = `${this.baseUrl}?product_id=${id}`;
+  const url = `${environment.apiBaseUrl}/product?product_id=${id}`;
 
-    return this.http.get<{ status: string; data: Product }>(url, { headers }).pipe(
-      map(response => response.data)
-    );
-  }
+  return this.http.get<{ status: string; data: Product }>(url, { headers }).pipe(
+    map(response => {
+      if (!response.data) throw new Error(`Product with ID ${id} not found`);
+      return response.data;
+    })
+  );
+}
+
+
 
 
   // Get products by category

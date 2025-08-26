@@ -1,59 +1,148 @@
+<!-- product-page.component.html -->
 @if (!isLoading && product) {
-  <div class="container py-4" dir="rtl">
-    <div class="row g-4">
-      <!-- Product Image + Thumbnails -->
-      <div class="col-md-5">
-        <div class="border rounded-4 p-3 bg-white text-center">
-          <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              @for (image of product.images; track image; let i = $index) {
-                <div class="carousel-item" [class.active]="i === 0">
-                  <img [src]="image" class="img-fluid" style="height: 300px; object-fit: contain;" />
-                </div>
-              }
+<div class="container py-4 mt-5" dir="rtl">
+  <div class="row g-4">
+    <!-- Product Image + Thumbnails -->
+    <div class="col-md-5">
+      <div class="p-3 bg-white text-center position-relative">
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+
+         <!-- Favorite button -->
+<button 
+  class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-2"
+  style="border-color: #00000033; z-index: 10;"  
+  (click)="toggleFavorite(product)">
+  <i [class]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'"></i>
+</button>
+
+
+          <!-- Carousel Images -->
+          <div class="carousel-inner">
+            @for (image of product.images; track image; let i = $index) {
+            <div class="carousel-item pt-5" [class.active]="i === 0">
+              <img [src]="image" class="img-fluid" style="height: 300px; object-fit: contain;" />
             </div>
-          </div>
-          <div class="d-flex justify-content-center gap-2 mt-2">
-            @for (image of product.images; track image) {
-              <img
-                [src]="image"
-                class="img-thumbnail"
-                style="width: 60px; height: 60px; object-fit: contain;" />
             }
           </div>
         </div>
-      </div>
-      <!-- Product Info -->
-      <div class="col-md-7">
-        <div class="border rounded-4 p-4 bg-white h-100 d-flex flex-column">
-          <h4 class="fw-bold">{{ product.name_ar }}</h4>
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <span class="text-success fw-bold fs-5">{{ product.price }} ر.س</span>
-            @if (product.categories.length) {
-              <span class="badge bg-secondary">
-                {{ product.categories[0].name_ar }}
-              </span>
-            }
-          </div>
-          <div class="mb-3">
-            <span class="text-warning">★</span> {{ product.name }}
-            <small class="text-muted">({{ product.stock }} متوفر)</small>
-          </div>
-          <div class="d-flex gap-2 mb-3">
-            <button class="btn btn-success rounded-pill px-4" (click)="addToCart()">
-              إضافة للعربة
-              <img src="assets/Images/shopping-cart-add-01.svg" class="ms-2" width="20" />
-            </button>
-            <button class="btn btn-outline-secondary rounded-circle" (click)="toggleFavorite()">
-              <i [class]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'"></i>
-            </button>
-          </div>
-          <div class="border-top pt-3">
-            <h6 class="fw-bold">الوصف</h6>
-            <p class="text-muted" style="white-space: pre-line;">{{ product.description_ar }}</p>
-          </div>
+
+        <!-- Thumbnails -->
+        <div class="d-flex justify-content-center gap-2 mt-2">
+          @for (image of product.images; track image) {
+          <img [src]="image" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: contain;" />
+          }
         </div>
       </div>
     </div>
+
+    <!-- Product Info -->
+    <div class="col-md-7">
+      <div class="p-4 bg-white h-100 d-flex flex-column">
+        <h4 class="fw-bold">{{ product.name_ar }}</h4>
+
+        <!-- Price + Category -->
+        <div class="d-flex align-items-center gap-2 mb-2">
+          @if (product.sale_price) {
+          <span class="text-success fw-bold fs-5">
+            {{ product.sale_price }} ر.س
+          </span>
+          <span class="text-muted text-decoration-line-through">
+            {{ product.price }} ر.س
+          </span>
+          } @else {
+          <span class="fw-bold fs-5 text-dark">{{ product.price }} ر.س</span>
+          }
+
+          @if (product.categories && product.categories.length) {
+          <span class="badge bg-secondary">
+            {{ product.categories[0].name_ar  }}
+          </span>
+          }
+        </div>
+
+        <!-- Name + Stock -->
+        <div class="mb-3">
+          <div class="mb-2 d-flex align-items-center">
+            @for (star of [1,2,3,4,5]; track star) {
+            <i class="fa-star" [class.fa-solid]="star <= (product.average_rating ?? 0)"
+              [class.fa-regular]="star > (product.average_rating ?? 0)" style="color: gold;">
+            </i>
+            }
+            <small class="text-muted ms-2">
+              ({{ product.average_rating ?? 0 }})
+            </small>
+          </div>
+
+
+
+
+
+
+
+          <small class="text-muted">({{ product.stock }} متوفر)</small>
+        </div>
+
+        <!-- Add to cart -->
+        <div class="d-flex gap-2 mb-3">
+          <button class="btn px-4 d-flex align-items-center justify-content-center"
+            style="background-color:#7ED321; color:black; font-weight:600;" (click)="addToCart()">
+            <img src="assets/Images/shopping-cart-add-01.svg" width="20" />
+            <span class="ms-2">إضافة للعربة</span>
+          </button>
+        </div>
+
+        <div class="d-flex gap-2 mb-3">
+         <div class="d-flex gap-2 mb-3">
+  <button class="tab-btn" 
+          [class.active]="showDescription"
+          (click)="showDescription = true; showReviews = false">
+    الوصف
+  </button>
+  <button class="tab-btn" 
+          [class.active]="showReviews"
+          (click)="showDescription = false; showReviews = true">
+    التقييمات
+  </button>
+</div>
+
+        </div>
+
+        <div *ngIf="showDescription" class="border-top pt-3">
+          <h6 class="fw-bold">الوصف</h6>
+          <p class="text-muted" style="white-space: pre-line;">
+            {{ product.description_ar }}
+          </p>
+        </div>
+
+        <div *ngIf="showReviews" class="border-top pt-3">
+          <h6 class="fw-bold">التقييمات والمراجعات</h6>
+
+          <div *ngIf="product.reviews?.length; else noReviews">
+            <div *ngFor="let review of product.reviews" class="mb-3 p-2 bg-light rounded">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong>{{ review.client_name }}</strong>
+                <small class="text-muted">{{ review.created_at | date:'short' }}</small>
+              </div>
+
+              <div class="mb-1">
+                <ng-container *ngFor="let star of [1,2,3,4,5]">
+                  <i class="fa-star" [class.fa-solid]="star <= review.rating" [class.fa-regular]="star > review.rating"
+                    style="color: gold;">
+                  </i>
+                </ng-container>
+              </div>
+
+              <p class="mb-0">{{ review.comment }}</p>
+            </div>
+          </div>
+
+          <ng-template #noReviews>
+            <p class="text-muted">لا توجد مراجعات لهذا المنتج بعد.</p>
+          </ng-template>
+        </div>
+
+      </div>
+    </div>
   </div>
+</div>
 }

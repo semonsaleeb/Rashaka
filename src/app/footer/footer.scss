@@ -1,294 +1,33 @@
- * {
-  font-family: 'Almarai', sans-serif !important;
-}
- .footer {
-      background: #081E25;
-      color: white;
-      padding: 60px 0 20px;
-      font-family: 'Arial', sans-serif;
-      position: relative;
-      overflow: hidden;
-      text-align: right;
-    }
-.social-section{
-    justify-content: right;
-}
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 40px;
-      padding: 0 20px;
-    }
-
-    .footer-section h3 {
-      color: #7dd55c;
-      font-size: 1.3em;
-      margin-bottom: 20px;
-      font-weight: bold;
-    }
-
-    .footer-section h4 {
-        text-align: right;
-      font-size: 1.1em;
-      margin: 20px 0 10px;
-      font-weight: bold;
-    }
-
-    /* Contact Section */
-    .contact-section .contact-item {
-  display: flex;
-  align-items: center;         /* Vertical centering */
-  justify-content: flex-end;   /* Push content to the right */
-  margin-bottom: 15px;
-  gap: 10px;
-}
-
-    .contact-item .icon {
-      background: #7dd55c;
-      color: #1a4a3a;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-     
-      font-size: 12px;
-      flex-shrink: 0;
-    }
-
-    .contact-section p {
-      margin: 5px 0;
-      opacity: 0.9;
-    }
-
-    /* Links Section */
-    .links-section ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .links-section li {
-      margin-bottom: 12px;
-    }
-
-    .links-section a {
-      color: white;
-      text-decoration: none;
-      transition: color 0.3s ease;
-      opacity: 0.9;
-    }
-
-    .links-section a:hover {
-      color: #7dd55c;
-    }
-
-    /* Logo Section */
-    .logo-section {
-      text-align: center;
-    }
-
-    .logo-container {
-      margin-bottom: 20px;
-    }
-
-    .logo {
-      display: inline-block;
-      background: linear-gradient(45deg, #7dd55c, #a8e6cf);
-      color: #1a4a3a;
-      padding: 15px 25px;
-      border-radius: 10px;
-      font-weight: bold;
-      position: relative;
-    }
-
-    .logo-text {
-      display: block;
-      font-size: 1.2em;
-      margin-bottom: 5px;
-    }
-
-    .logo-english {
-      display: block;
-      font-size: 0.9em;
-      font-style: italic;
-    }
-    .logo_img{
-align-items: right;
-    }
-    .tagline {
-      direction: rtl;
-      text-align: right;
-      margin: 20px 0;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
-
-    /* Social Section */
-    .social-links {
-      display: flex;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .social-link {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-     
-      text-decoration: none;
-      transition: transform 0.3s ease;
-      font-size: 18px;
-    }
-
-    .social-link:hover {
-      transform: translateY(-3px);
-    }
-
-    .social-link.facebook {
-      background: #1877f2;
-      color: white;
-    }
-
-    .social-link.instagram {
-      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      color: white;
-    }
-
-    .social-link.youtube {
-      background: #ff0000;
-      color: white;
-    }
-
-    .social-link.snapchat {
-      background: #fffc00;
-      color: black;
-    }
-
-    /* Footer Bottom */
-    .footer-bottom {
-      text-align: center;
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(125, 213, 92, 0.3);
-      opacity: 0.8;
-    }
-
-    /* Decorative Elements */
-    .decorative-circles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(125, 213, 92, 0.1);
-    }
-
-    .circle-1 {
-      width: 200px;
-      height: 200px;
-      top: -100px;
-      right: -100px;
-    }
-
-    .circle-2 {
-      width: 150px;
-      height: 150px;
-      bottom: -75px;
-      left: -75px;
-    }
-
-    .footer-content {
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        text-align: center;
-      }
-
-      .contact-section .contact-item {
-        justify-content: center;
-      }
-
-      .footer {
-        padding: 40px 0 20px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .footer-content {
-        padding: 0 15px;
-      }
-
-      .logo {
-        padding: 12px 20px;
-      }
-
-      .logo-text {
-        font-size: 1.1em;
-      }
-
-      .social-links {
-        gap: 12px;
-      }
-
-      .social-link {
-        width: 35px;
-        height: 35px;
-        font-size: 16px;
-      }
-    }
-
-
-
-.footer-border-top {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  right: 0;
-  height: 60px;
-  z-index: 10;
+.footer-top {
+  position: relative; /* crucial */
+  height: 80px; /* enough to show the curved border */
 }
 
 .curved-border {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px; /* Increased height for better curve */
+  top: 80px;
+  left: 50%; /* start from the center */
+  width: 70%; /* your desired width */
+  height: 20px;
   background: linear-gradient(90deg, #7AD03A 0%, #5CB85C 100%);
-  transform: scale(0.7, 0.2); /* Adjusted scale for smoother curve */
-  border-radius:  100px 100px 0 0;
-  transform-origin: top center;
+  border-radius: 100px 100px 0 0;
+  transform: translateX(-50%); /* center horizontally */
 }
 
 .up-arrow {
   position: absolute;
-  top: -20px; /* Adjusted position */
-  left: 17%;
-  transform: translateX(-50%);
+  top: 50px; /* adjust to sit above the border */
+  left: 15%; /* center horizontally relative to parent */
+  transform: translateX(-50%); /* center it exactly */
   width: 50px;
   height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transition: all 0.3s ease;
 }
 
@@ -300,17 +39,5 @@ align-items: right;
 .up-arrow img {
   width: 64px;
   height: 64px;
-
 }
 
-
-
-footer.footer {
-  margin-top: -90px; /* adjust to fit smoothly */
-  padding-top: 60px;  /* prevent content overlap */
-}
-.footer-border-top {
-  position: relative;
-  margin-bottom: -33px; /* curve overlaps */
-  z-index: 2;
-}

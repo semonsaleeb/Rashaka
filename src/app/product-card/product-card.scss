@@ -1,0 +1,30 @@
+/* product-page.component.css */
+.carousel-item img {
+  transition: transform 0.3s ease-in-out;
+}
+.carousel-item img:hover {
+  transform: scale(1.05);
+}
+.img-thumbnail {
+  cursor: pointer;
+  border-radius: 8px;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #000;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.tab-btn.active {
+  border-bottom-color: #7AD03A;
+  color: #7AD03A;
+}
+
+.tab-btn:hover {
+  color: #7AD03A;
+}

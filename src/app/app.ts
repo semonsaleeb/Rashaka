@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
 
@@ -18,16 +18,27 @@ import { Downloadapp } from './pages/home/downloadapp/downloadapp';
 import { Footer } from './footer/footer';
 import { Home } from './pages/home';
 import { WelcomePopup } from './welcome-popup/welcome-popup';
+import { CartSidebar } from './cart-sidebar/cart-sidebar';
+import { CartStateService } from './services/cart-state-service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Footer, Header, WelcomePopup],
+  imports: [RouterOutlet, Footer, Header, WelcomePopup, CartSidebar],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
+export class App implements OnInit {
+  cartItems: any[] = [];
 
+  constructor(private cartState: CartStateService) {}
+
+  ngOnInit() {
+    // 👇 خلي الكارت يتحدث مع أي تغيير
+    this.cartState.cartItems$.subscribe(items => {
+      this.cartItems = items;
+    });
+  }
 //   products: Product[] = [];
 
 // constructor(private productService: ProductService) {}

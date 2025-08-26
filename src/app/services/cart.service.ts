@@ -1,64 +1,22 @@
 // cart.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface CartItem {
-  id: number;
-  product_id: number;
-  product_name: string;
-  product_name_ar: string;
-  name: string;
-  name_ar: string;
-  description: string;
-  image: string;
-  images: string[];
-
-  price: string;
-  sale_price: string | null;
-  unit_price: string;
-  sale_unit_price: string;
-  final_price: string;
-  line_total: number;
-  total_price?: string;
-  total_sale_price?: string;
-  description_ar?: string;
-  quantity: number;
-  stock_quantity?: number;
-  stock?: number;
-  isFavorite?: boolean;
-}
-
-export interface CartResponse {
-  items: CartItem[];
-  totalPrice: number;
-  totalQuantity: number;
-  totalSalePrice?: number;
-}
+import { CartItem } from '../../models/CartItem';
+import { CartResponse } from '../../models/CartResponse';
+import { PlaceOrderResponse } from '../../models/PlaceOrderResponse';
+import { PromoResponse } from '../../models/PromoResponse';
 
 
 
-export interface PlaceOrderResponse {
-  status: string;
-  message: string;
-  order_id: number;
-  address_id: number;
-  payment_method: string;
-  order_status: string;
-  total_price: number;
-  discount: number;
-  promocode: string | null;
-  items: any[];
-}
 
-export interface PromoResponse {
-  success: boolean;
-  original_total: number;
-  discount_amount: number;
-  new_total: number;
-  promocode: string;
-}
+
+
+
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -177,4 +135,23 @@ export class CartService {
     return this.http.post<PromoResponse>(`${this.apiUrl}/client/order/apply-promocode`,
       { promocode, total_price }, { headers: this.getHeaders() });
   }
+
+
+updateQuantity(productId: number, quantity: number): Observable<any> {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    // لو مستخدم مسجل دخول
+    return this.http.post(`${this.apiUrl}/cart/update-quantity`,
+      { product_id: productId, quantity },
+      { headers: this.getHeaders() }
+    );
+  } else {
+    // ضيف → تحديث localStorage
+    this.updateGuestQuantity(productId, quantity);
+    return of(true); // ✅ بيرجع Observable علشان الكومبوننت يعرف يكمل
+  }
+}
+
+
 }

@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  CartService,
-  PromoResponse as ServicePromoResponse,
-  CartResponse,
-  CartItem
-} from '../services/cart.service';
+import { CartService } from '../services/cart.service';
 import { CartStateService } from '../services/cart-state-service';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { PromoResponse as ServicePromoResponse } from '../../models/PromoResponse';
+import { CartItem } from '../../models/CartItem';
+import { CartResponse } from '../../models/CartResponse';
+
 
 @Component({
   selector: 'app-cart-page.component',
@@ -73,7 +72,7 @@ export class CartPageComponent implements OnInit {
     console.log('📦 loadCart called, token:', this.token);
 
     if (this.token) {
-      // ✅ Logged in user
+      // ✅ Logged-in user
       this.cartService.getCart().subscribe({
         next: (response) => {
           const data: CartResponse = response?.data || {
@@ -82,77 +81,57 @@ export class CartPageComponent implements OnInit {
             totalQuantity: 0
           };
 
-          let originalTotal = 0;
-          let finalTotal = 0;
-          let discountTotal = 0;
-
-          this.cartItems = (data.items || []).map((item) => {
-            const qty = item.quantity || 0;
-
-            const unitPriceNum = parseFloat(item.unit_price as any) || 0;       // السعر الأصلي
-            const saleUnitPriceNum = parseFloat(item.sale_unit_price as any) || 0; // سعر بعد الخصم (لو موجود)
-            const discountedUnit = saleUnitPriceNum > 0 ? saleUnitPriceNum : unitPriceNum;
-
-            originalTotal += unitPriceNum * qty;
-            finalTotal += discountedUnit * qty;
-            discountTotal += Math.max(unitPriceNum - discountedUnit, 0) * qty;
-
-            return {
-              ...item,
-              nameAr: item.product_name_ar || 'منتج بدون اسم',
-              unitPriceNum,
-              saleUnitPriceNum,
-              finalPrice: discountedUnit
-            };
-          });
-
-          this.totalPrice = this.round2(originalTotal);
-          this.totalSalePrice = this.round2(finalTotal);
-          this.discountAmount = this.round2(discountTotal);
-          this.progressValue = Math.min((this.totalSalePrice / 1000) * 100, 100);
-
-          console.log('📊 Totals:', {
-            totalPrice: this.totalPrice,
-            totalSalePrice: this.totalSalePrice,
-            discountAmount: this.discountAmount
-          });
+          this.processCartItems(data.items || []);
         },
         error: (err) => console.error('❌ Error loading cart:', err)
       });
     } else {
       // 👤 Guest user
       const data = this.cartService.getGuestCart();
-
-      let originalTotal = 0;
-      let finalTotal = 0;
-      let discountTotal = 0;
-
-      this.cartItems = (data.items || []).map((item) => {
-        const qty = item.quantity || 0;
-
-        const unitPriceNum = parseFloat(item.unit_price as any) || 0;
-        const saleUnitPriceNum = parseFloat(item.sale_unit_price as any) || 0;
-        const discountedUnit = saleUnitPriceNum > 0 ? saleUnitPriceNum : unitPriceNum;
-
-        originalTotal += unitPriceNum * qty;
-        finalTotal += discountedUnit * qty;
-        discountTotal += Math.max(unitPriceNum - discountedUnit, 0) * qty;
-
-        return { ...item, unitPriceNum, saleUnitPriceNum, finalPrice: discountedUnit };
-      });
-
-      // في حالة الضيف نعيد حساب الإجماليات بدقة بدل الاعتماد على قيم مخزنة قديمة
-      this.totalPrice = this.round2(originalTotal);
-      this.totalSalePrice = this.round2(finalTotal);
-      this.discountAmount = this.round2(discountTotal);
-
-      console.log('📊 Guest Totals:', {
-        totalPrice: this.totalPrice,
-        totalSalePrice: this.totalSalePrice,
-        discountAmount: this.discountAmount
-      });
+      this.processCartItems(data.items || []);
     }
   }
+
+  /**
+   * 🧮 Shared function for calculating totals (works for both guest & logged-in users)
+   */
+  private processCartItems(items: CartItem[]) {
+    let originalTotal = 0;
+    let finalTotal = 0;
+    let discountTotal = 0;
+
+    this.cartItems = items.map((item) => {
+      const qty = item.quantity || 0;
+
+      const unitPriceNum = parseFloat(item.unit_price as any) || 0;        // السعر الأصلي
+      const saleUnitPriceNum = parseFloat(item.sale_unit_price as any) || 0; // السعر بعد الخصم
+      const discountedUnit = saleUnitPriceNum > 0 ? saleUnitPriceNum : unitPriceNum;
+
+      originalTotal += unitPriceNum * qty;
+      finalTotal += discountedUnit * qty;
+      discountTotal += Math.max(unitPriceNum - discountedUnit, 0) * qty;
+
+      return {
+        ...item,
+        nameAr: item.product_name_ar || 'منتج بدون اسم',
+        unitPriceNum,
+        saleUnitPriceNum,
+        finalPrice: discountedUnit
+      };
+    });
+
+    this.totalPrice = this.round2(originalTotal);
+    this.totalSalePrice = this.round2(finalTotal);
+    this.discountAmount = this.round2(discountTotal);
+    this.progressValue = Math.min((this.totalSalePrice / 1000) * 100, 100);
+
+    console.log('📊 Totals:', {
+      totalPrice: this.totalPrice,
+      totalSalePrice: this.totalSalePrice,
+      discountAmount: this.discountAmount
+    });
+  }
+
 
   private handleCartResponse(data: CartResponse) {
     // احتفظنا بالدالة لو بتستخدم في أماكن تانية، بس loadCart هو المصدر الحقيقي للحسابات
@@ -164,36 +143,64 @@ export class CartPageComponent implements OnInit {
   // ================== Cart Operations ==================
   increaseQuantity(productId: number) {
     if (this.token) {
-      this.cartService.addToCart(productId, 1).subscribe({ next: () => this.loadCart() });
+      this.cartService.addToCart(productId, 1).subscribe({
+        next: () => this.loadCartAndUpdateState() // ⬅️ تعديل هنا
+      });
     } else {
-      const item = this.cartItems.find((i) => i.product_id === productId);
+      const item = this.cartItems.find(i => i.product_id === productId);
       if (item) {
-        this.cartService.updateGuestQuantity(productId, item.quantity + 1);
-        this.loadCart();
+        item.quantity += 1;
+        this.cartService.updateGuestQuantity(productId, item.quantity);
+        this.loadCartAndUpdateState(); // ⬅️ هنا أيضاً
       }
     }
   }
 
   decreaseQuantity(productId: number) {
     if (this.token) {
-      this.cartService.reduceCartItem(productId).subscribe({ next: () => this.loadCart() });
+      this.cartService.reduceCartItem(productId).subscribe({
+        next: () => this.loadCartAndUpdateState()
+      });
     } else {
-      const item = this.cartItems.find((i) => i.product_id === productId);
+      const item = this.cartItems.find(i => i.product_id === productId);
       if (item && item.quantity > 1) {
-        this.cartService.updateGuestQuantity(productId, item.quantity - 1);
-        this.loadCart();
+        item.quantity -= 1;
+        this.cartService.updateGuestQuantity(productId, item.quantity);
+        this.loadCartAndUpdateState();
       }
     }
   }
 
   removeItem(productId: number) {
     if (this.token) {
-      this.cartService.removeCartItem(productId).subscribe({ next: () => this.loadCart() });
+      this.cartService.removeCartItem(productId).subscribe({
+        next: () => this.loadCartAndUpdateState()
+      });
     } else {
       this.cartService.removeGuestItem(productId);
-      this.loadCart();
+      this.loadCartAndUpdateState();
     }
   }
+  private loadCartAndUpdateState() {
+    if (this.token) {
+      this.cartService.getCart().subscribe({
+        next: (res) => {
+          const items = res.data?.items || [];
+          this.processCartItems(items);
+          this.cartState.updateItems(items); // 🔥 هنا يحدث الـ BehaviorSubject
+        },
+        error: () => {
+          this.cartItems = [];
+          this.cartState.updateItems([]);
+        }
+      });
+    } else {
+      const guestCart = this.cartService.getGuestCart().items || [];
+      this.processCartItems(guestCart);
+      this.cartState.updateItems(guestCart); // 🔥 تحديث الـ BehaviorSubject للـ guest
+    }
+  }
+
 
   // ================== Getters ==================
   get totalCartItemsCount(): number {
@@ -209,19 +216,19 @@ export class CartPageComponent implements OnInit {
   }
 
   // ================== Place Order ==================
- placeOrder() {
-  if (!this.token) {
-    // احفظ الصفحة الحالية للعودة لها بعد تسجيل الدخول
-    localStorage.setItem('redirectAfterLogin', this.router.url);
+  placeOrder() {
+    if (!this.token) {
+      // احفظ الصفحة الحالية للعودة لها بعد تسجيل الدخول
+      localStorage.setItem('redirectAfterLogin', this.router.url);
 
-    // عرض popup تسجيل الدخول
-    this.showLoginPopup = true;
-    return;
+      // عرض popup تسجيل الدخول
+      this.showLoginPopup = true;
+      return;
+    }
+
+    // المستخدم مسجل دخول → اذهب لصفحة الطلب
+    this.router.navigate(['/placeOrder']);
   }
-
-  // المستخدم مسجل دخول → اذهب لصفحة الطلب
-  this.router.navigate(['/placeOrder']);
-}
 
 
   // ================== Promo ==================

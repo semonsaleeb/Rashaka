@@ -61,13 +61,14 @@
 
               <!-- السعر -->
               <div class="small">
-                @if (item.sale_unit_price) {
+                @if ((+item.sale_unit_price! > 0) && (+item.sale_unit_price! !== +item.unit_price!)) {
                 <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} ر.س</span>
                 <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
                 } @else {
-                <span class="fw-bold">{{ item.unit_price }} ر.س</span>
+                <span class="fw-bold text-dark">{{ item.unit_price }} ر.س</span>
                 }
               </div>
+
 
               <!-- أزرار التحكم -->
               <div class="d-flex align-items-center justify-content-between mt-2">

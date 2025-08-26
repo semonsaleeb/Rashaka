@@ -1,0 +1,80 @@
+<div class="offcanvas offcanvas-end" dir="rtl" tabindex="-1" id="cartSidebar" aria-labelledby="cartSidebarLabel">
+  <div class="offcanvas-header">
+    <h5 id="cartSidebarLabel" class="fw-bold">🛒 سلة المشتريات</h5>
+
+    <button type="button" class="btn btn-success w-100 mt-3" data-bs-dismiss="offcanvas">
+      إغلاق السلة
+    </button>
+  </div>
+  <div class="offcanvas-body">
+
+    <!-- العرض اللي إنتي كتباه -->
+    <div class="col-12">
+      <h6 class="mb-4 text-end">
+        <img src="assets/Images/delivery.svg" class="me-2" style="max-height: 22px;">
+        <span> شحن مجاني للطلبات أكثر من </span>
+        <strong>1000 ريال</strong>
+      </h6>
+
+      <div class="progress border border-c mb-3" style="height: 10px;">
+        <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
+          [attr.aria-valuenow]="progressValue" aria-valuemin="0" aria-valuemax="100" style="background-color: #2EA2CC;">
+        </div>
+      </div>
+
+      @for (item of cartItems; track item) {
+      <div class="card mb-3 shadow-sm border-1 rounded-4 p-2" style="background-color: #FAFAFA;">
+        <div class="row g-2 align-items-center">
+          <div class="col-3 text-center">
+            <div class="col-3 text-center">
+              @if (item.images && item.images.length > 0) {
+              <img [src]="item.images[0]" class="img-fluid rounded-3" style="max-height: 70px;">
+              } @else {
+              <img src="assets/Images/placeholder.png" class="img-fluid rounded-3" style="max-height: 70px;">
+              }
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="card-body mx-lg-3 text-end p-2">
+              <h6 class="card-title fw-bold">{{ item.product_name_ar }}</h6>
+              <div class="small">
+                @if ((+item.sale_unit_price! > 0) && (+item.sale_unit_price! !== +item.unit_price!)) {
+                <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} ر.س</span>
+                <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
+                } @else {
+                <span class="fw-bold text-dark">{{ item.unit_price }} ر.س</span>
+                }
+              </div>
+
+
+              <div class="d-flex align-items-center justify-content-between mt-2">
+                <button class="btn btn-outline-danger btn-sm" (click)="removeItem(item.product_id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+                <div class="d-flex align-items-center gap-2 ">
+                  <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <span>{{ item.quantity }}</span>
+                  <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- زر الذهاب لعربة التسوق -->
+    <a [routerLink]="['/cart']" class="btn btn-success w-100 mt-3" data-bs-dismiss="offcanvas">
+      <i class="fa-solid fa-cart-shopping me-2"></i> الذهاب إلى السلة
+    </a>
+
+
+
+
+  </div>
+</div>

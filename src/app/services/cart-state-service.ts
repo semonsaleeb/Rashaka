@@ -1,55 +1,61 @@
 // services/cart-state.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { CartItem } from '../../models/CartItem';
 
-// ده بس مثال لو انت محتاجه مع الكارت
-export interface PromoResponse {
-  success: boolean;
-  original_total: number;
-  discount_amount: number;
-  new_total: number;
-  promocode: string;
-}
 
-export interface CartItem {
-  id: number;
-  product_id: number;
-  name: string;
-  name_ar: string;
-  product_name: string;
-  product_name_ar: string;
-  description: string;
-  description_ar: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
+
+
+
 
 @Injectable({ providedIn: 'root' })
 export class CartStateService {
-  // 🟢 عدد المنتجات
+  // 🟢 عدد المنتجات في الكارت
   private cartCountSource = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCountSource.asObservable();
 
-  // 🟢 كل المنتجات
+  // 🟢 كل المنتجات في الكارت
   private cartItemsSource = new BehaviorSubject<CartItem[]>([]);
   cartItems$ = this.cartItemsSource.asObservable();
 
-  // ✅ تحديث العدد
+  constructor() {}
+
+  // ✅ تحديث العدد مباشرة
   updateCount(count: number): void {
     this.cartCountSource.next(count);
   }
 
-  // ✅ تحديث المنتجات كلها
+  // ✅ تحديث المنتجات كلها (ويحسب العدد تلقائي)
   updateItems(items: CartItem[]): void {
     this.cartItemsSource.next(items);
 
-    // كمان نحدث العدد أوتوماتيك
-    const count = items.reduce((sum, item) => sum + item.quantity, 0);
-    this.updateCount(count);
+    // 🟢 نحسب العدد الكلي من الكميات
+    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+    this.updateCount(totalQuantity);
   }
 
-  // ✅ reset cart (مثلاً عند تسجيل الخروج)
+  // ✅ تحديث عنصر واحد بس (مفيد للزيادة/النقصان)
+  updateSingleItem(updatedItem: CartItem): void {
+    const currentItems = this.cartItemsSource.getValue();
+    const index = currentItems.findIndex(i => i.product_id === updatedItem.product_id);
+
+    if (index > -1) {
+      currentItems[index] = { ...currentItems[index], ...updatedItem };
+    } else {
+      currentItems.push(updatedItem);
+    }
+
+    this.updateItems([...currentItems]);
+  }
+
+  // ✅ حذف عنصر من الكارت
+  removeItem(productId: number): void {
+    const currentItems = this.cartItemsSource.getValue();
+    const newItems = currentItems.filter(i => i.product_id !== productId);
+    this.updateItems(newItems);
+  }
+
+  // ✅ reset cart (مثلاً عند تسجيل الخروج أو إفراغ الكارت)
   clearCart(): void {
     this.cartItemsSource.next([]);
     this.cartCountSource.next(0);

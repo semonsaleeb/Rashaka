@@ -6,8 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { ClientService } from '../services/client.service';
 import { AddressService } from '../services/address.service';
 import { CartService } from '../services/cart.service';
-import { CartStateService, PromoResponse } from '../services/cart-state-service';
+import { CartStateService } from '../services/cart-state-service';
 import { DecimalPipe } from '@angular/common';
+import { PromoResponse } from '../../models/PromoResponse';
 
 @Component({
   selector: 'app-place-order',

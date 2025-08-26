@@ -19,7 +19,7 @@
 }
 .category-products-container {
   background-color: #081E25;
-  padding: 2rem 6rem;
+  // padding: 2rem 6rem;
   width: 100%;
 
   .header-section {
@@ -304,5 +304,15 @@
   }
    .left-pattern {
     display: none !important;
+  }
+}
+/* cart-page.component.scss or global.scss */
+.offcanvas-end {
+  width: 350px; /* adjust width */
+}
+
+@media (max-width: 768px) {
+  .offcanvas-end {
+    width: 100%; /* full screen on mobile */
   }
 }

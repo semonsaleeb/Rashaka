@@ -2,89 +2,11 @@
 <app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()">
 </app-compare-popup>
 }
-<div class="offcanvas offcanvas-end" dir="rtl" tabindex="-1" id="cartSidebar" aria-labelledby="cartSidebarLabel">
-  <div class="offcanvas-header">
-    <h5 id="cartSidebarLabel" class="fw-bold">🛒 سلة المشتريات</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="إغلاق"></button>
-  </div>
-  <div class="offcanvas-body">
 
-    <!-- العرض اللي إنتي كتباه -->
-    <div class="col-12">
-      <h6 class="mb-4 text-end">
-        <img src="assets/Images/delivery.svg" class="me-2" style="max-height: 22px;">
-        <span> شحن مجاني للطلبات أكثر من </span>
-        <strong>1000 ريال</strong>
-      </h6>
-
-      <div class="progress border border-c mb-3" style="height: 10px;">
-        <div class="progress-bar" role="progressbar" [style.width.%]="progressValue"
-          [attr.aria-valuenow]="progressValue" aria-valuemin="0" aria-valuemax="100" style="background-color: #2EA2CC;">
-        </div>
-      </div>
-
-      @for (item of cartItems; track item.product_id)
-      {
-      <div class="card mb-3 shadow-sm border-1 rounded-4 p-2" style="background-color: #FAFAFA;">
-        <div class="row g-2 align-items-center">
-          <div class="col-3 text-center">
-            <div class="col-3 text-center">
-              @if (item.images && item.images.length > 0) {
-              <img [src]="item.images[0]" class="img-fluid rounded-3" style="max-height: 70px;">
-              } @else {
-              <img src="assets/Images/placeholder.png" class="img-fluid rounded-3" style="max-height: 70px;">
-              }
-            </div>
-          </div>
-          <div class="col-9">
-            <div class="card-body text-end p-2">
-              <h6 class="card-title fw-bold">{{ item.product_name_ar }}</h6>
-
-              <!-- السعر -->
-              <div class="small">
-                @if (item.sale_unit_price) {
-                <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} ر.س</span>
-                <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
-                } @else {
-                <span class="fw-bold">{{ item.unit_price }} ر.س</span>
-                }
-              </div>
-
-              <!-- أزرار التحكم -->
-              <div class="d-flex align-items-center justify-content-between mt-2">
-                <button class="btn btn-outline-danger btn-sm" (click)="removeItem(item.product_id)">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-                <div class="d-flex align-items-center gap-2 ">
-                  <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)">
-                    <i class="fa-solid fa-minus"></i>
-                  </button>
-                  <span>{{ item.quantity }}</span>
-                  <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)">
-                    <i class="fa-solid fa-plus"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      }
-    </div>
-
-    <!-- زر الذهاب لعربة التسوق -->
-    <a [routerLink]="['/cart']" class="btn btn-success w-100 mt-3" data-bs-dismiss="offcanvas">
-      <i class="fa-solid fa-cart-shopping me-2"></i> الذهاب إلى السلة
-    </a>
-
-
-
-  </div>
-</div>
 
 <!-- Carousel Mode -->
 @if (mode === 'carousel') {
-<div class="position-relative">
+<div class="position-relative ">
 
   <!-- Left Pattern -->
   <img src="assets/Images/pattern.svg" class="left-pattern"
@@ -94,7 +16,7 @@
   <div class="category-products-container py-5">
 
     <!-- المحتوى الداخلي مع padding -->
-    <div class="px-3">
+    <div class="px-lg-5 px-3">
       @if (!isLoading) {
       <div class="special-offers-container mb-5">
 
@@ -184,38 +106,51 @@
                           <span class="fw-bold text-success">{{ product.price }} ر.س </span>
                           }
                         </p>
-                        <!-- Cart Controls -->
-                        <div class="py-4">
-                          @if (isInCart(product.id)) {
-                          <div class="d-flex align-items-center justify-content-center gap-2 border rounded-4"
-                            style="direction: rtl;">
-                            <div class="d-flex align-items-center gap-2">
-                              <button class="btn custom-remove-btn btn-sm" (click)="removeItem(product.id, $event)">
-                                <img src="assets/Images/delete-02.svg">
-                              </button>
-                              <span class="fw-bold custom-qty-display text-center">
-                                {{ getCartItem(product.id)?.quantity }}
-                              </span>
-                              <button class="btn custom-increase-btn btn-sm"
-                                (click)="increaseQuantity(product.id, $event)">
-                                <i class="fa-solid fa-plus"></i>
-                              </button>
-                            </div>
-                          </div>
-                          } @else {
-                          <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover w-100"
-                            (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
-                            data-bs-target="#cartSidebar" aria-controls="cartSidebar">
-                            <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-                            إضافة للعربة
-                          </button>
-                          }
-                        </div>
+
+
                       </div>
 
                     </div>
                   </a>
+                  <!-- Cart Controls -->
+                  <div class="py-4 px-4">
+                    @if (isInCart(product.id)) {
+                    <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4"
+                      style="direction: rtl;">
 
+                      <!-- Quantity Controls -->
+                      <div class="d-flex align-items-center gap-2">
+                        <!-- Increase Button -->
+                        <button class="btn custom-increase-btn btn-sm"
+                          (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                          <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <!-- Quantity Display -->
+                        <span class="fw-bold custom-qty-display text-center">
+                          {{ getCartItem(product.id)?.quantity }}
+                        </span>
+                        <!-- Remove Button -->
+                        <button class="btn custom-remove-btn btn-sm"
+                          (click)="removeItem(product.id); $event.stopPropagation()">
+                          <img src="assets/Images/delete-02.svg">
+                        </button>
+                      </div>
+                    </div>
+                    } @else {
+                    <button class="btn btn-outline-dark w-100 btn-xs bg-white text-black rounded-5 custom-hover"
+                      style="font-size: 1rem;" (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
+                      data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+                      <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+
+                      إضافة الي العربة
+                    </button>
+
+
+
+
+
+                    }
+                  </div>
 
                 </div>
               </div>
@@ -267,7 +202,7 @@
 
 <!-- Grid Mode -->
 @if (mode === 'grid') {
-<div class="container-fluid py-5 px-4">
+<div class="container-fluid py-5 mt-lg-5 px-4">
   <div class="row" dir="rtl">
     <!-- Sidebar -->
     <div class="col-lg-3 mb-4 border rounded-4 py-2 d-none d-lg-block">
@@ -462,37 +397,43 @@
                 <!-- الزر أو كنترول الكمية -->
                 <div class="py-4">
                   @if (isInCart(product.id)) {
-                  <div class="d-flex align-items-center justify-content-center gap-2 border rounded-4"
+                  <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4"
                     style="direction: rtl;">
+
+                    <!-- Quantity Controls -->
                     <div class="d-flex align-items-center gap-2">
-
-                      <!-- زر الحذف -->
-                      <button class="btn custom-remove-btn btn-sm" (click)="removeItem(product.id, $event)">
-                        <img src="assets/Images/delete-02.svg">
+                      <!-- Increase Button -->
+                      <button class="btn custom-increase-btn btn-sm"
+                        (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                        <i class="fa-solid fa-plus"></i>
                       </button>
-
-                      <!-- الكمية -->
+                      <!-- Quantity Display -->
                       <span class="fw-bold custom-qty-display text-center">
                         {{ getCartItem(product.id)?.quantity }}
                       </span>
-
-                      <!-- زر الزيادة -->
-                      <button class="btn custom-increase-btn btn-sm" (click)="increaseQuantity(product.id, $event)">
-                        <i class="fa-solid fa-plus"></i>
+                      <!-- Remove Button -->
+                      <button class="btn custom-remove-btn btn-sm"
+                        (click)="removeItem(product.id); $event.stopPropagation()">
+                        <img src="assets/Images/delete-02.svg">
                       </button>
                     </div>
                   </div>
                   } @else {
-                  <!-- زر الإضافة -->
-                  <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover w-100"
-                    (click)="addToCart(product, $event)" data-bs-toggle="offcanvas" data-bs-target="#cartSidebar"
-                    aria-controls="cartSidebar">
+                  <button class="btn btn-outline-dark w-100 btn-xs bg-white text-black rounded-5 custom-hover"
+                    style="font-size: 1rem;" (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
+                    data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+                    <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
 
-                    <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-                    إضافة للعربة
+                    إضافة الي العربة
                   </button>
+
+
+
+
+
                   }
                 </div>
+
               </div>
 
 

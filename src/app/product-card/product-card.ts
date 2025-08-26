@@ -1,73 +1,90 @@
 import { Component, inject, OnInit } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { Product, ProductService } from '../services/product';
 import { AuthService } from '../services/auth.service';
 import { CartService } from '../services/cart.service';
 import { CartStateService } from '../services/cart-state-service';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { FavoriteService } from '../services/favorite.service';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     RouterModule
-],
+  ],
   templateUrl: './product-card.html',
   styleUrls: ['./product-card.scss']
 })
 export class ProductCard implements OnInit {
   product!: Product;
   isLoading = true;
+  errorMessage = '';
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  Math = Math;
+showDescription = true; showReviews = false;
   constructor(
     private http: HttpClient,
     private productService: ProductService,
     private auth: AuthService,
     private cartService: CartService,
-    public cartState: CartStateService
-  ) {}
+    public cartState: CartStateService,
+    private favoriteService: FavoriteService
+  ) { }
 
-  ngOnInit(): void {
-    const productId = Number(this.route.snapshot.paramMap.get('id'));
-    if (productId) {
-      this.getProduct(productId);
-    }
+ngOnInit(): void {
+  const productId = Number(this.route.snapshot.paramMap.get('id'));
+  if (!productId || isNaN(productId)) {
+    this.errorMessage = 'Invalid product ID';
+    this.isLoading = false;
+    return;
   }
 
-getProduct(id: number): void {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`,
-    'Accept': 'application/json'
-  });
+  const token = localStorage.getItem('token') || '';
 
-  this.http.get<{ data: Product[] }>(`${environment.apiBaseUrl}/products`, {
-    headers,
-    params: { product_id: id.toString() }
-  }).subscribe({
-    next: (res) => {
-      const foundProduct = res.data.find(p => p.id === id);
-      if (foundProduct) {
-        this.product = foundProduct;
-      } else {
-        console.warn(`Product with ID ${id} not found.`);
-      }
+  this.productService.getProductById(productId, token).subscribe({
+    next: (product) => {
+      this.product = {
+        ...product,
+        average_rating: product.average_rating ?? 0,
+        isFavorite: this.favoriteService.getFavorites().some(fav => fav.id === product.id)
+      };
+
+      console.log('Loaded product:', this.product); // ✅ log for debugging
       this.isLoading = false;
     },
     error: (err) => {
-      console.error('Error fetching product', err);
+      console.error('Error fetching product details', err);
+      this.errorMessage = 'Failed to load product details';
       this.isLoading = false;
     }
   });
 }
 
+
+  getProductById(id: number, token: string): Observable<Product> {
+    const headers = new HttpHeaders({
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+
+    const url = `${environment.apiBaseUrl}/products?product_id=${id}`;
+
+    return this.http.get<{ status: string; data: Product[] }>(url, { headers }).pipe(
+      map(response => {
+        const found = response.data.find(p => p.id === id);
+        if (!found) throw new Error(`Product with ID ${id} not found`);
+        return found;
+      })
+    );
+  }
 
   addToCart(): void {
     this.cartService.addToCart(this.product.id).subscribe({
@@ -83,14 +100,42 @@ getProduct(id: number): void {
     });
   }
 
-  toggleFavorite(): void {
-    this.auth.isLoggedIn$.subscribe((isLoggedIn) => {
-      if (!isLoggedIn) {
-        alert('يرجى تسجيل الدخول أولاً لإضافة المنتج إلى المفضلة');
-        this.router.navigate(['/auth']);
-        return;
-      }
-      this.product.isFavorite = !this.product.isFavorite;
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+
+  toggleFavorite(product: Product): void {
+    if (!this.isLoggedIn()) {
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.favoriteService.toggleFavorite(product, token).subscribe({
+      next: () => {
+        product.isFavorite = !product.isFavorite;
+        const favorites = this.favoriteService.getFavorites();
+        this.favoriteService.setFavorites(
+          product.isFavorite
+            ? [...favorites, product]
+            : favorites.filter(p => p.id !== product.id)
+        );
+      },
+      error: (err) => console.error('Error updating favorite:', err)
     });
+  }
+
+  getFullStars(rating: number): number[] {
+    return Array(Math.floor(rating)).fill(0);
+  }
+
+  getHalfStar(rating: number): boolean {
+    return rating % 1 !== 0;
+  }
+
+  getEmptyStars(rating: number): number[] {
+    return Array(5 - Math.ceil(rating)).fill(0);
   }
 }

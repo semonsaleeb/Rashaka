@@ -12,7 +12,7 @@ Carousel Mode
 
       <!-- Link -->
       <a [routerLink]="['/home/packages']"
-        class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 p-0">
+        class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 fs-5 px-lg-4">
         عرض الكل
         <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل" width="25px">
 
@@ -167,7 +167,7 @@ Grid Mode
 
   @if (plans.length > 0) {
   <!-- Grid Wrapper -->
-  <div class="carousel-wrapper position-relative overflow-hidden px-lg-5 ">
+  <div class="carousel-wrapper position-relative overflow-hidden px-lg-3 ">
     <div class="d-flex transition-transform carousel-track justify-content-end"
       [ngStyle]="{transform: 'translateX(-' + (currentSlideIndex * (105/visibleCards)) + '%)'}">
       @for (plan of plans; track plan) {
@@ -278,47 +278,47 @@ Grid Mode
 
 
 @if (showPopup) {
-  <div class="popup-overlay" dir="rtl">
-    <div class="popup-card-wrapper">
-      <button class="close-btn" (click)="showPopup = false">×</button>
-
-      <!-- ✅ لو عامل login -->
-      @if (isLoggedIn) {
-        <div class="popup-overlay" dir="rtl">
+<div class="popup-overlay" dir="rtl">
   <div class="popup-card-wrapper">
-    <button class="close-btn" (click)="closePopup()">×</button>
+    <button class="close-btn" (click)="showPopup = false">×</button>
 
-    <div class="carousel-slide p-3" style="flex: 0 0 350px; max-width: 350px;">
-      <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
-        [ngClass]="selectedPlanForPopup?.styleType + '-card'">
+    <!-- ✅ لو عامل login -->
+    @if (isLoggedIn) {
+    <div class="popup-overlay" dir="rtl">
+      <div class="popup-card-wrapper">
+        <button class="close-btn" (click)="closePopup()">×</button>
 
-        <!-- Card Top -->
-        <div class="card-top position-relative p-3">
-          <div class="ribbon-top-left fs-6"
-            [style.background-color]="selectedPlanForPopup?.styleType === 'basic' ? '#B4EB52' : '#ccc'">
-            {{ selectedPlanForPopup?.title }}
-          </div>
-          <img src="assets/Images/Group 9010.svg" alt="Frame"
-            style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
-          <div class="plan-info mt-5 text-end">
-            <span class="d-block" [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'">
-              اشتراك
-            </span>
-            <div class="sessions fw-bold my-2"
-              [style.background-color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : '#1B6079'"
-              [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'inherit' : 'white'">
-              {{ selectedPlanForPopup?.sessions }} جلسة
+        <div class="carousel-slide p-3" style="flex: 0 0 350px; max-width: 350px;">
+          <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
+            [ngClass]="selectedPlanForPopup?.styleType + '-card'">
+
+            <!-- Card Top -->
+            <div class="card-top position-relative p-3">
+              <div class="ribbon-top-left fs-6"
+                [style.background-color]="selectedPlanForPopup?.styleType === 'basic' ? '#B4EB52' : '#ccc'">
+                {{ selectedPlanForPopup?.title }}
+              </div>
+              <img src="assets/Images/Group 9010.svg" alt="Frame"
+                style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
+              <div class="plan-info mt-5 text-end">
+                <span class="d-block" [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'">
+                  اشتراك
+                </span>
+                <div class="sessions fw-bold my-2"
+                  [style.background-color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : '#1B6079'"
+                  [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'inherit' : 'white'">
+                  {{ selectedPlanForPopup?.sessions }} جلسة
+                </div>
+                <div class="price fw-bold"
+                  [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'">
+                  السعر {{ selectedPlanForPopup?.price }} ر.س
+                </div>
+              </div>
             </div>
-            <div class="price fw-bold"
-              [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'">
-              السعر {{ selectedPlanForPopup?.price }} ر.س
-            </div>
-          </div>
-        </div>
 
-        <!-- Card Bottom -->
-        <div class="card-bottom text-end px-3 pb-4">
-          <div class="available-places" [ngStyle]="{
+            <!-- Card Bottom -->
+            <div class="card-bottom text-end px-3 pb-4">
+              <div class="available-places" [ngStyle]="{
                 'background-color': selectedPlanForPopup?.cities ? '#E3E3E3' : '#B4EB52',
                 'color': '#333',
                 'padding': '3px 0',
@@ -327,55 +327,57 @@ Grid Mode
                 'border-radius': '0',
                 'font-size': '14px'
               }">
-            {{ selectedPlanForPopup?.cities }}
-          </div>
+                {{ selectedPlanForPopup?.cities }}
+              </div>
 
-          <div class="feature mt-4 mb-3">
-            @for (feature of isPopupExpanded
-            ? (selectedPlanForPopup?.features ?? [])
-            : (selectedPlanForPopup?.features ?? []).slice(0, 3); track feature) {
-            <span class="feature-label fs-6 d-block mb-1">
-              <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
-            </span>
-            }
-            @if ((selectedPlanForPopup?.features?.length ?? 0) > 3) {
-            <button class="btn btn-link p-0 mt-2 text-decoration-underline"
-              (click)="isPopupExpanded = !isPopupExpanded">
-              {{ isPopupExpanded ? 'عرض أقل' : 'عرض المزيد' }}
-            </button>
-            }
-
-
-          </div>
-
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary w-50" (click)="closePopup()">إلغاء</button>
-            <button class="btn  w-50" style="background-color: #7AD03A; color: black;" (click)="goToOrder(selectedPlanForPopup!)">
-              تأكيد
-            </button>
+              <div class="feature mt-4 mb-3">
+                @for (feature of isPopupExpanded
+                ? (selectedPlanForPopup?.features ?? [])
+                : (selectedPlanForPopup?.features ?? []).slice(0, 3); track feature) {
+                <span class="feature-label fs-6 d-block mb-1">
+                  <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
+                </span>
+                }
+                @if ((selectedPlanForPopup?.features?.length ?? 0) > 3) {
+                <button class="btn btn-link p-0 mt-2 text-decoration-underline"
+                  (click)="isPopupExpanded = !isPopupExpanded">
+                  {{ isPopupExpanded ? 'عرض أقل' : 'عرض المزيد' }}
+                </button>
+                }
 
 
+              </div>
+
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary w-50" (click)="closePopup()">إلغاء</button>
+                <button class="btn  w-50" style="background-color: #7AD03A; color: black;"
+                  (click)="goToOrder(selectedPlanForPopup!)">
+                  تأكيد
+                </button>
+
+
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>س
-      }
+    </div>س
+    }
 
-      <!-- ❌ لو مش عامل login -->
-      @else {
-        <div class="p-4 text-center">
-          <img src="assets/Images/Enter OTP-cuate 1.svg" alt="Login Illustration" style="max-width: 200px;">
-          <h5 class="mb-3">يرجى تسجيل الدخول</h5>
-          <p class="text-muted">يجب تسجيل الدخول أو إنشاء حساب جديد لمتابعة الاشتراك.</p>
+    <!-- ❌ لو مش عامل login -->
+    @else {
+    <div class="p-4 text-center">
+      <img src="assets/Images/Enter OTP-cuate 1.svg" alt="Login Illustration" style="max-width: 200px;">
+      <h5 class="mb-3">يرجى تسجيل الدخول</h5>
+      <p class="text-muted">يجب تسجيل الدخول أو إنشاء حساب جديد لمتابعة الاشتراك.</p>
 
-          <div class="d-flex gap-2 mt-3">
-            <button class="btn  w-50" style="background-color: #7AD03A; color: black;" (click)="goToLogin()">تسجيل الدخول</button>
-            <button class="btn btn-outline-secondary w-50" (click)="goToRegister()">إنشاء حساب</button>
-          </div>
-        </div>
-      }
+      <div class="d-flex gap-2 mt-3">
+        <button class="btn  w-50" style="background-color: #7AD03A; color: black;" (click)="goToLogin()">تسجيل
+          الدخول</button>
+        <button class="btn btn-outline-secondary w-50" (click)="goToRegister()">إنشاء حساب</button>
+      </div>
     </div>
+    }
   </div>
+</div>
 }
