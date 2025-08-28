@@ -29,9 +29,9 @@
                     <button class="btn btn-sm btn-danger" (click)="cancelAppointment(appt.id)">
                         إلغاء
                     </button>
-                <!-- <button class="btn btn-sm btn-primary" (click)="goToUpdateTime(appt.id)">
-  تعديل الوقت
-</button> -->
+                    <!-- <button class="btn btn-sm btn-primary" (click)="goToUpdateTime(appt.id)">
+                        تعديل الوقت
+                    </button> -->
 
 
                 </div>
@@ -45,4 +45,37 @@
         لا يوجد مواعيد حالياً.
     </div>
     }
+</div>
+
+
+
+<!-- Cancel Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 p-4 text-center">
+      
+      <!-- زر الإغلاق -->
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+      </div>
+
+      <!-- صورة -->
+<div class="d-flex justify-content-center">
+  <img src="assets/Images/Cancel-bro 1.svg" 
+       alt="Cancel" 
+       style="max-width: 180px;" 
+       class="mb-3">
+</div>
+
+      <!-- العنوان -->
+      <h5 class="fw-bold mb-2 text-danger">إلغاء الحجز!</h5>
+      <p class="text-muted mb-4">هل أنت متأكد أنك تريد إلغاء هذا الحجز؟</p>
+
+      <!-- الأزرار -->
+      <div class="d-flex justify-content-center gap-3">
+        <button class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">إلغاء</button>
+        <button class="btn btn-success px-4" (click)="confirmCancel()">تأكيد</button>
+      </div>
+    </div>
+  </div>
 </div>

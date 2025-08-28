@@ -26,19 +26,28 @@ export class Branch implements OnInit {
     this.loadCenters();
   }
 
-  loadCenters() {
-    this.availabilityService.getCentersAvailability({})
-      .subscribe({
-        next: (res: any) => {
-          if (res?.status === 'success') {
-            this.centers = res.centers || [];
-          }
-        },
-        error: (err) => {
-          console.error('❌ Error fetching centers:', err);
+ loadCenters() {
+  this.availabilityService.getCentersAvailability({})
+    .subscribe({
+      next: (res: any) => {
+        if (res?.status === 'success') {
+          // فلترة المراكز اللي عندها أخصائيين متاحين فقط
+       this.centers = (res.centers || []).filter((center: any) => {
+  const specialists = center.specialists || [];
+  return specialists.some((sp: any) => {
+    const workingDays = sp.working_days || [];
+    return workingDays.length > 0; // أي أخصائي عنده مواعيد
+  });
+});
+
         }
-      });
-  }
+      },
+      error: (err) => {
+        console.error('❌ Error fetching centers:', err);
+      }
+    });
+}
+
 
 goNext() {
   if (this.selectedBranchId) {

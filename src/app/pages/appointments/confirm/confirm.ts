@@ -27,15 +27,15 @@ export class Confirm {
   }
 
   confirmBooking() {
-    const payload = {
-      specialist_id: this.bookingData.specialist?.id,
-      date: this.bookingData.date!,
-      start: this.bookingData.start!,
-      appointment_type: 'consultation',
-      session_type: this.bookingData.session_type_key || null,
-      payment_method: 'cash',
-      is_paid: true
-    };
+   const payload = {
+  specialist_id: this.bookingData.specialist?.id,
+  date: this.bookingData.date!,
+  start: this.bookingData.start!,
+  appointment_type: 'consultation',
+  session_type: this.bookingData.session_type_key || null,
+  payment_method: 'cash',
+  is_paid: true
+};
 
     this.appointmentService.createAppointment(payload).subscribe({
       next: () => {

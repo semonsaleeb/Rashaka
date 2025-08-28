@@ -133,7 +133,7 @@ goToDetails(dataFromMap: Partial<AddressData>) {
         },
         error: (err) => {
           console.error('خطأ في تعديل العنوان', err);
-          alert('فشل تعديل العنوان');
+          // alert('فشل تعديل العنوان');
         }
       });
     } else {
@@ -189,7 +189,7 @@ deleteAddress(addressId: number) {
         this.fetchAddresses(); // إعادة تحميل العناوين بعد الحذف
       },
       error: (err) => {
-        console.error('❌ خطأ أثناء حذف العنوان:', err);
+        // console.error('❌ خطأ أثناء حذف العنوان:', err);
         alert('فشل حذف العنوان');
       }
     });

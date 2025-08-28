@@ -149,7 +149,7 @@ Carousel Mode
 Grid Mode
 =========================== -->
 @if (mode === 'grid') {
-<div class="pricing-container w-100 py-5 mt-5" dir="rtl">
+<div class="pricing-container w-100 py-5 mt-3 px-lg-5 px-3" dir="rtl">
   <!-- Header -->
   <div class="header text-center">
     <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4 pt-5">
@@ -167,17 +167,18 @@ Grid Mode
 
   @if (plans.length > 0) {
   <!-- Grid Wrapper -->
-  <div class="carousel-wrapper position-relative overflow-hidden px-lg-3 ">
+  <div class="carousel-wrapper position-relative overflow-hidden px-4  ">
     <div class="d-flex transition-transform carousel-track justify-content-end"
-      [ngStyle]="{transform: 'translateX(-' + (currentSlideIndex * (105/visibleCards)) + '%)'}">
+      [ngStyle]="{transform: 'translateX(-' + (currentSlideIndex * (105/visibleCards)) + '%)'}"
+      (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
       @for (plan of plans; track plan) {
-      <div class="carousel-slide p-3" dir="rtl" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
+      <div class="carousel-slide p-lg-3" dir="rtl" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
         [style.max-width]="'calc(100% / ' + visibleCards + ')'">
         <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
           [ngClass]="plan.styleType + '-card'">
 
           <!-- Card Top -->
-          <div class="card-top position-relative p-3">
+          <div class="card-top position-relative p-lg-3">
             <div class="ribbon-top-left fs-6"
               [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">
               {{ plan.title }}
@@ -243,23 +244,28 @@ Grid Mode
     </div>
 
     <!-- Navigation -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 py-3">
+    <div class="d-flex flex-wrap align-items-center mt-4 py-3 w-100 
+            justify-content-center justify-content-md-between">
       <!-- Dots -->
-      <div class="d-flex gap-2 justify-content-center align-items-center mt-3">
+      <div class="d-flex gap-2 align-items-center mt-3 
+            justify-content-center justify-content-md-end">
         @for (i of getDotsArray(); track i) {
         <button (click)="goToSlide(i)" class="dot-btn" [ngClass]="{'active-dot': currentSlideIndex === i}">
         </button>
         }
       </div>
 
-
+      <!-- Arrows (hidden on mobile) -->
       <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
         <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
         <button class="arrow-btn prev" (click)="scrollRight()"
           [disabled]="currentSlideIndex >= plans.length - visibleCards"></button>
       </div>
 
+
+
     </div>
+
   </div>
   } @else {
   <!-- No plans available -->

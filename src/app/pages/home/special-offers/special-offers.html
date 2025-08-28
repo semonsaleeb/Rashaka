@@ -196,14 +196,16 @@
 
           <!-- Favorite & Compare Buttons -->
           <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-            <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
-              [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
-              <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
-            </button>
+              <button (click)="toggleFavorite(product, $event)" class="btn-circle"
+            [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+            <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+          </button>
 
-            <button (click)="addToCompare(product)" class="btn-circle text-muted">
-              <i class="fas fa-random"></i>
-            </button>
+          <!-- Compare -->
+          <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
+            <i class="fas fa-random"></i>
+          </button>
+
           </div>
 
           <div class="card-body text-end px-3 mx-lg-3 pb-4">
@@ -303,14 +305,16 @@
 
           <!-- Favorite & Compare Buttons - Smaller for mobile -->
           <div class="position-absolute top-0 start-0 p-1 d-flex flex-column gap-1">
-            <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle-sm"
-              [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
-              <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
-            </button>
+              <button (click)="toggleFavorite(product, $event)" class="btn-circle"
+            [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+            <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+          </button>
 
-            <button (click)="addToCompare(product)" class="btn-circle-sm text-muted">
-              <i class="fas fa-random" style="font-size: 0.8rem;"></i>
-            </button>
+          <!-- Compare -->
+          <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
+            <i class="fas fa-random"></i>
+          </button>
+
           </div>
 
           <div class="card-body mx-lg-3 text-end px-2 pb-3">

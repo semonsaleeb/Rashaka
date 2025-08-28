@@ -1,78 +1,157 @@
-<div class="specialist-step">
+<div class="specialist-step container py-3 " dir="rtl">
+
   <!-- اختيار الأخصائي -->
-  <h3 class="section-title">اختر أخصائي</h3>
+  <h3 class="h5 fw-bold mb-3">اختر أخصائي</h3>
 
   @if (specialists.length > 0) {
-    <div class="specialist-cards">
-      @for (sp of specialists; track sp.id) {
-        <div 
-          class="card"
-          [class.selected]="selectedSpecialistId === sp.id"
-          (click)="selectedSpecialistId = sp.id; onSpecialistChange()">
-          
-          <div class="card-header">
-            <img [src]="sp.image || 'assets/Images/User.svg'" >
-            <div class="info">
-              <h4>{{ sp.name }}</h4>
-              <p class="speciality" *ngIf="sp.speciality">{{ sp.speciality }}</p>
-              <div class="stars">★★★★★</div>
-            </div>
-            @if (selectedSpecialistId === sp.id) {
-              <div class="check">✔</div>
-            }
-          </div>
+  <div class="d-flex gap-2 overflow-auto">
+    @for (sp of specialists; track sp.id) {
+    <div class="card p-2 flex-shrink-0" [class.border-success]="selectedSpecialistId === sp.id"
+      [class.bg-light]="selectedSpecialistId === sp.id" style="min-width: 180px; cursor:pointer"
+      (click)="selectedSpecialistId = sp.id; onSpecialistChange()">
+
+      <div class="d-flex align-items-center">
+        <img [src]="sp.image || 'assets/Images/User.svg'" class="rounded-circle mx-2" width="50" height="50">
+        <div class="ms-2 flex-fill">
+          <h6 class="mb-0">{{ sp.name }}</h6>
+          <small class="text-muted" *ngIf="sp.speciality">{{ sp.speciality }}</small>
+          <div class="text-warning small">★★★★★</div>
         </div>
-      }
+        @if (selectedSpecialistId === sp.id) {
+        <span class="text-success fw-bold">✔</span>
+        }
+      </div>
     </div>
+    }
+  </div>
   } @else {
-    <div class="no-data">لا يوجد أخصائيون لهذا الفرع</div>
+  <div class="alert alert-warning mt-3">لا يوجد أخصائيون لهذا الفرع</div>
   }
 
-<!-- اختيار التاريخ -->
-@if (selectedSpecialist) {
-  <div class="date-picker-container p-3 mb-3 bg-light rounded shadow-sm end-0">
-    <h5 class="section-title mb-3 text-primary">
-      <i class="bi bi-calendar-event me-2"></i> اختر التاريخ
-    </h5>
-    <div class="input-group">
-     
-      <input 
-        type="date" 
-        class="form-control" 
-        [(ngModel)]="selectedDate" 
-        (change)="onDateChange()">
+  <!-- اختيار التاريخ -->
+  @if (selectedSpecialist && availableMonthsRange.length > 0) {
+  <div class="bg-light p-3 rounded shadow-sm my-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-outline-secondary btn-sm" (click)="nextMonth()"
+        [disabled]="selectedMonthIndex === availableMonthsRange.length - 1">
+        ▶
+      </button>
+
+      <h5 class="h5 fw-bold mb-0">
+        <i class="bi bi-calendar-event me-2"></i>
+        {{ availableMonthsRange[selectedMonthIndex].name }}
+      </h5>
+
+      <button class="btn btn-outline-secondary btn-sm" (click)="prevMonth()" [disabled]="selectedMonthIndex === 0">
+        ◀
+      </button>
     </div>
+
+    @if (availableMonthsRange[selectedMonthIndex].days.length > 0) {
+    <!-- جدول الأيام للشهر الحالي -->
+    <div class="table-responsive">
+      <table class="table text-center align-middle" dir="rtl">
+        <thead>
+          <tr>
+            <th class="text-secondary">الأحد</th>
+            <th class="text-secondary">الاثنين</th>
+            <th class="text-secondary">الثلاثاء</th>
+            <th class="text-secondary">الأربعاء</th>
+            <th class="text-secondary">الخميس</th>
+            <th class="text-secondary">الجمعة</th>
+            <th class="text-secondary">السبت</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (week of weeksArray(availableMonthsRange[selectedMonthIndex].days); track $index) {
+          <tr>
+            @for (day of week; track $index) {
+            <td>
+              @if (day) {
+              <button class="btn btn-sm border-0" [disabled]="!isDateAvailable(day)" [ngClass]="{
+                          'btn-danger': selectedDate === day && isDateAvailable(day),
+                          'btn-primary': isDateAvailable(day) && selectedDate !== day,
+                          ' text-muted': !isDateAvailable(day)
+                        }" (click)="selectDate(day)">
+                {{ day | date:'d' }}
+              </button>
+              } @else {
+              <span>&nbsp;</span>
+              }
+            </td>
+            }
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    } @else {
+    <p class="text-center text-muted my-3">
+      لا توجد مواعيد متاحة هذا الشهر
+    </p>
+    }
   </div>
-}
+  }
+
 
 
   <!-- اختيار الوقت -->
   @if (availableTimes.length > 0) {
-    <h3 class="section-title">الأوقات المتاحة</h3>
+  <h3 class="h5 fw-bold mt-3">الأوقات المتاحة</h3>
   }
 
-  <div class="time-slots">
-    @for (time of availableTimes; track time) {
-      <div 
-        class="time-slot"
-        [class.selected]="selectedTime === time"
-        (click)="selectedTime = time">
-        من {{ time }}
-      </div>
-    }
-    @if (selectedDate && availableTimes.length === 0) {
-      <div class="no-times">
-        لا توجد مواعيد متاحة في هذا اليوم
+<div class="my-3">
+  <!-- على الموبايل هتبقى d-flex scroll -->
+  <div class="d-flex d-md-none flex-row flex-nowrap overflow-auto gap-2">
+    @for (time of availableTimes; track time.start) {
+      <div class="border rounded px-4 py-2 d-flex align-items-center gap-2 justify-content-center"
+           [class.border-primary]="selectedTime === time.start"
+           [class.bg-primary]="selectedTime === time.start"
+           [class.text-white]="selectedTime === time.start"
+           style="cursor:pointer; min-width: 150px;"
+           (click)="selectedTime = time.start">
+        <span>من {{ time.start }}</span>
+        <div class="vr"></div>
+        <span>إلى {{ time.end }}</span>
       </div>
     }
   </div>
 
+  <!-- على الشاشات الكبيرة Grid -->
+  <div class="row row-cols-1 row-cols-md-3 g-3 d-none d-md-flex">
+    @for (time of availableTimes; track time.start) {
+      <div class="col">
+        <div class="border rounded px-4 py-2 d-flex align-items-center gap-2 justify-content-center h-100"
+             [class.border-primary]="selectedTime === time.start"
+             [class.bg-primary]="selectedTime === time.start"
+             [class.text-white]="selectedTime === time.start"
+             style="cursor:pointer;"
+             (click)="selectedTime = time.start">
+          <span>من {{ time.start }}</span>
+          <div class="vr"></div>
+          <span>إلى {{ time.end }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (selectedDate && availableTimes.length === 0) {
+    <div class="alert alert-info text-center mt-3">
+      لا توجد مواعيد متاحة في هذا اليوم
+    </div>
+  }
+</div>
+
+
+
+
   <!-- أزرار التحكم -->
-  <div class="actions">
-    <button class="prev" (click)="prev.emit()">السابق</button>
-    <button 
-      class="next" 
-      [disabled]="!selectedSpecialistId || !selectedDate || !selectedTime"
+  <div class="d-flex justify-content-between mt-4">
+    <button class="btn btn-success w-25" [disabled]="!selectedSpecialistId || !selectedDate || !selectedTime"
       (click)="goNext()">التالي</button>
+    <button class="btn btn-outline-secondary w-25" (click)="prev.emit()">السابق</button>
+
   </div>
 </div>

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AvailabilityService } from '../../../services/availability.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+
+declare var bootstrap: any; // 👈 مهم عشان يشتغل الـ Modal
 
 @Component({
   selector: 'app-reservation',
-    imports: [RouterModule],
+  standalone: true,
+  imports: [RouterModule],
   templateUrl: './reservation.html',
   styleUrls: ['./reservation.scss']
 })
@@ -13,12 +16,19 @@ export class Reservation implements OnInit {
   loading = false;
   errorMessage = '';
 
-  constructor(private availabilityService: AvailabilityService,  private router: Router  ) {}
+  // 👇 المتغير اللي كان عامللك Error
+  appointmentToCancel: number | null = null;
+
+  constructor(
+    private availabilityService: AvailabilityService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.fetchAppointments();
   }
 
+  // 📌 تجيب كل المواعيد
   fetchAppointments() {
     this.loading = true;
     console.log('📡 Fetching client appointments...');
@@ -36,13 +46,27 @@ export class Reservation implements OnInit {
     });
   }
 
+  // 📌 فتح المودال عشان يطلب تأكيد الإلغاء
   cancelAppointment(id: number) {
-    if (!confirm('هل أنت متأكد من إلغاء هذا الموعد؟')) return;
-    console.log(`📤 Sending cancel request for appointment ID: ${id}`);
-    this.availabilityService.cancelAppointment(id).subscribe({
+    this.appointmentToCancel = id;
+
+    const modalEl = document.getElementById('cancelModal');
+    if (modalEl) {
+      const myModal = new bootstrap.Modal(modalEl, {
+        backdrop: 'static',
+        keyboard: false
+      });
+      myModal.show();
+    }
+  }
+
+  // 📌 تنفيذ الإلغاء بعد التأكيد
+  confirmCancel() {
+    if (!this.appointmentToCancel) return;
+
+    this.availabilityService.cancelAppointment(this.appointmentToCancel).subscribe({
       next: (res) => {
         console.log('✅ Cancel response:', res);
-        alert('تم إلغاء الموعد بنجاح');
         this.fetchAppointments();
       },
       error: (err) => {
@@ -50,8 +74,18 @@ export class Reservation implements OnInit {
         alert('تعذر إلغاء الموعد');
       }
     });
+
+    // اغلاق المودال بعد التأكيد
+    const modalEl = document.getElementById('cancelModal');
+    if (modalEl) {
+      const myModal = bootstrap.Modal.getInstance(modalEl);
+      if (myModal) myModal.hide();
+    }
+
+    this.appointmentToCancel = null;
   }
 
+  // 📌 تعديل وقت الموعد (باستخدام prompt حالياً)
   updateAppointmentTime(id: number) {
     const newDate = prompt('أدخل التاريخ الجديد (YYYY-MM-DD):');
     const newStart = prompt('أدخل وقت البدء الجديد (HH:MM):');
@@ -75,8 +109,8 @@ export class Reservation implements OnInit {
     });
   }
 
-
-    goToUpdateTime(id: number) {
-    this.router.navigate(['/reservation', id]); // 👈 ينقلك للصفحة بالـ id
+  // 📌 الانتقال لصفحة تعديل الموعد مع تمرير الـ id
+  goToUpdateTime(id: number) {
+    this.router.navigate(['/reservation', id]);
   }
 }

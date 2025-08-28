@@ -25,15 +25,17 @@ export class DetailsStep implements OnChanges  {
     building_number: '',
     apartment_number: '',
     floor_number: '',
-    comment: ''
+    comment: '',
+    name: ''
   };
 @Input() clientPhone: string = '';
-
+ @Input() clientName!: string;
  
 
 
   // ✅ Detect input changes to populate form (for editing)
 ngOnChanges(changes: SimpleChanges): void {
+
   if (changes['initialData'] && this.initialData) {
     this.form = {
       ...this.form,
@@ -45,12 +47,16 @@ ngOnChanges(changes: SimpleChanges): void {
   if (!this.form.phone_number && this.clientPhone) {
     this.form.phone_number = this.clientPhone;
   }
+    // Fill name from phone if empty
+   if (!this.form.name && this.clientName) {
+    
+      this.form.name = this.clientName;
+    }
 }
 
 
 
 submitForm(): void {
-  console.log("phone", this.clientPhone);
   
   if (!this.form.coordinate) {
     alert('اختر موقعًا على الخريطة أولًا');
@@ -90,7 +96,7 @@ submitForm(): void {
     comment: this.form.comment || ''
   };
 
-  console.log("📦 Sending to backend:", finalData);
+  // console.log("📦 Sending to backend:", finalData);
   this.submit.emit(finalData);
 }
 

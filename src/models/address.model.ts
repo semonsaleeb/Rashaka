@@ -12,4 +12,5 @@ export interface AddressData {
   floor_number?: string;
   phone_number?: string;
   comment?: string;
+  name?: string;
 }

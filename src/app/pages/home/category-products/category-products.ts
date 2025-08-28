@@ -413,15 +413,33 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   // ---------------------- compare ----------------------
-  addToCompare(product: Product): void {
-    if (this.compareProducts.find(p => p.id === product.id)) return;
-    if (this.compareProducts.length >= 2) return;
-
-    this.compareProducts.push(product);
-    if (this.compareProducts.length === 2) {
-      this.showComparePopup = true;
-    }
+addToCompare(product: Product, event?: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
+
+  if (this.compareProducts.find(p => p.id === product.id)) {
+    alert('هذا المنتج مضاف بالفعل للمقارنة');
+    return;
+  }
+
+  if (this.compareProducts.length >= 2) {
+    alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
+    return;
+  }
+
+  this.compareProducts.push(product);
+
+  if (this.compareProducts.length === 1) {
+    alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
+  }
+
+  if (this.compareProducts.length === 2) {
+    this.showComparePopup = true;
+  }
+}
+
 
   onCloseComparePopup(): void {
     this.showComparePopup = false;

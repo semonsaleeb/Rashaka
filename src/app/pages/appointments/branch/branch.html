@@ -1,14 +1,31 @@
-<div class="branches container" dir="rtl">
-  <h5>اختيار الفرع</h5>
+<div class="container my-4" dir="rtl">
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h5 class="card-title text-success mb-3">
+        <i class="bi bi-building me-2"></i>
+        اختيار الفرع
+      </h5>
 
-  <select class="form-select mb-3" [(ngModel)]="selectedBranchId">
-    <option [ngValue]="null">-- اختر فرع --</option>
-    @for (center of centers; track center.id) {
-      <option [ngValue]="center.id">{{ center.name }}</option>
-    }
-  </select>
+    <div class="mb-3">
+  <label for="branchSelect" class="form-label">الفرع</label>
+<select 
+  id="branchSelect" 
+  class="form-select w-100 text-end" 
+  dir="rtl"
+  [(ngModel)]="selectedBranchId">
 
-  <button class="btn btn-success" (click)="goNext()" [disabled]="!selectedBranchId">
-    التالي
-  </button>
+  <option [ngValue]="null">-- اختر فرع --</option>
+  @for (center of centers; track center.id) {
+    <option [ngValue]="center.id">{{ center.name }}</option>
+  }
+</select>
+
+</div>
+
+
+      <button class="btn btn-success w-25" (click)="goNext()" [disabled]="!selectedBranchId">
+        التالي <i class="bi bi-arrow-left-circle ms-1"></i>
+      </button>
+    </div>
+  </div>
 </div>

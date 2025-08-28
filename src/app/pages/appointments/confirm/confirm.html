@@ -2,28 +2,68 @@
   <div class="row g-4">
     <!-- العمود الأيسر: تفاصيل الحجز -->
     <div class="col-md-6 border border-1 py-3 rounded">
-      <div class="booking-card p-3 rounded shadow-sm">
-        <div class="specialist-card d-flex align-items-center p-2 rounded mb-3 border">
-          <input type="checkbox" checked class="form-check-input me-2" />
-          <div>
-            <h6 class="mb-1">{{ bookingData.specialist?.name }}</h6>
-            <div class="stars text-warning mb-1">★★★★★</div>
-          </div>
-        </div>
+    <div class="booking-card p-4 rounded shadow-sm bg-white border">
 
-        <ul class="list-unstyled mb-3">
-          <li><i class="bi bi-building"></i> الفرع: {{ bookingData.center?.name }}</li>
-          <li><i class="bi bi-telephone"></i> {{ bookingData.center?.phone }}</li>
-          <li><i class="bi bi-calendar-event"></i> {{ bookingData.date }}</li>
-          <li><i class="bi bi-clock"></i> من: {{ bookingData.start }} إلى {{ bookingData.end }}</li>
-        </ul>
+  <!-- Specialist Info -->
+  <div class="specialist-card d-flex align-items-center p-3 rounded mb-4 border bg-light">
+    <!-- <input type="checkbox" checked class="form-check-input me-3" /> -->
 
-        <div class="d-flex justify-content-between">
+    <div class="d-flex align-items-center gap-3">
+      <!-- صورة الأخصائي -->
+      <img [src]="bookingData.specialist?.image || 'assets/Images/User.svg'" alt="صورة الأخصائي"
+        class="rounded-circle border border-2" width="60" height="60">
+
+      <!-- بيانات الأخصائي -->
+      <div>
+        <h5 class="mb-1 fw-semibold text-dark">{{ bookingData.specialist?.name }}</h5>
+        <div class="stars text-warning small">★★★★★</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Details -->
+  <ul class="list-unstyled mb-0">
+    <li class="mb-2 d-flex align-items-center">
+      <i class="bi bi-building text-primary me-2"></i>
+      <img src="assets/Images/location-01 (1).svg" alt="" class="me-2" width="18">
+      <span class="fw-semibold">الفرع:</span> {{ bookingData.center?.name }}
+    </li>
+
+    @if (bookingData.center?.city?.name) {
+      <li class="mb-2 d-flex align-items-center">
+        <i class="bi bi-geo-alt text-danger me-2"></i>
+        <img src="assets/Images/house-01.svg" alt="" class="me-2" width="18">
+        <span class="fw-semibold">العنوان:</span> {{ bookingData.center?.city?.name }}
+      </li>
+    }
+
+    @if (bookingData.center?.phone) {
+      <li class="mb-2 d-flex align-items-center">
+        <i class="bi bi-telephone text-success me-2"></i>
+        <img src="assets/Images/contact-02.svg" alt="" class="me-2" width="18">
+        <span class="fw-semibold">هاتف:</span> {{ bookingData.center?.phone }}
+      </li>
+    }
+
+    <li class="mb-2 d-flex align-items-center">
+      <i class="bi bi-calendar-event text-info me-2"></i>
+      <img src="assets/Images/calendar-02.svg" alt="" class="me-2" width="18">
+      <span class="fw-semibold">التاريخ:</span> {{ bookingData.date }}
+    </li>
+
+    <li class="d-flex align-items-center">
+      <i class="bi bi-clock text-warning me-2"></i>
+      <span class="fw-semibold">الوقت:</span> من {{ bookingData.start }}
+    </li>
+  </ul>
+</div>
+
+      
+    </div>
+     <div class="d-flex justify-content-between">
           <button class="btn btn-secondary" (click)="prev.emit()">السابق</button>
           <button class="btn btn-success" (click)="confirmBooking()">تأكيد الحجز</button>
         </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -32,12 +72,15 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4" style="border-radius: 12px;">
       <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
-<div style="text-align: center;">
-  <img src="assets/Images/Authentication-cuate 1.svg" alt="نجاح الحجز" class="mb-3" style="width:300px;">
-</div>      <h5 class="fw-bold">تم حجز موعدك بنجاح!</h5>
-      <p class="text-muted small">سيتم ارسال تفاصيل الحجز إلى بريدك الإلكتروني، ويمكنك متابعة حجوزاتك من صفحة الحساب.</p>
+      <div style="text-align: center;">
+        <img src="assets/Images/Authentication-cuate 1.svg" alt="نجاح الحجز" class="mb-3" style="width:300px;">
+      </div>
+      <h5 class="fw-bold">تم حجز موعدك بنجاح!</h5>
+      <p class="text-muted small">سيتم ارسال تفاصيل الحجز إلى بريدك الإلكتروني، ويمكنك متابعة حجوزاتك من صفحة الحساب.
+      </p>
       <div class="d-flex gap-2 mt-3">
-        <button class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal" (click)="goHome()">العودة إلى الرئيسية</button>
+        <button class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal" (click)="goHome()">العودة إلى
+          الرئيسية</button>
         <button class="btn btn-success flex-fill" (click)="goToReservations()">عرض الحجز</button>
       </div>
     </div>

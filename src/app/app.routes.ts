@@ -72,7 +72,7 @@ export const routes: Routes = [
   { path: 'home/special-offers', component: SpecialOffersComponent, data: { mode: 'grid' } },
   { path: 'home/blogs', component: Blogs },
   { path: 'home/blog/:id', component: SingleBlog },
-    { path: 'home/branches', component: Branches },
+  { path: 'home/branches', component: Branches },
 
 
   // Cart & Favorites
@@ -84,9 +84,9 @@ export const routes: Routes = [
   // Other Pages
   { path: 'about_us', component: AboutUs },
   { path: 'reservation', component: Appointments },
-{ path: 'reservation/:id', component: Appointments },
+  { path: 'reservation/:id', component: Appointments },
 
-  
+
   // Fallback
   { path: '**', redirectTo: '' }
 ];

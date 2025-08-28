@@ -39,3 +39,10 @@ export interface Appointment {
   start_at?: string;
   end_at?: string;
 }
+
+
+export interface WorkingHour {
+  day: string;   // اسم اليوم (مثلاً الأحد)
+  start: string;
+  end: string;
+}
