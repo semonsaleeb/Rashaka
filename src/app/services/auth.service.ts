@@ -11,7 +11,7 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cartService: CartService) {} // ✅ added cartService
 
   /**
    * تسجيل الدخول → إرسال بيانات المستخدم للسيرفر
@@ -21,6 +21,9 @@ export class AuthService {
       tap((res: any) => {
         if (res?.token) {
           this.setLogin(res.token, res.user);
+
+          // 🟢 Merge Guest Cart بعد تسجيل الدخول
+          this.mergeGuestCartAfterLogin();
         }
       })
     );
@@ -39,6 +42,7 @@ export class AuthService {
     }).pipe(
       tap(() => {
         this.clearAuth();
+        localStorage.removeItem('guest_cart'); // 🟢 ضمان نظافة الكارت
       })
     );
   }
@@ -70,22 +74,24 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-mergeGuestCartAfterLogin(cartService: CartService): void {
-  const guestCart: CartViewItem[] = JSON.parse(localStorage.getItem('guest_cart') || '[]');
-  if (!guestCart || guestCart.length === 0) return;
+  /**
+   * دمج كارت الضيف مع كارت المستخدم بعد تسجيل الدخول
+   */
+  mergeGuestCartAfterLogin(): void {
+    const guestCart: CartViewItem[] = JSON.parse(localStorage.getItem('guest_cart') || '[]');
+    if (!guestCart || guestCart.length === 0) return;
 
-  guestCart.forEach(item => {
-    cartService.addToCart(item.product_id, item.quantity).subscribe({
-      next: () => {},
-      error: (err) => console.error('Failed to merge guest cart:', err)
+    guestCart.forEach(item => {
+      this.cartService.addToCart(item.product_id, item.quantity).subscribe({
+        next: () => console.log(`Merged item ${item.product_id} to server cart`),
+        error: (err) => console.error('Failed to merge guest cart:', err)
+      });
     });
-  });
 
-  localStorage.removeItem('guest_cart');
-}
+    // 🟢 بعد الدمج امسح الكارت المحلي
+    localStorage.removeItem('guest_cart');
+  }
 
-
-  
   /**
    * getter للحالة الحالية
    */

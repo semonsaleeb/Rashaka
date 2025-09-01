@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { Product, ProductService, Category } from '../../../services/product';
@@ -60,7 +60,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   };
 
   private GUEST_CART_KEY = 'guest_cart';
-
+  products: any[] = [];
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -69,30 +69,77 @@ export class CategoryProducts implements OnInit, OnDestroy {
     private router: Router,
     private favoriteService: FavoriteService,
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) { }
 
   // ---------------------- lifecycle ----------------------
   ngOnInit(): void {
+    // -------------------------
+    // 1️⃣ Handle window resize
+    // -------------------------
     this.resizeHandler();
     window.addEventListener('resize', this.resizeHandler);
 
-    this.fetchProductsAndFavorites();
+    // -------------------------
+    // 2️⃣ Load products dynamically when query param changes
+    // -------------------------
+    this.route.queryParams.subscribe(params => {
+      const categoryId = params['category_id'] ? Number(params['category_id']) : null;
+
+      if (categoryId) {
+        this.productService.getProductsByCategory(categoryId).subscribe({
+          next: (products) => {
+            this.allProducts = [...products];
+            this.filteredProducts = [...products];
+            this.categories = this.extractUniqueCategories(this.allProducts);
+          },
+          error: (err) => console.error('Error fetching products by category:', err)
+        });
+      } else {
+        this.fetchProductsAndFavorites();
+      }
+    });
+
+    // -------------------------
+    // 3️⃣ Load cart
+    // -------------------------
     this.loadCart();
 
+    // Subscribe to cart changes
     this.cartState.cartItems$.subscribe(items => {
       this.cartItems = items;
-
       this.updateCartTotals();
     });
 
+    // Update cart when offcanvas opens
     const offcanvasEl = document.getElementById('cartSidebar');
     if (offcanvasEl) {
-      offcanvasEl.addEventListener('shown.bs.offcanvas', () => {
-        this.loadCart();
-      });
+      offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
     }
+
+    // -------------------------
+    // 4️⃣ Subscribe to favorites
+    // -------------------------
+    this.favoriteService.favorites$.subscribe(favs => {
+      const favoriteIds = new Set(favs.map(f => f.id));
+
+      this.allProducts = this.allProducts.map(p => ({
+        ...p,
+        isFavorite: favoriteIds.has(p.id)
+      }));
+      this.filteredProducts = this.filteredProducts.map(p => ({
+        ...p,
+        isFavorite: favoriteIds.has(p.id)
+      }));
+
+      this.cdr.detectChanges();
+    });
   }
+
+
+
+
 
   ngOnDestroy(): void {
     window.removeEventListener('resize', this.resizeHandler);
@@ -116,20 +163,15 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
     this.productService.getProducts().subscribe({
       next: (products) => {
-        if (token) {
-          this.favoriteService.loadFavorites(token).subscribe({
-            next: (favorites) => {
-              const favoriteIds = new Set(favorites.map(f => f.id));
-              this.allProducts = products.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
-              this.filteredProducts = [...this.allProducts];
-              this.categories = this.extractUniqueCategories(this.allProducts);
-              this.isLoading = false;
-            },
-            error: () => this.loadProductsWithoutFavorites(products)
-          });
-        } else {
-          this.loadProductsWithoutFavorites(products);
-        }
+        this.allProducts = [...products];
+        this.filteredProducts = [...products];
+        this.categories = this.extractUniqueCategories(this.allProducts);
+
+        // 🟢 بس load init للـ favorites
+        this.favoriteService.loadFavorites(token).subscribe({
+          next: () => { this.isLoading = false; },
+          error: () => { this.isLoading = false; }
+        });
       },
       error: (err) => {
         console.error('Failed to load products:', err);
@@ -137,6 +179,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
       }
     });
   }
+
 
   private loadProductsWithoutFavorites(products: Product[]): void {
     this.allProducts = products.map(p => ({ ...p, isFavorite: false }));
@@ -174,13 +217,49 @@ export class CategoryProducts implements OnInit, OnDestroy {
     this.applyCombinedFilters();
   }
 
-  filterByCategory(categoryId: number | 'all'): void {
+  // ---------------------- filters ----------------------
+  filterByCategory(categoryId: number | 'all') {
     this.selectedCategory = categoryId;
-    this.filteredProducts = categoryId === 'all'
-      ? [...this.allProducts]
-      : this.allProducts.filter(p => p.categories.some(c => c.id === categoryId));
-    this.currentSlideIndex = 0;
+
+    // حدث الـ query param في الـ URL بدون إعادة تحميل الصفحة
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { category_id: categoryId },
+      queryParamsHandling: 'merge', // يحافظ على أي params تانية موجودة
+    });
+
+    // حمل المنتجات بناءً على الكاتيجوري
+    if (categoryId === 'all') {
+      this.loadAllProducts();
+    } else {
+      this.loadProductsByCategory(+categoryId);
+    }
   }
+
+  // المنتجات حسب الكاتيجوري
+  loadProductsByCategory(categoryId: number) {
+    this.productService.getProductsByCategory(categoryId).subscribe({
+      next: products => {
+        this.allProducts = [...products];
+        this.filteredProducts = [...products];
+        this.categories = this.extractUniqueCategories(this.allProducts);
+      },
+      error: err => console.error('Failed to load products by category:', err)
+    });
+  }
+
+  // كل المنتجات
+  loadAllProducts() {
+    this.productService.getProducts().subscribe({
+      next: products => {
+        this.allProducts = [...products];
+        this.filteredProducts = [...products];
+        this.categories = this.extractUniqueCategories(this.allProducts);
+      },
+      error: err => console.error('Failed to load all products:', err)
+    });
+  }
+
 
   filterBySearch(): void { this.applyCombinedFilters(); }
   applyPriceFilter(): void { this.applyCombinedFilters(); }
@@ -224,18 +303,29 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   // ---------------------- favorites ----------------------
-  toggleFavorite(product: Product): void {
-    if (!this.isLoggedIn()) { alert('يرجى تسجيل الدخول أولاً'); this.router.navigate(['/auth/login']); return; }
-    const token = localStorage.getItem('token'); if (!token) { this.router.navigate(['/auth/login']); return; }
+  toggleFavorite(product: Product, event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
+
+    const token = localStorage.getItem('token');
+
     this.favoriteService.toggleFavorite(product, token).subscribe({
-      next: () => {
-        product.isFavorite = !product.isFavorite;
-        const current = this.favoriteService.getFavorites();
-        product.isFavorite ? this.favoriteService.setFavorites([...current, product]) : this.favoriteService.setFavorites(current.filter(p => p.id !== product.id));
+      next: (res) => {
+        // ✅ لو عندك favorites$ في الـ service هيحدث تلقائي
+        if (!this.favoriteService.favorites$) {
+          // 🔄 Manual flip fallback
+          product.isFavorite = !product.isFavorite;
+        }
       },
-      error: err => console.error('Error updating favorite:', err)
+      error: (err) => console.error('Error toggling favorite:', err)
     });
   }
+
+
+
+
+
+
 
   // ---------------------- cart helpers ----------------------
   private handleCartActionError(err: HttpErrorResponse): void {
@@ -413,32 +503,32 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   // ---------------------- compare ----------------------
-addToCompare(product: Product, event?: Event): void {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
+  addToCompare(product: Product, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-  if (this.compareProducts.find(p => p.id === product.id)) {
-    alert('هذا المنتج مضاف بالفعل للمقارنة');
-    return;
-  }
+    if (this.compareProducts.find(p => p.id === product.id)) {
+      alert('هذا المنتج مضاف بالفعل للمقارنة');
+      return;
+    }
 
-  if (this.compareProducts.length >= 2) {
-    alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
-    return;
-  }
+    if (this.compareProducts.length >= 2) {
+      alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
+      return;
+    }
 
-  this.compareProducts.push(product);
+    this.compareProducts.push(product);
 
-  if (this.compareProducts.length === 1) {
-    alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
-  }
+    if (this.compareProducts.length === 1) {
+      alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
+    }
 
-  if (this.compareProducts.length === 2) {
-    this.showComparePopup = true;
+    if (this.compareProducts.length === 2) {
+      this.showComparePopup = true;
+    }
   }
-}
 
 
   onCloseComparePopup(): void {

@@ -196,15 +196,16 @@
 
           <!-- Favorite & Compare Buttons -->
           <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-              <button (click)="toggleFavorite(product, $event)" class="btn-circle"
-            [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
-            <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
-          </button>
+            <button (click)="toggleFavorite(product, $event)" class="btn-circle"
+              [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+              <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+            </button>
 
-          <!-- Compare -->
-          <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
-            <i class="fas fa-random"></i>
-          </button>
+
+            <!-- Compare -->
+            <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
+              <i class="fas fa-random"></i>
+            </button>
 
           </div>
 
@@ -305,15 +306,16 @@
 
           <!-- Favorite & Compare Buttons - Smaller for mobile -->
           <div class="position-absolute top-0 start-0 p-1 d-flex flex-column gap-1">
-              <button (click)="toggleFavorite(product, $event)" class="btn-circle"
-            [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
-            <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
-          </button>
+            <button (click)="toggleFavorite(product)" class="btn-circle"
+              [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+              <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+            </button>
 
-          <!-- Compare -->
-          <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
-            <i class="fas fa-random"></i>
-          </button>
+
+            <!-- Compare -->
+            <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
+              <i class="fas fa-random"></i>
+            </button>
 
           </div>
 

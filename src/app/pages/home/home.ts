@@ -1,6 +1,7 @@
-
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+// Child Components
 import { Downloadapp } from './downloadapp/downloadapp';
 import { Checkup } from './checkup/checkup';
 import { Footer } from '../../footer/footer';
@@ -14,7 +15,8 @@ import { PostHero } from './post-hero/post-hero';
 import { Blogs } from './blogs/blogs';
 import { SpecialOffersComponent } from './special-offers/special-offers';
 import { CategoryProducts } from './category-products/category-products';
-
+import { FavoriteService } from '../../services/favorite.service';
+import { Product } from '../../services/product';
 
 @Component({
   selector: 'app-home',
@@ -31,30 +33,60 @@ import { CategoryProducts } from './category-products/category-products';
     Blogs,
     SpecialOffersComponent,
     CategoryProducts
-],
+  ],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home {
-ngOnInit(): void {
-  const token = localStorage.getItem('token'); // or 'access_token' depending on your app
-  console.log('Token:', token);
-}
-showComparePopup = false;
-  compareProducts: any[] = [];
+export class Home implements OnInit {
+  products: Product[] = [];
+  favorites: Product[] = [];
 
-  // // Add/remove products to compare
-  // addToCompare(product: any) {
-  //   if (!this.compareProducts.some(p => p.id === product.id)) {
-  //     this.compareProducts.push(product);
-  //   }
-  // }
+  showComparePopup = false;
+  compareProducts: Product[] = [];
 
-  // removeFromCompare(productId: string) {
-  //   this.compareProducts = this.compareProducts.filter(p => p.id !== productId);
-  // }
+  constructor(private favoriteService: FavoriteService) {}
 
-  // onCloseComparePopup() {
-  //   this.showComparePopup = false;
-  // }
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    console.log('Token:', token);
+
+    if (token) {
+      this.favoriteService.loadFavorites(token).subscribe(favs => {
+        this.favorites = favs;
+        this.markFavorites();
+      });
+    } else {
+      const localFavs = this.favoriteService.getLocalFavorites();
+      this.favorites = localFavs;
+      this.markFavorites();
+    }
+  }
+
+  private markFavorites(): void {
+    this.products.forEach(p => {
+      p.isFavorite = this.favorites.some(f => f.id === p.id);
+    });
+  }
+
+  toggleFavorite(product: Product): void {
+    const token = localStorage.getItem('token');
+
+    this.favoriteService.toggleFavorite(product, token).subscribe(() => {
+      product.isFavorite = !product.isFavorite;
+      if (product.isFavorite) {
+        this.favorites.push(product);
+      } else {
+        this.favorites = this.favorites.filter(f => f.id !== product.id);
+      }
+    });
+  }
+
+  clearFavorites(): void {
+    const token = localStorage.getItem('token');
+
+    this.favoriteService.clearFavorites(token).subscribe(() => {
+      this.favorites = [];
+      this.products.forEach(p => (p.isFavorite = false));
+    });
+  }
 }

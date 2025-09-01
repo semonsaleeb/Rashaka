@@ -1,121 +1,122 @@
 <div class="container my-5 mt-lg-5" dir="rtl">
   <h2 class="mb-4 text-center pt-lg-5">
-    <img src="assets/Images/Frame 9033 fav.svg" > المفضلة
+    <img src="assets/Images/Frame 9033 fav.svg"> المفضلة
   </h2>
-    
-@if (favorites.length > 0) {
+
+  @if (favorites.length > 0) {
   <div class="d-flex justify-content-between align-items-center mb-3">
-    
+
     <!-- العنوان في اليمين -->
     <h1 class="py-4 m-0">
       <span class="counter px-2 mx-2 text-center">{{ favorites.length }}</span> منتج
     </h1>
 
     <!-- الزر في اليسار -->
-    <button 
-      class="btn border border-1 rounded-3"
-      (click)="clearAllFavorites()">
+    <button class="btn border border-1 rounded-3" (click)="clearAllFavorites()">
       إزلة الكل
     </button>
 
   </div>
-}
+  }
 
   @if (isLoading) {
-    <div class="text-center">
-      <div class="spinner-border text-success" role="status"></div>
-      <p>جاري تحميل المفضلة...</p>
-    </div>
+  <div class="text-center">
+    <div class="spinner-border text-success" role="status"></div>
+    <p>جاري تحميل المفضلة...</p>
+  </div>
   }
 
 
   @if (!isLoading && favorites.length === 0) {
-   <div class="text-center">
-  <div class="align-items-center mt-4">
-    <img src="assets/Images/aloe vera-pana 1.svg" alt="" style="max-width: 250px;">
-  </div>
-  <h1>"قائمتك المفضلة فارغة!"</h1>
-  <p>أضف المنتجات اللي ترغب في شرائها وارجع لإتمام الطلب وقت ما تحب.</p>
+  <div class="text-center">
+    <div class="align-items-center mt-4">
+      <img src="assets/Images/aloe vera-pana 1.svg" alt="" style="max-width: 250px;">
+    </div>
+    <h1>"قائمتك المفضلة فارغة!"</h1>
+    <p>أضف المنتجات اللي ترغب في شرائها وارجع لإتمام الطلب وقت ما تحب.</p>
 
-  <button 
-    class="btn custom-green-btn mt-3 px-4 py-2" 
-    [routerLink]="['/home/category-products']">
-    تصفح المنتجات
-  </button>
-</div>
+    <button class="btn custom-green-btn mt-3 px-4 py-2" [routerLink]="['/home/category-products']">
+      تصفح المنتجات
+    </button>
+  </div>
 
   }
 
 
 
   @if (favorites.length > 0) {
-   
-    <div class="row">
-      @for (product of favorites; track product) {
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="position-relative">
-              <img [src]="product.images[0]" class="card-img-top p-3"
-                   [alt]="product.name_ar"
-                   style="height: 200px; object-fit: contain;" />
-            </div>
 
-            <div class="card-body text-end">
-              <h5 class="card-title fw-semibold">{{ product.name_ar }}</h5>
-              <p class="card-text text-secondary mb-3" style="
+  <div class="row">
+    @for (product of favorites; track product) {
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="position-relative">
+          <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name_ar"
+            style="height: 200px; object-fit: contain;" />
+        </div>
+
+        <div class="card-body text-end">
+          <h5 class="card-title fw-semibold">{{ product.name_ar }}</h5>
+          <p class="card-text text-secondary mb-3" style="
                   display: -webkit-box;
                   -webkit-line-clamp: 2;
                   -webkit-box-orient: vertical;
                   overflow: hidden;
                   text-overflow: ellipsis;">
-                {{ product.description }}
-              </p>
+            {{ product.description }}
+          </p>
+          <p class="fw-bold mb-1" style="font-size: 14px;">
+            @if (product.sale_price && product.sale_price !== product.price) {
+            <!-- عرض سعر الخصم -->
+            <span class="fw-bold text-success">
+              {{ product.sale_price || product.price_after }} ر.س
+            </span>
+            @if (product.price) {
+            <span class="text-secondary" style="text-decoration: line-through;">
+              {{ product.price || product.price_before }} ر.س
+            </span>
+            }
+            } @else {
+            <!-- عرض السعر العادي -->
+            <span class="fw-bold text-success">
+              {{ product.price || product.price_after || product.price_before }} ر.س
+            </span>
+            }
+          </p>
 
-              @if (product.price_after && product.price_after !== product.price_before) {
-                <div>
-                  <span class="text-success fw-bold">{{ product.price_after }} ر.س</span>
-                  <span class="text-secondary text-decoration-line-through">
-                    {{ product.price_before }} ر.س
-                  </span>
-                </div>
-              } @else {
-                <span class="text-success fw-bold">{{ product.price_after }} ر.س</span>
-              }
 
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <button class="btn btn-outline-danger btn-sm rounded-5"
-                        (click)="removeFromFavorites(product); $event.stopPropagation()">
-                  <i class="fas fa-heart"></i>
-                </button>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <button class="btn btn-outline-danger btn-sm rounded-5"
+              (click)="removeFromFavorites(product); $event.stopPropagation()">
+              <i class="fas fa-heart"></i>
+            </button>
 
-                @if (isInCart(product.id)) {
-                  <div class="d-flex align-items-center justify-content-center px-3 gap-2 border rounded-4"
-                       style="direction: rtl;">
-                    <button class="btn btn-sm text-success"
-                            (click)="increaseQuantity(product.id); $event.stopPropagation()">
-                      <i class="fa-solid fa-plus"></i>
-                    </button>
-                    <span class="fw-bold text-center">
-                      {{ getCartItem(product.id)?.quantity }}
-                    </span>
-                    <button class="btn btn-sm text-danger"
-                            (click)="decreaseQuantity(product.id); $event.stopPropagation()">
-                      <i class="fa-solid fa-minus"></i>
-                    </button>
-                  </div>
-                } @else {
-                  <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover"
-                          (click)="addToCart(product.id); $event.stopPropagation()">
-                    <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
-                    إضافة للعربة
-                  </button>
-                }
-              </div>
+            @if (isInCart(product.id)) {
+            <div class="d-flex align-items-center justify-content-center px-3 gap-2 border rounded-4"
+              style="direction: rtl;">
+              <button class="btn btn-sm text-success" (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+              <span class="fw-bold text-center">
+                {{ getCartItem(product.id)?.quantity }}
+              </span>
+              <button class="btn btn-sm text-danger" (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                <i class="fa-solid fa-minus"></i>
+              </button>
             </div>
+            } @else {
+            <button class="btn btn-outline-dark btn-sm bg-white text-black rounded-5 custom-hover"
+              (click)="addToCart(product.id); $event.stopPropagation()">
+              <img src="assets/Images/shopping-cart-add-01.svg" class="px-2">
+              إضافة للعربة
+            </button>
+            }
           </div>
         </div>
-      }
+      </div>
     </div>
+    }
+  </div>
   }
 
   <app-downloadapp style="direction: ltr;"></app-downloadapp>

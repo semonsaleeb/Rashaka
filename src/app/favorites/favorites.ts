@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-import { HttpClientModule, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { ProductService } from '../services/product';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { ProductService, Product } from '../services/product';
 import { AuthService } from '../services/auth.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { CartStateService } from '../services/cart-state-service';
 import { FavoriteService } from '../services/favorite.service';
 import { FormsModule } from '@angular/forms';
 import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
-import { Product } from '../services/product';
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-favorites',
@@ -30,64 +27,88 @@ export class Favorites implements OnInit {
     public router: Router,
     private cartService: CartService,
     public cartState: CartStateService,
-    private route: ActivatedRoute,
     private favoriteService: FavoriteService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadFavorites();
     this.loadCart();
   }
 
- loadFavorites(): void {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    this.isLoading = false;
-    return;
+  /** ---------------- FAVORITES ---------------- */
+  loadFavorites(): void {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // ✅ لو مسجل دخول → API
+      this.favoriteService.loadFavorites(token).subscribe({
+        next: (favorites) => {
+          this.favorites = favorites;
+          this.favoriteService.setFavorites(favorites);
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error loading favorites:', err);
+          this.isLoading = false;
+          if (err.status === 401) this.auth.logout();
+        }
+      });
+    } else {
+      // ✅ Guest → localStorage
+      this.favorites = this.favoriteService.getLocalFavorites();
+      this.favoriteService.setFavorites(this.favorites);
+      this.isLoading = false;
+    }
   }
 
-  this.favoriteService.loadFavorites(token).subscribe({
-    next: favorites => {
-      this.favorites = favorites;
-      this.favoriteService.setFavorites(favorites); // ✅ This updates the count observable
-      this.isLoading = false;
-    },
-    error: err => {
-      console.error('Error loading favorites:', err);
-      this.isLoading = false;
-      if (err.status === 401) {
-        this.auth.logout();
-      }
+  removeFromFavorites(product: Product): void {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // API
+      product.isFavorite = true; // علشان toggle يشيلها
+      this.favoriteService.toggleFavorite(product, token).subscribe({
+        next: () => this.loadFavorites(),
+        error: (err) => console.error('Error removing favorite:', err)
+      });
+    } else {
+      // LocalStorage
+this.favoriteService.removeLocalFavorite(product.id);
+      this.favorites = this.favoriteService.getLocalFavorites();
     }
-  });
-}
-
-
-removeFromFavorites(product: Product): void {
-  if (!this.isLoggedIn()) {
-    this.router.navigate(['/auth/login']);
-    return;
   }
 
-  const token = localStorage.getItem('token');
-  if (!token) return;
+  clearAllFavorites(): void {
+    const token = localStorage.getItem('token');
 
-  product.isFavorite = true; // trigger removal
-
-  this.favoriteService.toggleFavorite(product, token).subscribe({
-    next: () => {
-      this.loadFavorites(); // ✅ refresh the list after removing
-    },
-    error: err => {
-      console.error('Error removing favorite:', err);
+    if (token) {
+      if (!confirm('هل أنت متأكد من مسح جميع المفضلة؟')) return;
+      this.favoriteService.clearFavorites(token).subscribe({
+        next: () => {
+          this.favorites = [];
+          this.favoriteService.setFavorites([]);
+        },
+        error: (err) => console.error('Error clearing favorites:', err)
+      });
+    } else {
+      // Guest
+      if (!confirm('هل أنت متأكد من مسح جميع المفضلة؟')) return;
+      this.favoriteService.clearLocalFavorites();
+      this.favorites = [];
+      this.favoriteService.setFavorites([]);
     }
-  });
-}
+  }
 
-
-
-  isLoggedIn(): boolean {
-    return this.auth.isLoggedIn();
+  /** ---------------- CART ---------------- */
+  private loadCart(): void {
+    if (!this.isLoggedIn()) {
+      this.cartItems = [];
+      return;
+    }
+    this.cartService.getCart().subscribe({
+      next: (response) => this.handleCartResponse(response),
+      error: (err: HttpErrorResponse) => this.handleCartError(err)
+    });
   }
 
   addToCart(productId: number): void {
@@ -95,26 +116,10 @@ removeFromFavorites(product: Product): void {
       this.router.navigate(['/auth/login']);
       return;
     }
-
     this.cartService.addToCart(productId, 1).subscribe({
       next: () => this.loadCart(),
       error: (err: HttpErrorResponse) => this.handleCartActionError(err)
     });
-  }
-
-  private loadCart(): void {
-    this.cartService.getCart().subscribe({
-      next: (response) => this.handleCartResponse(response),
-      error: (err: HttpErrorResponse) => this.handleCartError(err)
-    });
-  }
-
-  isInCart(productId: number): boolean {
-    return this.cartItems.some(item => Number(item.product_id) === Number(productId));
-  }
-
-  getCartItem(productId: number): any {
-    return this.cartItems.find(item => Number(item.product_id) === Number(productId));
   }
 
   increaseQuantity(productId: number): void {
@@ -129,6 +134,14 @@ removeFromFavorites(product: Product): void {
       next: () => this.loadCart(),
       error: (err) => console.error('Error decreasing quantity:', err)
     });
+  }
+
+  isInCart(productId: number): boolean {
+    return this.cartItems.some(item => Number(item.product_id) === Number(productId));
+  }
+
+  getCartItem(productId: number): any {
+    return this.cartItems.find(item => Number(item.product_id) === Number(productId));
   }
 
   private handleCartResponse(response: any): void {
@@ -162,26 +175,7 @@ removeFromFavorites(product: Product): void {
     this.cartState.updateCount(0);
   }
 
-  clearAllFavorites(): void {
-  if (!this.isLoggedIn()) {
-    this.router.navigate(['/auth/login']);
-    return;
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
   }
-
-  const token = localStorage.getItem('token');
-  if (!token) return;
-
-  if (!confirm('هل أنت متأكد من مسح جميع المفضلة؟')) return;
-
-  this.favoriteService.clearFavorites(token).subscribe({
-    next: () => {
-      this.favorites = [];
-      this.favoriteService.setFavorites([]);
-    },
-    error: (err) => {
-      console.error('Error clearing favorites:', err);
-    }
-  });
-}
-
 }

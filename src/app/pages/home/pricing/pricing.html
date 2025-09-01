@@ -168,12 +168,15 @@ Grid Mode
   @if (plans.length > 0) {
   <!-- Grid Wrapper -->
   <div class="carousel-wrapper position-relative overflow-hidden px-4  ">
-    <div class="d-flex transition-transform carousel-track justify-content-end"
-      [ngStyle]="{transform: 'translateX(-' + (currentSlideIndex * (105/visibleCards)) + '%)'}"
-      (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+   <div class="d-flex transition-transform carousel-track "
+     [ngStyle]="{transform: 'translateX(calc(' + (currentSlideIndex * (100/visibleCards)) + '%))'}"
+     dir="rtl"
+     (touchstart)="onTouchStart($event)" 
+     (touchend)="onTouchEnd($event)">
+
       @for (plan of plans; track plan) {
-      <div class="carousel-slide p-lg-3" dir="rtl" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
-        [style.max-width]="'calc(100% / ' + visibleCards + ')'">
+      <div class="carousel-slide p-lg-3" dir="rtl" [style.flex]="'0 0 calc(97% / ' + visibleCards + ')'"
+        [style.max-width]="'calc(97% / ' + visibleCards + ')'">
         <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
           [ngClass]="plan.styleType + '-card'">
 

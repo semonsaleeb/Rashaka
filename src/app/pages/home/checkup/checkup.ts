@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-checkup',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './checkup.html',
   styleUrl: './checkup.scss'
 })

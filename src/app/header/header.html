@@ -83,30 +83,30 @@
         <!-- Cart + Favorites -->
         <div class="icon-buttons d-flex gap-3 mx-1">
           <a [routerLink]="['/favorites']" class="position-relative">
-            <div
-              class="position-relative rounded-circle border  d-flex align-items-center justify-content-center"
+            <div class="position-relative rounded-circle border d-flex align-items-center justify-content-center"
               style="width: 40px; height: 40px; border-color: #7AD03A !important">
               <img src="assets/Images/Vector.svg" alt="cart" width="20" />
-              @if (isLoggedIn && favoriteCount > 0) {
+              @if (favoriteCount > 0) {
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ favoriteCount }}
+                {{ favoriteCount || 0 }}
               </span>
+
               }
             </div>
           </a>
 
+
           <a [routerLink]="['/cart']">
-            <div
-              class="position-relative rounded-circle border  d-flex align-items-center justify-content-center"
+            <div class="position-relative rounded-circle border d-flex align-items-center justify-content-center"
               style="width: 40px; height: 40px; border-color: #7AD03A !important">
-              <img src="assets/Images/shopping-cart-01.svg" alt="favorites" width="20" />
-              @if (cartCount > 0) {
+              <img src="assets/Images/shopping-cart-01.svg" alt="cart" width="20" />
+
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ cartCount }}
+                {{ cartCount || 0 }}
               </span>
-              }
             </div>
           </a>
+
         </div>
       </div>
     </div>
@@ -117,7 +117,7 @@
         <div class="collapse navbar-collapse d-flex">
           <ul class="navbar-nav d-flex flex-row gap-1">
             @for (item of navItems; track item.label) {
-            <li class="nav-item position-relative " >
+            <li class="nav-item position-relative ">
               <a class="nav-link text-dark" [routerLink]="!item.hasDropdown ? item.path : null"
                 href="javascript:void(0)" (click)="onNavClick($event, item)">
                 {{ item.label }}
@@ -138,18 +138,18 @@
                     <div class="row">
                       @for (category of categories; track category.id) {
                       <div class="col-6 mb-2" dir="rtl">
+                        <!-- Mobile & Desktop -->
                         <a class="fs-5 d-block text-end py-1 text-decoration-none text-dark"
-                          [routerLink]="['/home/category-products']" [queryParams]="{ type: category.id }"
-                          (click)="closeAllDropdowns()">
+                          [routerLink]="['/home/category-products']" [queryParams]="{ category_id: category.id }"
+                          (click)="closeMobileMenu(); closeAllDropdowns()">
                           {{ category.name_ar }}
                         </a>
-
-
                       </div>
                       }
                       <div class="col-12 text-end mt-3 mx-3">
+                        <!-- "عرض الكل" -->
                         <a class="d-inline-flex align-items-center text-dark fw-bold mt-2 text-decoration-none px-3 py-1 rounded-5"
-                          [routerLink]="['/home/category-products']" (click)="closeAllDropdowns()"
+                          [routerLink]="['/home/category-products']" (click)="closeMobileMenu(); closeAllDropdowns()"
                           style="border: 2px solid #61AD29;">
                           <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" />
                           عرض الكل
@@ -207,14 +207,14 @@
       <!-- Cart / Favorites + Menu Toggle -->
       <div class="d-flex gap-2 align-items-center">
         <a [routerLink]="['/favorites']" class="position-relative">
-        <div class="position-relative">
-          <img src="assets/Images/Vector.svg" alt="Fav" width="22">
-          @if (favoriteCount > 0) {
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ favoriteCount }}
-          </span>
-          }
-        </div>
+          <div class="position-relative">
+            <img src="assets/Images/Vector.svg" alt="Fav" width="22">
+            @if (favoriteCount > 0) {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ favoriteCount }}
+            </span>
+            }
+          </div>
         </a>
         <a [routerLink]="['/cart']" class="position-relative">
           <img src="assets/Images/shopping-cart-01.svg" alt="Cart" width="22">
@@ -284,8 +284,9 @@
     <!-- تسجيل الدخول / المستخدم -->
     <div class="py-3 text-center">
       @if (!isLoggedIn) {
-      <a routerLink="/auth" 
-        class="btn bg-white w-100 text-dark d-flex justify-content-center align-items-center gap-2 px-3 rounded-5 border border-dark"  (click)="toggleMobileMenu()">
+      <a routerLink="/auth"
+        class="btn bg-white w-100 text-dark d-flex justify-content-center align-items-center gap-2 px-3 rounded-5 border border-dark"
+        (click)="toggleMobileMenu()">
         <img src="assets/Images/user-circle.svg" alt="User" width="25" />
         <span>تسجيل الدخول</span>
       </a>
@@ -324,19 +325,31 @@
 
       @if (isStoreOpen) {
       <div class="ps-2 pe-2 py-2 rounded-3 bg-light mt-2">
-        @for (category of categories; track category.id) {
-        <a class="fs-3 d-block text-end py-1 text-decoration-none text-dark" [routerLink]="['/home/category-products']"
-          [queryParams]="{ type: category.id }" (click)="toggleMobileMenu()">
-          {{ category.name_ar }}
-        </a>
-        }
 
-        <a class="d-block text-end text-success fs-3 fw-bold mt-2 text-decoration-none"
-          [routerLink]="['/home/category-products']" (click)="toggleMobileMenu()">
-          عرض الكل
-        </a>
+        @for (category of categories; track category.id) {
+        <div class="col-6 mb-2" dir="rtl">
+          <!-- Mobile & Desktop -->
+          <a class="fs-5 d-block text-end py-1 text-decoration-none text-dark"
+            [routerLink]="['/home/category-products']" [queryParams]="{ category_id: category.id }"
+            (click)="closeMobileMenu(); closeAllDropdowns()">
+            {{ category.name_ar }}
+          </a>
+        </div>
+        }
+        <div class="col-12 text-end mt-3 mx-3">
+          <!-- "عرض الكل" -->
+          <a class="d-inline-flex align-items-center text-dark fw-bold mt-2 text-decoration-none px-3 py-1 rounded-5"
+            [routerLink]="['/home/category-products']" (click)="closeMobileMenu(); closeAllDropdowns()"
+            style="border: 2px solid #61AD29;">
+            <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" />
+            عرض الكل
+          </a>
+        </div>
+
+
       </div>
       }
+
     </div>
 
     <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"

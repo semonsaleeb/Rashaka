@@ -82,12 +82,18 @@ getProductById(id: number, token: string): Observable<Product> {
 }
 
 
+getProductsByCategory(categoryId: number): Observable<Product[]> {
+  const url = `${this.baseUrl}/products?category_id=${categoryId}`;
+  return this.http.get<{ status: string; data: Product[] }>(url).pipe(
+    map(res => res.data)
+  );
+}
 
 
   // Get products by category
-  getProductsByCategory(category: string): Observable<Product[]> {
-    return this.http.get<Product[]>(this.getFullUrl(API_ENDPOINTS.products.getByCategory(category)));
-  }
+  // getProductsByCategory(category: string): Observable<Product[]> {
+  //   return this.http.get<Product[]>(this.getFullUrl(API_ENDPOINTS.products.getByCategory(category)));
+  // }
 
   // Create new product
   createProduct(product: Omit<Product, 'id'>): Observable<Product> {

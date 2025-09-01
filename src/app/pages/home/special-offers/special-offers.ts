@@ -52,7 +52,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private favoriteService: FavoriteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.updateVisibleCards();
@@ -63,7 +63,17 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
 
     this.loadCartAndProducts();
     this.loadProductsAndFavorites();
+
+    // 🟢 اسمع أي تغييرات من FavoriteService
+    this.favoriteService.favorites$.subscribe(favs => {
+      const favoriteIds = new Set(favs.map(f => f.id));
+      this.products = this.products.map(p => ({
+        ...p,
+        isFavorite: favoriteIds.has(p.id)
+      }));
+    });
   }
+
 
   ngAfterViewInit() {
     this.myElement?.nativeElement?.scrollIntoView({ behavior: 'smooth' });
@@ -128,81 +138,65 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     return this.auth.isLoggedIn();
   }
 
-toggleFavorite(product: Product, event?: Event): void {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
+  toggleFavorite(product: Product, event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
 
-  if (!this.isLoggedIn()) {
-    this.router.navigate(['/auth/login']);
-    return;
-  }
+    const token = localStorage.getItem('token');
 
-  const token = localStorage.getItem('token');
-  if (!token) return;
-
-  this.favoriteService.toggleFavorite(product, token).subscribe({
-    next: () => {
-      product.isFavorite = !product.isFavorite;
-      const favorites = this.favoriteService.getFavorites();
-      this.favoriteService.setFavorites(
-        product.isFavorite
-          ? [...favorites, product]
-          : favorites.filter(p => p.id !== product.id)
-      );
-    },
-    error: (err) => console.error('Error updating favorite:', err)
-  });
-}
-
-  loadProductsAndFavorites(): void {
-    this.productService.getOffer().subscribe(offerProducts => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        this.favoriteService.loadFavorites(token).subscribe(favorites => {
-          const favoriteIds = new Set(favorites.map(f => f.id));
-          this.products = offerProducts.map(p => ({
-            ...p,
-            isFavorite: favoriteIds.has(p.id)
-          }));
-          this.favoriteService.setFavorites(
-            offerProducts.filter(p => favoriteIds.has(p.id))
-          );
-        });
-      } else {
-        this.products = offerProducts.map(p => ({ ...p, isFavorite: false }));
-      }
+    this.favoriteService.toggleFavorite(product, token).subscribe({
+      next: (res) => {
+        // ✅ لو عندك favorites$ في الـ service هيحدث تلقائي
+        if (!this.favoriteService.favorites$) {
+          // 🔄 Manual flip fallback
+          product.isFavorite = !product.isFavorite;
+        }
+      },
+      error: (err) => console.error('Error toggling favorite:', err)
     });
   }
 
+
+
+
+  loadProductsAndFavorites(): void {
+    this.productService.getOffer().subscribe(offerProducts => {
+      this.allProducts = offerProducts;
+      this.products = [...offerProducts];
+
+      const token = localStorage.getItem('token');
+      this.favoriteService.loadFavorites(token).subscribe(); // بس init
+    });
+  }
+
+
   /** ------------------- COMPARE ------------------- */
-addToCompare(product: Product, event?: Event): void {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
+  addToCompare(product: Product, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-  if (this.compareProducts.find(p => p.id === product.id)) {
-    alert('هذا المنتج مضاف بالفعل للمقارنة');
-    return;
-  }
+    if (this.compareProducts.find(p => p.id === product.id)) {
+      alert('هذا المنتج مضاف بالفعل للمقارنة');
+      return;
+    }
 
-  if (this.compareProducts.length >= 2) {
-    alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
-    return;
-  }
+    if (this.compareProducts.length >= 2) {
+      alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
+      return;
+    }
 
-  this.compareProducts.push(product);
+    this.compareProducts.push(product);
 
-  if (this.compareProducts.length === 1) {
-    alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
-  }
+    if (this.compareProducts.length === 1) {
+      alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
+    }
 
-  if (this.compareProducts.length === 2) {
-    this.showComparePopup = true;
+    if (this.compareProducts.length === 2) {
+      this.showComparePopup = true;
+    }
   }
-}
 
 
   onCloseComparePopup(): void {

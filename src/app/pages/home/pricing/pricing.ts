@@ -260,9 +260,9 @@ handleSubscribe(plan: Plan) {
     const swipeDistance = this.touchEndX - this.touchStartX;
     if (Math.abs(swipeDistance) > 50) { 
       if (swipeDistance > 0) {
-        this.scrollLeft();
-      } else {
         this.scrollRight();
+      } else {
+        this.scrollLeft();
       }
     }
   }

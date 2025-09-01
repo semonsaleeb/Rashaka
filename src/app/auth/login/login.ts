@@ -40,8 +40,8 @@ login() {
         // ✅ Store token and client info
         this.authService.setLogin(res.token, res.client);
 
-        // ✅ Merge guest cart (pass CartService)
-        this.authService.mergeGuestCartAfterLogin(this.cartService);
+        // ✅ Merge guest cart
+        this.authService.mergeGuestCartAfterLogin();
 
         // ✅ Update cart count after merge
         this.cartService.getCart().subscribe({
@@ -71,6 +71,7 @@ login() {
     }
   });
 }
+
 
 
 

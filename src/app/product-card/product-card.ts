@@ -29,7 +29,7 @@ export class ProductCard implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   Math = Math;
-showDescription = true; showReviews = false;
+  showDescription = true; showReviews = false;
   constructor(
     private http: HttpClient,
     private productService: ProductService,
@@ -39,34 +39,40 @@ showDescription = true; showReviews = false;
     private favoriteService: FavoriteService
   ) { }
 
-ngOnInit(): void {
-  const productId = Number(this.route.snapshot.paramMap.get('id'));
-  if (!productId || isNaN(productId)) {
-    this.errorMessage = 'Invalid product ID';
-    this.isLoading = false;
-    return;
+  ngOnInit(): void {
+    const productId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!productId || isNaN(productId)) {
+      this.errorMessage = 'Invalid product ID';
+      this.isLoading = false;
+      return;
+    }
+
+    const token = localStorage.getItem('token') || '';
+
+    this.productService.getProductById(productId, token).subscribe({
+      next: (product) => {
+        this.product = {
+          ...product,
+          average_rating: product.average_rating ?? 0,
+          isFavorite: false // مؤقتاً لحد ما نشوف من favoriteService
+        };
+
+        // 🟢 هنا نسمع أي تغيير في الـ favorites$ و نحدث حالة المنتج
+        this.favoriteService.favorites$.subscribe(favs => {
+          this.product.isFavorite = favs.some(fav => fav.id === this.product.id);
+        });
+
+        console.log('Loaded product:', this.product);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching product details', err);
+        this.errorMessage = 'Failed to load product details';
+        this.isLoading = false;
+      }
+    });
   }
 
-  const token = localStorage.getItem('token') || '';
-
-  this.productService.getProductById(productId, token).subscribe({
-    next: (product) => {
-      this.product = {
-        ...product,
-        average_rating: product.average_rating ?? 0,
-        isFavorite: this.favoriteService.getFavorites().some(fav => fav.id === product.id)
-      };
-
-      console.log('Loaded product:', this.product); // ✅ log for debugging
-      this.isLoading = false;
-    },
-    error: (err) => {
-      console.error('Error fetching product details', err);
-      this.errorMessage = 'Failed to load product details';
-      this.isLoading = false;
-    }
-  });
-}
 
 
   getProductById(id: number, token: string): Observable<Product> {
@@ -104,28 +110,23 @@ ngOnInit(): void {
     return this.auth.isLoggedIn();
   }
 
-  toggleFavorite(product: Product): void {
-    if (!this.isLoggedIn()) {
-      this.router.navigate(['/auth/login']);
-      return;
-    }
+  toggleFavorite(product: Product, event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
 
     const token = localStorage.getItem('token');
-    if (!token) return;
 
     this.favoriteService.toggleFavorite(product, token).subscribe({
       next: () => {
-        product.isFavorite = !product.isFavorite;
-        const favorites = this.favoriteService.getFavorites();
-        this.favoriteService.setFavorites(
-          product.isFavorite
-            ? [...favorites, product]
-            : favorites.filter(p => p.id !== product.id)
-        );
+        // مفيش داعي لأي حاجة هنا
+        // الـ favorites$ هيتحدث تلقائي
       },
-      error: (err) => console.error('Error updating favorite:', err)
+      error: (err) => console.error('Error toggling favorite:', err)
     });
   }
+
+
+
 
   getFullStars(rating: number): number[] {
     return Array(Math.floor(rating)).fill(0);

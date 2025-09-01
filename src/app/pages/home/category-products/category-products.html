@@ -13,7 +13,7 @@
     style="position: absolute; left: 0; top: 20px; height: 200px; width: 100px; z-index: 1;">
 
   <!-- الخلفية تاخد العرض كله -->
-  <div class="category-products-container py-5">
+  <div class="category-products-container py-5 px-lg-5">
 
     <!-- المحتوى الداخلي مع padding -->
     <div class="px-lg-5 px-3">
@@ -81,11 +81,11 @@
 
                     <!-- Favorite & Compare Buttons -->
                     <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-                      <button (click)="toggleFavorite(product); $event.preventDefault(); $event.stopPropagation()"
-                        class="btn-circle" [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
-                        <i class="fa fa-heart" style="font-size: 15px;"
-                          [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+                      <button (click)="toggleFavorite(product, $event)" class="btn-circle"
+                        [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                        <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
                       </button>
+
                       <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
                         class="btn-circle text-muted">
                         <i class="fas fa-random"></i>
@@ -159,7 +159,7 @@
           </div>
 
           <!-- Navigation -->
-          <div class="d-flex align-items-center justify-content-between mt-4">
+          <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
 
             <!-- Dots -->
             <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0">
@@ -242,7 +242,7 @@
         <div class="m-4 my-5 px-2">
           @for (range of predefinedRanges; track range.label; let i = $index) {
           <div class="form-check d-flex align-items-center justify-content-start gap-2 mb-2" dir="rtl">
-            <input type="checkbox" class="form-check-input" [checked]="range.selected"
+            <input type="checkbox" class="form-check-input mx-2" [checked]="range.selected"
               (change)="applyPredefinedRange(i)" />
             <label class="form-check-label">{{ range.label }}</label>
           </div>
@@ -341,11 +341,12 @@
     <!-- Products Section -->
     <div class="col-lg-9 py-2">
       @if (selectedCategories.length > 0) {
-      <div class="mb-3 py-5">
+      <div class="mb-3 py-3">
         @for (catId of selectedCategories; track catId) {
-        <span class="badge bg-success me-2">
+        <span class="badge caotegoryDesign me-2 py-1 px-2 rounded-pill">
+          <span (click)="removeCategory(catId)" class="ms-2 fs-5" style="cursor: pointer;">&times;</span>
+
           {{ getCategoryName(catId) }}
-          <span (click)="removeCategory(catId)" class="ms-2" style="cursor: pointer;">&times;</span>
         </span>
         }
       </div>
@@ -366,11 +367,11 @@
 
             <!-- أزرار المفضلة والمقارنة -->
             <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
-              <button (click)="toggleFavorite(product); $event.stopPropagation(); $event.preventDefault()"
-                class="btn-circle" [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
-                <i class="fa fa-heart" style="font-size: 15px;"
-                  [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+              <button (click)="toggleFavorite(product, $event)" class="btn-circle"
+                [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
               </button>
+
               <button (click)="addToCompare(product); $event.stopPropagation(); $event.preventDefault()"
                 class="btn-circle text-muted">
                 <i class="fas fa-random"></i>
@@ -420,7 +421,7 @@
                   </div>
                   } @else {
                   <button class="btn btn-outline-dark w-100 btn-xs bg-white text-black rounded-5 custom-hover"
-                    style="font-size: 1rem;" (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
+                    style="font-size: 0.9rem;" (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
                     data-bs-target="#cartSidebar" aria-controls="cartSidebar">
                     <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
 

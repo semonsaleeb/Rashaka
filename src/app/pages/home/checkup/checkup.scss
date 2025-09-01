@@ -92,13 +92,25 @@ button:hover img {
   height: 350px;
   position: absolute;
   top: 19rem;
-  /* Move down */
   left: 24rem;
-  /* Move to the right */
   z-index: 2;
-  /* Ensure image is above overlay */
   overflow: visible;
 }
+
+/* للشاشات الصغيرة (موبايل) */
+@media (max-width: 768px) {
+  .img-fluid {
+    position: absolute;
+    top: 340px;   
+    left: 300px;    
+    width: 70%;     
+    height: auto;   
+    max-width: none; 
+    z-index: 2;     
+  }
+}
+
+
 
 .overlay-adjust {
   position: absolute;
