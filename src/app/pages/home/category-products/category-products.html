@@ -252,7 +252,7 @@
     </div>
     <!-- زرار الفلترة يظهر فقط على الشاشات الصغيرة -->
     <!-- يظهر فقط في الموبايل -->
-    <div class="d-flex justify-content-between gap-2 d-lg-none mt-4 pt-5 mt-5 py-5">
+    <div class="d-flex justify-content-between gap-2 d-lg-none mt-1 pt-3  py-5">
 
       <div class="flex-fill">
         <h1 class="fw-bold">المتجر</h1>
@@ -273,13 +273,20 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+<div class="modal fade" id="filtersModal" tabindex="-1" 
+     aria-labelledby="filtersModalLabel" aria-hidden="true" 
+     data-bs-backdrop="true" data-bs-keyboard="true">
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content rounded-4">
           <div class="modal-header">
-            <h5 class="modal-title fw-bold" id="filtersModalLabel">الفلاتر</h5>
+            <img src="assets/Images/logo.svg" alt="Happy Fitness" style="height: 40px;">
+            <div class="mx-5 px-3"></div>
             <div class="modal-header d-flex justify-content-start">
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+              <h5 class="modal-title fw-bold" id="filtersModalLabel">الغاء</h5>
+
+              <button type="button" class="btn-close px-2 mx-2" data-bs-dismiss="modal" aria-label="إغلاق">
+
+              </button>
             </div>
           </div>
           <div class="modal-body">
@@ -314,7 +321,9 @@
                 <div class="d-flex gap-2 mb-2">
                   <input type="number" class="form-control text-end" placeholder="من" [(ngModel)]="priceMin" />
                   <input type="number" class="form-control text-end" placeholder="إلى" [(ngModel)]="priceMax" />
-                  <button class="btn btn-success" (click)="applyPriceFilter()">عرض</button>
+                  <button class="btn btn-success" (click)="applyPriceFilter()" data-bs-dismiss="modal">
+                    عرض
+                  </button>
                 </div>
 
                 <!-- Predefined Ranges -->
@@ -323,7 +332,7 @@
                   <div class="form-check d-flex align-items-center justify-content-start gap-2 mb-2" dir="rtl">
                     <input type="checkbox" class="form-check-input" [checked]="range.selected"
                       (change)="applyPredefinedRange(i)" />
-                    <label class="form-check-label">{{ range.label }}</label>
+                    <label class="form-check-label mx-4">{{ range.label }}</label>
                   </div>
                   }
                 </div>
@@ -332,7 +341,7 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+            <button type="button" class="btn close_btn" data-bs-dismiss="modal">تم </button>
           </div>
         </div>
       </div>
@@ -362,7 +371,7 @@
             <!-- صورة المنتج -->
             <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
               <img [src]="product.images[0]" class="card-img-top px-3" [alt]="product.name"
-                style=" object-fit: contain;" />
+                style="height: 200px; object-fit: contain;" />
             </a>
 
             <!-- أزرار المفضلة والمقارنة -->

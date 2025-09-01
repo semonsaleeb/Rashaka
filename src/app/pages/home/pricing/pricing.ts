@@ -39,6 +39,8 @@ export class Pricing implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    console.log("plans" +this.plans);
+    
     // قراءة حالة تسجيل الدخول الحالية
     this.isLoggedIn = this.auth.isLoggedIn();
     // متابعة أي تغيير يحصل في الحالة
@@ -256,16 +258,20 @@ handleSubscribe(plan: Plan) {
     this.handleSwipe();
   }
 
-  handleSwipe(): void {
-    const swipeDistance = this.touchEndX - this.touchStartX;
-    if (Math.abs(swipeDistance) > 50) { 
-      if (swipeDistance > 0) {
-        this.scrollRight();
-      } else {
-        this.scrollLeft();
-      }
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) {
+    if (swipeDistance > 0) {
+            this.scrollLeft();
+
+    } else {
+            this.scrollRight();
+
     }
   }
+}
+
 
   showLoginPopup = false;
 

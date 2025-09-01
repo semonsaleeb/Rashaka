@@ -39,26 +39,6 @@
       <div class="p-4 bg-white h-100 d-flex flex-column">
         <h4 class="fw-bold">{{ product.name_ar }}</h4>
 
-        <!-- Price + Category -->
-        <div class="d-flex align-items-center gap-2 mb-2">
-          @if (product.sale_price) {
-          <span class="text-success fw-bold fs-5">
-            {{ product.sale_price }} ر.س
-          </span>
-          <span class="text-muted text-decoration-line-through">
-            {{ product.price }} ر.س
-          </span>
-          } @else {
-          <span class="fw-bold fs-5 text-dark">{{ product.price }} ر.س</span>
-          }
-
-          @if (product.categories && product.categories.length) {
-          <span class="badge bg-secondary">
-            {{ product.categories[0].name_ar }}
-          </span>
-          }
-        </div>
-
         <!-- Name + Stock -->
         <div class="mb-3">
           <div class="mb-2 d-flex align-items-center">
@@ -80,6 +60,28 @@
 
           <small class="text-muted">({{ product.stock }} متوفر)</small>
         </div>
+        <!-- Price + Category -->
+        <div class="d-flex align-items-center gap-2 mb-2">
+          @if (product.sale_price) {
+          <span class="text-success fw-bold fs-5">
+            {{ product.sale_price }} ر.س
+          </span>
+          <span class="text-muted text-decoration-line-through">
+            {{ product.price }} ر.س
+          </span>
+          } @else {
+
+          <span class="fw-bold fs-5 text-dark">{{ product.price }} ر.س</span>
+          }
+
+          <!-- @if (product.categories && product.categories.length) {
+          <span class="badge bg-secondary">
+            {{ product.categories[0].name_ar }}
+          </span>
+          } -->
+        </div>
+
+
 
         <!-- Add to cart -->
         <div class="d-flex gap-2 mb-3">
@@ -106,8 +108,15 @@
         <div *ngIf="showDescription" class="border-top pt-3">
           <h6 class="fw-bold">الوصف</h6>
           <p class="text-muted" style="white-space: pre-line;">
-            {{ product.description_ar }}
+            {{ showFullDescription ? (product.description_ar || product.description) : shortDescription }}
           </p>
+
+          @if (hasMore) {
+          <button class="btn btn-link p-0" (click)="showFullDescription = !showFullDescription">
+            {{ showFullDescription ? 'عرض أقل' : 'عرض المزيد' }}
+          </button>
+          }
+
         </div>
 
         <div *ngIf="showReviews" class="border-top pt-3">
@@ -141,4 +150,5 @@
     </div>
   </div>
 </div>
+<app-downloadapp></app-downloadapp>
 }

@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FavoriteService } from '../services/favorite.service';
 import { map, Observable } from 'rxjs';
+import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
 
 @Component({
   selector: 'app-product-card',
@@ -17,7 +18,8 @@ import { map, Observable } from 'rxjs';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    Downloadapp
   ],
   templateUrl: './product-card.html',
   styleUrls: ['./product-card.scss']
@@ -29,6 +31,8 @@ export class ProductCard implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   Math = Math;
+showFullDescription = false;
+wordLimit = 20;
   showDescription = true; showReviews = false;
   constructor(
     private http: HttpClient,
@@ -105,7 +109,16 @@ export class ProductCard implements OnInit {
       this.cartState.updateCount(count);
     });
   }
+get shortDescription(): string {
+  const desc = this.product?.description_ar || this.product?.description || '';
+  const words = desc.split(' ');
+  return words.slice(0, this.wordLimit).join(' ');
+}
 
+get hasMore(): boolean {
+  const desc = this.product?.description_ar || this.product?.description  || '';
+  return desc.split(' ').length > this.wordLimit;
+}
   isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
