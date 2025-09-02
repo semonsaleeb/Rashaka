@@ -45,18 +45,30 @@ export class Register {
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private authService: AuthService) {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
-      email: ['', 
-        [Validators.required, Validators.email, Validators.maxLength(255)], 
+      // في الـ FormControl
+      email: ['',
+        [
+          Validators.required,
+          Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/), // ✅ تأكد من وجود @ و .
+          Validators.maxLength(255)
+        ],
         [this.verifiedEmailValidator()]
       ],
+
+      // داخل FormControl
       phone: this.fb.control(
         '',
         {
-          validators: [Validators.required, Validators.pattern(/^01[0-9]{9}$/)],
+          validators: [
+            Validators.required,
+            Validators.pattern(/^(01[0-9]{9}|(\+9665|05)[0-9]{8})$/)
+
+          ],
           asyncValidators: [this.uniquePhoneValidator()],
           updateOn: 'blur'
         }
       ),
+
       password: ['', [Validators.required, strongPasswordValidator()]],
       password_confirmation: ['', [Validators.required]],
     }, { validators: this.passwordMatchValidator });
@@ -149,12 +161,18 @@ export class Register {
 
   verifiedEmailValidator(): AsyncValidatorFn {
     return (control: AbstractControl) => {
-      if (!control.value) return of(null);
+      if (!control.value || control.hasError('pattern')) {
+        // لو فاضي أو مش مطابق للصيغة (بدون @ أو .) متعملش check
+        return of(null);
+      }
 
-      return this.http.post<any>(`${environment.apiBaseUrl}/check-email`, { email: control.value }).pipe(
-        map(res => res.exists && res.verified ? null : { emailNotVerified: true }),
-        catchError(() => of(null))
-      );
+      return this.http.post<any>(`${environment.apiBaseUrl}/verify-email`, { email: control.value })
+        .pipe(
+          map(res => res.verified ? null : { emailNotVerified: true }),
+          catchError(() => of(null))
+        );
     };
   }
+
+
 }

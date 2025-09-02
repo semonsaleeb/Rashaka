@@ -168,7 +168,8 @@
                       <p class="small text-muted">
                         نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ).
                       </p>
-                      <button class="btn border rounded-5 mt-2" (click)="onGetStarted(); closeMobileMenu(); closeAllDropdowns()" >
+                      <button class="btn border rounded-5 mt-2"
+                        (click)="onGetStarted(); closeMobileMenu(); closeAllDropdowns()">
                         <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" />
                         احجز الآن
                       </button>
@@ -184,12 +185,14 @@
           </ul>
 
           <!-- WhatsApp -->
-          <div class="ms-auto m-y2" style="position: absolute; left: 0;">
-            <button class="btn d-flex align-items-center border px-5 py-2 fs-6" style="color: #25D366;">
+          <div style="position: absolute; left: 0;">
+            <a href="https://wa.me/966593936089" target="_blank"
+              class="btn d-flex align-items-center border px-5 py-2 fs-6" style="color: #25D366;">
               <span class="ms-1">واتساب</span>
               <i class="fab fa-whatsapp"></i>
-            </button>
+            </a>
           </div>
+
         </div>
       </div>
     </nav>
