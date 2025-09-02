@@ -11,18 +11,19 @@
     <div class="header-gradient"></div>
   </div>
 
-  <div class="stats-container container bg-white rounded-3 py-5 px-md-5 px-3 text-center">
-    <div class="row g-0">
-      @for (stat of stats; track stat; let i = $index) {
-      <div class="col-6 col-md-3 position-relative stat-item p-3">
-        <div class="fs-2 fw-bold text-dark">{{ stat.value }}</div>
-        <div class="fs-6 text-black fw-medium">
-          <h3>{{ stat.label }}</h3>
-        </div>
+<div class="stats-container container bg-white rounded-3 align-items-center py-5 px-md-5 px-5 text-center">
+  <div class="row g-0 justify-content-center">
+    @for (stat of stats; track stat; let i = $index) {
+    <div class="col-6 col-md-3 position-relative stat-item p-3">
+      <div class="fs-2 fw-bold text-dark">{{ stat.value }}</div>
+      <div class="fs-6 text-black fw-medium">
+        <h3>{{ stat.label }}</h3>
       </div>
-      }
     </div>
+    }
   </div>
+</div>
+
 
 
 
@@ -69,5 +70,5 @@
 
   </div>
   <app-suces-story mode="carousel" dir="ltr"></app-suces-story>
-
+<app-downloadapp dir="ltr"></app-downloadapp>
 </section>

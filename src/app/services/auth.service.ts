@@ -98,4 +98,10 @@ export class AuthService {
   isLoggedIn(): boolean {
     return this.isLoggedInSubject.value;
   }
+
+  /** حدث حالة تسجيل الدخول */
+setLoggedInState(value: boolean) {
+  this.isLoggedInSubject.next(value);
+}
+
 }

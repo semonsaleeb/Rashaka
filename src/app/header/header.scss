@@ -48,6 +48,9 @@ header {
   left: -25px !important; /* يحرك القائمة 10px لليمين */
 }
 
+.nav-link {
+  cursor: pointer;
+}
 
 
 select.rtl-select {

@@ -9,7 +9,7 @@
 
           <!-- Favorite button -->
           <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-2"
-            style="border-color: #00000033; z-index: 10;" (click)="toggleFavorite(product, $event)">
+            style="border-color: #00000033; z-index: 2;" (click)="toggleFavorite(product, $event)">
             <i [ngClass]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-muted'"></i>
           </button>
 

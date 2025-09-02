@@ -90,6 +90,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
       if (categoryId) {
         this.productService.getProductsByCategory(categoryId).subscribe({
           next: (products) => {
+            console.log('📦 Products by category:', products);
+            
             this.allProducts = [...products];
             this.filteredProducts = [...products];
             this.categories = this.extractUniqueCategories(this.allProducts);
@@ -146,11 +148,12 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   // ---------------------- responsive ----------------------
-  updateVisibleCards() {
-    if (window.innerWidth <= 768) this.visibleCards = 1;
-    else if (window.innerWidth <= 1024) this.visibleCards = 2;
-    else this.visibleCards = 4;
-  }
+updateVisibleCards() {
+  if (window.innerWidth <= 768) this.visibleCards = 1;
+  else if (window.innerWidth <= 1024) this.visibleCards = 2;
+  else this.visibleCards = 3;
+}
+
 
   checkIfMobile() {
     this.isMobile = window.innerWidth <= 768;
@@ -231,6 +234,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
     // حمل المنتجات بناءً على الكاتيجوري
     if (categoryId === 'all') {
       this.loadAllProducts();
+      console.log("category all"+ this.loadAllProducts);
+      
     } else {
       this.loadProductsByCategory(+categoryId);
     }
@@ -249,16 +254,18 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   // كل المنتجات
-  loadAllProducts() {
-    this.productService.getProducts().subscribe({
-      next: products => {
-        this.allProducts = [...products];
-        this.filteredProducts = [...products];
-        this.categories = this.extractUniqueCategories(this.allProducts);
-      },
-      error: err => console.error('Failed to load all products:', err)
-    });
-  }
+loadAllProducts() {
+  this.productService.getProducts().subscribe({
+    next: (products) => {
+      console.log("🔍 All Products from API:", products); // اطبع هنا
+      this.allProducts = [...products];
+      this.filteredProducts = [...products];
+      this.categories = this.extractUniqueCategories(this.allProducts);
+    },
+    error: (err) => console.error("Failed to load all products:", err)
+  });
+}
+
 
 
   filterBySearch(): void { this.applyCombinedFilters(); }
@@ -493,7 +500,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   isInCart(product_id: number | string): boolean {
-    console.log(this.cartItems);
+    // console.log(this.cartItems);
 
     return this.cartItems.some(i => Number(i.product_id) === Number(product_id));
   }
@@ -544,7 +551,10 @@ export class CategoryProducts implements OnInit, OnDestroy {
   handleSwipe(): void { const swipeDistance = this.touchEndX - this.touchStartX; if (Math.abs(swipeDistance) > 50) { swipeDistance > 0 ? this.nextSlide() : this.prevSlide(); } }
   nextSlide(): void { const maxIndex = Math.max(0, this.getTotalSlides() - 1); if (this.currentSlideIndex < maxIndex) this.currentSlideIndex++; }
   prevSlide(): void { if (this.currentSlideIndex > 0) this.currentSlideIndex--; }
-  getTotalSlides(): number { return Math.max(1, Math.ceil(this.filteredProducts.length / Math.max(1, this.visibleCards))); }
+getTotalSlides(): number {
+  if (!this.filteredProducts) return 0;
+  return Math.ceil(this.filteredProducts.length / this.visibleCards);
+}
   getDotsArray(): number[] { return Array.from({ length: this.getTotalSlides() }, (_, i) => i); }
   goToSlide(index: number) { this.currentSlideIndex = Math.min(Math.max(index, 0), this.getTotalSlides() - 1); }
 }

@@ -77,6 +77,9 @@ this.favoriteService.removeLocalFavorite(product.id);
       this.favorites = this.favoriteService.getLocalFavorites();
     }
   }
+goToProduct(productId: number): void {
+  this.router.navigate(['/product', productId]);
+}
 
   clearAllFavorites(): void {
     const token = localStorage.getItem('token');

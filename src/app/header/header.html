@@ -119,12 +119,14 @@
             @for (item of navItems; track item.label) {
             <li class="nav-item position-relative ">
               <a class="nav-link text-dark" [routerLink]="!item.hasDropdown ? item.path : null"
-                href="javascript:void(0)" (click)="onNavClick($event, item)">
+                href="javascript:void(0)" (click)="onNavClick($event, item)" style="cursor: pointer;">
                 {{ item.label }}
                 @if (item.hasDropdown) {
-                <i class="fas fa-chevron-down small"></i>
+                <i [class]="item.showDropdown ? 'fas fa-chevron-up small px-2' : 'fas fa-chevron-down small px-2'"></i>
                 }
               </a>
+
+
 
 
               <!-- Dropdown Menu -->
@@ -166,7 +168,7 @@
                       <p class="small text-muted">
                         نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ).
                       </p>
-                      <button class="btn border rounded-5 mt-2" (click)="onGetStarted()">
+                      <button class="btn border rounded-5 mt-2" (click)="onGetStarted(); closeMobileMenu(); closeAllDropdowns()" >
                         <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" />
                         احجز الآن
                       </button>
@@ -202,13 +204,13 @@
     <!-- Top Header Row -->
     <div class="d-flex justify-content-between align-items-center p-3">
       <!-- Logo -->
-      <img src="assets/Images/logo.svg" alt="Happy Fitness" style="height: 40px;">
+      <img src="assets/Images/logo.svg" alt="Happy Fitness" style="height: 45px;">
 
       <!-- Cart / Favorites + Menu Toggle -->
       <div class="d-flex gap-2 align-items-center">
-        <a [routerLink]="['/favorites']" class="position-relative">
+        <a [routerLink]="['/favorites']" class="position-relative px-1">
           <div class="position-relative">
-            <img src="assets/Images/Vector.svg" alt="Fav" width="22">
+            <img src="assets/Images/Vector.svg" alt="Fav" width="27">
             @if (favoriteCount > 0) {
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
               {{ favoriteCount }}
@@ -216,8 +218,8 @@
             }
           </div>
         </a>
-        <a [routerLink]="['/cart']" class="position-relative">
-          <img src="assets/Images/shopping-cart-01.svg" alt="Cart" width="22">
+        <a [routerLink]="['/cart']" class="position-relative px-1">
+          <img src="assets/Images/shopping-cart-01.svg" alt="Cart" width="27">
           @if (cartCount > 0) {
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {{ cartCount }}
@@ -228,9 +230,9 @@
         <!-- Menu Toggle -->
         <button class="btn p-0" (click)="toggleMobileMenu()">
           @if (!isMobileMenuOpen) {
-          <img src="assets/Images/menu.svg" alt="Menu" width="24">
+          <img src="assets/Images/menu.svg" alt="Menu" width="27">
           } @else {
-          <img src="assets/Images/close.svg" alt="Close" width="24">
+          <img src="assets/Images/close.svg" alt="Close" width="27">
           }
         </button>
       </div>
@@ -324,17 +326,18 @@
       </button>
 
       @if (isStoreOpen) {
-      <div class="ps-2 pe-2 py-2 rounded-3 bg-light mt-2">
+      <div class="ps-2 pe-2 py-2 rounded-3 bg-light mt-2 ص-100">
 
         @for (category of categories; track category.id) {
-        <div class="col-6 mb-2" dir="rtl">
-          <!-- Mobile & Desktop -->
-          <a class="fs-5 d-block text-end py-1 text-decoration-none text-dark"
+        <div class="col-12 mb-2" dir="rtl">
+          <a class="fs-5 d-block text-end py-1 w-100 text-decoration-none text-dark single-line-text"
             [routerLink]="['/home/category-products']" [queryParams]="{ category_id: category.id }"
             (click)="closeMobileMenu(); closeAllDropdowns()">
             {{ category.name_ar }}
           </a>
         </div>
+
+
         }
         <div class="col-12 text-end mt-3 mx-3">
           <!-- "عرض الكل" -->

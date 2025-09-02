@@ -35,9 +35,12 @@
       </div>
 
       <!-- Forgot Password Link -->
-      <a href="/forgot-password" class="d-block text-end text-primary mb-3" style="text-decoration: none;">
-        هل نسيت كلمة المرور؟ <i class="fas fa-unlock"></i>
-      </a>
+   <a [routerLink]="['/forgot-password']"
+   class="d-block text-end text-primary mb-3"
+   style="text-decoration: none;">
+  هل نسيت كلمة المرور؟ <i class="fas fa-unlock"></i>
+</a>
+
 
       <!-- Submit Button -->
       <button type="submit" class="btn custom-green-btn w-100" [disabled]="loading">

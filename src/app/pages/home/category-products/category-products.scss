@@ -68,6 +68,7 @@
     }
   }
 
+
   .carousel-wrapper {
     position: relative;
     width: 100%;
@@ -343,4 +344,33 @@
 .close_btn{
     background-color: #7AD03A;
 color: black;
+}
+
+
+/* خلي المودال ياخد العرض كامل */
+#filtersModal .modal-dialog {
+  // margin: 0;              /* يشيل أي margin */
+  width: 95%;            /* full width */
+  max-width: 95%;        /* يمنع حدود ثابتة */
+  height: auto;           /* خلي الطول auto */
+}
+
+/* لو عايزة تحكمي في المسافة من فوق */
+#filtersModal .modal-dialog {
+  margin-top: 20px; /* غيري الرقم حسب ما تحبي */
+  margin-bottom: 0; /* يشيل أي margin من تحت */
+}
+/* خلي المودال يبدأ من تحت */
+.modal-dialog-bottom {
+  position: fixed;
+  bottom: 0;
+  margin: 0;
+
+  transform: translateY(100%);  /* مخفي تحت */
+  transition: transform 0.3s ease-out;
+}
+
+/* لما المودال يفتح */
+.modal.show .modal-dialog-bottom {
+  transform: translateY(0);  /* يطلع لفوق */
 }

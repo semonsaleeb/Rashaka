@@ -21,7 +21,7 @@
       <div class="special-offers-container mb-5">
 
         <!-- Header Section -->
-        <div class="header-section mb-4" dir="rtl">
+        <div class="header-section mb-4 px-3" dir="rtl">
           <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
             <h2 class="section-title mb-0 fw-bold">منتجاتنا المميزة</h2>
             <a [routerLink]="['/home/category-products']"
@@ -60,7 +60,7 @@
         <div class="position-relative carousel-wrapper my-3" dir="rtl">
           <div class="carousel-container">
             <div class="d-flex transition-transform carousel-track" [ngStyle]="{
-  transform: 'translateX(' + (currentSlideIndex * (isMobile ? (100 / visibleCards) : (130 / visibleCards))) + '%)'
+  transform: 'translateX(' + (currentSlideIndex * (isMobile ? (100 / visibleCards) : (100 / visibleCards))) + '%)'
 }" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
               @for (product of filteredProducts; track product.id) {
               <div class="carousel-slide p-3">
@@ -115,7 +115,7 @@
                   <!-- Cart Controls -->
                   <div class="mb-2 px-4">
                     @if (isInCart(product.id)) {
-                    <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4"
+                    <div class="d-flex align-items-center mb-1 justify-content-center px-3 mt-2 gap-2 border rounded-4"
                       style="direction: rtl;">
 
                       <!-- Quantity Controls -->
@@ -172,8 +172,7 @@
 
             <!-- Arrows (desktop only) -->
             <div class="d-flex gap-2 d-none d-md-flex">
-              <button class="arrow-btn next" (click)="nextSlide()"
-                [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
+              <button class="arrow-btn next" (click)="nextSlide()" [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
               <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
 
             </div>
@@ -273,14 +272,13 @@
     </div>
 
     <!-- Modal -->
-<div class="modal fade" id="filtersModal" tabindex="-1" 
-     aria-labelledby="filtersModalLabel" aria-hidden="true" 
+<div class="modal fade" id="filtersModal" tabindex="1" aria-labelledby="filtersModalLabel" aria-hidden="true"
      data-bs-backdrop="true" data-bs-keyboard="true">
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content rounded-4">
+  <div class="modal-dialog modal-dialog-scrollable custom-modal modal-dialog-bottom">
+    <div class="modal-content rounded-4">
           <div class="modal-header">
             <img src="assets/Images/logo.svg" alt="Happy Fitness" style="height: 40px;">
-            <div class="mx-5 px-3"></div>
+            <div class="mx-5 px-4"></div>
             <div class="modal-header d-flex justify-content-start">
               <h5 class="modal-title fw-bold" id="filtersModalLabel">الغاء</h5>
 

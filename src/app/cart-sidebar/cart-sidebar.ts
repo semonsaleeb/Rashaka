@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, NgZone } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CartItem } from '../../models/CartItem';
 import { ProductService } from '../services/product';
 import { CartService } from '../services/cart.service';
@@ -8,6 +8,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FavoriteService } from '../services/favorite.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+
 declare var bootstrap: any;
 
 @Component({
@@ -17,11 +18,14 @@ declare var bootstrap: any;
   templateUrl: './cart-sidebar.html',
   styleUrl: './cart-sidebar.scss'
 })
-export class CartSidebar {
+export class CartSidebar implements OnInit, OnDestroy {
   @Input() cartItems: CartItem[] = [];
   private GUEST_CART_KEY = 'guest_cart';
   progressValue = 80;
   isLoading = true;
+
+  // 🟢 نخزن الـ callback علشان removeEventListener يشتغل صح
+  private outsideClickHandler = this.handleOutsideClick.bind(this);
 
   constructor(
     private productService: ProductService,
@@ -32,21 +36,27 @@ export class CartSidebar {
     private favoriteService: FavoriteService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
+  // ✅ هل المستخدم عامل تسجيل دخول
   isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
+
+  // ✅ تحميل الكارت للـ guest
   private loadGuestCart(): any[] {
     const cart = localStorage.getItem(this.GUEST_CART_KEY);
     return cart ? JSON.parse(cart) : [];
   }
 
+  // ✅ حفظ الكارت للـ guest
   private saveGuestCart(cart: any[]): void {
     localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
-    this.cartItems = cart; // ⬅️ تحديث مباشر
+    this.cartItems = cart;
     this.refreshCartCount();
   }
+
+  // ✅ تحديث عدد العناصر
   private refreshCartCount(): void {
     const total = this.isLoggedIn()
       ? this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
@@ -55,6 +65,7 @@ export class CartSidebar {
     this.cartState.updateCount(total);
   }
 
+  // ✅ تحميل الكارت من الـ API
   private loadCart(): void {
     this.cartService.getCart().subscribe({
       next: (response) => {
@@ -65,6 +76,42 @@ export class CartSidebar {
     });
   }
 
+  // ====================== LIFECYCLE ======================
+
+  ngOnInit(): void {
+    const sidebarEl = document.getElementById('cartSidebar');
+
+    if (sidebarEl) {
+      // 🟢 log لما يتفتح
+      sidebarEl.addEventListener('shown.bs.offcanvas', () => {
+        console.log('🟢 cartSidebar opened!');
+      });
+
+      // 🔴 log لما يتقفل
+      sidebarEl.addEventListener('hidden.bs.offcanvas', () => {
+        console.log('🔴 cartSidebar closed!');
+      });
+    }
+
+    // ⬅️ كليك على أي مكان برة الـ sidebar
+    document.addEventListener('click', this.outsideClickHandler);
+  }
+
+  ngOnDestroy(): void {
+    document.removeEventListener('click', this.outsideClickHandler);
+  }
+
+  // ====================== HELPERS ======================
+
+  private handleOutsideClick(event: MouseEvent) {
+    const sidebarEl = document.getElementById('cartSidebar');
+    if (sidebarEl && sidebarEl.classList.contains('show')) {
+      if (!sidebarEl.contains(event.target as Node)) {
+        console.log('🔹 Closing sidebar because of outside click');
+        this.closeSidebar();
+      }
+    }
+  }
 
   private handleCartError(err: HttpErrorResponse): void {
     console.error('❌ Error loading cart:', err);
@@ -86,6 +133,8 @@ export class CartSidebar {
     this.cartItems = [];
     this.cartState.updateCount(0);
   }
+
+  // ====================== CART ACTIONS ======================
 
   increaseQuantity(productId: number): void {
     if (!this.isLoggedIn()) {
@@ -123,16 +172,20 @@ export class CartSidebar {
     this.cartService.removeCartItem(productId).subscribe({ next: () => this.loadCart() });
   }
 
-  closeSidebar(): void {
-    const sidebarEl = document.getElementById('cartSidebar');
-    if (sidebarEl) {
-      const offcanvas = bootstrap.Offcanvas.getInstance(sidebarEl)
-        || new bootstrap.Offcanvas(sidebarEl);
-      offcanvas.hide();
-    }
+closeSidebar(): void {
+  const sidebarEl = document.getElementById('cartSidebar');
+  if (sidebarEl) {
+    const offcanvas = bootstrap.Offcanvas.getInstance(sidebarEl)
+      || new bootstrap.Offcanvas(sidebarEl);
+    offcanvas.hide();
+
+    // 🟢 شيل الـ backdrop على طول
+    setTimeout(() => {
+      const backdrops = document.querySelectorAll('.offcanvas-backdrop');
+      backdrops.forEach(b => b.remove());
+      document.body.classList.remove('offcanvas-backdrop'); 
+    }, 200); // مهلة صغيرة علشان Bootstrap يلحق يقفل الأول
   }
-
-
 }
 
-
+}

@@ -3,10 +3,11 @@ import { Component } from '@angular/core';
 import { Branches } from '../home/branches/branches';
 import { SucesStory } from '../home/suces-story/suces-story';
 import { Branch } from "../appointments/branch/branch";
+import { Downloadapp } from "../home/downloadapp/downloadapp";
 
 @Component({
   selector: 'app-about-us',
-  imports: [Branches, SucesStory, Branches],
+  imports: [Branches, SucesStory, Branches, Downloadapp],
   templateUrl: './about-us.html',
   styleUrl: './about-us.scss'
 })

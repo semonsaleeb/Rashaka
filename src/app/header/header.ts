@@ -267,10 +267,10 @@ export class Header implements OnInit {
       }
     });
   }
-  onGetStarted() {
-    console.log('Get started clicked');
-    // Add your navigation logic here
-  }
+onGetStarted() {
+  this.router.navigate(['/reservation']);
+}
+
 
 
   isStoreOpen: boolean = false;
