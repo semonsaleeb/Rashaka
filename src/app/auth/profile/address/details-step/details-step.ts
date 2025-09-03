@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { Location } from '@angular/common'; // لازم من هنا
 import { AddressData } from '../../../../../models/address.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-details-step',
@@ -13,7 +14,9 @@ import { AddressData } from '../../../../../models/address.model';
 export class DetailsStep implements OnChanges  {
   @Input() initialData: Partial<AddressData> | null = null;
   @Output() submit = new EventEmitter<AddressData>();
-
+  constructor(private location: Location, private router: Router) {}
+  showSteps = false;
+  step = 2;
   form: AddressData = {
     id: 0, // ✅ Default value for creation; will be overwritten on edit
     location_type: 'home',
@@ -98,6 +101,11 @@ submitForm(): void {
 
   // console.log("📦 Sending to backend:", finalData);
   this.submit.emit(finalData);
+}
+@Output() back = new EventEmitter<void>();
+
+goBackToMap() {
+  this.back.emit();
 }
 
 }

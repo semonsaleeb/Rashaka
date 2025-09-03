@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Product, ProductService } from '../services/product';
+import {  ProductService } from '../services/product';
 import { AuthService } from '../services/auth.service';
 import { CartService } from '../services/cart.service';
 import { CartStateService } from '../services/cart-state-service';
@@ -11,6 +11,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FavoriteService } from '../services/favorite.service';
 import { map, Observable } from 'rxjs';
 import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
+import { Product } from '../../models/Product';
 
 @Component({
   selector: 'app-product-card',

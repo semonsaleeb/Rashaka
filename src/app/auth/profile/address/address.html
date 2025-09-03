@@ -1,82 +1,91 @@
 <!-- ✅ قائمة العناوين -->
 <div class="px-lg-5 mx-lg-5 ">
   @if (!showSteps) {
-    @if (addressList.length > 0) {
-      <div class="row">
-        @for (address of addressList; track address) {
-          <div class="col-md-4 mb-4">
-            <div class="border border-primary rounded-3 p-3 position-relative">
-              <!-- شارة "الرئيسي" -->
-              <div class="d-flex justify-content-between align-items-end mb-2" dir="ltr">
-                <!-- زر تعديل -->
-                <button class="btn btn-link p-0 me-2" (click)="editAddress(address)">
-                  <i class="fas fa-pen text-secondary"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger me-2" (click)="deleteAddress(address.id)">
-                  حذف
-                </button>
-                <!-- عنوان -->
-                <span class="fw-bold mx-2">تفاصيل العنوان <input type="checkbox" checked
-                class="form-check-input ms-2"></span>
-              </div>
-              <!-- الاسم -->
-              <div class="mb-2">
-                <p class="text-end text-secondary">الأسم</p>
-                <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
-              </div>
-              <!-- العنوان الكامل -->
-              <div class="mb-2">
-                <p class="text-end text-secondary"> العنوان</p>
-                <input type="text" class="form-control" [value]="getFullAddress(address)" readonly>
-              </div>
-              <div>
-                <!-- رقم الجوال -->
-                <div class="col-md-6 w-100">
-                  <p class="text-end text-secondary"> رقم الجوال</p>
-                  <div class="input-group w-100">
-                    <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone"
-                      [readonly]="client.phone && client.phone.trim() !== ''">
-                      @if (!client.phone || client.phone.trim() === '') {
-                        <button class="btn btn-outline-success rounded-0"
-                          type="button">
-                          أضف +
-                        </button>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
+  @if (addressList.length > 0) {
+  <div class="row">
+    @for (address of addressList; track address) {
+    <div class="col-md-4 mb-4">
+      <div class="border border-primary rounded-3 p-3 position-relative">
+        <!-- شارة "الرئيسي" -->
+        <div class="d-flex justify-content-between align-items-end mb-2" dir="ltr">
+          <!-- زر تعديل -->
+          <button class="btn btn-link p-0 me-2" (click)="editAddress(address)">
+            <i class="fas fa-pen text-secondary"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger me-2" (click)="deleteAddress(address.id)">
+            حذف
+          </button>
+          <!-- عنوان -->
+          <span class="fw-bold mx-2">تفاصيل العنوان <input type="checkbox" checked class="form-check-input ms-2"></span>
         </div>
-        <!-- زر إضافة عنوان جديد -->
-        <button class="btn btn-outline-success" (click)="startAddressFlow()">إضافة عنوان جديد</button>
-      } @else {
-        <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
-        <br>
-          <button class="btn btn-success px-4 py-2" (click)="startAddressFlow()">أضف عنوان</button>
-        }
-        <!-- ❌ لا يوجد عنوان -->
-      }
+        <!-- الاسم -->
+        <div class="mb-2">
+          <p class="text-end text-secondary">الأسم</p>
+          <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
+        </div>
+        <!-- العنوان الكامل -->
+        <div class="mb-2">
+          <p class="text-end text-secondary"> العنوان</p>
+          <input type="text" class="form-control" [value]="getFullAddress(address)" readonly>
+        </div>
+        <div>
+          <!-- رقم الجوال -->
+          <div class="col-md-6 w-100">
+            <p class="text-end text-secondary"> رقم الجوال</p>
+            <div class="input-group w-100">
+              <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone"
+                [readonly]="client.phone && client.phone.trim() !== ''">
+              @if (!client.phone || client.phone.trim() === '') {
+              <button class="btn btn-outline-success rounded-0" type="button">
+                أضف +
+              </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- Step 1: اختر من الخريطة -->
-    @if (showSteps && step === 1) {
-      <app-map-step (next)="goToDetails($event)"></app-map-step>
     }
-
-    <!-- Step 2: تفاصيل العنوان -->
-   @if (showSteps && step === 2) {
-  @if (client.phone) {
-    <app-details-step
-      [initialData]="addressData"
-      [clientPhone]="client.phone"
-      [clientName]="client.name"   
-      (submit)="submitAddress($event)">
-    </app-details-step>
+  </div>
+  <!-- زر إضافة عنوان جديد -->
+  <button class="btn btn-outline-success" (click)="startAddressFlow()">إضافة عنوان جديد</button>
+  } @else {
+  <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
+  <br>
+  <button class="btn btn-success px-4 py-2" (click)="startAddressFlow()">أضف عنوان</button>
   }
+  <!-- ❌ لا يوجد عنوان -->
+  }
+</div>
+<!-- Step 1: اختر من الخريطة -->
+@if (showSteps && step === 1) {
+<app-map-step (next)="goToDetails($event)"></app-map-step>
 }
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+
+<!-- Step 2: تفاصيل العنوان -->
+@if (showSteps && step === 2) {
+@if (client.phone) {
+<app-details-step [initialData]="addressData" [clientPhone]="client.phone" [clientName]="client.name"
+  (submit)="submitAddress($event)" (back)="step = 1; showSteps = true;">
+</app-details-step>
+
+}
+}
+<!-- ===================== MODALS ===================== -->
+<!-- Success Modal – إضافة عنوان -->
+<div class="modal fade" id="successAddModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4 rounded-4 d-flex flex-column align-items-center justify-content-center">
+      <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration" width="200px">
+      <h5 class="fw-bold text-success mb-3 mt-3">✔ تم إضافة العنوان بنجاح</h5>
+      <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">حسناً</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Success Modal – حذف عنوان -->
+<div class="modal fade" id="successDeleteModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4 rounded-4">
       <h5 class="fw-bold text-success mb-3">✔ تم الحذف بنجاح</h5>
@@ -85,16 +94,7 @@
   </div>
 </div>
 
-<!-- Error Modal -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-center p-4 rounded-4">
-      <h5 class="fw-bold text-danger mb-3">❌ حدث خطأ أثناء الحذف</h5>
-      <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">إغلاق</button>
-    </div>
-  </div>
-</div>
-<!-- Popup Modal -->
+<!-- Confirm Delete Modal -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4 p-3">
@@ -102,9 +102,21 @@
         <h5 class="mb-3">هل أنت متأكد من حذف هذا العنوان؟</h5>
         <div class="d-flex justify-content-center gap-2">
           <button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-          <!-- <button class="btn btn-danger" (click)="confirmDelete()">حذف</button> -->
+          <button class="btn btn-danger" (click)="confirmDelete()">حذف</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
+
+<!-- Error Modal -->
+<!-- <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4 rounded-4">
+      <h5 class="fw-bold text-danger mb-3">❌ حدث خطأ أثناء الحذف</h5>
+      <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">إغلاق</button>
+    </div>
+  </div>
+</div> -->

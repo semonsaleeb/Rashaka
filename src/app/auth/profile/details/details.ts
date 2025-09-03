@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './details.html',
   styleUrls: ['./details.scss']
 })

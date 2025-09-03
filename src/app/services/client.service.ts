@@ -20,4 +20,36 @@ export class ClientService {
 
     return this.http.get<any>(this.baseUrl, { headers });
   }
+
+  uploadProfileImage(image: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', image);
+    
+    return this.http.post<any>(`${this.baseUrl}/image`, formData, { 
+      headers: this.getImageUploadHeaders() 
+    });
+  }
+
+  deleteProfileImage(): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/image`, { 
+      headers: this.getHeaders() 
+    });
+  }
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    });
+  }
+
+  private getImageUploadHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+      // Note: Don't set Content-Type for FormData - let browser set it automatically
+    });
+  }
 }

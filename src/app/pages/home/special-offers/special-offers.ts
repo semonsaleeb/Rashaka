@@ -4,7 +4,7 @@ import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { Category, Product, ProductService } from '../../../services/product';
+import {  ProductService } from '../../../services/product';
 import { AuthService } from '../../../services/auth.service';
 import { CartService } from '../../../services/cart.service';
 import { CartStateService } from '../../../services/cart-state-service';
@@ -12,6 +12,8 @@ import { FavoriteService } from '../../../services/favorite.service';
 
 import { Downloadapp } from '../downloadapp/downloadapp';
 import { ComparePopup } from '../../../compare-popup/compare-popup';
+import { Product } from '../../../../models/Product';
+import { Category } from '../../../../models/Category';
 
 @Component({
   selector: 'app-special-offers',

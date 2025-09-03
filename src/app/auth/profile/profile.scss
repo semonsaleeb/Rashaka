@@ -6,11 +6,19 @@
   background-color: #f8f9fa;
   border-radius: 10px;
 }
+.btn-upload{
+    background-color: #7AD03A;
+    color: black;
 
+}
 .profile_btn {
   border: 2px solid #E3E3E3;
   color: #757575;
   border-radius: 8px;
+}
+/* يخفي السهم الافتراضي للـ dropdown */
+.btn[ngbDropdownToggle]::after {
+  display: none !important;
 }
 
 .profile_btn.active,
@@ -26,3 +34,17 @@
 }
 
 
+.scroll-tabs {
+  flex-wrap: nowrap; /* منع الكسر */
+  overflow-x: auto; /* تمكين التمرير أفقي */
+  -webkit-overflow-scrolling: touch; /* smooth scroll على iOS */
+}
+
+.scroll-tabs::-webkit-scrollbar {
+  display: none; /* إخفاء scrollbar */
+}
+
+/* Optional: spacing between buttons */
+.scroll-tabs .col-auto {
+  flex: 0 0 auto; /* يمنع الانكماش */
+}

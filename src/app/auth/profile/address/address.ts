@@ -6,6 +6,7 @@ import { AddressData } from '../../../../models/address.model';
 import { DetailsStep } from './details-step/details-step';
 import { MapStep } from './map-step/map-step';
 import { FormsModule } from '@angular/forms';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-address',
@@ -25,47 +26,42 @@ export class Address implements OnInit {
     name: ''
   };
   isEditing = false;
-
+  pendingDeleteId: number | null = null; // لتخزين العنوان المراد حذفه
 
   constructor(
     private addressService: AddressService,
-    private clientService: ClientService // ✅ Inject ClientService
+    private clientService: ClientService
   ) { }
 
   ngOnInit(): void {
     this.fetchAddresses();
-    this.loadClientProfile(); // ✅ Use service instead of decodeToken
+    this.loadClientProfile();
   }
 
- loadClientProfile() {
-  this.clientService.getProfile().subscribe({
-    next: (res) => {
-      this.client = res.client;
-      console.log('✅ Client loaded:', this.client);
-    },
-    error: (err) => {
-      console.error('❌ Failed to load client profile:', err);
-    }
-  });
-}
+  loadClientProfile() {
+    this.clientService.getProfile().subscribe({
+      next: (res) => {
+        this.client = res.client;
+        console.log('✅ Client loaded:', this.client);
+      },
+      error: (err) => {
+        console.error('❌ Failed to load client profile:', err);
+      }
+    });
+  }
 
-
-  // getFullAddress(address: any): string {
-  //   return `${address.street_name}, ${address.area_name}, ${address.city_name}, ${address.government_name}, عمارة ${address.building_number}, شقة ${address.apartment_number}, الدور ${address.floor_number}`;
-  // }
-getFullAddress(address: any): string {
-  const parts = [
-    address.street_name,
-    address.area_name,
-    address.city_name,
-    address.government_name,
-    address.building_number ? 'عمارة ' + address.building_number : '',
-    address.apartment_number ? 'شقة ' + address.apartment_number : '',
-    address.floor_number ? 'الدور ' + address.floor_number : ''
-  ];
-
-  return parts.filter(part => part && part.trim() !== '').join(', ');
-}
+  getFullAddress(address: any): string {
+    const parts = [
+      address.street_name,
+      address.area_name,
+      address.city_name,
+      address.government_name,
+      address.building_number ? 'عمارة ' + address.building_number : '',
+      address.apartment_number ? 'شقة ' + address.apartment_number : '',
+      address.floor_number ? 'الدور ' + address.floor_number : ''
+    ];
+    return parts.filter(part => part && part.trim() !== '').join(', ');
+  }
 
   fetchAddresses() {
     this.addressService.getAllAddresses().subscribe({
@@ -83,27 +79,16 @@ getFullAddress(address: any): string {
     this.step = 1;
   }
 
-goToDetails(dataFromMap: Partial<AddressData>) {
-  this.step = 2;
-
-  if (this.addressData?.id) {
-    this.addressData = {
-      ...this.addressData,
-      ...dataFromMap
-    };
-  } else {
-    this.addressData = {
-      ...dataFromMap
-    } as AddressData;
+  goToDetails(dataFromMap: Partial<AddressData>) {
+    this.step = 2;
+    if (this.addressData?.id) {
+      this.addressData = { ...this.addressData, ...dataFromMap };
+    } else {
+      this.addressData = { ...dataFromMap } as AddressData;
+    }
+    this.addressData = { ...this.addressData };
+    this.client = { ...this.client };
   }
-
-  // 🔁 Force Angular to detect new input bindings
-  this.addressData = { ...this.addressData };
-  this.client = { ...this.client };
-}
-
-
-
 
   submitAddress(finalData: AddressData) {
     if (this.isEditing) {
@@ -124,78 +109,100 @@ goToDetails(dataFromMap: Partial<AddressData>) {
       };
 
       this.addressService.editAddress(payload).subscribe({
-        next: (res) => {
-          alert('تم تعديل العنوان بنجاح');
+        next: () => {
           this.fetchAddresses();
           this.showSteps = false;
           this.step = 1;
           this.isEditing = false;
+          this.openAddSuccessModal(); // استخدام مودال النجاح
         },
         error: (err) => {
           console.error('خطأ في تعديل العنوان', err);
-          // alert('فشل تعديل العنوان');
         }
       });
     } else {
       // إضافة جديد
       this.addressService.addAddress(finalData).subscribe({
-        next: (res) => {
-          alert('تم إضافة العنوان بنجاح');
+        next: () => {
           this.fetchAddresses();
           this.showSteps = false;
           this.step = 1;
+          this.openAddSuccessModal();
         },
         error: (err) => {
           if (err.status === 401) {
             alert('يجب تسجيل الدخول قبل إضافة العنوان');
-          } else {
-            alert('حدث خطأ أثناء إرسال العنوان');
           }
         }
       });
     }
   }
 
-editAddress(address: AddressData) {
-  console.log('📦 Editing address:', address);
-
-  this.isEditing = true;
-  this.showSteps = true;
-  this.step = 1; // ⬅️ يعرض الخريطة أولًا
-
-  // نحفظ بيانات العنوان في المتغير مؤقتًا (لكن لا نمررها الآن للفورم)
-  this.addressData = {
-    id: address.id,
-    location_type: address.location_type || 'home',
-    coordinate: address.coordinate || '',
-    government_name: address.government_name || '',
-    city_name: address.city_name || '',
-    area_name: address.area_name || '',
-    street_name: address.street_name || '',
-    building_number: address.building_number || '',
-    apartment_number: address.apartment_number || '',
-    floor_number: address.floor_number || '',
-    phone_number: address.phone_number || '',
-    comment: address.comment || ''
-  };
-}
-
-
-deleteAddress(addressId: number) {
-  if (confirm('هل أنت متأكد من حذف هذا العنوان؟')) {
-    this.addressService.deleteAddress(addressId).subscribe({
-      next: (res) => {
-        alert('تم حذف العنوان بنجاح');
-        this.fetchAddresses(); // إعادة تحميل العناوين بعد الحذف
-      },
-      error: (err) => {
-        // console.error('❌ خطأ أثناء حذف العنوان:', err);
-        alert('فشل حذف العنوان');
-      }
-    });
+  editAddress(address: AddressData) {
+    console.log('📦 Editing address:', address);
+    this.isEditing = true;
+    this.showSteps = true;
+    this.step = 1; // عرض الخريطة أولاً
+    this.addressData = { ...address };
   }
+
+  deleteAddress(addressId: number) {
+    this.openDeleteConfirmModal(addressId);
+  }
+
+  // ------------------ MODALS ------------------
+
+  // فتح مودال إضافة/تعديل بنجاح
+  openAddSuccessModal() {
+    const modalEl = document.getElementById('successAddModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  }
+
+  // فتح مودال حذف بنجاح
+  openDeleteSuccessModal() {
+    const modalEl = document.getElementById('successDeleteModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  }
+
+  // فتح مودال تأكيد الحذف
+  openDeleteConfirmModal(addressId: number) {
+    this.pendingDeleteId = addressId;
+    const modalEl = document.getElementById('deleteConfirmModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  }
+
+  // عند الضغط على حذف داخل Confirm Delete Modal
+  confirmDelete() {
+  if (!this.pendingDeleteId) return;
+
+  // امسك مودال Confirm Delete
+  const modalEl = document.getElementById('deleteConfirmModal');
+  const modal = modalEl ? bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl) : null;
+
+  this.addressService.deleteAddress(this.pendingDeleteId).subscribe({
+    next: () => {
+      this.fetchAddresses();
+      this.openDeleteSuccessModal();
+      this.pendingDeleteId = null;
+
+      // إغلاق المودال بعد الحذف
+      if (modal) {
+        modal.hide();
+      }
+    },
+    error: () => {
+      alert('فشل حذف العنوان');
+    }
+  });
 }
-
-
 
 }

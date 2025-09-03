@@ -1,67 +1,95 @@
-<div class="subscription-page" dir="rtl">
+<h1 class="mb-4 text-center">الطلبات</h1>
 
-  <!-- حالة التحميل -->
-  @if (isLoading) {
-  <div class="text-center py-5">
-    <div class="spinner-border text-success" role="status"></div>
-  </div>
-  }
+<!-- ✅ حالة التحميل -->
+@if (isLoading) {
+<div class="text-center">جاري التحميل...</div>
+}
 
-  <!-- لو في اشتراك -->
-  @if (!isLoading && activeSubscription) {
-  <div class="row justify-content-center">
-    <div class="col-md-8 d-flex gap-4">
+<!-- ✅ رسالة الخطأ -->
+@if (errorMessage) {
+<div class="alert alert-danger text-center">{{ errorMessage }}</div>
+}
 
-      <!-- تفاصيل الاشتراك -->
-      <div class="flex-grow-1 p-4 border rounded-3  ">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <span [class.text-success]="activeSubscription.status === 'active'"
-            [class.text-warning]="activeSubscription.status === 'pending_activation'"
-            [class.text-danger]="activeSubscription.status === 'expired'">
-            @if (activeSubscription.status === 'active') { مفعل }
-            @else if (activeSubscription.status === 'pending_activation') { في انتظار التفعيل }
-            @else { منتهي }
-          </span>
-          <h5 class="m-0">تفاصيل الاشتراك</h5>
+<!-- ✅ لو فيه طلبات -->
+@if (groupedOrders.length > 0) {
+<div class="px-3 px-md-5" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+   <ngb-carousel [activeId]="currentIndex.toString()"
+              [showNavigationIndicators]="false"
+              [showNavigationArrows]="false"
+              [keyboard]="true"
+              [wrap]="false"
+              [pauseOnHover]="false"
+              (slide)="onSlide($event)">
+
+        @for (group of groupedOrders; track group; let i = $index) {
+        <ng-template ngbSlide [id]="i.toString()">
+            <div class="row justify-content-center">
+                @for (order of group; track order) {
+                <div class="col-12 col-md-4 mb-4"> <!-- 1 product per slide mobile, 3 desktop -->
+                    <div class="order-card text-center p-4 rounded shadow-sm">
+
+                        <!-- رقم الطلب + الحالة -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-light text-dark px-3 py-2">#{{ order.order_id }}</span>
+                            <span class="status-badge" [ngClass]="{
+                      'text-success': order.status === 'تم التسليم',
+                      'text-danger': order.status === 'ملغي',
+                      'text-warning': order.status === 'قيد التنفيذ',
+                      'text-secondary': order.status === 'pending'
+                    }">
+                                {{ order.status }}
+                            </span>
+                        </div>
+
+                        <!-- صورة + بيانات المنتج الأول -->
+                        @if (order.items?.length > 0) {
+                        <div class="product-image-wrapper mb-3">
+                            <img [src]="order.items[0].product_images?.length ? encodeUrl(order.items[0].product_images[0]) : 'assets/no-image.png'"
+                                alt="{{ order.items[0].product_name }}" class="product-image rounded" width="100"
+                                height="100" />
+                        </div>
+                        <p class="fw-bold">{{ order.items[0].product_name }}</p>
+                        <p>الكمية: {{ order.items[0].quantity }}</p>
+                        } @else {
+                        <p class="text-muted">لا توجد منتجات</p>
+                        }
+
+                        <!-- باقي التفاصيل -->
+                        <p><strong>المجموع:</strong> {{ order.total_price }} ر.س</p>
+                        <p><strong>طريقة الدفع:</strong>
+                            <span class="payment-method">{{ order.payment_method }}</span>
+                        </p>
+                        <p><strong>تاريخ الطلب:</strong> {{ order.created_at | date:'yyyy-MM-dd' }}</p>
+                    </div>
+                </div>
+                }
+            </div>
+        </ng-template>
+        }
+    </ngb-carousel>
+
+    <!-- ✅ أزرار التنقل + النقاط -->
+    <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+
+        <!-- النقاط -->
+        <div class="d-flex gap-2 justify-content-center justify-content-md-start" dir="ltr">
+            @for (group of groupedOrders; track group; let i = $index) {
+            <button type="button" class="dot btn btn-sm rounded-circle" [class.active]="i === currentIndex"
+                (click)="goToSlide(i)"></button>
+            }
         </div>
 
-        <p><strong>الاسم:</strong> {{ activeSubscription.name }}</p>
 
-        <hr>
-        <h6>المميزات:</h6>
-        <ul>
-          @for (feature of activeSubscription.features; track feature) {
-          <li>{{ feature }}</li>
-          }
-        </ul>
-      </div>
+        <!-- الأسهم -->
+        <div class="d-flex gap-2 d-none d-md-flex"> <!-- hide on mobile (sm < 768px), show md+ -->
+            <button class="arrow-btn next" (click)="nextSlide()"
+                [disabled]="currentIndex === groupedOrders.length - 1"></button>
+            <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentIndex === 0"></button>
+        </div>
 
-      <!-- كود التفعيل -->
-      @if (activeSubscription.status === 'pending_activation' && activeSubscription.activation_code) {
-      <div class="p-4 border rounded-3 bg-light shadow-sm text-center" style="min-width: 220px;">
-        <p>كود التفعيل</p>
-        <h5 class="bg-success text-white px-3 py-2 rounded">
-          #{{ activeSubscription.activation_code }}
-        </h5>
-        <p class="text-muted small">
-          يرجى زيارة أحد الفروع لتفعيل اشتراكك
-        </p>
-        <button class="btn btn-success w-100" (click)="visitBranch()">
-          عرض جميع الفروع
-        </button>
-      </div>
-      }
     </div>
-  </div>
-  }
-
-  <!-- لو مفيش اشتراك -->
-  @if (!isLoading && !activeSubscription) {
-  <div class="text-center p-5 border rounded-3 ">
-    <img src="assets/Images/Subscriber-amico 2.svg" alt="no sub" class="mb-3" style="max-width:200px;">
-    <p class="fw-bold">أنت غير مشترك في أي باقة حاليًا.</p>
-    <p>اختار الباقة اللي تناسبك وابدأ تجربتك معانا النهارده.</p>
-    <button class="btn btn-success" (click)="goToPackages()">عرض الباقات</button>
-  </div>
-  }
 </div>
+
+} @else if (!isLoading) {
+<p class="text-center">لا توجد طلبات بعد.</p>
+}

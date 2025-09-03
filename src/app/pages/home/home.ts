@@ -16,7 +16,7 @@ import { Blogs } from './blogs/blogs';
 import { SpecialOffersComponent } from './special-offers/special-offers';
 import { CategoryProducts } from './category-products/category-products';
 import { FavoriteService } from '../../services/favorite.service';
-import { Product } from '../../services/product';
+import { Product } from '../../../models/Product';
 
 @Component({
   selector: 'app-home',

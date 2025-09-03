@@ -71,6 +71,7 @@
         }
 
         <!-- Language Switch -->
+        <!-- header.component.html -->
         <div class="language-selector d-flex align-items-center mx-3">
           <img src="assets/Images/language.svg" alt="globe" width="20" class="ms-1 me-1" />
           <select class="form-select border-0 p-0 rtl-select px-1" [(ngModel)]="selectedLanguage"
@@ -79,6 +80,7 @@
             <option value="English">English</option>
           </select>
         </div>
+
 
         <!-- Cart + Favorites -->
         <div class="icon-buttons d-flex gap-3 mx-1">
@@ -358,14 +360,17 @@
 
     </div>
 
-    <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-      routerLink="/home/blogs" (click)="toggleMobileMenu()">المدونة</a>
+   
     <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
       routerLink="/home/packages" (click)="toggleMobileMenu()">الأشتراكات</a>
     <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
       routerLink="/home/sucesStory" (click)="toggleMobileMenu()">قصص نجاح عملائنا</a>
     <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
       routerLink="/reservation" (click)="toggleMobileMenu()">الفحوصات المجانيه</a>
+       <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/home/special-offers" (click)="toggleMobileMenu()"> العروض </a>
+       <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+      routerLink="/home/blogs" (click)="toggleMobileMenu()">المدونة</a>
     <a class="d-block py-2 fs-3 text-end fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
       routerLink="/about_us" (click)="toggleMobileMenu()">عن الرشاقة</a>
   </div>

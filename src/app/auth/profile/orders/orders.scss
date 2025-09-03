@@ -1,94 +1,201 @@
-.btn-success{
-    background-color: #7AD03A;
-    color :black;
-    border: none;
+.order-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 15px;
+  min-height: 350px;
 }
 
+.product-image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+}
 
+.product-image {
+  max-height: 100px;
+  max-width: 100px;
+  object-fit: contain;
+}
 
-.my-subscription {
-  direction: rtl;
-  
-  h3, h4 {
-    color: #2c3e50;
-    font-weight: 600;
-  }
-  
-  .activation-code-box {
-    border: 2px dashed #eee;
-    
-    h4 {
-      font-weight: 700;
-      letter-spacing: 2px;
-    }
-  }
-  
-  .feature-item {
-    background-color: #f8f9fa;
-    transition: all 0.3s;
-    
-    &:hover {
-      background-color: #e9ecef;
-      transform: translateY(-3px);
-    }
-    
-    h5 {
-      font-size: 1.5rem;
-      color: #3498db;
-    }
-  }
-  
-  .rtl-list {
-    padding-right: 20px;
-    
-    li {
-      margin-bottom: 8px;
-      position: relative;
-      
-      &::before {
-        content: "•";
-        color: #3498db;
-        font-weight: bold;
-        display: inline-block;
-        width: 1em;
-        margin-right: -1em;
-      }
-    }
+.status-badge {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.payment-method {
+  display: inline-block;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: #f8f8f8;
+}
+
+/* Arrow buttons styling for RTL */
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
+  transition: none;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
-.no-subscription {
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #f8f9fa;
-  
-  .btn-success {
-    padding: 10px 25px;
-    font-weight: 500;
-    
-    img {
-      width: 18px;
-      height: 18px;
-    }
+/* Swapped arrow directions for RTL */
+.arrow-btn.next {
+  background-image: url("/assets/Images/right-arrow.svg");
+
+  &:not([disabled]):hover {
+    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+
   }
 }
 
-.badge {
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 0.85rem;
+.arrow-btn.prev {
+
+  background-image: url("/assets/Images/left-arrow.svg");
+
+  &:not([disabled]):hover {
+    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+
+  }
 }
 
-.subscription-page {
-  h5, h6 {
-    font-weight: bold;
-  }
+.dot {
+  width: 15px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #DDDDDD;
+  border: none;
+  transition: all 0.3s ease;
 
-  ul {
-    padding-right: 20px;
-  }
+  &.active {
+    background-color: #7AD03A !important;
+    width: 35px;
+    height: 9px;
+    border-radius: 15px;
+    margin-top: 2px;
 
-  .shadow-sm {
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
+}
+.carousel-item {
+  transition: none !important; /* يلغي أي تحريك */
+}
+.ngb-carousel .carousel-item {
+  transition: none !important;
+  transform: none !important;
+}
+.order-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 15px;
+  min-height: 350px;
+}
+
+.product-image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+}
+
+.product-image {
+  max-height: 100px;
+  max-width: 100px;
+  object-fit: contain;
+}
+
+.status-badge {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.payment-method {
+  display: inline-block;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: #f8f8f8;
+}
+
+/* Arrow buttons styling for RTL */
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  padding: 0;
+  cursor: pointer;
+  transition: none;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.arrow-btn.next {
+  background-image: url("/assets/Images/right-arrow.svg");
+  &:not([disabled]):hover {
+    background-image: url("/assets/Images/right-arrow.svg");
+  }
+}
+
+.arrow-btn.prev {
+  background-image: url("/assets/Images/left-arrow.svg");
+  &:not([disabled]):hover {
+    background-image: url("/assets/Images/left-arrow.svg");
+  }
+}
+
+/* Dots */
+.dot {
+  width: 15px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #DDDDDD;
+  border: none;
+  transition: all 0.3s ease;
+
+&.active {
+  background-color: #7AD03A !important;
+  width: 45px;       /* ضيق من العرض */
+  height: 17px;     /* أطول من العرض */
+  border-radius: 8px / 50%; /* نص دايرة من الجانبين */
+  margin-top: -2px; /* حسب المكان */
+}
+
+
+}
+@media (max-width: 767px) {
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+}
+
+/* Disable carousel animation */
+.ngb-carousel .carousel-item {
+  transition: none !important;
+  transform: none !important;
 }

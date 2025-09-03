@@ -9,10 +9,11 @@ import { CartStateService } from '../services/cart-state-service';
 import { CartIconComponent } from '../cart-icon.component/cart-icon.component';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Category, ProductService } from '../services/product';
+import {  ProductService } from '../services/product';
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Category } from '../../models/Category';
 
 
 @Component({
@@ -207,10 +208,7 @@ export class Header implements OnInit {
 
   }
 
-  onLanguageChange(event: any) {
-    this.selectedLanguage = event.target.value;
-    console.log('Language changed to:', this.selectedLanguage);
-  }
+
 
   products: any[] = [];
   filteredProducts: any[] = [];
@@ -336,4 +334,11 @@ onGetStarted() {
   }
 
 
+  onLanguageChange(event: any) {
+    const lang = event.target.value;
+    // استدعاء دالة Google Translate
+    if (window && (window as any).changeLanguage) {
+      (window as any).changeLanguage(lang);
+    }
+  }
 }

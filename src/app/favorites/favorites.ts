@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { ProductService, Product } from '../services/product';
+import { ProductService } from '../services/product';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../services/cart.service';
@@ -8,6 +8,7 @@ import { CartStateService } from '../services/cart-state-service';
 import { FavoriteService } from '../services/favorite.service';
 import { FormsModule } from '@angular/forms';
 import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
+import { Product } from '../../models/Product';
 
 @Component({
   selector: 'app-favorites',

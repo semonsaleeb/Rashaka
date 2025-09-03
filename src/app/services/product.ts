@@ -4,42 +4,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
+import { Product } from '../../models/Product';
 
-export interface Product {
-  category_id: number;
-  id: number;
-  name: string;
-  name_ar: string;
-  description: string;
-  description_ar: string;
-  stock: number;
-  original_price?: string;
-  price: string;         // string because it's "25.00" in quotes
-  sale_price: string;    // same here
-  cart_quantity: number;
-  images: string[];
-  categories: Category[];
-  isFavorite?: boolean;  // optional if you're using a favorites system
-  price_before: string;
-  price_after: string;
-average_rating?: number ;
- reviews?: Review[];
-}
 
-export interface Review {
-  id: number;
-  client_name: string;
-  client_id: number;
-  rating: number; // 1-5
-  comment: string;
-  created_at: string;
-}
 
-export interface Category {
-  id: number;
-  name: string;
-  name_ar: string;
-}
 
 
 @Injectable({

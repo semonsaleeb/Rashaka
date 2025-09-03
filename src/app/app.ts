@@ -10,7 +10,7 @@ import { OurService } from './pages/home/our-service/our-service';
 import { SucesStory } from './pages/home/suces-story/suces-story';
 import { Branches } from './pages/home/branches/branches';
 import { ProductCard } from "./product-card/product-card";
-import { Product, ProductService } from './services/product';
+import {  ProductService } from './services/product';
 import { Checkup } from './pages/home/checkup/checkup';
 import { Pricing } from './pages/home/pricing/pricing';
 import { Blogs } from './pages/home/blogs/blogs';

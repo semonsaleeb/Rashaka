@@ -22,6 +22,7 @@ import { AboutUs } from './pages/about-us/about-us';
 import { PackagePricingOrder } from './package-pricing-order/package-pricing-order';
 import { Branches } from './pages/home/branches/branches';
 import { Appointments } from './pages/appointments/appointments';
+import { Packages } from './auth/profile/packages/packages';
 
 export const routes: Routes = [
   // Home page
@@ -59,8 +60,9 @@ export const routes: Routes = [
       { path: '', redirectTo: 'details', pathMatch: 'full' },
       { path: 'details', component: Details },
       { path: 'reservations', component: Reservation },
-      { path: 'orders', component: Orders },
-      { path: 'addresses', component: Address }
+      { path: 'packages', component: Packages },
+      { path: 'addresses', component: Address },
+      { path: 'orders', component: Orders }, 
     ]
   },
 
