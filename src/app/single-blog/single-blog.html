@@ -1,18 +1,27 @@
 @if (isLoading) {
-  <div class="text-center p-5">جارٍ التحميل...</div>
+<div class="text-center p-5">{{ 'BLOG.LOADING' | translate }}</div>
 }
 
 @if (errorMessage) {
-  <div class="alert alert-danger text-center">
-    {{ errorMessage }}
-  </div>
+<div class="alert alert-danger text-center">
+  {{ errorMessage }}
+</div>
 }
 
 @if (blog) {
-  <div class="container py-5 mt-5 pt-5" dir="rtl">
-    <p class="text-muted">{{ blog!.created_at }} - {{ blog!.author }}</p>
-    <img [src]="blog!.image" class="img-fluid mb-4 rounded" width="100%" alt="Blog Image">
-    <h1 class="mb-3">{{ blog!.title_ar }}</h1>
-    <div [innerHTML]="blogHtml" class="blog-content" dir="rtl"></div>
+<div class="container py-5 mt-5 pt-5" [attr.dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  <p class="text-muted">
+    {{ blog.created_at }} - {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }}
+  </p>
+
+  <img [src]="blog.image" class="img-fluid mb-4 rounded" width="100%" alt="Blog Image">
+
+  <h1 class="mb-3">
+    {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
+  </h1>
+
+  <div [innerHTML]="currentLang === 'ar' ? parseContent(blog.content_ar) : parseContent(blog.content)"
+    class="blog-content">
   </div>
+</div>
 }

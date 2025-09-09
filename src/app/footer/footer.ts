@@ -1,15 +1,16 @@
-import { ViewportScroller } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './footer.html',
   styleUrl: './footer.scss'
 })
 export class Footer {
 
-  constructor(private viewportScroller: ViewportScroller) {}
+  constructor(private viewportScroller: ViewportScroller, public translate: TranslateService) {}
 
 scrollToTop() {
   this.viewportScroller.scrollToPosition([0, 0]);

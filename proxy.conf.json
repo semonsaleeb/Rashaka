@@ -1,0 +1,11 @@
+{
+  "/fatoorah": {
+    "target": "https://api-sa.myfatoorah.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/fatoorah": ""
+    },
+    "logLevel": "debug"
+  }
+}

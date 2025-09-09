@@ -14,11 +14,13 @@ import { Downloadapp } from '../downloadapp/downloadapp';
 import { ComparePopup } from '../../../compare-popup/compare-popup';
 import { Product } from '../../../../models/Product';
 import { Category } from '../../../../models/Category';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
   selector: 'app-special-offers',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, Downloadapp, ComparePopup],
+  imports: [CommonModule, RouterModule, FormsModule, Downloadapp, ComparePopup, TranslateModule],
   templateUrl: './special-offers.html',
   styleUrls: ['./special-offers.scss'],
   providers: [ProductService]
@@ -39,6 +41,8 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   currentSlideIndex = 0;
   visibleCards = 3;
   progressValue = 80;
+  
+  currentLang: string = 'ar';
 
   compareProducts: Product[] = [];
   showComparePopup = false;
@@ -53,7 +57,9 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     public cartState: CartStateService,
     private router: Router,
     private route: ActivatedRoute,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private translate: TranslateService,
+    private languageService: LanguageService
   ) { }
 
   ngOnInit(): void {
@@ -74,6 +80,23 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
         isFavorite: favoriteIds.has(p.id)
       }));
     });
+
+
+    
+    this.translate.use(this.languageService.getCurrentLanguage());
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.translate.use(lang);
+    });
+
+    this.currentLang = this.languageService.getCurrentLanguage();
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+    });
+
   }
 
 

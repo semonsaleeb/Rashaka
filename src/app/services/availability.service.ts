@@ -22,6 +22,21 @@ getCentersAvailability(params?: any): Observable<any> {
 }
 
 
+  // // Fetch session types
+  // getSessionTypes(): Observable<any> {
+  //   const token = localStorage.getItem('token');
+  //   const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  //   return this.http.get(`${this.centersUrl}/session-types`, { headers });
+  // }
+
+  // // Fetch centers availability, optional session_type
+  // getCentersAvailability(session_type?: string): Observable<any> {
+  //   const token = localStorage.getItem('token');
+  //   const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+  //   const body = session_type ? { session_type } : {};
+  //   return this.http.post(`${this.centersUrl}/centers/availability`, body, { headers });
+  // }
 createAppointment(appointment: any): Observable<{ status: string; appointment: Appointment }> {
   const token = localStorage.getItem('token');
 
@@ -64,8 +79,23 @@ updateAppointmentTime(id: number, date: string, start: string) {
     Authorization: `Bearer ${token}`,
     Accept: 'application/json'
   });
-  return this.http.put(`${environment.apiCentersUrl}/appointments/${id}/updateTime`,
+  return this.http.put(`${environment.apiCentersUrl}/client/appointments/${id}/updateTime`,
     { date, start },
+    { headers }
+  );
+}
+getUpcomingAppointments(status: string[] = ['pending', 'confirmed']): Observable<any> {
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json'
+  });
+
+  // query params
+  const params = status.map(s => `status[]=${s}`).join('&');
+
+  return this.http.get<any>(
+    `${this.centersUrl}/appointments/upcoming?${params}`,
     { headers }
   );
 }

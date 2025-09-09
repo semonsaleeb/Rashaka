@@ -6,21 +6,17 @@
         اختيار الفرع
       </h5>
 
-    <div class="mb-3">
-  <label for="branchSelect" class="form-label">الفرع</label>
-<select 
-  id="branchSelect" 
-  class="form-select w-100 text-end" 
-  dir="rtl"
-  [(ngModel)]="selectedBranchId">
+      <div class="mb-3">
+        <label for="branchSelect" class="form-label">الفرع</label>
+        <select id="branchSelect" class="form-select w-100 text-end" dir="rtl" [(ngModel)]="selectedBranchId">
 
-  <option [ngValue]="null">-- اختر فرع --</option>
-  @for (center of centers; track center.id) {
-    <option [ngValue]="center.id">{{ center.name }}</option>
-  }
-</select>
+          <option [ngValue]="null">-- اختر فرع --</option>
+          @for (center of centers; track center.id) {
+          <option [ngValue]="center.id">{{ center.name }}</option>
+          }
+        </select>
 
-</div>
+      </div>
 
 
       <button class="btn btn-success w-25" (click)="goNext()" [disabled]="!selectedBranchId">

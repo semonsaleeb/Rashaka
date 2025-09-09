@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppointmentStateService } from '../../../services/appointment-state.service';
 import { AvailabilityService } from '../../../services/availability.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-branch',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './branch.html',
   styleUrls: ['./branch.scss']
 })

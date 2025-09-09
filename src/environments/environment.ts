@@ -1,6 +1,12 @@
-// src/environments/environment.ts (development)
+// export const environment = {
+//   production: false,
+//   apiBaseUrl: 'https://rshaka.ghaytiapp.com/api/client',
+//   apiCentersUrl: 'https://rshaka.ghaytiapp.com/api'
+// };
+
+
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://rshaka.ghaytiapp.com/api/client',
-  apiCentersUrl: 'https://rshaka.ghaytiapp.com/api'
+  apiBaseUrl: 'https://93-127-214-92.sslip.io/api/client',
+  apiCentersUrl: 'https://93-127-214-92.sslip.io/api'
 };

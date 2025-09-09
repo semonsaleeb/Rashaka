@@ -1,95 +1,76 @@
-<section class="hero-section justify-content-center text-white mt-lg-5 pt-lg-5 w-100" dir="rtl">
-  <img src="assets/Images/pattern.svg" style="position: absolute;
-                left: 0;
-                top: 20;
-                height: 200px;
-                width: 100px;
-                z-index: 1;">
+<section class="hero-section justify-content-center text-white mt-lg-5 pt-lg-5 w-100">
+  <img src="assets/Images/pattern.svg" style="position: absolute; left: 0; top: 20px; height: 200px; width: 100px; z-index: 1;">
+  
   <div class="container py-lg-5">
+    <div class="row align-items-center" >
 
-    <div class="row align-items-center">
-
+   
       <!-- Right Content Column -->
       <div class="col-lg-6 mb-4 mb-lg-0 text-center text-lg-end">
-
-        <h1 class="hero-title mb-5 ">
+        <h1 class="hero-title mb-5">
           <div class="highlight-wrapper">
-
-            <span class="highlight">رشاقتك هدفنا ..</span> وصحتك أولويتنا
+            <span class="highlight">{{ 'hero.highlight' | translate }}</span>
+            {{ 'hero.priority' | translate }}
           </div>
         </h1>
-        <p class="hero-description ">بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا</p>
-        <p class="hero-subtitle mb-5">اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك</p>
+
+        <p class="hero-description">{{ 'hero.description' | translate }}</p>
+        <p class="hero-subtitle mb-5">{{ 'hero.subtitle' | translate }}</p>
+
         <!-- features -->
         <div class="d-flex flex-nowrap justify-content-start text-end my-4 mb-5 features-container"
-          style="direction: rtl; overflow-x: auto;">
-
-          <div class="gradient-border rounded-4">
+             style="overflow-x: auto;">
+          <div class="gradient-border rounded-4" *ngFor="let feature of features">
             <div class="feature-item d-flex align-items-center gap-2">
-              <img src="assets/Images/checkmark-square-02.svg"> فحص مجاني
+              <img src="assets/Images/checkmark-square-02.svg">
+              {{ feature | translate }}
             </div>
           </div>
-
-          <div class="gradient-border rounded-4">
-            <div class="feature-item d-flex align-items-center gap-2">
-              <img src="assets/Images/checkmark-square-02.svg"> متابعة أسبوعية
-            </div>
-          </div>
-
-          <div class="gradient-border rounded-4">
-            <div class="feature-item d-flex align-items-center gap-2">
-              <img src="assets/Images/checkmark-square-02.svg"> ملتجات صحية
-            </div>
-          </div>
-
         </div>
 
-
-
         <!-- CTA Button desktop -->
-        <button class="btn btn-success cta-button d-none d-md-inline-block" (click)="navigateToReservation()">
-          <span class="arrow-icon">
-            <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
-          </span>
-          احجز الآن
-        </button>
-      </div>
+      <button class="btn btn-success cta-button d-none d-md-inline-block" (click)="navigateToReservation()">
+  <span class="arrow-icon">
+    <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
+  </span>
+  {{ 'cta.reserveNow' | translate }}
+</button>
 
-      <!-- Left Slider Column -->
-      <div class="col-lg-6 text-center ">
+      </div>
+    <!-- Left Slider Column -->
+      <div class="col-lg-6 text-center">
         <div class="slider-container mx-auto">
           <div class="slider-wrapper">
             <div class="slides d-flex" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
-              @for (image of sliderImages; track image) {
-              <div class="slide">
+              <div class="slide" *ngFor="let image of sliderImages; let i = index">
                 <img [src]="image.src" [alt]="image.alt" class="slide-image">
               </div>
-              }
             </div>
           </div>
 
           <!-- Slider Dots -->
           <div class="slider-dots mt-3">
-            @for (image of sliderImages; track image; let i = $index) {
-            <span class="dot" [class.active]="i === currentSlide" (click)="goToSlide(i)">
+            <span class="dot" *ngFor="let image of sliderImages; let i = index"
+                  [class.active]="i === currentSlide"
+                  (click)="goToSlide(i)">
             </span>
-            }
           </div>
-
         </div>
+
         <!-- CTA Button mobile -->
         <button class="btn btn-success cta-button d-inline-block d-md-none" (click)="onGetStarted()">
           <span class="arrow-icon">
             <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
           </span>
-          احجز الآن
+          {{ 'hero.cta' | translate }}
         </button>
       </div>
-
+     
     </div>
 
 
-  </div>
 
+  </div>
 </section>
-<img src="assets/Images/pattern.svg" class="pattern-img">
+
+

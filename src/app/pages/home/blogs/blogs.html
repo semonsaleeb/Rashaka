@@ -1,9 +1,9 @@
-<div class="blog-container w-100" dir="rtl">
+<div class="blog-container w-100" [attr.dir]="dir">
 
   <!-- GRID VIEW -->
   @if (mode === 'grid') {
   <div class="row px-lg-3 py-5  mx-lg-5" style="  background-color: #ffffff;">
-    <h1 class="text-center py-4"> المدونة </h1>
+    <h1 class="text-center py-4">{{ 'BLOG.TITLE' | translate }}</h1>
     @for (blog of blogs; track blog) {
     <div class="col-md-4 mb-4 p-3">
       <div class="card h-100" style="border-radius: 24px;">
@@ -14,36 +14,42 @@
           </div>
         </a>
         <div class="card-body">
-          <h5 class="card-title">{{ blog.title_ar }}</h5>
-          <p class="card-text" [innerHTML]="parseContent(blog.content_ar) | truncate:150"></p>
+           <h6 class="card-title fw-bold">
+    {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
+  </h6>
+
+  <p class="card-text text-muted two-lines-only"
+     [innerHTML]="parseContent(currentLang === 'ar' ? blog.content_ar : blog.content) | truncate:150">
+  </p>
         </div>
         <div class="card-footer bg-transparent">
           <small class="text-muted">
-            بواسطة: {{ blog.author || 'غير معروف' }} |
+            {{ 'BLOG.BY' | translate }}: {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }} |
             {{ blog.created_at | date: 'dd/MM/yyyy' }}
           </small>
         </div>
       </div>
     </div>
     }
-    <app-downloadapp dir="ltr"></app-downloadapp>
+    <app-downloadapp></app-downloadapp>
   </div>
   }
 
   @if (mode === 'carousel' && !loading) {
-  <div class="position-relative px-lg-5 px-3 py-5 mb-0" style="  background-color: #081E25;" dir="rtl">
+  <div class="position-relative px-lg-5 px-3 py-5 mb-0" style="  background-color: #081E25;">
     <div class="special-offers-container mb-5 ">
       <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center px-lg-3 mb-4">
-        <!-- العنوان -->
-        <h2 class="section-title mb-0 text-light fw-bold px-lg-5 px-2">أحدث المقالات</h2>
+      <div class="d-flex justify-content-between align-items-center px-lg-4 mb-4">
 
+        <!-- العنوان -->
+        <h2 class="section-title mb-0 text-light fw-bold px-lg-5 px-2">{{ 'BLOG.LATEST_ARTICLES' | translate }}</h2>
         <!-- الزر -->
         <a [routerLink]="['/home/blogs']"
           class="btn btn-link view-all-btn px-lg-5 px-4 text-light d-flex fs-5 align-items-center gap-1">
-          <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
-          عرض الكل
+          <img src="assets/Images/circle-arrow-up-right-02 (1).svg" [alt]="'BLOG.VIEW_ALL' | translate">
+          {{ 'BLOG.VIEW_ALL' | translate }}
         </a>
+
       </div>
 
       <!-- Carousel Container -->
@@ -64,15 +70,18 @@
                   </div>
                 </a>
                 <!-- Blog Body -->
-                <div class="card-body text-end ">
-                  <h6 class="card-title fw-bold ">{{ blog.title_ar }}</h6>
-                  <p class="card-text text-muted text-end two-lines-only"
-                    [innerHTML]="parseContent(blog.content_ar) | truncate:150">
-                  </p>
-                  <div class="text-muted small">
-                    بواسطة: {{ blog.author || 'غير معروف' }} |
+                <div class="card-body" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+                  <h6 class="card-title fw-bold">
+    {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
+  </h6>
+
+  <p class="card-text text-muted two-lines-only"
+     [innerHTML]="parseContent(currentLang === 'ar' ? blog.content_ar : blog.content) | truncate:150">
+  </p>
+                  <small class="text-muted">
+                    {{ 'BLOG.BY' | translate }}: {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }} |
                     {{ blog.created_at | date: 'dd/MM/yyyy' }}
-                  </div>
+                  </small>
                 </div>
               </div>
             </div>

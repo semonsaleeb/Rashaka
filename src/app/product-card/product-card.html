@@ -3,7 +3,7 @@
 <div class="container py-4 mt-5" dir="rtl">
   <div class="row g-4">
     <!-- Product Image + Thumbnails -->
-    <div class="col-md-5">
+    <div class="col-md-5 rounded" style=" border: 1px solid #00000033;">
       <div class="p-3 bg-white text-center position-relative">
         <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
 
@@ -37,8 +37,14 @@
     <!-- Product Info -->
     <div class="col-md-7">
       <div class="p-4 bg-white h-100 d-flex flex-column">
-        <h4 class="fw-bold">{{ product.name_ar }}</h4>
+        <p *ngIf="product.is_top_seller"
+          class=" d-inline-flex align-items-center p-2 rounded w-25"
+          style="border: 1px solid #00000033;">
+          <img src="assets/Images/star-circle.svg" alt="" class="me-2 mx-2"> الأكثر مبيعاً
+        </p>
 
+
+        <h4 class="fw-bold fs-1">{{ product.name_ar }}</h4>
         <!-- Name + Stock -->
         <div class="mb-3">
           <div class="mb-2 d-flex align-items-center">

@@ -4,7 +4,7 @@ import { OrderService } from '../../../services/order.service';
 import { Order } from '../../../../models/Order';
 import { NgbCarousel, NgbCarouselModule, NgbSlideEvent } from '@ng-bootstrap/ng-bootstrap';
 import { catchError, forkJoin, of } from 'rxjs';
-import '@angular/localize/init';
+// import '@angular/localize/init';
 
 @Component({
   selector: 'app-orders',

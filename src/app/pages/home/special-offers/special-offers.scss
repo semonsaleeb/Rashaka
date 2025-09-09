@@ -110,7 +110,6 @@ button.rounded-circle {
     min-width: 300px;
     background: white !important;
     border-radius: 8px;
-    text-align: end;
 
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -132,24 +131,17 @@ button.rounded-circle {
     padding: 1.5rem;
 
     .product-name {
-      text-align: end;
 
-      text-align: end;
       margin-right: 1rem;
       margin: 0 0 0.5rem;
       font-size: 1.2rem;
       color: #222;
     }
 
-    .card-title {
-      text-align: right;
-
-    }
+ 
 
     .product-description {
-      text-align: right;
       margin-right: 1rem;
-      text-align: end;
 
       background-color: white;
       color: #666;
@@ -197,7 +189,6 @@ button.rounded-circle {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  text-align: end;
   color: #666;
 }
 
@@ -494,7 +485,6 @@ button.rounded-circle {
     min-width: 300px;
     background: white;
     border-radius: 8px;
-    text-align: end;
 
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -512,30 +502,22 @@ button.rounded-circle {
   }
 
   .product-info {
-    text-align: right;
     margin-right: 1rem;
     justify-content: end;
     padding: 1.5rem;
 
     .product-name {
-      text-align: end;
 
-      text-align: right;
       margin-right: 1rem;
       margin: 0 0 0.5rem;
       font-size: 1.2rem;
       color: #222;
     }
 
-    .card-title {
-      text-align: right;
-
-    }
+  
 
     .product-description {
-      text-align: right;
       margin-right: 1rem;
-      text-align: end;
 
       background-color: white;
       color: #666;
@@ -583,7 +565,6 @@ button.rounded-circle {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  text-align: end;
   color: #666;
 }
 
@@ -862,7 +843,6 @@ a.text-decoration-none:hover .card {
   background-color: #f8f9fa;
   border-radius: 20px;
   min-width: 30px;
-  text-align: center;
 }
 
 /* Mobile Adjustments */

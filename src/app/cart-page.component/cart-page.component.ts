@@ -78,59 +78,48 @@ export class CartPageComponent implements OnInit {
           const data: CartResponse = response?.data || {
             items: [],
             totalPrice: 0,
+            totalSalePrice: 0,
+            discountAmount: 0,
             totalQuantity: 0
           };
 
-          this.processCartItems(data.items || []);
+          this.processCartItems(data); // 🔥 هنمرر الـ object كله
         },
         error: (err) => console.error('❌ Error loading cart:', err)
       });
     } else {
       // 👤 Guest user
       const data = this.cartService.getGuestCart();
-      this.processCartItems(data.items || []);
+      this.processCartItems(data);
     }
   }
 
   /**
-   * 🧮 Shared function for calculating totals (works for both guest & logged-in users)
+   * 🧮 دلوقتي هنستخدم القيم من الـ API مباشرة
    */
-  private processCartItems(items: CartItem[]) {
-    let originalTotal = 0;
-    let finalTotal = 0;
-    let discountTotal = 0;
+  private processCartItems(data: CartResponse) {
+    const items = Array.isArray(data.items) ? data.items : [];
 
-    this.cartItems = items.map((item) => {
-      const qty = item.quantity || 0;
+    this.cartItems = items.map((item) => ({
+      ...item,
+      nameAr: item.product_name_ar || 'منتج بدون اسم',
+    }));
 
-      const unitPriceNum = parseFloat(item.unit_price as any) || 0;        // السعر الأصلي
-      const saleUnitPriceNum = parseFloat(item.sale_unit_price as any) || 0; // السعر بعد الخصم
-      const discountedUnit = saleUnitPriceNum > 0 ? saleUnitPriceNum : unitPriceNum;
+    // ناخد القيم مباشرة من الـ backend
+    this.totalPrice = this.round2(this.toNumber(data.cart_total));
+    this.totalSalePrice = this.round2(this.toNumber(data.sale_cart_total));
+    // this.discountAmount = this.round2(this.toNumber(data.discountAmount));
 
-      originalTotal += unitPriceNum * qty;
-      finalTotal += discountedUnit * qty;
-      discountTotal += Math.max(unitPriceNum - discountedUnit, 0) * qty;
-
-      return {
-        ...item,
-        nameAr: item.product_name_ar || 'منتج بدون اسم',
-        unitPriceNum,
-        saleUnitPriceNum,
-        finalPrice: discountedUnit
-      };
-    });
-
-    this.totalPrice = this.round2(originalTotal);
-    this.totalSalePrice = this.round2(finalTotal);
-    this.discountAmount = this.round2(discountTotal);
+    // progress (مثال)
     this.progressValue = Math.min((this.totalSalePrice / 1000) * 100, 100);
 
-    console.log('📊 Totals:', {
+    console.log('📊 Totals (from API):', {
       totalPrice: this.totalPrice,
       totalSalePrice: this.totalSalePrice,
       discountAmount: this.discountAmount
     });
   }
+
 
 
   private handleCartResponse(data: CartResponse) {
@@ -185,9 +174,15 @@ export class CartPageComponent implements OnInit {
     if (this.token) {
       this.cartService.getCart().subscribe({
         next: (res) => {
-          const items = res.data?.items || [];
-          this.processCartItems(items);
-          this.cartState.updateItems(items); // 🔥 هنا يحدث الـ BehaviorSubject
+          const data: CartResponse = res.data || {
+            items: [],
+            cart_total: 0,
+            sale_cart_total: 0,
+            totalQuantity: 0
+          };
+
+          this.processCartItems(data); // ✅ pass full object
+          this.cartState.updateItems(data.items);
         },
         error: () => {
           this.cartItems = [];
@@ -195,11 +190,12 @@ export class CartPageComponent implements OnInit {
         }
       });
     } else {
-      const guestCart = this.cartService.getGuestCart().items || [];
-      this.processCartItems(guestCart);
-      this.cartState.updateItems(guestCart); // 🔥 تحديث الـ BehaviorSubject للـ guest
+      const data = this.cartService.getGuestCart();
+      this.processCartItems(data);             // ✅ also pass full object
+      this.cartState.updateItems(data.items);  // not just array
     }
   }
+
 
 
   // ================== Getters ==================

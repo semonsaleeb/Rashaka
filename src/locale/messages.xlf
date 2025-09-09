@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="ar">
+  <file id="ngi18n" original="ng.template">
+    <unit id="ngb.alert.close">
+      <notes>
+        <note category="location">node_modules/src/alert/alert.ts:50</note>
+      </notes>
+      <segment>
+        <source>Close</source>
+      </segment>
+    </unit>
+    <unit id="ngb.carousel.slide-number">
+      <notes>
+        <note category="location">node_modules/src/carousel/carousel.ts:131</note>
+        <note category="description">Currently selected slide number read by screen reader</note>
+      </notes>
+      <segment>
+        <source> Slide <ph id="0" equiv="INTERPOLATION"/> of <ph id="1" equiv="INTERPOLATION_1"/> </source>
+      </segment>
+    </unit>
+    <unit id="ngb.carousel.previous">
+      <notes>
+        <note category="location">node_modules/src/carousel/carousel.ts:140,141</note>
+      </notes>
+      <segment>
+        <source>Previous</source>
+      </segment>
+    </unit>
+    <unit id="ngb.carousel.next">
+      <notes>
+        <note category="location">node_modules/src/carousel/carousel.ts:148</note>
+      </notes>
+      <segment>
+        <source>Next</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.select-month">
+      <notes>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation-select.ts:91</note>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation-select.ts:91</note>
+      </notes>
+      <segment>
+        <source>Select month</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.select-year">
+      <notes>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation-select.ts:91</note>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation-select.ts:91</note>
+      </notes>
+      <segment>
+        <source>Select year</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.previous-month">
+      <notes>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation.ts:83,85</note>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation.ts:96,98</note>
+      </notes>
+      <segment>
+        <source>Previous month</source>
+      </segment>
+    </unit>
+    <unit id="ngb.datepicker.next-month">
+      <notes>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation.ts:112</note>
+        <note category="location">node_modules/src/datepicker/datepicker-navigation.ts:112</note>
+      </notes>
+      <segment>
+        <source>Next month</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.first">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:289,290</note>
+      </notes>
+      <segment>
+        <source>««</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.previous">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:300,301</note>
+      </notes>
+      <segment>
+        <source>«</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.next">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:314</note>
+      </notes>
+      <segment>
+        <source>»</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.last">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:324</note>
+      </notes>
+      <segment>
+        <source>»»</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.first-aria">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:342,344</note>
+      </notes>
+      <segment>
+        <source>First</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.previous-aria">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:358</note>
+      </notes>
+      <segment>
+        <source>Previous</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.next-aria">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:376,377</note>
+      </notes>
+      <segment>
+        <source>Next</source>
+      </segment>
+    </unit>
+    <unit id="ngb.pagination.last-aria">
+      <notes>
+        <note category="location">node_modules/src/pagination/pagination.ts:395</note>
+      </notes>
+      <segment>
+        <source>Last</source>
+      </segment>
+    </unit>
+    <unit id="ngb.progressbar.value">
+      <notes>
+        <note category="location">node_modules/src/progressbar/progressbar.ts:41</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION"/></source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.HH">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:232,234</note>
+      </notes>
+      <segment>
+        <source>HH</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.hours">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:250,254</note>
+      </notes>
+      <segment>
+        <source>Hours</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.MM">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:269,270</note>
+      </notes>
+      <segment>
+        <source>MM</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.minutes">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:288</note>
+      </notes>
+      <segment>
+        <source>Minutes</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-hours">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:299,300</note>
+      </notes>
+      <segment>
+        <source>Increment hours</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-hours">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:310,313</note>
+      </notes>
+      <segment>
+        <source>Decrement hours</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-minutes">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:333,337</note>
+      </notes>
+      <segment>
+        <source>Increment minutes</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-minutes">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:355,356</note>
+      </notes>
+      <segment>
+        <source>Decrement minutes</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.SS">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:369,370</note>
+      </notes>
+      <segment>
+        <source>SS</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.seconds">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:388,389</note>
+      </notes>
+      <segment>
+        <source>Seconds</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.increment-seconds">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:405,410</note>
+      </notes>
+      <segment>
+        <source>Increment seconds</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.decrement-seconds">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:427,429</note>
+      </notes>
+      <segment>
+        <source>Decrement seconds</source>
+      </segment>
+    </unit>
+    <unit id="ngb.timepicker.PM">
+      <notes>
+        <note category="location">node_modules/src/timepicker/timepicker.ts:440</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION"/></source>
+      </segment>
+    </unit>
+    <unit id="ngb.toast.close-aria">
+      <notes>
+        <note category="location">node_modules/src/toast/toast.ts:92</note>
+      </notes>
+      <segment>
+        <source>Close</source>
+      </segment>
+    </unit>
+    <unit id="7033848149208691695">
+      <notes>
+        <note category="location">src/app/header/header.html:8</note>
+        <note category="location">src/app/header/header.html:8</note>
+      </notes>
+      <segment>
+        <source>Happy Fitness</source>
+      </segment>
+    </unit>
+    <unit id="4622269494713454615">
+      <notes>
+        <note category="location">src/app/header/header.html:17</note>
+      </notes>
+      <segment>
+        <source>ابحث عن منتجات</source>
+      </segment>
+    </unit>
+    <unit id="4580988005648117665">
+      <notes>
+        <note category="location">src/app/header/header.html:19,20</note>
+      </notes>
+      <segment>
+        <source>Search</source>
+      </segment>
+    </unit>
+    <unit id="7616770651914901276">
+      <notes>
+        <note category="location">src/app/header/header.html:32</note>
+      </notes>
+      <segment>
+        <source>Product</source>
+      </segment>
+    </unit>
+    <unit id="8163377888322583105">
+      <notes>
+        <note category="location">src/app/header/header.html:37,38</note>
+      </notes>
+      <segment>
+        <source>لا توجد منتجات</source>
+      </segment>
+    </unit>
+    <unit id="2392488717875840729">
+      <notes>
+        <note category="location">src/app/header/header.html:49</note>
+        <note category="location">src/app/header/header.html:59</note>
+      </notes>
+      <segment>
+        <source>User</source>
+      </segment>
+    </unit>
+    <unit id="loginText">
+      <notes>
+        <note category="location">src/app/header/header.html:50,52</note>
+        <note category="location">src/app/header/header.html:307,309</note>
+      </notes>
+      <segment>
+        <source>تسجيل الدخول</source>
+      </segment>
+    </unit>
+    <unit id="welcomeMessage">
+      <notes>
+        <note category="location">src/app/header/header.html:60,61</note>
+      </notes>
+      <segment>
+        <source>مرحباً، <ph id="0" equiv="INTERPOLATION" disp="{{ client?.name || &apos;المستخدم&apos; }}"/></source>
+      </segment>
+    </unit>
+    <unit id="4915431133669985304">
+      <notes>
+        <note category="location">src/app/header/header.html:64,65</note>
+      </notes>
+      <segment>
+        <source>Profile</source>
+      </segment>
+    </unit>
+    <unit id="1035504139495845422">
+      <notes>
+        <note category="location">src/app/header/header.html:65,66</note>
+      </notes>
+      <segment>
+        <source>الملف الشخصي</source>
+      </segment>
+    </unit>
+    <unit id="3797778920049399855">
+      <notes>
+        <note category="location">src/app/header/header.html:68,69</note>
+      </notes>
+      <segment>
+        <source>Logout</source>
+      </segment>
+    </unit>
+    <unit id="2511094015898140692">
+      <notes>
+        <note category="location">src/app/header/header.html:69,70</note>
+      </notes>
+      <segment>
+        <source>تسجيل الخروج</source>
+      </segment>
+    </unit>
+    <unit id="4085930761302974863">
+      <notes>
+        <note category="location">src/app/header/header.html:106</note>
+      </notes>
+      <segment>
+        <source>Favorites</source>
+      </segment>
+    </unit>
+    <unit id="4398863504443682316">
+      <notes>
+        <note category="location">src/app/header/header.html:117</note>
+      </notes>
+      <segment>
+        <source>Cart</source>
+      </segment>
+    </unit>
+    <unit id="3897859590371293520">
+      <notes>
+        <note category="location">src/app/header/header.html:168,169</note>
+        <note category="description">viewAllText</note>
+      </notes>
+      <segment>
+        <source>عرض الكل</source>
+      </segment>
+    </unit>
+    <unit id="bookFreeCheckup">
+      <notes>
+        <note category="location">src/app/header/header.html:177,178</note>
+      </notes>
+      <segment>
+        <source>احجز فحص مجاني الآن</source>
+      </segment>
+    </unit>
+    <unit id="checkupDescription">
+      <notes>
+        <note category="location">src/app/header/header.html:179,180</note>
+      </notes>
+      <segment>
+        <source> نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ). </source>
+      </segment>
+    </unit>
+    <unit id="cta-reserve-now">
+      <notes>
+        <note category="location">src/app/header/header.html:186,187</note>
+        <note category="location">src/app/pages/home/hero/hero.html:47,51</note>
+      </notes>
+      <segment>
+        <source>احجز الآن</source>
+      </segment>
+    </unit>
+    <unit id="7822192719285101528">
+      <notes>
+        <note category="location">src/app/header/header.html:190</note>
+      </notes>
+      <segment>
+        <source>Doctors</source>
+      </segment>
+    </unit>
+    <unit id="whatsappText">
+      <notes>
+        <note category="location">src/app/header/header.html:205,206</note>
+      </notes>
+      <segment>
+        <source>واتساب</source>
+      </segment>
+    </unit>
+    <unit id="searchPlaceholder">
+      <notes>
+        <note category="location">src/app/header/header.html:258,259</note>
+      </notes>
+      <segment>
+        <source>ابحث عن منتجات</source>
+      </segment>
+    </unit>
+    <unit id="viewAllText">
+      <notes>
+        <note category="location">src/app/header/header.html:362,364</note>
+      </notes>
+      <segment>
+        <source>عرض الكل</source>
+      </segment>
+    </unit>
+    <unit id="7292478410121998819">
+      <notes>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:11,14</note>
+      </notes>
+      <segment>
+        <source> نزّل تطبيق &quot;الرياضة السعيدة&quot; <ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br&gt;"/> واستفد من عروض حصرية! </source>
+      </segment>
+    </unit>
+    <unit id="7289796902827461621">
+      <notes>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:18,19</note>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:70,71</note>
+      </notes>
+      <segment>
+        <source>خصومات حصرية لمستخدمي التطبيق</source>
+      </segment>
+    </unit>
+    <unit id="1805813796625030430">
+      <notes>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:22,23</note>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:26,27</note>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:78,79</note>
+      </notes>
+      <segment>
+        <source>استشارات مباشرة عبر التطبيق</source>
+      </segment>
+    </unit>
+    <unit id="1863731253187464424">
+      <notes>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:63,64</note>
+      </notes>
+      <segment>
+        <source> نزّل تطبيق &quot;الرياضة السعيدة&quot; واستفد من <ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br&gt;"/> !عروض حصرية </source>
+      </segment>
+    </unit>
+    <unit id="6441642259443944407">
+      <notes>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:74,75</note>
+      </notes>
+      <segment>
+        <source>تسجيل بالعضوية أول بأول</source>
+      </segment>
+    </unit>
+    <unit id="5819262290060876529">
+      <notes>
+        <note category="location">src/app/pages/home/downloadapp/downloadapp.html:86,87</note>
+      </notes>
+      <segment>
+        <source>افحص الـ QR كود!</source>
+      </segment>
+    </unit>
+    <unit id="hero-highlight">
+      <notes>
+        <note category="location">src/app/pages/home/hero/hero.html:18,19</note>
+      </notes>
+      <segment>
+        <source>رشاقتك هدفنا ..</source>
+      </segment>
+    </unit>
+    <unit id="hero-priority">
+      <notes>
+        <note category="location">src/app/pages/home/hero/hero.html:19,21</note>
+      </notes>
+      <segment>
+        <source>وصحتك أولويتنا</source>
+      </segment>
+    </unit>
+    <unit id="hero-description">
+      <notes>
+        <note category="location">src/app/pages/home/hero/hero.html:24,27</note>
+      </notes>
+      <segment>
+        <source> بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا </source>
+      </segment>
+    </unit>
+    <unit id="hero-subtitle">
+      <notes>
+        <note category="location">src/app/pages/home/hero/hero.html:28,31</note>
+      </notes>
+      <segment>
+        <source> اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك </source>
+      </segment>
+    </unit>
+    <unit id="cta-reserve-now-mobile">
+      <notes>
+        <note category="location">src/app/pages/home/hero/hero.html:77,81</note>
+      </notes>
+      <segment>
+        <source><pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;arrow-icon&quot; [ngClass]=&quot;{&apos;ms-2&apos;: currentLang === &apos;ar&apos;, &apos;me-2&apos;: currentLang === &apos;en&apos;}&quot;&gt;" dispEnd="&lt;/span&gt;"><ph id="1" equiv="TAG_IMG" type="image" disp="&lt;img src=&quot;assets/Images/circle-arrow-up-right-02.svg&quot; alt=&quot;Arrow Icon&quot;&gt;"/></pc> احجز الآن </source>
+      </segment>
+    </unit>
+  </file>
+</xliff>

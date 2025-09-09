@@ -2,22 +2,27 @@ import { Component, Input, OnInit, AfterViewInit, HostListener } from '@angular/
 import { CommonModule } from '@angular/common';
 import { PricingService } from '../../../services/pricing.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Plan } from '../../../../models/plan.model';
+import {  City, Feature, Plan } from '../../../../models/plan.model';
 import { AuthService } from '../../../services/auth.service';
 import { Downloadapp } from '../downloadapp/downloadapp';
 import { SucesStory } from '../suces-story/suces-story';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule, RouterModule, Downloadapp, SucesStory],
+  imports: [CommonModule, RouterModule, Downloadapp, SucesStory, TranslateModule],
   templateUrl: './pricing.html',
   styleUrls: ['./pricing.scss']
 })
 export class Pricing implements OnInit, AfterViewInit {
   @Input() mode: 'carousel' | 'grid' = 'grid';
+  lang: 'ar' | 'en' = 'ar'; // default Arabic
+
+
 
   selectedPlan: string = 'nutrition';
   plans: Plan[] = [];
@@ -35,6 +40,8 @@ export class Pricing implements OnInit, AfterViewInit {
   subscribedPlanId: number | null = null;
   isLoggedIn = false;
 
+  currentLang: string = 'ar';
+
   // Popups
   selectedPlanForPopup: Plan | null = null;
   showPopup = false;
@@ -50,7 +57,9 @@ export class Pricing implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private auth: AuthService,
-  ) {}
+    private translate: TranslateService,
+    private languageService: LanguageService
+  ) { }
 
   ngOnInit() {
     // حالة تسجيل الدخول (مزامنة مستمرة)
@@ -66,6 +75,24 @@ export class Pricing implements OnInit, AfterViewInit {
       const pkgId = Number(params['id']);
       this.loadPackages(pkgId, openPopup);
     });
+
+
+    this.translate.use(this.languageService.getCurrentLanguage());
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.translate.use(lang);
+    });
+
+    this.currentLang = this.languageService.getCurrentLanguage();
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+    });
+
+
+
   }
 
   ngAfterViewInit(): void {
@@ -97,9 +124,9 @@ export class Pricing implements OnInit, AfterViewInit {
     if (this.currentSlideIndex < 0) this.currentSlideIndex = 0;
   }
 
-public getMaxIndex(): number {
-  return this.plans.length - 1;
-}
+  public getMaxIndex(): number {
+    return this.plans.length - 1;
+  }
 
 
   getDotsArray() {
@@ -130,38 +157,70 @@ public getMaxIndex(): number {
 
   // === Data ===
 
-  loadPackages(pkgId?: number, openPopup?: boolean): void {
-    this.isLoading = true;
-    this.pricingService.getPackages(this.selectedPlan).subscribe({
-      next: res => {
-        this.plans = res.packages.map((pkg: any, index: number): Plan => ({
+loadPackages(pkgId?: number, openPopup?: boolean): void {
+  this.isLoading = true;
+
+  this.pricingService.getPackages(this.selectedPlan).subscribe({
+    next: res => {
+      this.plans = res.packages.map((pkg: any, index: number): Plan => {
+        // Features
+        const features: Feature[] = pkg.features.map((f: any) => ({
+          type: f.type,
+          text_ar: f.text_ar,
+          text_en: f.text_en
+        }));
+
+        // Cities
+        const cities: City[] = pkg.cities.map((c: any) => ({
+          name: c.name,
+          name_ar: c.name_ar
+        }));
+
+        // Active offer (optional)
+        const active_offer = pkg.active_offer ? {
+          id: pkg.active_offer.id,
+          discount_type: pkg.active_offer.discount_type,
+          discount_value: pkg.active_offer.discount_value,
+          start_date: pkg.active_offer.start_date,
+          end_date: pkg.active_offer.end_date
+        } : undefined;
+
+        return {
           id: pkg.id,
           type: pkg.type,
           title: pkg.name,
-          price: pkg.price_after || pkg.price_before,
-          sessions: pkg.features.length,
-          cities: this.formatCities(pkg.cities),
-          features: pkg.features.map((f: any) => f.text_ar),
-          styleType: (['basic', 'premium', 'standard'][index % 3] as 'basic' | 'premium' | 'standard')
-        }));
+          price_after: pkg.price_after,
+          price_before: pkg.price_before,
+          sessions: pkg.duration,
+          cities,        // store full array
+          features,      // store full feature objects
+          styleType: (['basic', 'premium', 'standard'][index % 3] as 'basic' | 'premium' | 'standard'),
+          active_offer   // store the active offer
+        };
+      });
 
-        // إعادة ضبط المؤشر وضمان صلاحيته
-        this.currentSlideIndex = 0;
-        this.clampIndex();
-        this.isLoading = false;
+      this.currentSlideIndex = 0;
+      this.clampIndex();
+      this.isLoading = false;
 
-        // فتح البوب أب إذا فيه باراميتر
-        if (openPopup && pkgId) {
-          const pkg = this.plans.find(p => p.id === pkgId);
-          if (pkg) this.openPopup(pkg);
-        }
-      },
-      error: err => {
-        console.error('Failed to load packages', err);
-        this.isLoading = false;
+      if (openPopup && pkgId) {
+        const pkg = this.plans.find(p => p.id === pkgId);
+        if (pkg) this.openPopup(pkg);
       }
-    });
-  }
+    },
+    error: err => {
+      console.error('Failed to load packages', err);
+      this.isLoading = false;
+    }
+  });
+}
+
+
+
+
+
+
+
 
   changePlanType(type: string): void {
     this.selectedPlan = type;
@@ -173,6 +232,11 @@ public getMaxIndex(): number {
     if (!cities || cities.length === 0) return 'كل المدن';
     return cities.map(city => city.name_ar || city.name).join('، ');
   }
+getCitiesText(cities: City[]): string {
+  if (!cities || cities.length === 0) return this.currentLang === 'ar' ? 'كل المدن' : 'All Cities';
+  return cities.map(c => this.currentLang === 'ar' ? c.name_ar : c.name).join(', ');
+}
+
 
   // === Expand features ===
 
@@ -204,11 +268,11 @@ public getMaxIndex(): number {
       .subscribeToPackageFromWeb(this.selectedPlanForPopup.id, 'cash', true)
       .subscribe({
         next: (res) => {
-          console.log('تم الاشتراك بنجاح', res);
+          // console.log('تم الاشتراك بنجاح', res);
           this.showPopup = false;
         },
         error: (err) => {
-          console.error('خطأ في الاشتراك', err);
+          // console.error('خطأ في الاشتراك', err);
         }
       });
   }
@@ -283,7 +347,7 @@ public getMaxIndex(): number {
       }
     }
   }
- goToLogin() {
+  goToLogin() {
     this.showLoginPopup = false;
     this.router.navigate(['/auth/login']);
   }
@@ -296,5 +360,10 @@ public getMaxIndex(): number {
 
   trackPlan(_index: number, plan: Plan) {
     return plan?.id ?? _index;
+  }
+
+
+  get textDir(): 'rtl' | 'ltr' {
+    return this.lang === 'ar' ? 'rtl' : 'ltr';
   }
 }

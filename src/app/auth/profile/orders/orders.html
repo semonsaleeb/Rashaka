@@ -74,7 +74,7 @@
         <!-- النقاط -->
         <div class="d-flex gap-2 justify-content-center justify-content-md-start" dir="ltr">
             @for (group of groupedOrders; track group; let i = $index) {
-            <button type="button" class="dot btn btn-sm rounded-circle" [class.active]="i === currentIndex"
+            <button type="button" class="dot btn btn-sm " [class.active]="i === currentIndex"
                 (click)="goToSlide(i)"></button>
             }
         </div>

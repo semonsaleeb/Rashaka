@@ -20,4 +20,5 @@ export interface Product {
   price_after: string;
 average_rating?: number ;
  reviews?: Review[];
+ is_top_seller:boolean;
 }

@@ -4,7 +4,7 @@
   <div class="mb-3">
     <label class="form-label">الأسم:</label>
     <input type="text" formControlName="name" class="form-control"
-      [class.is-invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+      [class.is-invalid]="(registerForm.get('name')?.invalid && registerForm.get('name')?.touched) || apiErrors?.name">
     <div *ngIf="registerForm.get('name')?.hasError('required') && registerForm.get('name')?.touched"
       class="invalid-feedback">
       يرجى إدخال الاسم الكامل
@@ -13,13 +13,16 @@
       class="invalid-feedback">
       الاسم طويل جدًا، الحد الأقصى 255 حرف
     </div>
+    <div *ngIf="apiErrors?.name" class="invalid-feedback d-block">
+      {{ apiErrors.name }}
+    </div>
   </div>
 
   <!-- البريد الإلكتروني -->
   <div class="mb-3">
     <label class="form-label">البريد الإلكتروني:</label>
     <input type="email" formControlName="email" class="form-control"
-      [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+      [class.is-invalid]="(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) || apiErrors?.email">
     <div *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched"
       class="invalid-feedback">
       يرجى إدخال البريد الإلكتروني
@@ -39,24 +42,25 @@
       class="invalid-feedback">
       يرجى إدخال بريد إلكتروني صالح يحتوي على @ و .
     </div>
-
+    <div *ngIf="apiErrors?.email" class="invalid-feedback d-block">
+      {{ apiErrors.email }}
+    </div>
   </div>
 
   <!-- رقم الهاتف -->
   <div class="mb-3">
     <label class="form-label">رقم الهاتف:</label>
     <input type="tel" formControlName="phone" class="form-control"
-      [class.is-invalid]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+      [class.is-invalid]="(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) || apiErrors?.phone">
     <div *ngIf="registerForm.get('phone')?.hasError('required') && registerForm.get('phone')?.touched"
       class="invalid-feedback">
       يرجى إدخال رقم الهاتف
     </div>
-   <div *ngIf="registerForm.get('phone')?.hasError('pattern')" class="invalid-feedback d-block">
-  رقم الهاتف غير صالح، يجب أن يكون رقم مصري (11 رقم يبدأ بـ 01) أو سعودي (10 أرقام يبدأ بـ 05 أو +9665)
-</div>
-
-    <div *ngIf="registerForm.get('phone')?.hasError('phoneTaken')" class="invalid-feedback d-block">
-      رقم الهاتف مستخدم بالفعل
+    <div *ngIf="registerForm.get('phone')?.hasError('pattern')" class="invalid-feedback d-block">
+      رقم الهاتف غير صالح، يجب أن يكون رقم مصري (11 رقم يبدأ بـ 01) أو سعودي (10 أرقام يبدأ بـ 05 أو +9665)
+    </div>
+    <div *ngIf="apiErrors?.phone" class="invalid-feedback d-block">
+      {{ apiErrors.phone }}
     </div>
   </div>
 
@@ -65,7 +69,7 @@
     <label class="form-label">كلمة المرور:</label>
     <div class="position-relative" dir="rtl">
       <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5"
-        [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+        [class.is-invalid]="(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) || apiErrors?.password"
         placeholder="كلمة المرور">
       <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="cursor: pointer;"
         (click)="togglePasswordVisibility()">
@@ -80,6 +84,9 @@
       class="invalid-feedback d-block text-end">
       كلمة المرور ضعيفة، يجب أن تحتوي على أحرف كبيرة وصغيرة وأرقام وطول ≥ 8
     </div>
+    <div *ngIf="apiErrors?.password" class="invalid-feedback d-block text-end">
+      {{ apiErrors.password }}
+    </div>
   </div>
 
   <!-- تأكيد كلمة المرور -->
@@ -88,7 +95,7 @@
     <div class="position-relative" dir="rtl">
       <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="password_confirmation"
         class="form-control ps-5"
-        [class.is-invalid]="registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched"
+        [class.is-invalid]="(registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched) || apiErrors?.password_confirmation"
         placeholder="تأكيد كلمة المرور">
       <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="cursor: pointer;"
         (click)="toggleConfirmPasswordVisibility()">
@@ -99,6 +106,9 @@
       class="invalid-feedback text-end d-block">
       كلمات المرور غير متطابقة
     </div>
+    <div *ngIf="apiErrors?.password_confirmation" class="invalid-feedback text-end d-block">
+      {{ apiErrors.password_confirmation }}
+    </div>
   </div>
 
   <!-- زر التسجيل -->
@@ -107,10 +117,9 @@
     تسجيل
   </button>
 
-
-  <!-- رسائل النجاح والخطأ -->
+  <!-- رسائل النجاح والخطأ العامة -->
   <div *ngIf="successMessage" class="alert alert-success mt-3 text-center">{{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">{{ errorMessage }}</div>
+  <div *ngIf="apiErrors?.general" class="alert alert-danger mt-3 text-center">{{ apiErrors.general }}</div>
 </form>
 
 <!-- Success Modal -->

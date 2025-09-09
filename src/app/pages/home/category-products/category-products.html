@@ -21,43 +21,47 @@
       <div class="special-offers-container mb-5">
 
         <!-- Header Section -->
-        <div class="header-section mb-4 px-3" dir="rtl">
+        <div class="header-section mb-4 px-3">
           <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-            <h2 class="section-title mb-0 fw-bold">منتجاتنا المميزة</h2>
+            <h2 class="section-title mb-0 fw-bold">
+              {{ 'FEATURED_PRODUCTS' | translate }}
+            </h2>
             <a [routerLink]="['/home/category-products']"
               class="btn btn-link view-all-btn text-light d-flex align-items-center gap-2 p-0">
-              <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="عرض الكل">
-              عرض الكل
+              <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="{{ 'VIEW_ALL' | translate }}" width="25px">
+              {{ 'VIEW_ALL' | translate }}
             </a>
           </div>
 
           <!-- Category Buttons -->
           <div class="category-buttons d-flex gap-2 py-3" [ngClass]="{'mobile-scroll': isMobile}">
+            <!-- All button -->
             <button (click)="filterByCategory('all')" class="fw-bold" [ngClass]="{
-              'btn': true,
-              'btn-sm': true,
-              'btn-success': selectedCategory === 'all',
-              'btn-outline-success': selectedCategory !== 'all'
-            }">
-              الكل
+            'btn': true,
+            'btn-sm': true,
+            'btn-success': selectedCategory === 'all',
+            'btn-outline-success': selectedCategory !== 'all'
+          }">
+              {{ currentLang === 'ar' ? 'الكل' : 'All' }}
             </button>
 
-            @for (category of categories; track category.id) {
-            <button (click)="filterByCategory(category.id)" class="fw-bold" [ngClass]="{
-              'btn': true,
-              'btn-sm': true,
-              'btn-success': selectedCategory === category.id,
-              'btn-outline-success': selectedCategory !== category.id
-            }">
-              {{ category.name_ar }}
+            <!-- Category buttons -->
+            <button *ngFor="let category of categories" (click)="filterByCategory(category.id)" class="fw-bold"
+              [ngClass]="{
+            'btn': true,
+            'btn-sm': true,
+            'btn-success': selectedCategory === category.id,
+            'btn-outline-success': selectedCategory !== category.id
+          }">
+              {{ currentLang === 'ar' ? category.name_ar : category.name }}
             </button>
-            }
           </div>
+
 
         </div>
 
         <!-- Carousel Container -->
-        <div class="position-relative carousel-wrapper my-3" dir="rtl">
+        <div class="position-relative carousel-wrapper my-3">
           <div class="carousel-container">
             <div class="d-flex transition-transform carousel-track" [ngStyle]="{
   transform: 'translateX(' + (currentSlideIndex * (isMobile ? (100 / visibleCards) : (100 / visibleCards))) + '%)'
@@ -93,17 +97,18 @@
                     </div>
 
                     <!-- Product Details -->
-                    <div class="card-body text-end mx-3">
-                      <h6 class="card-title fw-bold text-black">{{ product.name_ar }}</h6>
-                      <p class="card-text">{{ product.description }}</p>
+                    <div class="card-body  mx-3">
+                      <h6 class="card-title fw-bold text-black"> {{ currentLang === 'ar' ? product.name_ar : product.name }}</h6>
+                      <p class="card-text">{{ currentLang === 'ar' ? product.description_ar : product.description }}</p>
                       <div>
                         <p class="fw-bold " style="font-size: 14px;">
                           @if (product.sale_price && product.sale_price !== product.price) {
-                          <span class="fw-bold text-success">{{ product.sale_price }} ر.س </span>
-                          <span class="text-secondary" style="text-decoration: line-through;">{{ product.price }}
-                            ر.س</span>
+                          <span class="fw-bold text-success">{{ product.sale_price }} {{ 'CURRENCY' | translate
+                            }}</span>
+                          <span class="text-secondary px-2" style="text-decoration: line-through;">{{ product.price }}
+                            {{ 'CURRENCY' | translate }}</span>
                           } @else {
-                          <span class="fw-bold text-success">{{ product.price }} ر.س </span>
+                          <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY' | translate }}</span>
                           }
                         </p>
 
@@ -115,8 +120,7 @@
                   <!-- Cart Controls -->
                   <div class="mb-2 px-4">
                     @if (isInCart(product.id)) {
-                    <div class="d-flex align-items-center mb-1 justify-content-center px-3 mt-2 gap-2 border rounded-4"
-                      style="direction: rtl;">
+                    <div class="d-flex align-items-center mb-1 justify-content-center px-3 mt-2 gap-2 border rounded-4">
 
                       <!-- Quantity Controls -->
                       <div class="d-flex align-items-center gap-2">
@@ -141,9 +145,9 @@
                       style="font-size: 1rem;" (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
                       data-bs-target="#cartSidebar" aria-controls="cartSidebar">
                       <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
-
-                      إضافة الي العربة
+                      {{ 'ADD_TO_CART' | translate }}
                     </button>
+
 
 
 
@@ -172,7 +176,8 @@
 
             <!-- Arrows (desktop only) -->
             <div class="d-flex gap-2 d-none d-md-flex">
-              <button class="arrow-btn next" (click)="nextSlide()" [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
+              <button class="arrow-btn next" (click)="nextSlide()"
+                [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
               <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
 
             </div>
@@ -202,26 +207,26 @@
 <!-- Grid Mode -->
 @if (mode === 'grid') {
 <div class="container-fluid py-5 mt-lg-5 px-4">
-  <div class="row" dir="rtl">
+  <div class="row">
     <!-- Sidebar -->
     <div class="col-lg-3 mb-4 border rounded-4 py-2 d-none d-lg-block">
       <!-- Search Filter -->
       <div class="mb-4">
-        <label class="form-label fw-bold">البحث عن منتج</label>
-        <input type="text" class="form-control" placeholder="ابحث عن منتجات..." [(ngModel)]="searchQuery"
-          (input)="filterBySearch()" />
+        <label class="form-label fw-bold">{{ 'SEARCH_PRODUCT' | translate }}</label>
+        <input type="text" class="form-control" [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+          [(ngModel)]="searchQuery" (input)="filterBySearch()" />
       </div>
 
       <!-- Category Filter -->
       <div class="my-5">
-        <h5 class="fw-bold mb-3">الفئات</h5>
+        <h5 class="fw-bold mb-3">{{ 'CATEGORIES' | translate }}</h5>
         <ul class="list-unstyled">
           @for (cat of categories; track cat.id) {
           <li>
             <label class="form-check d-flex align-items-center gap-2">
               <input class="form-check-input mx-2" type="checkbox" [checked]="selectedCategories.includes(cat.id)"
                 (change)="toggleCategory(cat.id)" />
-              <span>{{ cat.name_ar }}</span>
+              <span>{{ currentLang === 'ar' ? cat.name_ar : cat.name }}</span>
             </label>
           </li>
           }
@@ -230,17 +235,21 @@
 
       <!-- Price Filter -->
       <div class="my-5">
-        <h5 class="fw-bold mb-3">تصفية حسب السعر</h5>
+        <h5 class="fw-bold mb-3">{{ 'FILTER_BY_PRICE' | translate }}</h5>
         <div class="d-flex gap-2 mb-2">
-          <input type="number" class="form-control text-end" placeholder="من" [(ngModel)]="priceMin" />
-          <input type="number" class="form-control text-end" placeholder="إلى" [(ngModel)]="priceMax" />
-          <button class="btn btn-success" (click)="applyPriceFilter()">عرض</button>
+          <input type="number" class="form-control text-end" [placeholder]="'PRICE_FROM' | translate"
+            [(ngModel)]="priceMin" />
+          <input type="number" class="form-control text-end" [placeholder]="'PRICE_TO' | translate"
+            [(ngModel)]="priceMax" />
+          <button class="btn btn-success" (click)="applyPriceFilter()">
+            {{ 'SHOW' | translate }}
+          </button>
         </div>
 
         <!-- Predefined Ranges -->
         <div class="m-4 my-5 px-2">
           @for (range of predefinedRanges; track range.label; let i = $index) {
-          <div class="form-check d-flex align-items-center justify-content-start gap-2 mb-2" dir="rtl">
+          <div class="form-check d-flex align-items-center justify-content-start gap-2 mb-2">
             <input type="checkbox" class="form-check-input mx-2" [checked]="range.selected"
               (change)="applyPredefinedRange(i)" />
             <label class="form-check-label">{{ range.label }}</label>
@@ -249,64 +258,70 @@
         </div>
       </div>
     </div>
+
     <!-- زرار الفلترة يظهر فقط على الشاشات الصغيرة -->
-    <!-- يظهر فقط في الموبايل -->
-    <div class="d-flex justify-content-between gap-2 d-lg-none mt-1 pt-3  py-5">
+    <div class="d-flex justify-content-between gap-2 d-lg-none mt-1 pt-3 py-5">
 
       <div class="flex-fill">
-        <h1 class="fw-bold">المتجر</h1>
+        <h1 class="fw-bold">{{ 'STORE' | translate }}</h1>
       </div>
+
       <!-- زرار الفلاتر -->
       <button class="btn btn-outline-success flex-fill" style="background-color: #7AD03A; color:black; border: none;"
         (click)="openSidebar()">
         <img src="assets/Images/filter-horizontal.svg" class="">
-        &nbsp;تصنيف
+        &nbsp;{{ 'FILTER' | translate }}
       </button>
 
       <!-- زرار الترتيب -->
       <button class="btn btn-outline-secondary flex-fill">
-        الترتيب
+        {{ 'SORT' | translate }}
       </button>
-
 
     </div>
 
+
     <!-- Modal -->
-<div class="modal fade" id="filtersModal" tabindex="1" aria-labelledby="filtersModalLabel" aria-hidden="true"
-     data-bs-backdrop="true" data-bs-keyboard="true">
-  <div class="modal-dialog modal-dialog-scrollable custom-modal modal-dialog-bottom">
-    <div class="modal-content rounded-4">
+    <div class="modal fade" id="filtersModal" tabindex="1" aria-labelledby="filtersModalLabel" aria-hidden="true"
+      data-bs-backdrop="true" data-bs-keyboard="true">
+      <div class="modal-dialog modal-dialog-scrollable custom-modal modal-dialog-bottom">
+        <div class="modal-content rounded-4">
+
+          <!-- Modal Header -->
           <div class="modal-header">
             <img src="assets/Images/logo.svg" alt="Happy Fitness" style="height: 40px;">
             <div class="mx-5 px-4"></div>
             <div class="modal-header d-flex justify-content-start">
-              <h5 class="modal-title fw-bold" id="filtersModalLabel">الغاء</h5>
-
-              <button type="button" class="btn-close px-2 mx-2" data-bs-dismiss="modal" aria-label="إغلاق">
-
+              <h5 class="modal-title fw-bold" id="filtersModalLabel">
+                {{ 'CANCEL' | translate }}
+              </h5>
+              <button type="button" class="btn-close px-2 mx-2" data-bs-dismiss="modal"
+                [attr.aria-label]="'CANCEL' | translate">
               </button>
+
             </div>
           </div>
+
+          <!-- Modal Body -->
           <div class="modal-body">
-            <!-- حط نفس محتوى الـ Sidebar هنا -->
             <div>
               <!-- Search Filter -->
               <div class="mb-4">
-                <label class="form-label fw-bold">البحث عن منتج</label>
-                <input type="text" class="form-control" placeholder="ابحث عن منتجات..." [(ngModel)]="searchQuery"
-                  (input)="filterBySearch()" />
+                <label class="form-label fw-bold">{{ 'SEARCH_PRODUCT' | translate }}</label>
+                <input type="text" class="form-control" [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+                  [(ngModel)]="searchQuery" (input)="filterBySearch()" />
               </div>
 
               <!-- Category Filter -->
               <div class="my-5">
-                <h5 class="fw-bold mb-3">الفئات</h5>
+                <h5 class="fw-bold mb-3">{{ 'CATEGORIES' | translate }}</h5>
                 <ul class="list-unstyled">
                   @for (cat of categories; track cat.id) {
                   <li>
                     <label class="form-check d-flex align-items-center gap-2">
                       <input class="form-check-input mx-2" type="checkbox"
                         [checked]="selectedCategories.includes(cat.id)" (change)="toggleCategory(cat.id)" />
-                      <span>{{ cat.name_ar }}</span>
+                      <span>{{ currentLang === 'ar' ? cat.name_ar : cat.name }}</span>
                     </label>
                   </li>
                   }
@@ -315,19 +330,21 @@
 
               <!-- Price Filter -->
               <div class="my-5">
-                <h5 class="fw-bold mb-3">تصفية حسب السعر</h5>
+                <h5 class="fw-bold mb-3">{{ 'FILTER_BY_PRICE' | translate }}</h5>
                 <div class="d-flex gap-2 mb-2">
-                  <input type="number" class="form-control text-end" placeholder="من" [(ngModel)]="priceMin" />
-                  <input type="number" class="form-control text-end" placeholder="إلى" [(ngModel)]="priceMax" />
+                  <input type="number" class="form-control text-end" [placeholder]="'PRICE_FROM' | translate"
+                    [(ngModel)]="priceMin" />
+                  <input type="number" class="form-control text-end" [placeholder]="'PRICE_TO' | translate"
+                    [(ngModel)]="priceMax" />
                   <button class="btn btn-success" (click)="applyPriceFilter()" data-bs-dismiss="modal">
-                    عرض
+                    {{ 'SHOW' | translate }}
                   </button>
                 </div>
 
                 <!-- Predefined Ranges -->
                 <div class="m-4 my-5 px-2">
                   @for (range of predefinedRanges; track range.label; let i = $index) {
-                  <div class="form-check d-flex align-items-center justify-content-start gap-2 mb-2" dir="rtl">
+                  <div class="form-check d-flex align-items-center justify-content-start gap-2 mb-2">
                     <input type="checkbox" class="form-check-input" [checked]="range.selected"
                       (change)="applyPredefinedRange(i)" />
                     <label class="form-check-label mx-4">{{ range.label }}</label>
@@ -338,12 +355,17 @@
             </div>
           </div>
 
+          <!-- Modal Footer -->
           <div class="modal-footer">
-            <button type="button" class="btn close_btn" data-bs-dismiss="modal">تم </button>
+            <button type="button" class="btn close_btn" data-bs-dismiss="modal">
+              {{ 'DONE' | translate }}
+            </button>
           </div>
+
         </div>
       </div>
     </div>
+
 
     <!-- Products Section -->
     <div class="col-lg-9 py-2">
@@ -386,27 +408,28 @@
             </div>
 
             <!-- تفاصيل المنتج + السعر + العربة -->
-            <div class="card-body text-end px-3 pb-4 d-flex flex-column justify-content-between flex-grow-1">
+            <div class="card-body  px-3 pb-4 d-flex flex-column justify-content-between flex-grow-1">
 
               <div>
-                <h6 class="card-title fw-bold mb-2">{{ product.name_ar }}</h6>
+                <h6 class="card-title fw-bold mb-2">{{ currentLang === 'ar' ? product.name_ar :
+                  product.name }}</h6>
                 <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
-                  {{ product.description }}
+                  {{ currentLang === 'ar' ? product.description_ar : product.description }}
                 </p>
                 <p class="fw-bold mb-1" style="font-size: 14px;">
                   @if (product.sale_price && product.sale_price !== product.price) {
-                  <span class="fw-bold text-success">{{ product.sale_price }} ر.س </span>
-                  <span class="text-secondary" style="text-decoration: line-through;">{{ product.price }} ر.س</span>
+                  <span class="fw-bold text-success">{{ product.sale_price }} {{ 'CURRENCY' | translate }}</span>
+                  <span class="text-secondary px-2" style="text-decoration: line-through;">{{ product.price }} {{
+                    'CURRENCY' | translate }}</span>
                   } @else {
-                  <span class="fw-bold text-success">{{ product.price }} ر.س </span>
+                  <span class="fw-bold text-success">{{ product.price }}{{ 'CURRENCY' | translate }} </span>
                   }
                 </p>
 
                 <!-- الزر أو كنترول الكمية -->
                 <div class="py-2">
                   @if (isInCart(product.id)) {
-                  <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4"
-                    style="direction: rtl;">
+                  <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4">
 
                     <!-- Quantity Controls -->
                     <div class="d-flex align-items-center gap-2">
@@ -432,7 +455,7 @@
                     data-bs-target="#cartSidebar" aria-controls="cartSidebar">
                     <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
 
-                    إضافة الي العربة
+                    {{ 'ADD_TO_CART' | translate }}
                   </button>
 
 
@@ -461,7 +484,7 @@
       }
 
     </div>
-    <app-downloadapp style="direction: ltr;"></app-downloadapp>
+    <app-downloadapp ></app-downloadapp>
 
   </div>
 </div>

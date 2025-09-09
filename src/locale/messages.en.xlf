@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="ar" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="hero-highlight" datatype="html">
+        <source>رشاقتك هدفنا ..</source>
+        <target>Your fitness is our goal..</target>
+      </trans-unit>
+      <trans-unit id="hero-priority" datatype="html">
+        <source>وصحتك أولويتنا</source>
+        <target>Your health is our priority</target>
+      </trans-unit>
+      <trans-unit id="hero-description" datatype="html">
+        <source>بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا</source>
+        <target>With a simple approach and plans that suit you, we reach your goal together</target>
+      </trans-unit>
+      <trans-unit id="hero-subtitle" datatype="html">
+        <source>اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك</source>
+        <target>Take your medical checkup now, and take the first step towards your dream body</target>
+      </trans-unit>
+      <trans-unit id="feature-free-check" datatype="html">
+        <source>فحص مجاني</source>
+        <target>Free checkup</target>
+      </trans-unit>
+      <trans-unit id="feature-weekly-follow" datatype="html">
+        <source>متابعة أسبوعية</source>
+        <target>Weekly follow-up</target>
+      </trans-unit>
+      <trans-unit id="feature-healthy-products" datatype="html">
+        <source>ملتجات صحية</source>
+        <target>Healthy products</target>
+      </trans-unit>
+      <trans-unit id="cta-reserve-now" datatype="html">
+        <source>احجز الآن</source>
+        <target>Reserve Now</target>
+      </trans-unit>
+      <trans-unit id="cta-reserve-now-mobile" datatype="html">
+        <source>احجز الآن</source>
+        <target>Reserve Now</target>
+      </trans-unit>
+      <trans-unit id="ngb.carousel.slide-number" datatype="html">
+        <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
+        <target> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </target>
+      </trans-unit>
+      <trans-unit id="ngb.carousel.previous" datatype="html">
+        <source>Previous</source>
+        <target>Previous</target>
+      </trans-unit>
+      <trans-unit id="ngb.carousel.next" datatype="html">
+        <source>Next</source>
+        <target>Next</target>
+      </trans-unit>
+      <trans-unit id="welcomeMessage" datatype="html">
+        <source>مرحباً، </source>
+        <target>Welcome, </target>
+      </trans-unit>
+      <trans-unit id="searchPlaceholder" datatype="html">
+        <source>ابحث عن منتجات</source>
+        <target>Search for products</target>
+      </trans-unit>
+      <trans-unit id="loginText" datatype="html">
+        <source>تسجيل الدخول</source>
+        <target>Login</target>
+      </trans-unit>
+      <trans-unit id="profileText" datatype="html">
+        <source>الملف الشخصي</source>
+        <target>Profile</target>
+      </trans-unit>
+      <trans-unit id="logoutText" datatype="html">
+        <source>تسجيل الخروج</source>
+        <target>Logout</target>
+      </trans-unit>
+      <trans-unit id="noProductsText" datatype="html">
+        <source>لا توجد منتجات</source>
+        <target>No products found</target>
+      </trans-unit>
+      <trans-unit id="viewAllText" datatype="html">
+        <source>عرض الكل</source>
+        <target>View All</target>
+      </trans-unit>
+      <trans-unit id="bookFreeCheckup" datatype="html">
+        <source>احجز فحص مجاني الآن</source>
+        <target>Book a free checkup now</target>
+      </trans-unit>
+      <trans-unit id="checkupDescription" datatype="html">
+        <source>نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ).</source>
+        <target>We offer a complete checkup including (weight, fat, fluids, muscles, salts, daily burn rate).</target>
+      </trans-unit>
+      <trans-unit id="bookNowText" datatype="html">
+        <source>احجز الآن</source>
+        <target>Book Now</target>
+      </trans-unit>
+      <trans-unit id="whatsappText" datatype="html">
+        <source>واتساب</source>
+        <target>WhatsApp</target>
+      </trans-unit>
+   <trans-unit id="download-app-title" datatype="html">
+        <source>نزّل تطبيق "الرياضة السعيدة" واستفد من عروض حصرية!</source>
+        <target>Download "Happy Sports" App and enjoy exclusive offers!</target>
+      </trans-unit>
+      <trans-unit id="download-app-title-mobile" datatype="html">
+        <source>نزّل تطبيق "الرياضة السعيدة" واستفد من عروض حصرية!</source>
+        <target>Download "Happy Sports" App and enjoy exclusive offers!</target>
+      </trans-unit>
+      <trans-unit id="feature-exclusive-discounts" datatype="html">
+        <source>خصومات حصرية لمستخدمي التطبيق</source>
+        <target>Exclusive discounts for app users</target>
+      </trans-unit>
+      <trans-unit id="feature-priority-registration" datatype="html">
+        <source>تسجيل بالعضوية أول بأول</source>
+        <target>Priority membership registration</target>
+      </trans-unit>
+      <trans-unit id="feature-direct-consultations" datatype="html">
+        <source>استشارات مباشرة عبر التطبيق</source>
+        <target>Direct consultations via the app</target>
+      </trans-unit>
+      <trans-unit id="scan-qr-code" datatype="html">
+        <source>افحص الـ QR كود!</source>
+        <target>Scan the QR Code!</target>
+      </trans-unit>
+
+      <!-- عناصر أخرى من التطبيق -->
+      <trans-unit id="hero-highlight" datatype="html">
+        <source>رشاقتك هدفنا ..</source>
+        <target>Your fitness is our goal..</target>
+      </trans-unit>
+      <trans-unit id="hero-priority" datatype="html">
+        <source>وصحتك أولويتنا</source>
+        <target>Your health is our priority</target>
+      </trans-unit>
+      <trans-unit id="hero-description" datatype="html">
+        <source>بأسلوب بسيط وخطط تناسبك، نتوصل لهدفك سوا</source>
+        <target>With a simple approach and plans that suit you, we reach your goal together</target>
+      </trans-unit>
+      <trans-unit id="hero-subtitle" datatype="html">
+        <source>اخذ فحصك الطبي الآن، وابدأ أول خطوة نحو جسم أحلامك</source>
+        <target>Take your medical checkup now, and take the first step towards your dream body</target>
+      </trans-unit>
+      <trans-unit id="feature-free-check" datatype="html">
+        <source>فحص مجاني</source>
+        <target>Free checkup</target>
+      </trans-unit>
+      <trans-unit id="feature-weekly-follow" datatype="html">
+        <source>متابعة أسبوعية</source>
+        <target>Weekly follow-up</target>
+      </trans-unit>
+      <trans-unit id="feature-healthy-products" datatype="html">
+        <source>ملتجات صحية</source>
+        <target>Healthy products</target>
+      </trans-unit>
+      <trans-unit id="cta-reserve-now" datatype="html">
+        <source>احجز الآن</source>
+        <target>Reserve Now</target>
+      </trans-unit>
+      <trans-unit id="cta-reserve-now-mobile" datatype="html">
+        <source>احجز الآن</source>
+        <target>Reserve Now</target>
+      </trans-unit>
+      <trans-unit id="ngb.carousel.slide-number" datatype="html">
+        <source> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </source>
+        <target> Slide <x id="INTERPOLATION"/> of <x id="INTERPOLATION_1"/> </target>
+      </trans-unit>
+      <trans-unit id="ngb.carousel.previous" datatype="html">
+        <source>Previous</source>
+        <target>Previous</target>
+      </trans-unit>
+      <trans-unit id="ngb.carousel.next" datatype="html">
+        <source>Next</source>
+        <target>Next</target>
+      </trans-unit>
+      <trans-unit id="welcomeMessage" datatype="html">
+        <source>مرحباً، </source>
+        <target>Welcome, </target>
+      </trans-unit>
+      <trans-unit id="searchPlaceholder" datatype="html">
+        <source>ابحث عن منتجات</source>
+        <target>Search for products</target>
+      </trans-unit>
+      <trans-unit id="loginText" datatype="html">
+        <source>تسجيل الدخول</source>
+        <target>Login</target>
+      </trans-unit>
+      <trans-unit id="profileText" datatype="html">
+        <source>الملف الشخصي</source>
+        <target>Profile</target>
+      </trans-unit>
+      <trans-unit id="logoutText" datatype="html">
+        <source>تسجيل الخروج</source>
+        <target>Logout</target>
+      </trans-unit>
+      <trans-unit id="noProductsText" datatype="html">
+        <source>لا توجد منتجات</source>
+        <target>No products found</target>
+      </trans-unit>
+      <trans-unit id="viewAllText" datatype="html">
+        <source>عرض الكل</source>
+        <target>View All</target>
+      </trans-unit>
+      <trans-unit id="bookFreeCheckup" datatype="html">
+        <source>احجز فحص مجاني الآن</source>
+        <target>Book a free checkup now</target>
+      </trans-unit>
+      <trans-unit id="checkupDescription" datatype="html">
+        <source>نقدم لك فحص كامل يشمل ( فحص الوزن، الدهون، السوائل، العضلات، الأملاح، معدل الحرق اليومي ).</source>
+        <target>We offer a complete checkup including (weight, fat, fluids, muscles, salts, daily burn rate).</target>
+      </trans-unit>
+      <trans-unit id="bookNowText" datatype="html">
+        <source>احجز الآن</source>
+        <target>Book Now</target>
+      </trans-unit>
+    
+        </body>
+  </file>
+</xliff>

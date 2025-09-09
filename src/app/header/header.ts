@@ -14,6 +14,8 @@ import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/route
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Category } from '../../models/Category';
+import { LanguageService } from '../services/language.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -21,13 +23,17 @@ import { Category } from '../../models/Category';
   standalone: true,
   imports: [
 
-    NgbDropdownModule, RouterModule, CommonModule, FormsModule, RouterLink
+    NgbDropdownModule, RouterModule, CommonModule, FormsModule, RouterLink, TranslateModule
 
   ],
   templateUrl: './header.html',
   styleUrls: ['./header.scss']
 })
 export class Header implements OnInit {
+
+  currentLang = 'ar';
+  currentDirection: 'rtl' | 'ltr' = 'rtl';
+
   selectedLanguage = 'العربية';
   searchQuery = '';
   isLoggedIn = false;
@@ -44,18 +50,19 @@ export class Header implements OnInit {
   // inside your class
   private route = inject(ActivatedRoute);
 
+
   navItems = [
-    { label: 'الرئيسية', path: '/', active: false },
-    { label: 'المتجر', path: '/home/category-products', hasDropdown: true, showDropdown: true },
-    { label: 'الاشتراكات', path: '/home/packages', hasDropdown: false },
-    { label: 'قصص نجاح عملائنا', path: '/home/sucesStory', hasDropdown: false },
-    { label: 'الفحوصات المجانيه', path: '/reservation', hasDropdown: false },
-    { label: 'العروض', path: '/home/special-offers', hasDropdown: false },
-    { label: 'المدونة ', path: '/home/blogs', hasDropdown: false },
-    { label: 'عن رشاقة ', path: '/about_us', hasDropdown: false },
+  { label: 'الرئيسية', labelEn: 'Home', path: '/', hasDropdown: false, active: false },
+  { label: 'المتجر', labelEn: 'Shop', path: null, hasDropdown: true, showDropdown: true, active: false },
+  { label: 'الاشتراكات', labelEn: 'Subscriptions', path: '/home/packages', hasDropdown: false, active: false },
+  { label: 'قصص نجاح عملائنا', labelEn:'success-stories', path: '/home/sucesStory', hasDropdown: false, active: false },
+  { label: 'الفحوصات المجانيه', labelEn: 'Free Checkup', path: '/reservation', hasDropdown: false, active: false },
+  { label: 'العروض', labelEn: 'Offers', path: '/home/special-offers', hasDropdown: false, active: false },
+  { label: 'المدونة ', labelEn: 'Blogs', path: '/home/blogs', hasDropdown: false, active: false },
+  { label: 'عن رشاقة ', labelEn: 'About Us', path: '/about_us', hasDropdown: false, active: false },
+];
 
 
-  ];
 
   toggleDropdown(item: any) {
     this.navItems.forEach(i => {
@@ -75,6 +82,8 @@ export class Header implements OnInit {
     private favoriteService: FavoriteService,
     private cartService: CartService,
     private cartState: CartStateService,
+    public languageService: LanguageService,
+    public translate: TranslateService,
   ) { }
 
 
@@ -151,6 +160,20 @@ export class Header implements OnInit {
       } else if (categoryId === 'all') {
         this.loadAllProducts();
       }
+    });
+
+      this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.currentDirection = lang === 'ar' ? 'rtl' : 'ltr';
+    });
+
+    
+
+    this.translate.use(this.languageService.getCurrentLanguage());
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.translate.use(lang);
     });
   }
 
@@ -341,4 +364,29 @@ onGetStarted() {
       (window as any).changeLanguage(lang);
     }
   }
+
+
+  // selectedLanguage: string = 'العربية';
+
+// switchLanguage(lang: string) {
+//   this.selectedLanguage = lang;
+//   console.log('Trying to switch language to:', lang);
+
+//   // نتأكد أن الفانكشن موجودة
+//   if (typeof (window as any).changeLanguage === 'function') {
+//     try {
+//       (window as any).changeLanguage(lang);
+//       console.log('✅ changeLanguage executed successfully');
+//     } catch (error) {
+//       console.error('❌ Error while executing changeLanguage:', error);
+//     }
+//   } else {
+//     console.warn('⚠️ window.changeLanguage is not defined!');
+//   }
+// }
+  switchLanguage(lang: string) {
+    this.languageService.setLanguage(lang);
+  }
 }
+
+

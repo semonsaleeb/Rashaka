@@ -1,107 +1,105 @@
 <div class="download-app-container">
 
   @if (isMobile) {
-    <!-- ✅ ديزاين الموبايل -->
-    <div class="mobile-design text-center my-5 py-5 px-3 gradient-top-bottom-border" dir="rtl">
-      <!-- صورة الموبايل -->
-      <img src="assets/Images/Group 20.svg" class="img-fluid mb-4" alt="App Image" style="max-width: 250px;">
+  <!-- ✅ ديزاين الموبايل -->
+<div class="mobile-design text-center my-5 py-5 px-3 gradient-top-bottom-border" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
 
-      <!-- العنوان -->
-      <h3 class="fw-bold mb-3">
-        نزّل تطبيق "الرياضة السعيدة" <br> واستفد من عروض حصرية!
-      </h3>
+  <!-- الصورة فوق في الوسط -->
+  <div class="d-flex justify-content-center mb-4">
+    <img src="assets/Images/Group 20.svg" class="img-fluid" alt="App Image" style="max-width: 250px;">
+  </div>
 
-      <!-- ✅ المميزات -->
-      <div class="text-start d-inline-block">
-        <div class="d-flex align-items-start mb-2">
-          <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="18" />
-         &nbsp; <span>خصومات حصرية لمستخدمي التطبيق</span>
-        </div>
-        <div class="d-flex align-items-start mb-2">
-          <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="18" />
-         &nbsp; <span>تسجيل بالعضوية أول بأول</span>
-        </div>
-        <div class="d-flex align-items-start">
-          <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="18" />
-         &nbsp; <span>استشارات مباشرة عبر التطبيق</span>
-        </div>
-      </div>
+  <!-- العنوان -->
+  <h3 class="fw-bold mb-3" style="color: #4A841F;">
+    {{ 'DOWNLOAD_APP.TITLE' | translate }}
+  </h3>
 
-      <!-- ✅ أزرار التحميل -->
-      <div class="mt-4">
-        <a href="#" class="d-inline-block mb-2">
-          <img src="assets/Images/Mobile app store badge (1).svg" alt="App Store" height="40">
-        </a>
-        <a href="#" class="d-inline-block mb-2">
-          <img src="assets/Images/Mobile app store badge.svg" alt="Google Play" height="40">
-        </a>
-      </div>
-
-      <!-- ✅ QR Code -->
-      <!-- <div class="mt-3">
-        <img src="assets/Images/QR Code (1).svg" width="120" alt="QR Code">
-        <p class="fw-bold mt-2" style="color: #4A841F;">افحص الـ QR كود!</p>
-      </div> -->
+  <!-- المميزات -->
+  <div class="text-start d-inline-block">
+    <div class="d-flex align-items-start mb-2">
+      <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
+      &nbsp; {{ 'DOWNLOAD_APP.FEATURE_1' | translate }}
     </div>
+    <div class="d-flex align-items-start mb-2">
+      <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
+      &nbsp; {{ 'DOWNLOAD_APP.FEATURE_2' | translate }}
+    </div>
+    <div class="d-flex align-items-start">
+      <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
+      &nbsp; {{ 'DOWNLOAD_APP.FEATURE_3' | translate }}
+    </div>
+  </div>
+
+  <!-- أزرار التحميل -->
+  <div class="mt-4">
+    <a href="#" class="d-inline-block mb-2">
+      <img src="assets/Images/Mobile app store badge (1).svg" [alt]="'DOWNLOAD_APP.APP_STORE_ALT' | translate" height="40">
+    </a>
+    <a href="#" class="d-inline-block mb-2">
+      <img src="assets/Images/Mobile app store badge.svg" [alt]="'DOWNLOAD_APP.GOOGLE_PLAY_ALT' | translate" height="40">
+    </a>
+  </div>
+
+</div>
+
   } @else {
-    <!-- ✅ ديزاين الديسكتوب -->
-    <div class="desktop-design py-5">
-      <div class="container position-relative my-5 mt-5 pt-5">
+  <!-- ✅ ديزاين الديسكتوب -->
+  <div class="desktop-design py-5" [ngClass]="{'arabic': isArabic, 'english': !isArabic}">
+    <div class="container position-relative my-5 mt-5 pt-5">
 
-        <!-- ✅ صورة الموبايل الطافية -->
-        <img src="assets/Images/Group 20.svg" class="phone-floating" alt="App Image" />
+      <!-- ✅ صورة الموبايل الطافية -->
+      <img src="assets/Images/Group 20.svg" class="phone-floating" alt="App Image" />
 
-        <!-- ✅ الكرت الأبيض -->
-        <div class="p-4 rounded-4 position-relative mb-5 gradient-bottom-border gradient-top-border"
-             style="border-top: none; height: 473px; border: 2px solid #D3F1C5; background-color: #fff; z-index: 1;">
-             
-          <div class="row align-items-center flex-row-reverse">
+      <!-- ✅ الكرت الأبيض -->
+      <div class="p-4 rounded-4 position-relative mb-5 gradient-bottom-border gradient-top-border"
+        style="border-top: none; height: 473px; border: 2px solid #D3F1C5; background-color: #fff; z-index: 1;">
 
-            <!-- ✅ النص والمميزات -->
-            <div class="col-md-7 py-2" dir="rtl">
-              <h2 class="fw-bold text-dark mb-4">
-                نزّل تطبيق "الرياضة السعيدة" واستفد من <br> !عروض حصرية
-              </h2>
+        <div class="">
 
-              <!-- ✅ Features -->
-              <div>
-                <div class="d-flex align-items-start mb-2">
-                  <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
-                  &nbsp; <span>خصومات حصرية لمستخدمي التطبيق</span>
-                </div>
-                <div class="d-flex align-items-start mb-2">
-                  <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
-                 &nbsp; <span>تسجيل بالعضوية أول بأول</span>
-                </div>
-                <div class="d-flex align-items-start">
-                  <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
-                &nbsp;  <span>استشارات مباشرة عبر التطبيق</span>
-                </div>
+          <!-- ✅ النص والمميزات -->
+          <div class="col-md-7 py-2">
+            <h2 class="fw-bold text-dark mb-4">{{ 'DOWNLOAD_APP.TITLE' | translate }}</h2>
+
+
+            <!-- ✅ Features -->
+            <div>
+              <div class="d-flex align-items-start mb-2">
+                <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
+                &nbsp; <span>{{ 'DOWNLOAD_APP.FEATURE_1' | translate }}</span>
               </div>
-
-              <!-- ✅ QR and Buttons -->
-              <div class="d-flex align-items-center mt-4">
-                <div>
-                  <h3 class="fw-bold mb-2" style="color: #4A841F;">افحص الـ QR كود!</h3>
-                  <div class="d-flex gap-3 flex-wrap mb-3">
-                    <a href="#">
-                      <img src="assets/Images/Mobile app store badge (1).svg" alt="App Store" height="40">
-                    </a>
-                    <a href="#">
-                      <img src="assets/Images/Mobile app store badge.svg" alt="Google Play" height="40">
-                    </a>
-                  </div>
-                </div>
-                <div class="m-5">
-                  <img src="assets/Images/QR Code (1).svg" width="150" height="150" alt="QR Code" class="me-3" />
-                </div>
+              <div class="d-flex align-items-start mb-2">
+                <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
+                &nbsp; <span>{{ 'DOWNLOAD_APP.FEATURE_2' | translate }}</span>
+              </div>
+              <div class="d-flex align-items-start">
+                <img src="assets/Images/checkmark-circle-02 green.svg" class="me-2 mt-1" width="20" />
+                &nbsp; <span>{{ 'DOWNLOAD_APP.FEATURE_3' | translate }}</span>
               </div>
             </div>
 
+            <div class="d-flex align-items-center mt-4">
+              <div>
+                <h3 class="fw-bold mb-2" style="color: #4A841F;">{{ 'DOWNLOAD_APP.QR_TITLE' | translate }}</h3>
+                <div class="d-flex gap-3 flex-wrap mb-3">
+                  <a href="#">
+                    <img src="assets/Images/Mobile app store badge (1).svg"
+                      [alt]="'DOWNLOAD_APP.APP_STORE_ALT' | translate" height="40">
+                  </a>
+                  <a href="#">
+                    <img src="assets/Images/Mobile app store badge.svg"
+                      [alt]="'DOWNLOAD_APP.GOOGLE_PLAY_ALT' | translate" height="40">
+                  </a>
+                </div>
+              </div>
+              <div class="m-5">
+                <img src="assets/Images/QR Code (1).svg" width="150" height="150" alt="QR Code" class="me-3" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
   }
 
 </div>

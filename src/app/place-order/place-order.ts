@@ -325,6 +325,70 @@ private handleCreditCardPayment(orderRes: any): void {
 }
 
 
+// معالجة الدفع بالبطاقة الائتمانية
+// private handleCreditCardPayment(orderRes: any): void {
+//   try {
+//     const totalAmount = Number(orderRes.total_price) + Number(this.shippingFee);
+
+//     if (isNaN(totalAmount)) {
+//       console.error('المبلغ الإجمالي غير صالح:', orderRes.total_price, this.shippingFee);
+//       alert('خطأ في حساب المبلغ الإجمالي');
+//       return;
+//     }
+
+//     if (totalAmount <= 0) {
+//       console.error('المبلغ الإجمالي يجب أن يكون أكبر من الصفر:', totalAmount);
+//       alert('المبلغ الإجمالي غير صالح');
+//       return;
+//     }
+
+//     const paymentData = {
+//       CustomerName: this.client?.name || 'عميل جديد',
+//       NotificationOption: 'Lnk',
+//       InvoiceValue: totalAmount,
+//       CustomerEmail: this.userEmail,
+//       CallBackUrl: `https://93-127-214-92.sslip.io/payment-success?orderId=${orderRes.order_id}`,
+//       ErrorUrl: `https://93-127-214-92.sslip.io/payment-failure?orderId=${orderRes.order_id}`,
+//       Language: 'AR',
+//       DisplayCurrencyIso: 'SAR'
+//     };
+
+//     console.log('بيانات الدفع المرسلة:', paymentData);
+
+//     const headers = new HttpHeaders({
+//       'Content-Type': 'application/json',
+//       'Authorization': 'QU5B_LUdoeZHdliM09PdwL9tBlLpD8oOfEAaRTLnBbDbxs25352n2aEKbSn4VBnl-9wT4kD0KyCO3SBgxAefDN-_Y0lS1qUmREuwH-KQ4jhOff23a3TrMDE3keIMm212_aEvZCE7dABiuXx2B4wT4Qs5mL1wp--TriwseWwTkVz8TtXscXUcrhHLhhH1ck-6YX2hzj9KpOqL69BYp15PRG8C1kWh5mV8zPvfEUkggmuLmHzZknBefokRl3deKNdjEK0e6uRWE4ozm4kODP9TiPIHrcOlGTm0vV-FdvYsgTVa34j9lO4i6bOUbeWX5pdvjhVSmGhbg7CYZXbR0lkrq4D0BDYiXn93WgiCxBPV5Tb8Ffyc_f5bWPR4YpQomq39hlQo33KcfkQvFmQ4Hj0fFdaPIDfEgd567XOLSbgxJTPtOY-K0JQjJKTn9sMc9ybkz8_Eo0GAGSEPwFddzHDyLaE7ecY9vkT_VTu2C_jP31MKY2fq5ADlS75MISbioXzkH6KNlSJ-sMIv0R6nvi1AuYxvSBTKrFSETo97PMwVowJju16byyLnibT1Pw0jwX4L2URM1IymI3GfZ10ZVqOsRBBIG0kOqdsM0fA4JQJWwzz2r8gqLRq60Ei_eI2MfmLbBXyyMJemfBh1oZqUJPJWiTeKLIebo7gtqet6BBTc46F6EM8S'  // حط توكن MyFatoorah الحقيقي هنا
+//     });
+
+//     // التعديل هنا: استخدم رابط الـ proxy بدلاً من الرابط المباشر
+//     this.http.post('/fatoorah/v2/SendPayment', paymentData, { headers }).subscribe({
+//       next: (res: any) => {
+//         console.log('استجابة ماي فاتورة:', res);
+
+//         if (!res) {
+//           console.error('استجابة ماي فاتورة فارغة');
+//           alert('تعذر الحصول على رابط الدفع');
+//           return;
+//         }
+
+//         if (res.IsSuccess && res.Data?.InvoiceURL) {
+//           window.location.href = res.Data.InvoiceURL;
+//         } else {
+//           console.error('فشل في إنشاء الفاتورة:', res.Message);
+//           alert(res.Message || 'تعذر إنشاء رابط الدفع');
+//         }
+//       },
+//       error: (err) => {
+//         console.error('خطأ في خدمة الدفع:', err);
+//         this.handlePaymentError(err);
+//       }
+//     });
+//   } catch (e) {
+//     console.error('خطأ غير متوقع في معالجة الدفع:', e);
+//     alert('حدث خطأ غير متوقع أثناء معالجة الدفع');
+//   }
+// }
+
 
 
 

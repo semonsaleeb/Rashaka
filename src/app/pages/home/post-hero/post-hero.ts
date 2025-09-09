@@ -1,4 +1,4 @@
-
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -6,19 +6,21 @@ import {
   ViewChildren,
   QueryList
 } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-post-hero',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './post-hero.html',
   styleUrl: './post-hero.scss'
 })
 export class PostHero implements AfterViewInit {
   stats = [
-    { number: 40, suffix: '+', label: 'فرع', description: 'Branches' },
-    { number: 285, suffix: '+', label: 'منتج', description: 'Products' },
-    { number: 500, suffix: '+', label: 'موظف', description: 'Employees' },
-    { number: 100000, suffix: '+', label: 'عميل', description: 'Clients' }
+    { number: 40, suffix: '+', textKey: 'STATS.BRANCHES', description: 'Branches' },
+    { number: 285, suffix: '+', textKey: 'STATS.PRODUCTS', description: 'Products' },
+    { number: 500, suffix: '+', textKey: 'STATS.EMPLOYEES', description: 'Employees' },
+    { number: 100000, suffix: '+', textKey: 'STATS.CLIENTS', description: 'Clients' }
   ];
 
   @ViewChildren('statNumber') statNumbers!: QueryList<ElementRef>;

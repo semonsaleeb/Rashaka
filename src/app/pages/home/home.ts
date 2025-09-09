@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core'; // ✅
 
-// Child Components
 import { Downloadapp } from './downloadapp/downloadapp';
 import { Checkup } from './checkup/checkup';
 import { Footer } from '../../footer/footer';
@@ -17,9 +17,11 @@ import { SpecialOffersComponent } from './special-offers/special-offers';
 import { CategoryProducts } from './category-products/category-products';
 import { FavoriteService } from '../../services/favorite.service';
 import { Product } from '../../../models/Product';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [
     RouterOutlet,
     Downloadapp,
@@ -32,7 +34,8 @@ import { Product } from '../../../models/Product';
     PostHero,
     Blogs,
     SpecialOffersComponent,
-    CategoryProducts
+    CategoryProducts,
+    TranslateModule
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss'
@@ -40,13 +43,23 @@ import { Product } from '../../../models/Product';
 export class Home implements OnInit {
   products: Product[] = [];
   favorites: Product[] = [];
-
+  currentLang = 'ar';
   showComparePopup = false;
   compareProducts: Product[] = [];
 
-  constructor(private favoriteService: FavoriteService) {}
+  constructor(
+    private favoriteService: FavoriteService,
+    private languageService: LanguageService,
+    private translate: TranslateService // ✅
+  ) {}
 
   ngOnInit(): void {
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.translate.use(lang); // ✅ غير اللغة وقت ما تتغير
+      console.log('🌍 Language in HomeComponent:', lang);
+    });
+
     const token = localStorage.getItem('token');
     console.log('Token:', token);
 

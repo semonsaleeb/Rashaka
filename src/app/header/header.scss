@@ -16,15 +16,88 @@ header {
       gap: 15px;
       margin-top: 15px;
     }
+// header.component.scss
+
+// تنسيقات للغة العربية (RTL)
 [dir="rtl"] {
-  text-align: right;
+  .navbar-nav {
+    margin-left: 0;
+    // margin-right: auto;
+  }
+  
+  .dropdown-menu {
+    // text-align: right;
+    left: auto;
+    right: 0;
+  }
+  
+  .text-end {
+    text-align: right !important;
+  }
+  
+  .ms-1 {
+    margin-left: 0.25rem !important;
+    margin-right: 0 !important;
+  }
+  
+  .me-1 {
+    margin-right: 0.25rem !important;
+    margin-left: 0 !important;
+  }
 }
-.navbar{
-  margin-right: -40px;
+
+// تنسيقات للغة الإنجليزية (LTR)
+[dir="ltr"] {
+  .navbar-nav {
+    margin-right: 0;
+    // margin-left: auto;
+  }
+  
+  .dropdown-menu {
+    text-align: left;
+    right: auto;
+    left: 0;
+  }
+  
+  .text-end {
+    text-align: left !important;
+  }
+  
+  .ms-1 {
+    margin-right: 0.25rem !important;
+    margin-left: 0 !important;
+  }
+  
+  .me-1 {
+    margin-left: 0.25rem !important;
+    margin-right: 0 !important;
+  }
 }
-[dir="rtl"] .form-control,
-[dir="rtl"] .form-select {
-  text-align: right;
+
+// تنسيقات عامة
+.language-selector {
+  button {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      color: #007bff !important;
+    }
+  }
+}
+
+// تكييف القائمة المنسدلة للغتين
+.dropdown-menu-center {
+  &.custom-dropdown {
+    min-width: 200px;
+    
+    [dir="rtl"] & {
+      text-align: right;
+    }
+    
+    [dir="ltr"] & {
+      text-align: left;
+    }
+  }
 }
 
 /* Search bar icon positioning */

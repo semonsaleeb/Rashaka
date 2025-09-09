@@ -38,12 +38,21 @@
   width: 537px;
   position: absolute;
   top: -2px;
-  left: 1%;
+  left: 0%;
   z-index: 2;
   max-width: 100%;
   height: auto;
 }
+.arabic .phone-floating {
+  left: 0%; /* الصورة قريبة من اليمين */
+  right: auto;
+}
 
+/* مكان الصورة للغة الإنجليزية */
+.english .phone-floating {
+  right: 0%; /* الصورة قريبة من الشمال */
+  left: auto;
+}
 /* ✅ Responsive adjustments */
 @media (max-width: 768px) {
   .phone-floating {

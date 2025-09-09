@@ -9,64 +9,90 @@ Carousel Mode
 <div class="pricing-container w-100 py-5 px-lg-5 px-4">
 
   <div class="header text-end">
-    <div class="d-flex justify-content-between align-items-center px-lg-3">
+    <div class="d-flex justify-content-between align-items-center px-lg-5">
+
+      <h2 class="title mb-0">{{ 'PLANS.PACKAGES' | translate }}</h2>
+
       <a [routerLink]="['/home/packages']"
-         class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 fs-5 px-lg-4">
-        عرض الكل
-        <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل" width="25">
+        class="btn btn-link view-all-btn text-dark d-flex align-items-center gap-2 fs-5 px-lg-4">
+        <img src="assets/Images/circle-arrow-up-right-02 (2).svg" [alt]="'PLANS.VIEW_ALL' | translate" width="25">
+        {{ 'PLANS.VIEW_ALL' | translate }}
       </a>
-      <h2 class="title mb-0">الباقات</h2>
+
     </div>
 
-    <div class="d-flex justify-content-between align-items-center my-4 flex-wrap" dir="rtl">
+    <div class="d-flex justify-content-between align-items-center my-4 flex-wrap px-lg-5">
       <div class="toggle-container d-flex gap-2">
         <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
-          الأجهزة و الجلسات
+          {{ 'PLANS.SESSIONS' | translate }}
         </button>
         <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
-          النظام الغذائي
+          {{ 'PLANS.NUTRITION' | translate }}
         </button>
       </div>
+
     </div>
   </div>
 
   @if (plans.length > 0) {
   <!-- Carousel Wrapper -->
-  <div class="carousel-wrapper position-relative overflow-hidden px-lg-5" dir="ltr">
-    <div
-      class="d-flex transition-transform carousel-track"
-      [ngStyle]="{ transform: 'translateX(+' + (currentSlideIndex * (104 / visibleCards)) + '%)' }"
-      (touchstart)="onTouchStart($event)"
-      (touchend)="onTouchEnd($event)"
-      dir="ltr">
+  <div class="carousel-wrapper position-relative overflow-hidden px-lg-5" [dir]="textDir">
+    <div class="d-flex transition-transform carousel-track"
+      [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? -1 : 1)) + '%)' }"
+      (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
+
 
       @for (plan of plans; track trackPlan($index, plan)) {
-      <div
-        class="carousel-slide"
-        [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
-        [style.max-width]="'calc(100% / ' + visibleCards + ')'"
-        dir="ltr">
+      <div class="carousel-slide" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
+        [style.max-width]="'calc(100% / ' + visibleCards + ')'">
 
-        <div class="card h-100 rounded-4 border-1 bg-white justify-content-between" [ngClass]="plan.styleType + '-card'">
+        <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
+          [ngClass]="plan.styleType + '-card'">
 
           <!-- Card Top -->
           <div class="card-top position-relative">
             <div class="ribbon-top-left fs-6"
-                 [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">
+              [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">
               {{ plan.title }}
             </div>
             <img src="assets/Images/Group 9010.svg" alt="Frame"
-                 style="position:absolute; top:0; right:0; width:80px; z-index:2;">
+              style="position:absolute; top:0; right:0; width:80px; z-index:2;">
             <div class="plan-info mt-5 text-end">
-              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
-              <div class="sessions fw-bold my-2"
-                   [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
-                   [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
-                {{ plan.sessions }} جلسة
+              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+                {{ 'PRICING.SUBSCRIPTION' | translate }}
+              </span>
+              <div class="sessions fw-bold my-2 "
+                [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
+                [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
+                {{ plan.sessions }}
               </div>
-              <div class="price fw-bold" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
-                السعر {{ plan.price }} ر.س
+              <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
+                [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'"
+                [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
+                <!-- النص "السعر" أو "Price" -->
+                <span>{{ 'PRICING.PRICE' | translate }}</span>
+
+                <!-- السعر قبل الخصم -->
+                <span *ngIf="plan.price_before !== null && plan.price_before !== undefined"
+                  [ngStyle]="{'text-decoration': plan.price_after ? 'line-through' : 'none'}">
+                  {{ plan.price_before }}
+                </span>
+
+                <!-- السعر بعد الخصم -->
+                <span *ngIf="plan.price_after !== null && plan.price_after !== undefined">
+                  {{ plan.price_after }}
+                </span>
+
+                <!-- العملة -->
+                <span *ngIf="plan.price_after !== null || plan.price_before !== null">
+                  {{ 'PRICING.CURRENCY' | translate }}
+                </span>
               </div>
+
+
+
+
             </div>
           </div>
 
@@ -81,35 +107,37 @@ Carousel Mode
               'border-radius': '0',
               'font-size': '14px'
             }">
-              {{ plan.cities }}
+              {{ getCitiesText(plan.cities) }}
             </div>
 
             <div class="feature mt-4 mb-3">
               @for (feature of isExpanded(plan.id) ? plan.features : plan.features.slice(0, 3); track feature) {
-                <span class="feature-label fs-6 d-block mb-1">
-                  <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
-                </span>
+              <span class="feature-label fs-6  mb-1">
+                <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ currentLang === 'ar' ?
+                feature.text_ar : feature.text_en }}
+              </span>
+
               }
               @if (plan.features.length > 3) {
-                <button class="btn btn-link p-0 mt-2 text-decoration-underline" (click)="toggleExpand(plan.id)">
-                  {{ isExpanded(plan.id) ? 'عرض أقل' : 'عرض المزيد' }}
-                </button>
+              <button class="btn btn-link p-0 mt-2 text-decoration-underline" (click)="toggleExpand(plan.id)">
+                {{ isExpanded(plan.id) ? ('PRICING.SHOW_LESS' | translate) : ('PRICING.SHOW_MORE' | translate) }}
+              </button>
               }
+
             </div>
 
             @if (subscribedPlanId !== plan.id) {
-              <button class="subscribe-btn w-100 rounded-3 py-2"
-                      (click)="handleSubscribe(plan)"
-                      [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
-                      [style.color]="'#000'"
-                      [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
-                اشتراك
-              </button>
+            <button class="subscribe-btn w-100 rounded-3 py-2" (click)="handleSubscribe(plan)"
+              [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'" [style.color]="'#000'"
+              [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
+              {{ 'PLANS.SUBSCRIBE' | translate }}
+            </button>
             } @else {
-              <div class="subscribed-text w-100 rounded-3 py-2 text-center fw-bold"
-                   [style.background]="'#E3E3E3'" [style.color]="'#000'">
-                تم الاشتراك
-              </div>
+            <div class="subscribed-text w-100 rounded-3 py-2 text-center fw-bold" [style.background]="'#E3E3E3'"
+              [style.color]="'#000'">
+              {{ 'PLANS.SUBSCRIBED' | translate }}
+            </div>
+
             }
           </div>
         </div>
@@ -120,33 +148,34 @@ Carousel Mode
     <!-- Navigation -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 py-3">
 
-      <!-- Arrows -->
-      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
-         <!-- prev = يرجع لورا (index--) -->
-        <button class="arrow-btn prev" (click)="scrollRight()"
-                [disabled]="currentSlideIndex >= getMaxIndex()"></button>
-        <!-- next = يمشي لقدّام (index++) -->
-        <button class="arrow-btn next" (click)="scrollLeft()"
-                [disabled]="currentSlideIndex === 0"></button>
-       
-      </div>
+
 
       <!-- Dots -->
-      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0" dir="rtl">
+      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0">
         @for (i of getDotsArray(); track i) {
-          <button (click)="goToSlide(i)"
-                  class="rounded-circle"
-                  [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
-                  style="width:10px; height:10px; border:none;">
-          </button>
+        <button (click)="goToSlide(i)" class="rounded-circle"
+          [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
+          style="width:10px; height:10px; border:none;">
+        </button>
         }
+      </div>
+      <!-- Arrows -->
+      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
+        <!-- next = يمشي لقدّام (index++) -->
+        <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
+
+        <!-- prev = يرجع لورا (index--) -->
+        <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= getMaxIndex()"></button>
+
       </div>
     </div>
   </div>
   } @else {
-    <div class="text-center py-5">
-      <p class="fs-5 fw-semibold">حاليًا {{selectedPlan}} لا يوجد باقات</p>
-    </div>
+  <div class="text-center py-5">
+    <p class="fs-5 fw-semibold">
+      {{ 'PRICING.NO_PLANS' | translate:{ plan: selectedPlan } }}
+    </p>
+  </div>
   }
 </div>
 }
@@ -156,102 +185,138 @@ Carousel Mode
 Grid Mode
 =========================== -->
 @if (mode === 'grid') {
-<div class="pricing-container w-100 py-5 mt-3 px-lg-5 px-3" dir="rtl">
+<div class="pricing-container w-100 py-5 mt-3 px-lg-5 px-3">
   <!-- Header -->
   <div class="header text-center">
-    <img src="assets/Images/Group 1000002770.svg" alt="عروض" class="img-fluid d-block mx-auto mb-4 pt-5">
-    <h2 class="title px-lg-3 ">الاشتراكات</h2>
-    <p>اختر الباقة التي تناسب احتياجاتك وابدأ الآن بسهولة.</p>
+    <img src="assets/Images/Group 1000002770.svg" alt="{{ 'SUBSCRIPTIONS.ALT' | translate }}"
+      class="img-fluid d-block mx-auto mb-4 pt-5">
+
+    <h2 class="title px-lg-3">{{ 'SUBSCRIPTIONS.TITLE' | translate }}</h2>
+
+    <p>{{ 'SUBSCRIPTIONS.DESCRIPTION' | translate }}</p>
+
     <div class="toggle-container d-flex gap-2">
       <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
-        الأجهزة و الجلسات
+        {{ 'SUBSCRIPTIONS.SESSIONS' | translate }}
       </button>
       <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
-        النظام الغذائي
+        {{ 'SUBSCRIPTIONS.NUTRITION' | translate }}
       </button>
     </div>
   </div>
 
+
   @if (plans.length > 0) {
   <!-- Carousel Wrapper -->
- <div class="carousel-wrapper position-relative overflow-hidden px-lg-5" dir="ltr">
-    <div
-      class="d-flex transition-transform carousel-track"
-      [ngStyle]="{ transform: 'translateX(+' + (currentSlideIndex * (104 / visibleCards)) + '%)' }"
-      (touchstart)="onTouchStart($event)"
-      (touchend)="onTouchEnd($event)"
-      dir="ltr">
+  <div class="carousel-wrapper position-relative overflow-hidden px-lg-5" [dir]="textDir">
+    <div class="d-flex transition-transform carousel-track"
+      [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? -1 : 1)) + '%)' }"
+      (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
+
 
       @for (plan of plans; track trackPlan($index, plan)) {
-      <div
-        class="carousel-slide"
-        [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
-        [style.max-width]="'calc(100% / ' + visibleCards + ')'"
-        dir="ltr">
+      <div class="carousel-slide" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
+        [style.max-width]="'calc(100% / ' + visibleCards + ')'">
 
-        <div class="card h-100 rounded-4 border-1 bg-white justify-content-between" [ngClass]="plan.styleType + '-card'">
+        <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
+          [ngClass]="plan.styleType + '-card'">
 
           <!-- Card Top -->
           <div class="card-top position-relative">
             <div class="ribbon-top-left fs-6"
-                 [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">
+              [style.background-color]="plan.styleType === 'basic' ? '#B4EB52' : '#ccc'">
               {{ plan.title }}
             </div>
             <img src="assets/Images/Group 9010.svg" alt="Frame"
-                 style="position:absolute; top:0; right:0; width:80px; z-index:2;">
+              style="position:absolute; top:0; right:0; width:80px; z-index:2;">
             <div class="plan-info mt-5 text-end">
-              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">اشتراك</span>
+              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+                {{ 'PRICING.SUBSCRIPTION' | translate }}
+              </span>
               <div class="sessions fw-bold my-2"
-                   [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
-                   [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
-                {{ plan.sessions }} جلسة
+                [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
+                [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
+                {{ plan.sessions }}
               </div>
-              <div class="price fw-bold" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
-                السعر {{ plan.price }} ر.س
+                <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
+                [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'"
+                [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
+                <!-- النص "السعر" أو "Price" -->
+                <span>{{ 'PRICING.PRICE' | translate }}</span>
+
+                <!-- السعر قبل الخصم -->
+                <span *ngIf="plan.price_before !== null && plan.price_before !== undefined"
+                  [ngStyle]="{'text-decoration': plan.price_after ? 'line-through' : 'none'}">
+                  {{ plan.price_before }}
+                </span>
+
+                <!-- السعر بعد الخصم -->
+                <span *ngIf="plan.price_after !== null && plan.price_after !== undefined">
+                  {{ plan.price_after }}
+                </span>
+
+                <!-- العملة -->
+                <span *ngIf="plan.price_after !== null || plan.price_before !== null">
+                  {{ 'PRICING.CURRENCY' | translate }}
+                </span>
               </div>
+
+
+
+
             </div>
           </div>
 
           <!-- Card Bottom -->
           <div class="card-bottom text-end px-3 pb-4">
             <div class="available-places" [ngStyle]="{
-              'background-color': plan.cities ? '#E3E3E3' : '#B4EB52',
-              'color': '#333',
-              'padding': '3px 0',
-              'text-align': 'center',
-              'margin': '-20px',
-              'border-radius': '0',
-              'font-size': '14px'
-            }">
-              {{ plan.cities }}
+  'background-color': plan.cities && plan.cities.length ? '#E3E3E3' : '#B4EB52',
+  'color': '#333',
+  'padding': '3px 0',
+  'text-align': 'center',
+  'margin': '-20px',
+  'border-radius': '0',
+  'font-size': '14px'
+}">
+              <!-- <div>
+  <span *ngFor="let city of plan.cities; let last = last">
+    {{ currentLang === 'ar' ? city.name_ar : city.name }}<span *ngIf="!last">, </span>
+  </span>
+</div> -->
+
+              {{ getCitiesText(plan.cities) }}
             </div>
+
 
             <div class="feature mt-4 mb-3">
               @for (feature of isExpanded(plan.id) ? plan.features : plan.features.slice(0, 3); track feature) {
-                <span class="feature-label fs-6 d-block mb-1">
-                  <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
-                </span>
+              <span class="feature-label fs-6  mb-1">
+                <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ currentLang === 'ar' ?
+                feature.text_ar : feature.text_en }}
+              </span>
+
               }
               @if (plan.features.length > 3) {
-                <button class="btn btn-link p-0 mt-2 text-decoration-underline" (click)="toggleExpand(plan.id)">
-                  {{ isExpanded(plan.id) ? 'عرض أقل' : 'عرض المزيد' }}
-                </button>
+              <button class="btn btn-link p-0 mt-2 text-decoration-underline" (click)="toggleExpand(plan.id)">
+                {{ isExpanded(plan.id) ? ('PRICING.SHOW_LESS' | translate) : ('PRICING.SHOW_MORE' | translate) }}
+              </button>
               }
+
             </div>
 
             @if (subscribedPlanId !== plan.id) {
-              <button class="subscribe-btn w-100 rounded-3 py-2"
-                      (click)="handleSubscribe(plan)"
-                      [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'"
-                      [style.color]="'#000'"
-                      [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
-                اشتراك
-              </button>
+            <button class="subscribe-btn w-100 rounded-3 py-2" (click)="handleSubscribe(plan)"
+              [style.background]="plan.styleType === 'basic' ? '#7AD03A' : 'transparent'" [style.color]="'#000'"
+              [style.border]="plan.styleType === 'basic' ? 'none' : '1px solid #808080'">
+              {{ 'PLANS.SUBSCRIBE' | translate }}
+            </button>
             } @else {
-              <div class="subscribed-text w-100 rounded-3 py-2 text-center fw-bold"
-                   [style.background]="'#E3E3E3'" [style.color]="'#000'">
-                تم الاشتراك
-              </div>
+            <div class="subscribed-text w-100 rounded-3 py-2 text-center fw-bold" [style.background]="'#E3E3E3'"
+              [style.color]="'#000'">
+              {{ 'PLANS.SUBSCRIBED' | translate }}
+            </div>
+
             }
           </div>
         </div>
@@ -261,28 +326,26 @@ Grid Mode
 
     <!-- Navigation -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 py-3">
-
-      <!-- Arrows -->
-      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
-         <!-- prev = يرجع لورا (index--) -->
-        <button class="arrow-btn prev" (click)="scrollRight()"
-                [disabled]="currentSlideIndex >= getMaxIndex()"></button>
-        <!-- next = يمشي لقدّام (index++) -->
-        <button class="arrow-btn next" (click)="scrollLeft()"
-                [disabled]="currentSlideIndex === 0"></button>
-       
-      </div>
-
-      <!-- Dots -->
-      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0" dir="rtl">
+   <!-- Dots -->
+      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0">
         @for (i of getDotsArray(); track i) {
-          <button (click)="goToSlide(i)"
-                  class="rounded-circle"
-                  [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
-                  style="width:10px; height:10px; border:none;">
-          </button>
+        <button (click)="goToSlide(i)" class="rounded-circle"
+          [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
+          style="width:10px; height:10px; border:none;">
+        </button>
         }
       </div>
+      <!-- Arrows -->
+      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
+          <!-- next = يمشي لقدّام (index++) -->
+        <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
+
+        <!-- prev = يرجع لورا (index--) -->
+        <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= getMaxIndex()"></button>
+      
+      </div>
+
+   
     </div>
   </div>
   } @else {
@@ -298,7 +361,7 @@ Grid Mode
 
 <!-- Popup -->
 @if (showPopup) {
-<div class="popup-overlay" dir="rtl">
+<div class="popup-overlay">
   <div class="popup-card-wrapper">
     <button class="close-btn" (click)="closePopup()">×</button>
 
@@ -316,52 +379,78 @@ Grid Mode
             style="position: absolute; top: 0; right: 0; width: 80px; z-index: 2;">
           <div class="plan-info mt-5 text-end">
             <span class="d-block" [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'">
-              اشتراك
+              {{ 'PRICING.SUBSCRIPTION' | translate }}
             </span>
             <div class="sessions fw-bold my-2"
               [style.background-color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : '#1B6079'"
               [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'inherit' : 'white'">
-              {{ selectedPlanForPopup?.sessions }} جلسة
+              {{ selectedPlanForPopup?.sessions }}
             </div>
-            <div class="price fw-bold"
-              [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'">
-              السعر {{ selectedPlanForPopup?.price }} ر.س
-            </div>
+       <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
+     [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'"
+     [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
+  <!-- نص السعر -->
+  <span>{{ 'PRICING.PRICE' | translate }}</span>
+
+  <!-- السعر قبل الخصم -->
+  <span *ngIf="selectedPlanForPopup?.price_before !== null && selectedPlanForPopup?.price_before !== undefined"
+        [ngStyle]="{'text-decoration': selectedPlanForPopup?.price_after ? 'line-through' : 'none'}">
+    {{ selectedPlanForPopup?.price_before }}
+  </span>
+
+  <!-- السعر بعد الخصم -->
+  <span *ngIf="selectedPlanForPopup?.price_after !== null && selectedPlanForPopup?.price_after !== undefined">
+    {{ selectedPlanForPopup?.price_after }}
+  </span>
+
+  <!-- العملة -->
+  <span *ngIf="selectedPlanForPopup?.price_after !== null || selectedPlanForPopup?.price_before !== null">
+    {{ 'PRICING.CURRENCY' | translate }}
+  </span>
+</div>
+
+
           </div>
         </div>
 
         <div class="card-bottom text-end px-3 pb-4">
           <div class="available-places" [ngStyle]="{
-            'background-color': selectedPlanForPopup?.cities ? '#E3E3E3' : '#B4EB52',
-            'color': '#333',
-            'padding': '3px 0',
-            'text-align': 'center',
-            'margin': '-20px',
-            'border-radius': '0',
-            'font-size': '14px'
-          }">
-            {{ selectedPlanForPopup?.cities }}
-          </div>
+        'background-color': selectedPlanForPopup?.cities?.length ? '#E3E3E3' : '#B4EB52',
+        'color': '#333',
+        'padding': '3px 0',
+        'text-align': 'center',
+        'margin': '-20px',
+        'border-radius': '0',
+        'font-size': '14px'
+      }">
+  {{ getCitiesText(selectedPlanForPopup?.cities || []) }}
+</div>
+
 
           <div class="feature mt-4 mb-3">
-            @for (feature of isPopupExpanded ? (selectedPlanForPopup?.features ?? []) : (selectedPlanForPopup?.features ?? []).slice(0, 3); track feature) {
+            @for (feature of isPopupExpanded ? (selectedPlanForPopup?.features ?? []) : (selectedPlanForPopup?.features
+            ?? []).slice(0, 3); track feature) {
             <span class="feature-label fs-6 d-block mb-1">
-              <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ feature }}
+              <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp;
+              {{ currentLang === 'ar' ? feature.text_ar : feature.text_en }}
             </span>
             }
             @if ((selectedPlanForPopup?.features?.length ?? 0) > 3) {
             <button class="btn btn-link p-0 mt-2 text-decoration-underline"
               (click)="isPopupExpanded = !isPopupExpanded">
-              {{ isPopupExpanded ? 'عرض أقل' : 'عرض المزيد' }}
+              {{ isPopupExpanded ? ('PRICING.SHOW_LESS' | translate) : ('PRICING.SHOW_MORE' | translate) }}
             </button>
             }
           </div>
 
           <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary w-50" (click)="closePopup()">إلغاء</button>
+            <button class="btn btn-outline-secondary w-50" (click)="closePopup()">
+              {{ 'PRICING.CANCEL' | translate }}
+            </button>
             <button class="btn w-50" style="background-color: #7AD03A; color: black;"
               (click)="goToOrder(selectedPlanForPopup!)">
-              تأكيد
+              {{ 'PRICING.CONFIRM' | translate }}
             </button>
           </div>
         </div>
@@ -373,12 +462,15 @@ Grid Mode
     @else {
     <div class="p-4 text-center">
       <img src="assets/Images/Enter OTP-cuate 1.svg" alt="Login Illustration" style="max-width: 200px;">
-      <h5 class="mb-3">يرجى تسجيل الدخول</h5>
-      <p class="text-muted">يجب تسجيل الدخول أو إنشاء حساب جديد لمتابعة الاشتراك.</p>
+      <h5 class="mb-3">{{ 'PRICING.LOGIN_REQUIRED_TITLE' | translate }}</h5>
+      <p class="text-muted">{{ 'PRICING.LOGIN_REQUIRED_TEXT' | translate }}</p>
       <div class="d-flex gap-2 mt-3">
-        <button class="btn w-50" style="background-color: #7AD03A; color: black;" (click)="goToLogin()">تسجيل
-          الدخول</button>
-        <button class="btn btn-outline-secondary w-50" (click)="goToRegister()">إنشاء حساب</button>
+        <button class="btn w-50" style="background-color: #7AD03A; color: black;" (click)="goToLogin()">
+          {{ 'PRICING.LOGIN' | translate }}
+        </button>
+        <button class="btn btn-outline-secondary w-50" (click)="goToRegister()">
+          {{ 'PRICING.REGISTER' | translate }}
+        </button>
       </div>
     </div>
     }

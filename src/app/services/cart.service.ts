@@ -8,15 +8,6 @@ import { CartResponse } from '../../models/CartResponse';
 import { PlaceOrderResponse } from '../../models/PlaceOrderResponse';
 import { PromoResponse } from '../../models/PromoResponse';
 
-
-
-
-
-
-
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,7 +21,7 @@ export class CartService {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
       'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
     });
   }
 
@@ -44,23 +35,29 @@ export class CartService {
     localStorage.setItem(this.localKey, JSON.stringify(items));
   }
 
-  getGuestCart(): CartResponse {
-    const items = this.loadGuestCart();
+  /** ----------------- GUEST CART RESPONSE ----------------- */
+getGuestCart(): CartResponse {
+  const items = this.loadGuestCart().map(i => {
+    const unit_price = Number(i.unit_price ?? "0");
+    const final_price = Number(i.final_price ?? "0");
 
-    const totalPrice = items.reduce((sum, i) => {
-      const unitPriceNum = parseFloat(i.unit_price as any) || 0;
-      return sum + unitPriceNum * i.quantity;
-    }, 0);
+    return {
+      ...i,
+      unit_price: unit_price.toString(),
+      final_price: final_price.toString(),
+      total_price: (unit_price * i.quantity).toString(),
+      total_sale_price: (final_price * i.quantity).toString()
+    };
+  });
 
-    const totalSalePrice = items.reduce((sum, i) => {
-      const finalPriceNum = parseFloat(i.final_price as any) || 0;
-      return sum + finalPriceNum * i.quantity;
-    }, 0);
+  const cart_total = items.reduce((sum, i) => sum + Number(i.total_price), 0);
+  const sale_cart_total = items.reduce((sum, i) => sum + Number(i.total_sale_price), 0);
+  const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
 
-    const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
+  return { items, cart_total, sale_cart_total, totalQuantity };
+}
 
-    return { items, totalPrice, totalSalePrice, totalQuantity };
-  }
+
 
   /** ----------------- COUNT HELPERS ----------------- */
   getGuestCartCount(): number {
@@ -70,10 +67,11 @@ export class CartService {
 
   getCartCount(): number {
     // حالياً بيرجع عدد الـ guest cart
-    // تقدر تطوره بعدين إنه يشيك لو فيه user logged in يجيب العدد من API
+    // ممكن تطوره بعدين يشيك إذا كان فيه مستخدم logged in
     return this.getGuestCartCount();
   }
 
+  /** ----------------- GUEST CART ACTIONS ----------------- */
   addGuestItem(product: CartItem) {
     const cart = this.loadGuestCart();
     const existing = cart.find(i => i.product_id === product.product_id);
@@ -101,7 +99,7 @@ export class CartService {
     localStorage.removeItem(this.localKey);
   }
 
-  /** ----------------- API (للي عامل Login) ----------------- */
+  /** ----------------- API CART (للي عامل Login) ----------------- */
   addToCart(productId: number, quantity: number = 1): Observable<any> {
     return this.http.post(`${this.apiUrl}/cart/add`,
       { product_id: productId, quantity },
@@ -136,22 +134,19 @@ export class CartService {
       { promocode, total_price }, { headers: this.getHeaders() });
   }
 
+  updateQuantity(productId: number, quantity: number): Observable<any> {
+    const token = localStorage.getItem('token');
 
-updateQuantity(productId: number, quantity: number): Observable<any> {
-  const token = localStorage.getItem('token');
-
-  if (token) {
-    // لو مستخدم مسجل دخول
-    return this.http.post(`${this.apiUrl}/cart/update-quantity`,
-      { product_id: productId, quantity },
-      { headers: this.getHeaders() }
-    );
-  } else {
-    // ضيف → تحديث localStorage
-    this.updateGuestQuantity(productId, quantity);
-    return of(true); // ✅ بيرجع Observable علشان الكومبوننت يعرف يكمل
+    if (token) {
+      // مستخدم مسجل دخول
+      return this.http.post(`${this.apiUrl}/cart/update-quantity`,
+        { product_id: productId, quantity },
+        { headers: this.getHeaders() }
+      );
+    } else {
+      // ضيف → تحديث localStorage
+      this.updateGuestQuantity(productId, quantity);
+      return of(true); // ✅ علشان الكومبوننت يكمل
+    }
   }
-}
-
-
 }

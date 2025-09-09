@@ -5,10 +5,12 @@ import { Downloadapp } from '../downloadapp/downloadapp';
 import { Checkup } from '../checkup/checkup';
 import { Branches } from '../branches/branches';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
   selector: 'app-suces-story',
-  imports: [CommonModule, Downloadapp, Checkup, Branches, RouterModule],
+  imports: [CommonModule, Downloadapp, Checkup, Branches, RouterModule, TranslateModule],
   templateUrl: './suces-story.html',
   styleUrl: './suces-story.scss'
 })
@@ -55,9 +57,22 @@ stories = [
 
 
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer,
+     private translate: TranslateService,
+       private languageService: LanguageService) {
     this.checkScreenSize();
   }
+
+  ngOnInit(): void {
+    
+    this.translate.use(this.languageService.getCurrentLanguage());
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.translate.use(lang);
+    });
+  }
+  
 
   @HostListener('window:resize')
   checkScreenSize() {

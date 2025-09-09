@@ -29,22 +29,24 @@ export class Reservation implements OnInit {
   }
 
   // 📌 تجيب كل المواعيد
-  fetchAppointments() {
-    this.loading = true;
-    console.log('📡 Fetching client appointments...');
-    this.availabilityService.getClientAppointments().subscribe({
-      next: (res) => {
-        console.log('✅ Appointments response:', res);
-        this.appointments = res.data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('❌ Error fetching appointments:', err);
-        this.errorMessage = 'تعذر تحميل المواعيد';
-        this.loading = false;
-      }
-    });
-  }
+fetchAppointments() {
+  this.loading = true;
+  console.log('📡 Fetching upcoming client appointments...');
+
+  this.availabilityService.getUpcomingAppointments().subscribe({
+    next: (res) => {
+      console.log('✅ Upcoming Appointments response:', res);
+      this.appointments = res.data;
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error('❌ Error fetching upcoming appointments:', err);
+      this.errorMessage = 'تعذر تحميل المواعيد';
+      this.loading = false;
+    }
+  });
+}
+
 
   // 📌 فتح المودال عشان يطلب تأكيد الإلغاء
   cancelAppointment(id: number) {

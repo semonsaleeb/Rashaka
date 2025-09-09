@@ -1,19 +1,22 @@
-<div class="container w-100 py-5 px-3" dir="rtl">
+<div class="container w-100 py-5 px-3">
 
   <!-- Section Title -->
   <div class="d-flex justify-content-between align-items-center mx-3 mb-4">
-    <!-- العنصر الأول (اليمين في RTL) -->
-    <h1 class="section-title fw-bold fs-3 mb-0 order-2 order-md-1">فروعنا</h1>
 
-    <!-- العنصر الثاني (اليسار في RTL) -->
+    <!-- العنصر الثاني -->
     <a [routerLink]="['/home/branches']"
       class="btn btn-link view-all-btn text-dark align-items-center gap-2 p-0 order-1 order-md-2 d-none d-md-flex"
       style="white-space: nowrap;">
-      <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="عرض الكل" width="25px">
-      عرض الكل
+      <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="{{ 'VIEW_ALL' | translate }}" width="25px">
+      {{ 'VIEW_ALL' | translate }}
     </a>
+    <!-- العنصر الأول -->
+    <h1 class="section-title fw-bold fs-3 mb-0 order-2 order-md-1">
+      {{ 'OUR_BRANCHES' | translate }}
+    </h1>
 
   </div>
+
 
 
 
@@ -22,7 +25,7 @@
     @for (branch of branches; track branch) {
     <button class="btn btn-outline-secondary rounded-3 px-5 mx-1 fw-bold" [class.active]="selectedBranch === branch"
       (click)="selectBranch(branch)">
-      {{ branch }}
+      {{ branch.name }}
     </button>
     }
   </div>
@@ -47,26 +50,30 @@
        }">
           <div class="service-card position-relative">
             <div class="d-flex justify-content-between align-items-center mb-2 flex-row-reverse">
-              <div class="branch-title fw-bold text-end">{{ l.title }}</div>
               <div class="text-start">
-                {{ l.phone }}
                 <img src="assets/Images/call-02.svg" alt="" width="20px">
+                {{ l.phone }}
               </div>
+              <div class="branch-title fw-bold text-end">{{ l.title }}</div>
+
             </div>
             <img [src]="l.image" alt="Frame"
               style="position: absolute; bottom: -40px; left: -10px; width: 50px; z-index: 2; transform: rotate(280deg);">
             <div class="service-card-content text-end">
               <div class="branch-location mb-1 py-3">
-                {{ l.location }}
                 <img src="assets/Images/location-05.svg" alt="" width="20px">
-              </div>
-              <button class="btn btn-outline-light  btn-sm rounded-pill mx-5 d-inline-flex align-items-center custom-fs">
-                <span class="d-flex align-items-center tablet-text ">
-                  عرض اتجاهات الموقع
-                  <img src="assets/Images/maps-location-01.svg" alt="" class="ms-2" style="height: 25px;" />
-                </span>
 
+                {{ l.location }}
+              </div>
+              <button class="btn btn-outline-light btn-sm rounded-pill mx-5 d-inline-flex align-items-center custom-fs"
+                (click)="openMap(selectedBranch)">
+                <span class="d-flex align-items-center tablet-text">
+                  <img src="assets/Images/maps-location-01.svg" alt="" class="ms-2" style="height: 25px;" />
+                  {{ 'VIEW_DIRECTIONS' | translate }}
+                </span>
               </button>
+
+
 
 
             </div>

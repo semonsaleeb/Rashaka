@@ -4,7 +4,7 @@ import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import {  ProductService } from '../../../services/product';
+import { ProductService } from '../../../services/product';
 import { CartService } from '../../../services/cart.service';
 import { CartStateService } from '../../../services/cart-state-service';
 import { AuthService } from '../../../services/auth.service';
@@ -14,11 +14,13 @@ import { ComparePopup } from '../../../compare-popup/compare-popup';
 import { CartItem } from '../../../../models/CartItem';
 import { Product } from '../../../../models/Product';
 import { Category } from '../../../../models/Category';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
   selector: 'app-category-products',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Downloadapp, ComparePopup],
+  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Downloadapp, ComparePopup, TranslateModule],
   templateUrl: './category-products.html',
   styleUrls: ['./category-products.scss']
 })
@@ -41,6 +43,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
   priceMax: number | null = null;
   selectedCategory: number | 'all' = 'all';
 
+  currentLang: string = 'ar';
+  
   cartItems: CartItem[] = [];
   subtotal = 0;
   total = 0;
@@ -72,7 +76,9 @@ export class CategoryProducts implements OnInit, OnDestroy {
     private favoriteService: FavoriteService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService,
+    private languageService: LanguageService
   ) { }
 
   // ---------------------- lifecycle ----------------------
@@ -92,8 +98,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
       if (categoryId) {
         this.productService.getProductsByCategory(categoryId).subscribe({
           next: (products) => {
-            console.log('📦 Products by category:', products);
-            
+            // console.log('📦 Products by category:', products);
+
             this.allProducts = [...products];
             this.filteredProducts = [...products];
             this.categories = this.extractUniqueCategories(this.allProducts);
@@ -139,6 +145,21 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
       this.cdr.detectChanges();
     });
+
+
+    this.translate.use(this.languageService.getCurrentLanguage());
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.translate.use(lang);
+    });
+
+    this.currentLang = this.languageService.getCurrentLanguage();
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+    });
   }
 
 
@@ -150,11 +171,11 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   // ---------------------- responsive ----------------------
-updateVisibleCards() {
-  if (window.innerWidth <= 768) this.visibleCards = 1;
-  else if (window.innerWidth <= 1024) this.visibleCards = 2;
-  else this.visibleCards = 3;
-}
+  updateVisibleCards() {
+    if (window.innerWidth <= 768) this.visibleCards = 1;
+    else if (window.innerWidth <= 1024) this.visibleCards = 2;
+    else this.visibleCards = 3;
+  }
 
 
   checkIfMobile() {
@@ -236,8 +257,8 @@ updateVisibleCards() {
     // حمل المنتجات بناءً على الكاتيجوري
     if (categoryId === 'all') {
       this.loadAllProducts();
-      console.log("category all"+ this.loadAllProducts);
-      
+      // console.log("category all"+ this.loadAllProducts);
+
     } else {
       this.loadProductsByCategory(+categoryId);
     }
@@ -256,17 +277,17 @@ updateVisibleCards() {
   }
 
   // كل المنتجات
-loadAllProducts() {
-  this.productService.getProducts().subscribe({
-    next: (products) => {
-      console.log("🔍 All Products from API:", products); // اطبع هنا
-      this.allProducts = [...products];
-      this.filteredProducts = [...products];
-      this.categories = this.extractUniqueCategories(this.allProducts);
-    },
-    error: (err) => console.error("Failed to load all products:", err)
-  });
-}
+  loadAllProducts() {
+    this.productService.getProducts().subscribe({
+      next: (products) => {
+        // console.log("🔍 All Products from API:", products); // اطبع هنا
+        this.allProducts = [...products];
+        this.filteredProducts = [...products];
+        this.categories = this.extractUniqueCategories(this.allProducts);
+      },
+      error: (err) => console.error("Failed to load all products:", err)
+    });
+  }
 
 
 
@@ -553,10 +574,10 @@ loadAllProducts() {
   handleSwipe(): void { const swipeDistance = this.touchEndX - this.touchStartX; if (Math.abs(swipeDistance) > 50) { swipeDistance > 0 ? this.nextSlide() : this.prevSlide(); } }
   nextSlide(): void { const maxIndex = Math.max(0, this.getTotalSlides() - 1); if (this.currentSlideIndex < maxIndex) this.currentSlideIndex++; }
   prevSlide(): void { if (this.currentSlideIndex > 0) this.currentSlideIndex--; }
-getTotalSlides(): number {
-  if (!this.filteredProducts) return 0;
-  return Math.ceil(this.filteredProducts.length / this.visibleCards);
-}
+  getTotalSlides(): number {
+    if (!this.filteredProducts) return 0;
+    return Math.ceil(this.filteredProducts.length / this.visibleCards);
+  }
   getDotsArray(): number[] { return Array.from({ length: this.getTotalSlides() }, (_, i) => i); }
   goToSlide(index: number) { this.currentSlideIndex = Math.min(Math.max(index, 0), this.getTotalSlides() - 1); }
 }

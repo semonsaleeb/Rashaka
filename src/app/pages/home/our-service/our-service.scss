@@ -1,10 +1,19 @@
+.container[dir='rtl'] {
+  text-align: right;
+}
+
+.container[dir='ltr'] {
+  text-align: left;
+}
+
+
 .container {
   margin-bottom: 80px;
   margin-top: 40px;
 }
 
 .section_title {
-  text-align: right;
+  // text-align: right;
   font-family: 'Almarai', sans-serif !important;
 }
 

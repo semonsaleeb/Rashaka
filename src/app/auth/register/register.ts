@@ -38,6 +38,7 @@ export class Register {
   loading = false;
   errorMessage = '';
   successMessage: string | null = null;
+  apiErrors: any = {}; // كائن لتخزين أخطاء API
 
   showPassword = false;
   showConfirmPassword = false;
@@ -45,30 +46,25 @@ export class Register {
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private authService: AuthService) {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
-      // في الـ FormControl
       email: ['',
         [
           Validators.required,
-          Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/), // ✅ تأكد من وجود @ و .
+          Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
           Validators.maxLength(255)
         ],
         [this.verifiedEmailValidator()]
       ],
-
-      // داخل FormControl
       phone: this.fb.control(
         '',
         {
           validators: [
             Validators.required,
             Validators.pattern(/^(01[0-9]{9}|(\+9665|05)[0-9]{8})$/)
-
           ],
           asyncValidators: [this.uniquePhoneValidator()],
           updateOn: 'blur'
         }
       ),
-
       password: ['', [Validators.required, strongPasswordValidator()]],
       password_confirmation: ['', [Validators.required]],
     }, { validators: this.passwordMatchValidator });
@@ -94,6 +90,7 @@ export class Register {
 
     this.loading = true;
     this.errorMessage = '';
+    this.apiErrors = {}; // مسح الأخطاء السابقة
 
     const formData = this.registerForm.value;
     console.log('Submitting registration with:', formData);
@@ -106,7 +103,7 @@ export class Register {
 
         if (!response || !response.token || !response.client) {
           console.warn('Registration response does not contain token/client:', response);
-          this.errorMessage = 'Registration failed: no token returned';
+          this.apiErrors.general = 'Registration failed: no token returned';
           this.loading = false;
           return;
         }
@@ -135,7 +132,29 @@ export class Register {
       },
       error: (error) => {
         console.error('Registration failed:', error);
-        this.errorMessage = error?.error?.message || 'Registration failed.';
+        
+        // معالجة أخطاء API
+        if (error.error && error.error.errors) {
+          // استخراج الأخطاء من الاستجابة
+          const apiErrors = error.error.errors;
+          this.apiErrors = {};
+          
+          // تعيين الأخطاء لكل حقل
+          for (const field in apiErrors) {
+            if (apiErrors.hasOwnProperty(field)) {
+              // أخذ أول خطأ فقط لكل حقل
+              this.apiErrors[field] = apiErrors[field][0];
+            }
+          }
+          
+          // إذا لم يكن هناك أخطاء محددة للحقول، عرض خطأ عام
+          if (Object.keys(this.apiErrors).length === 0) {
+            this.apiErrors.general = error.error.message || 'Registration failed.';
+          }
+        } else {
+          this.apiErrors.general = error.error?.message || 'Registration failed.';
+        }
+        
         this.loading = false;
       }
     });
@@ -162,7 +181,6 @@ export class Register {
   verifiedEmailValidator(): AsyncValidatorFn {
     return (control: AbstractControl) => {
       if (!control.value || control.hasError('pattern')) {
-        // لو فاضي أو مش مطابق للصيغة (بدون @ أو .) متعملش check
         return of(null);
       }
 
@@ -173,6 +191,4 @@ export class Register {
         );
     };
   }
-
-
 }

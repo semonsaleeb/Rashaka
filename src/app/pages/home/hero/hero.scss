@@ -1,11 +1,18 @@
+/* ========================
+   HERO SECTION
+======================== */
 .hero-section {
+  position: relative;
   background: #081E25;
- 
+  overflow: hidden;
+  color: white;
 }
 
+/* ---------- TITLE & HIGHLIGHT ---------- */
 .hero-title {
   font-size: 2.1rem;
   font-weight: 700;
+  margin-bottom: 1rem;
 }
 
 .highlight-wrapper {
@@ -18,70 +25,73 @@
   z-index: 1;
 }
 
-.hero-section {
-  position: relative;
-  overflow: hidden; /* يمنع الصورة من الخروج */
-}
-
 .highlight::before {
   content: "";
   position: absolute;
   top: -40px;
   left: 0;
-  right: -30px;  /* يغطي المساحة أفقياً */
+  right: -30px;
   margin: 0 auto;
   width: 120%;
   height: 200%;
   background-image: url('/assets/Images/Bubble%20Ellipse.svg');
-  background-size: cover; /* يخليها تغطي */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   z-index: 0;
   pointer-events: none;
 }
 
-
-
-.hero-description, .hero-subtitle {
+/* ---------- DESCRIPTION & SUBTITLE ---------- */
+.hero-description,
+.hero-subtitle {
   font-size: 1rem;
-    margin: 1rem;
-
+  margin: 1rem 0;
   opacity: 0.9;
   line-height: 1.6;
 }
 
+/* ========================
+   SLIDER
+======================== */
 .slider-container {
   position: relative;
-  max-width: 400px;
+  max-width: 500px;
   height: 500px;
   overflow: hidden;
+  margin: auto;
 }
 
 .slider-wrapper {
+  display: flex;
   width: 100%;
-  height: 100%;
-  position: relative;
+  height: 80%;
+  overflow: hidden;
 }
 
 .slides {
+  display: flex;
   transition: transform 0.5s ease-in-out;
+  width: 100%;
 }
 
 .slide {
-  width: 100%;
+  min-width: 100%;
   flex-shrink: 0;
 }
 
 .slide-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
+/* ---------- DOTS ---------- */
 .slider-dots {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
+  margin-top: 1rem;
 }
 
 .dot {
@@ -98,7 +108,9 @@
   transform: scale(1.2);
 }
 
-
+/* ========================
+   CTA BUTTON
+======================== */
 .cta-button {
   background-color: #7AD03A;
   border-radius: 50px;
@@ -107,8 +119,9 @@
   align-items: center;
   gap: 8px;
   padding: 0.75rem 1.5rem;
-  margin: .5rem;
-  color: #000000;
+  margin: 0.5rem;
+  color: #000;
+  transition: transform 0.3s ease;
 }
 
 .cta-button:hover {
@@ -118,24 +131,34 @@
 .arrow-icon img {
   width: 25px;
   height: 25px;
+  transition: transform 0.3s ease;
 }
 
+.cta-button:hover .arrow-icon img {
+  transform: translateX(5px);
+}
 
+/* RTL adjustments */
+// [dir="rtl"] .cta-button:hover .arrow-icon img {
+//   transform: translateX(-5px);
+// }
+
+/* ========================
+   FEATURES
+======================== */
 .features-container {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  gap: 4px; /* تحكم بالمسافة بين العناصر */
+  display: flex;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto;
 }
 
 .gradient-border {
   border-radius: 12px;
   padding: 3px;
-  background-image: url('/assets/Images/Frame 22 (1).svg');
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-image: url('/assets/Images/Frame%2022%20(1).svg');
+  background-size: cover;
   display: inline-block;
 }
 
@@ -149,44 +172,62 @@
   justify-content: center;
   gap: 0.4rem;
   height: 40px;
-  // width: 160px;
   padding: 0.3rem 0.8rem;
-}
-.pattern-img {
-           position: absolute;
-            right: 0;
-           bottom: -110px;      
-           height: 180px;
-            width: 100px;
-            z-index: 1;
-            transform: rotate(180deg);
+  white-space: nowrap;
 }
 
+/* ========================
+   BACKGROUND PATTERN
+======================== */
+.pattern-img {
+  position: absolute;
+  right: 0;
+  bottom: -110px;
+  height: 180px;
+  width: 100px;
+  z-index: 1;
+  transform: rotate(180deg);
+}
+
+/* ========================
+   RESPONSIVE
+======================== */
 @media (max-width: 768px) {
-  .col-lg-6.text-center.text-lg-end {
-    padding-top: 10rem;
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .col-lg-6.text-center {
+    padding-top: 2rem;
+  }
+
+  .slider-container {
+    height: 400px;
   }
 }
 
 @media (max-width: 576px) {
-  .gradient-border {
-    margin-left: 0 !important; /* بدل المسافة الكبيرة */
-    margin-right: 0 !important; /* عشان RTL */
+  .hero-title {
+    font-size: 1.5rem;
   }
-  
+
+  .gradient-border,
   .feature-item {
-    gap: 4px; /* تقليل المسافة بين الأيقونة والنص */
-    font-size: 12px; /* اختيارى لو حابة تصغري النص */
-  }
-   .pattern-img {
- position: absolute;
-            right: 0;
-           bottom: -210px !important;      
-           height: 180px;
-            width: 100px;
-            z-index: 1;
-            transform: rotate(180deg);
+    margin: 0 !important;
+    font-size: 12px;
+    gap: 4px;
   }
 
+  .pattern-img {
+    bottom: -210px !important;
+  }
 
+  .slider-container {
+    height: 300px;
+  }
+
+  .features-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

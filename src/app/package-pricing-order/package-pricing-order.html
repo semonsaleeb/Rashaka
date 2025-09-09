@@ -1,143 +1,107 @@
-<div class="container my-5" dir="rtl">
-    <!-- عنوان الصفحة -->
-    <div class="alert alert-light text-center p-3 mb-4" style="border-radius: 12px;">
-        <!-- <h4 class="text-center m-0">
-            <img src="assets/Images/Frame 9033.svg" class="me-2" style="height: 40px;">
-            <span>الاستراتيجيات</span>
-        </h4> -->
-    </div>
-
-  <div class="row g-4">
-
-  <!-- العمود الأيسر: معلومات إضافية -->
-  <div class="col-lg-7">
-    <div class="card border-0 rounded-0 p-4 shadow-sm" style="background-color: #FAFAFA;">
-      <h5 class="text-end mb-4 fw-bold" style="color: #198754;">الأشتراكات</h5>
-
-      <!-- رسالة التأكيد -->
-      <div class="alert alert-info mb-4" style="border-radius: 10px;">
-        <p class="mb-0">تنبيه: بعد الاشتراك من خلال الموقع، يجب زيارة أقرب فرع لتأكيد الاشتراك وتفعيله.</p>
-      </div>
-
-      <!-- اختيار طريقة الدفع -->
-      <div class="mb-3">
-        <h6 class="mb-3 fw-bold" style="color: #000000;">اختيار طريقة الدفع</h6>
-        <div class="form-check mb-2">
-          <input class="form-check-input" type="radio" id="payment_credit_card" name="paymentMethod"
-            value="credit_card" [(ngModel)]="paymentMethod">
-          <label class="form-check-label" for="payment_credit_card">
-            الدفع عن طريق ماي فاتورة (بطاقة ائتمان)
-          </label>
-        </div>
-        <div class="form-check mb-2">
-          <input class="form-check-input" type="radio" id="payment_cash" name="paymentMethod"
-            value="cash" [(ngModel)]="paymentMethod">
-          <label class="form-check-label" for="payment_cash">الدفع نقدًا</label>
-        </div>
-      </div>
-    </div>
+<div class="container my-5" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  <div class="alert alert-light text-center p-3 mb-4" style="border-radius: 12px;">
+    <!-- Page header could be translated -->
+    <!-- <h4 class="text-center m-0">{{ 'PAGE.STRATEGIES' | translate }}</h4> -->
   </div>
 
-  <!-- العمود الأيمن: تفاصيل الباقة -->
-  @if (selectedPackage) {
-    <div class="col-lg-5">
-      <div class="card p-4 rounded-4 shadow-sm" style="background-color: #FAFAFA;">
-        <!-- معلومات الباقة -->
-        <div class="mb-4">
-          <h5 class="text-primary mb-2 fw-bold text-dark">
-            الأشتراك في باقة {{ selectedPackage.title }}
-          </h5>
-          <div class="alert border border-1 rounded-3 w-25 py-1 mb-0">
-            <p>{{ selectedPackage.sessions }} شهر</p>
+  <div class="row g-4">
+    <!-- Left column -->
+    <div class="col-lg-7">
+      <div class="card border-0 rounded-0 p-4 shadow-sm" style="background-color: #FAFAFA;">
+        <h5 class=" mb-4 fw-bold" style="color: #198754;">{{ 'SUBSCRIPTIONS.TITLE' | translate }}</h5>
+
+        <!-- Info alert -->
+        <div class="alert alert-info mb-4" style="border-radius: 10px;">
+          <p class="mb-0">{{ 'SUBSCRIPTIONS.ALERT' | translate }}</p>
+        </div>
+
+        <!-- Payment method -->
+        <div class="mb-3">
+          <h6 class="mb-3 fw-bold" style="color: #000000;">{{ 'SUBSCRIPTIONS.PAYMENT_METHOD' | translate }}</h6>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" id="payment_credit_card" name="paymentMethod"
+              value="credit_card" [(ngModel)]="paymentMethod">
+            <label class="form-check-label" for="payment_credit_card">
+              {{ 'SUBSCRIPTIONS.CREDIT_CARD' | translate }}
+            </label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" id="payment_cash" name="paymentMethod" value="cash"
+              [(ngModel)]="paymentMethod">
+            <label class="form-check-label" for="payment_cash">{{ 'SUBSCRIPTIONS.CASH' | translate }}</label>
           </div>
         </div>
-
-        <!-- كود الخصم -->
-        <div class="input-group mb-4">
-          <input type="text" class="form-control rounded-0" placeholder="ادخل كود الخصم"
-            [(ngModel)]="promoCode">
-          <button class="btn rounded-0" style="background-color: #7AD03A; color: rgb(0, 0, 0);"
-            (click)="applyDiscount()">تطبيق</button>
-        </div>
-
-        <!-- المجموع -->
-        <ul class="list-unstyled text-end mb-4">
-          <li class="d-flex justify-content-between py-2">
-            <span>سعر الباقة</span>
-            <span>{{ selectedPackage.price | number:'1.2-2' }} ر.س</span>
-          </li>
-          @if (discountApplied) {
-            <li class="d-flex justify-content-between py-2">
-              <span>الخصم</span>
-              <span>-{{ discountAmount | number:'1.2-2' }} ر.س</span>
-            </li>
-          }
-          <li class="d-flex justify-content-between fw-bold pt-3 border-top">
-            <span>الإجمالي</span>
-            <span>{{ totalPrice | number:'1.2-2' }} ر.س</span>
-          </li>
-        </ul>
-
-        <!-- تأكيد الشروط -->
-        <div class="mb-3 form-check">
-          <input type="checkbox" id="terms" [(ngModel)]="agreeToTerms" class="form-check-input">
-          <label for="terms" class="form-check-label">
-            لقد قرأت ووافقت على <a href="#">الشروط والأحكام</a>
-          </label>
-        </div>
-
-        <!-- زر الاشتراك -->
-        <button class="btn w-100 fw-bold py-3"
-          style="background-color: #7AD03A; color: #030303; font-size: 1.1rem;"
-          (click)="confirmSubscription()">
-          تأكيد الاشتراك
-        </button>
       </div>
     </div>
-  }
-</div>
 
-</div>
+    <!-- Right column: selected package -->
+    <ng-container *ngIf="selectedPackage">
+      <div class="col-lg-5">
+        <div class="card p-4 rounded-4 shadow-sm" style="background-color: #FAFAFA;">
+          <div class="mb-4">
+            <h5 class="text-primary mb-2 fw-bold text-dark">
+              {{ 'SUBSCRIPTIONS.SELECTED_PACKAGE' | translate }} {{ selectedPackage.title }}
+            </h5>
+            <div class="border border-1 rounded-3 w-25 text-center mt-1 pt-1">
+              <p>{{ selectedPackage.sessions }} </p>
+            </div>
+          </div>
 
-<!-- Template للتحميل -->
-<ng-template #loadingTemplate>
-    <div class="text-center py-5">
-        <div class="spinner-border text-success" role="status">
-            <span class="visually-hidden">Loading...</span>
+          <!-- Promo code -->
+          <div class="input-group mb-4">
+            <input type="text" class="form-control rounded-0" placeholder="{{ 'SUBSCRIPTIONS.PROMO_PLACEHOLDER' | translate }}" [(ngModel)]="promoCode">
+            <button class="btn rounded-0" style="background-color: #7AD03A; color: rgb(0, 0, 0);"
+              (click)="applyDiscount()">{{ 'SUBSCRIPTIONS.APPLY_PROMO' | translate }}</button>
+          </div>
+
+          <!-- Price summary -->
+          <ul class="list-unstyled text-end mb-4">
+            <li class="d-flex justify-content-between py-2">
+              <span>{{ 'SUBSCRIPTIONS.PRICE_BEFORE' | translate }}</span>
+              <span>{{ selectedPackage.price_before | number:'1.2-2' }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
+            </li>
+            <li class="d-flex justify-content-between py-2">
+              <span>{{ 'SUBSCRIPTIONS.DISCOUNT' | translate }}</span>
+              <span>-{{ selectedPackage.active_offer?.discount_value ?? 0 | number:'1.2-2' }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
+            </li>
+            <li class="d-flex justify-content-between fw-bold pt-3 border-top">
+              <span>{{ 'SUBSCRIPTIONS.TOTAL' | translate }}</span>
+              <span>{{ (selectedPackage.price_after ?? selectedPackage.price_before) | number:'1.2-2' }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
+            </li>
+          </ul>
+
+          <button class="btn w-100 fw-bold py-3" style="background-color: #7AD03A; color: #030303; font-size: 1.1rem;"
+            (click)="confirmSubscription()">{{ 'SUBSCRIPTIONS.CONFIRM' | translate }}</button>
         </div>
-    </div>
-</ng-template>
+      </div>
+    </ng-container>
+  </div>
+</div>
 
-
-@if (showPopup) {
-<div class="popup-overlay" dir="rtl">
+<!-- Popup -->
+<ng-container *ngIf="showPopup">
+  <div class="popup-overlay" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
     <div class="popup-card-wrapper text-center">
-        <button class="close-btn" (click)="closePopup()">×</button>
+      <button class="close-btn" (click)="closePopup()">×</button>
 
-        <div class="success-icon mb-3">
-            <img src="assets/Images/Group 1000002774.svg" height="200px">
-        </div>
+      <div class="success-icon mb-3">
+        <img src="assets/Images/Group 1000002774.svg" height="200px">
+      </div>
 
-        <h3 class="mb-3">
-            أنت الآن على باقة {{ subscriptionData?.name }} لمدة {{ subscriptionData?.sessions }} شهرا
-        </h3>
+      <h3 class="mb-3">
+        {{ 'SUBSCRIPTIONS.POPUP_MSG' | translate }} {{ subscriptionData?.name }} {{ 'SUBSCRIPTIONS.POPUP_DURATION' | translate }} {{ subscriptionData?.sessions }}
+      </h3>
 
-        <div class="popup-content">
-            @if (subscriptionData?.activation_code) {
-            <p>
-                كود التفعيل الخاص بك: <strong class="border border-1 p-2 fs-4">{{ subscriptionData.activation_code }}</strong>
-            </p>
-            } 
-            <p class="">
-                لتفعيل الاشتراك، يرجى زيارة أقرب فرع لك وإظهار بيانات الاشتراك لفريق العمل.
-            </p>
-            
+      <div class="popup-content">
+        <p *ngIf="subscriptionData?.activation_code">
+          {{ 'SUBSCRIPTIONS.ACTIVATION_CODE' | translate }}: <strong class="border border-1 p-2 fs-4">{{ subscriptionData.activation_code }}</strong>
+        </p>
+        <p>{{ 'SUBSCRIPTIONS.POPUP_INFO' | translate }}</p>
+      </div>
 
-        </div>
-
-        <button class="btn btn-success w-100 py-2 fw-bold" (click)="goToBranches()">
-            عرض جميع الفروع
-        </button>
+      <button class="btn btn-success w-100 py-2 fw-bold" (click)="goToBranches()">
+        {{ 'SUBSCRIPTIONS.SHOW_BRANCHES' | translate }}
+      </button>
     </div>
-</div>
-}
+  </div>
+</ng-container>

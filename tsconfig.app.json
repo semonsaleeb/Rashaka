@@ -4,7 +4,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["swiper/element"]
+    "types": [
+      "swiper/element",
+      "@angular/localize"
+    ]
   },
   "include": [
     "src/**/*.ts"

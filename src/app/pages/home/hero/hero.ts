@@ -1,32 +1,52 @@
-
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 @Component({
   selector: 'app-hero',
-  imports: [],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './hero.html',
   styleUrl: './hero.scss'
 })
-export class Hero {
-    // You can make these dynamic with inputs
-  previousWeight = 160;
-  currentWeight = 80;
-  weeklyReward = 'مكعبات صحية';
-
+export class Hero implements OnInit {
+  isArabic: boolean = true;
   currentSlide: number = 0;
-  
- sliderImages = [
+
+  // Slider images
+  sliderImages = [
     { src: 'assets/Images/536783.png', alt: 'صورة الصحة 1' },
-    { src: 'assets/Images/536783.png', alt: 'صورة الصحة 2' },
-    { src: 'assets/Images/536783.png', alt: 'صورة الصحة 3' },
-    { src: 'assets/Images/536783.png', alt: 'صورة الصحة 4' }
+    { src: 'assets/Images/Doctor.svg', alt: 'صورة الصحة 2' }
   ];
-  
-  constructor(private router: Router) { }
-navigateToReservation() {
-  this.router.navigate(['/reservation']);
-}
+
+  // Feature keys for translation
+  features: string[] = [
+    'FEATURES.FREE_CHECKUP',
+    'FEATURES.WEEKLY_FOLLOWUP',
+    'FEATURES.HEALTHY_PRODUCTS'
+  ];
+
+  constructor(private router: Router, private languageService: LanguageService) {}
+
+  ngOnInit(): void {
+    // Set initial direction
+    this.isArabic = this.languageService.getCurrentLanguage() === 'ar';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.isArabic = lang === 'ar';
+    });
+  }
+
+  navigateToReservation() {
+    this.router.navigate(['/reservation']);
+  }
+
+  onGetStarted() {
+    console.log('Get started clicked');
+    // Add navigation or action here
+  }
+
   nextSlide() {
     this.currentSlide = (this.currentSlide + 1) % this.sliderImages.length;
   }
@@ -37,10 +57,5 @@ navigateToReservation() {
 
   goToSlide(index: number) {
     this.currentSlide = index;
-  }
-
-  onGetStarted() {
-    console.log('Get started clicked');
-    // Add your navigation logic here
   }
 }

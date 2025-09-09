@@ -6,11 +6,13 @@ import { Blog, BlogService } from '../../../services/blogs.service';
 import { AssetUtils } from '../../../utils/asset.utils';
 import { TruncatePipe } from '../../../pipes/truncate-pipe';
 import { Downloadapp } from '../downloadapp/downloadapp';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
   selector: 'app-blogs',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, TruncatePipe, Downloadapp],
+  imports: [CommonModule, HttpClientModule, RouterModule, TruncatePipe, Downloadapp, TranslateModule],
   templateUrl: './blogs.html',
   styleUrls: ['./blogs.scss'],
 })
@@ -20,13 +22,29 @@ export class Blogs implements OnInit {
   loading = true;
   currentSlideIndex = 0;
   visibleCards = 3;
+  currentLang: string = 'ar';
 
-  constructor(private blogService: BlogService) {}
+
+
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+  constructor(private blogService: BlogService, private translate: TranslateService, private languageService: LanguageService) {}
 
   ngOnInit(): void {
-    this.setVisibleCards();
-    this.loadBlogs();
-  }
+  this.setVisibleCards();
+  this.loadBlogs();
+
+  // Set initial language
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+  // Subscribe to language changes
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
+}
+
 
   /** 🔥 يغيّر عدد الكروت حسب حجم الشاشة */
   @HostListener('window:resize')
@@ -46,6 +64,13 @@ export class Blogs implements OnInit {
     if (this.currentSlideIndex > this.blogs.length - this.visibleCards) {
       this.currentSlideIndex = Math.max(0, this.blogs.length - this.visibleCards);
     }
+
+      this.translate.use(this.languageService.getCurrentLanguage());
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.translate.use(lang);
+    });
   }
 
   loadBlogs(): void {
@@ -109,7 +134,7 @@ export class Blogs implements OnInit {
   }
 
   onBlogClick(id: number): void {
-    console.log('Clicked blog ID:', id);
+    // console.log('Clicked blog ID:', id);
   }
 
 
