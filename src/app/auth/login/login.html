@@ -1,6 +1,6 @@
-<form (ngSubmit)="login()" dir="rtl">
+<form (ngSubmit)="login()" >
   <div class="mb-3">
-    <label for="email">البريد الإلكتروني</label>
+    <label for="email">{{ 'LOGIN.EMAIL' | translate }}</label>
     <input
       type="email"
       id="email"
@@ -8,49 +8,56 @@
       name="email"
       class="form-control"
       required
-      />
+    />
+  </div>
+
+<div class="my-3 position-relative">
+  <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
+  
+  <input
+    [type]="showPassword ? 'text' : 'password'"
+    id="password"
+    [(ngModel)]="password"
+    name="password"
+    class="form-control py-2"
+    [style.padding-right.px]="currentLang === 'en' ? 40 : null"
+    [style.padding-left.px]="currentLang === 'ar' ? 40 : null"
+    required
+  />
+
+  <!-- 👁️ Eye Icon داخل الـ input -->
+  <span
+    class="position-absolute pt-4 top-50"
+    [ngClass]="{
+      'end-0 pe-3': currentLang === 'en',
+      'start-0 ps-3': currentLang === 'ar'
+    }"
+    style="cursor: pointer; transform: translateY(-50%);"
+    (click)="togglePasswordVisibility()">
+    <i class="fas"
+       [class.fa-eye]="showPassword"
+       [class.fa-eye-slash]="!showPassword">
+    </i>
+  </span>
+</div>
+
+
+  <!-- Forgot Password Link -->
+  <a [routerLink]="['/forgot-password']"
+     class="d-block text-end text-primary mb-3"
+     style="text-decoration: none;">
+    {{ 'LOGIN.FORGOT_PASSWORD' | translate }} <i class="fas fa-unlock"></i>
+  </a>
+
+  <!-- Submit Button -->
+  <button type="submit" class="btn custom-green-btn w-100" [disabled]="loading">
+    {{ loading ? ('LOGIN.LOADING' | translate) : ('LOGIN.SUBMIT' | translate) }}
+  </button>
+
+  <!-- Error Message -->
+  <ng-container *ngIf="errorMessage">
+    <div class="text-danger mt-2">
+      {{ errorMessage }}
     </div>
-
-    <div class="my-3 position-relative">
-      <label for="password">كلمة المرور</label>
-      <input
-        [type]="showPassword ? 'text' : 'password'"
-        id="password"
-        [(ngModel)]="password"
-        name="password"
-        class="form-control py-2"
-        required
-        />
-
-        <!-- 👁️ Eye Icon for Toggle -->
-        <span
-          class="position-absolute top-50 start-0  ps-3"
-          style="cursor: pointer;"
-          (click)="togglePasswordVisibility()">
-          <i class="fas"
-            [class.fa-eye]="showPassword"
-            [class.fa-eye-slash]="!showPassword">
-          </i>
-        </span>
-      </div>
-
-      <!-- Forgot Password Link -->
-   <a [routerLink]="['/forgot-password']"
-   class="d-block text-end text-primary mb-3"
-   style="text-decoration: none;">
-  هل نسيت كلمة المرور؟ <i class="fas fa-unlock"></i>
-</a>
-
-
-      <!-- Submit Button -->
-      <button type="submit" class="btn custom-green-btn w-100" [disabled]="loading">
-        {{ loading ? 'جاري الدخول...' : 'دخول' }}
-      </button>
-
-      <!-- Error Message -->
-      @if (errorMessage) {
-        <div class="text-danger mt-2">
-          {{ errorMessage }}
-        </div>
-      }
-    </form>
+  </ng-container>
+</form>

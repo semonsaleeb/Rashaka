@@ -1,17 +1,17 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-4" dir="rtl">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-4" >
 
   <!-- الاسم -->
   <div class="mb-3">
-    <label class="form-label">الأسم:</label>
+    <label class="form-label">{{ 'REGISTER.NAME' | translate }}</label>
     <input type="text" formControlName="name" class="form-control"
       [class.is-invalid]="(registerForm.get('name')?.invalid && registerForm.get('name')?.touched) || apiErrors?.name">
     <div *ngIf="registerForm.get('name')?.hasError('required') && registerForm.get('name')?.touched"
       class="invalid-feedback">
-      يرجى إدخال الاسم الكامل
+      {{ 'REGISTER.ERRORS.NAME_REQUIRED' | translate }}
     </div>
     <div *ngIf="registerForm.get('name')?.hasError('maxlength') && registerForm.get('name')?.touched"
       class="invalid-feedback">
-      الاسم طويل جدًا، الحد الأقصى 255 حرف
+      {{ 'REGISTER.ERRORS.NAME_MAXLENGTH' | translate }}
     </div>
     <div *ngIf="apiErrors?.name" class="invalid-feedback d-block">
       {{ apiErrors.name }}
@@ -20,27 +20,27 @@
 
   <!-- البريد الإلكتروني -->
   <div class="mb-3">
-    <label class="form-label">البريد الإلكتروني:</label>
+    <label class="form-label">{{ 'REGISTER.EMAIL' | translate }}</label>
     <input type="email" formControlName="email" class="form-control"
       [class.is-invalid]="(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) || apiErrors?.email">
     <div *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched"
       class="invalid-feedback">
-      يرجى إدخال البريد الإلكتروني
+      {{ 'REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}
     </div>
     <div *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched"
       class="invalid-feedback">
-      يرجى إدخال بريد إلكتروني صحيح
+      {{ 'REGISTER.ERRORS.EMAIL_INVALID' | translate }}
     </div>
     <div *ngIf="registerForm.get('email')?.hasError('maxlength') && registerForm.get('email')?.touched"
       class="invalid-feedback">
-      البريد الإلكتروني طويل جدًا، الحد الأقصى 255 حرف
+      {{ 'REGISTER.ERRORS.EMAIL_MAXLENGTH' | translate }}
     </div>
     <div *ngIf="registerForm.get('email')?.hasError('emailNotVerified')" class="invalid-feedback d-block">
-      البريد الإلكتروني غير موثق
+      {{ 'REGISTER.ERRORS.EMAIL_NOT_VERIFIED' | translate }}
     </div>
     <div *ngIf="registerForm.get('email')?.hasError('pattern') && registerForm.get('email')?.touched"
       class="invalid-feedback">
-      يرجى إدخال بريد إلكتروني صالح يحتوي على @ و .
+      {{ 'REGISTER.ERRORS.EMAIL_PATTERN' | translate }}
     </div>
     <div *ngIf="apiErrors?.email" class="invalid-feedback d-block">
       {{ apiErrors.email }}
@@ -49,15 +49,15 @@
 
   <!-- رقم الهاتف -->
   <div class="mb-3">
-    <label class="form-label">رقم الهاتف:</label>
+    <label class="form-label">{{ 'REGISTER.PHONE' | translate }}</label>
     <input type="tel" formControlName="phone" class="form-control"
       [class.is-invalid]="(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) || apiErrors?.phone">
     <div *ngIf="registerForm.get('phone')?.hasError('required') && registerForm.get('phone')?.touched"
       class="invalid-feedback">
-      يرجى إدخال رقم الهاتف
+      {{ 'REGISTER.ERRORS.PHONE_REQUIRED' | translate }}
     </div>
     <div *ngIf="registerForm.get('phone')?.hasError('pattern')" class="invalid-feedback d-block">
-      رقم الهاتف غير صالح، يجب أن يكون رقم مصري (11 رقم يبدأ بـ 01) أو سعودي (10 أرقام يبدأ بـ 05 أو +9665)
+      {{ 'REGISTER.ERRORS.PHONE_INVALID' | translate }}
     </div>
     <div *ngIf="apiErrors?.phone" class="invalid-feedback d-block">
       {{ apiErrors.phone }}
@@ -66,11 +66,11 @@
 
   <!-- كلمة المرور -->
   <div class="mb-3">
-    <label class="form-label">كلمة المرور:</label>
-    <div class="position-relative" dir="rtl">
+    <label class="form-label">{{ 'REGISTER.PASSWORD' | translate }}</label>
+    <div class="position-relative" >
       <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5"
         [class.is-invalid]="(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) || apiErrors?.password"
-        placeholder="كلمة المرور">
+        [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate">
       <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="cursor: pointer;"
         (click)="togglePasswordVisibility()">
         <i class="fas" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
@@ -78,11 +78,11 @@
     </div>
     <div *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched"
       class="invalid-feedback d-block text-end">
-      يرجى إدخال كلمة المرور
+      {{ 'REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
     </div>
     <div *ngIf="registerForm.get('password')?.hasError('weakPassword') && registerForm.get('password')?.touched"
       class="invalid-feedback d-block text-end">
-      كلمة المرور ضعيفة، يجب أن تحتوي على أحرف كبيرة وصغيرة وأرقام وطول ≥ 8
+      {{ 'REGISTER.ERRORS.PASSWORD_WEAK' | translate }}
     </div>
     <div *ngIf="apiErrors?.password" class="invalid-feedback d-block text-end">
       {{ apiErrors.password }}
@@ -91,12 +91,12 @@
 
   <!-- تأكيد كلمة المرور -->
   <div class="mb-4">
-    <label class="form-label">تأكيد كلمة المرور:</label>
-    <div class="position-relative" dir="rtl">
+    <label class="form-label">{{ 'REGISTER.PASSWORD_CONFIRM' | translate }}</label>
+    <div class="position-relative" >
       <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="password_confirmation"
         class="form-control ps-5"
         [class.is-invalid]="(registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched) || apiErrors?.password_confirmation"
-        placeholder="تأكيد كلمة المرور">
+        [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate">
       <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="cursor: pointer;"
         (click)="toggleConfirmPasswordVisibility()">
         <i class="fas" [class.fa-eye]="showConfirmPassword" [class.fa-eye-slash]="!showConfirmPassword"></i>
@@ -104,7 +104,7 @@
     </div>
     <div *ngIf="registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched"
       class="invalid-feedback text-end d-block">
-      كلمات المرور غير متطابقة
+      {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
     </div>
     <div *ngIf="apiErrors?.password_confirmation" class="invalid-feedback text-end d-block">
       {{ apiErrors.password_confirmation }}
@@ -114,7 +114,7 @@
   <!-- زر التسجيل -->
   <button type="submit" class="btn custom-green-btn w-100 py-2"
     [disabled]="registerForm.invalid || registerForm.pending">
-    تسجيل
+    {{ 'REGISTER.SUBMIT' | translate }}
   </button>
 
   <!-- رسائل النجاح والخطأ العامة -->
@@ -128,10 +128,10 @@
     <div class="modal-content p-4 text-center">
       <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
       <img src="assets/Images/Account-amico 1.svg" alt="success" class="mb-3 d-block mx-auto" style="width: 240px;">
-      <h5 class="fw-bold">تم إنشاء الحساب بنجاح!</h5>
-      <p class="text-muted">مرحبًا بك! استكشف خدماتنا وابدأ تجربتك الآن.</p>
+      <h5 class="fw-bold">{{ 'REGISTER.SUCCESS_TITLE' | translate }}</h5>
+      <p class="text-muted">{{ 'REGISTER.SUCCESS_MESSAGE' | translate }}</p>
       <button class="btn btn-success w-100" [routerLink]="['/']" data-bs-dismiss="modal">
-        اذهب إلى الصفحة الرئيسية
+        {{ 'REGISTER.SUCCESS_BUTTON' | translate }}
       </button>
     </div>
   </div>

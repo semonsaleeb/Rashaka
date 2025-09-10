@@ -248,7 +248,161 @@
   },
     "SUCCESS_STORIES_TITLE": "Our Clients' Success Stories",
     "SUCCESS_STORIES_SUBTITLE": "\"Real Transformation Stories - Your Inspiration Starts Here\"<br>Take the first step now towards your dream body!",
-    "SUCCESS_STORIES_CTA": "Book Now"
+    "SUCCESS_STORIES_CTA": "Book Now",
+    "AUTH": {
+    "HOME": "Home",
+    "LOGIN_IMAGE_ALT": "Login Image",
+    "WELCOME": "Welcome to Happy Fitness!",
+    "SUBTITLE": "Log in or create your account to continue",
+    "REGISTER": "Create Account",
+    "LOGIN": "Login"
+  },
+  "LOGIN": {
+  "EMAIL": "Email",
+  "PASSWORD": "Password",
+  "FORGOT_PASSWORD": "Forgot your password?",
+  "SUBMIT": "Login",
+  "LOADING": "Logging in..."
+},
+"REGISTER": {
+  "NAME": "Name",
+  "EMAIL": "Email",
+  "PHONE": "Phone Number",
+  "PASSWORD": "Password",
+  "PASSWORD_PLACEHOLDER": "Password",
+  "PASSWORD_CONFIRM": "Confirm Password",
+  "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
+  "SUBMIT": "Register",
+  "ERRORS": {
+    "NAME_REQUIRED": "Please enter your full name",
+    "NAME_MAXLENGTH": "Name is too long, maximum 255 characters",
+    "EMAIL_REQUIRED": "Please enter your email",
+    "EMAIL_INVALID": "Please enter a valid email",
+    "EMAIL_MAXLENGTH": "Email is too long, maximum 255 characters",
+    "EMAIL_NOT_VERIFIED": "Email is not verified",
+    "EMAIL_PATTERN": "Please enter a valid email containing @ and .",
+    "PHONE_REQUIRED": "Please enter your phone number",
+    "PHONE_INVALID": "Invalid phone number, must be Egyptian (11 digits starting with 01) or Saudi (10 digits starting with 05 or +9665)",
+    "PASSWORD_REQUIRED": "Please enter a password",
+    "PASSWORD_WEAK": "Weak password, must contain uppercase, lowercase letters, numbers, and length ≥ 8",
+    "PASSWORD_MISMATCH": "Passwords do not match"
+  },
+  "SUCCESS_TITLE": "Account created successfully!",
+  "SUCCESS_MESSAGE": "Welcome! Explore our services and start your experience now.",
+  "SUCCESS_BUTTON": "Go to Homepage"
+},
+ "MODAL": {
+    "CLOSE": "Close",
+    "LOGIN_ILLUSTRATION": "Login Illustration",
+    "LOGIN_MESSAGE": "Please login or create a new account to continue.",
+    "REGISTER": "Register",
+    "LOGIN": "Login"
+  },
+  "HOME": {
+    "MAIN_TITLE": "Now you can do a full checkup and know your body details",
+    "MAIN_SUBTITLE": "Get a checkup and consultation to detect fat, tighten sagging, and remove cellulite"
+  },
+  "STEPS": {
+    "SELECT_BRANCH": "Select Branch",
+    "SELECT_SPECIALIST": "Select Specialist",
+    "CONFIRM_BOOKING": "Confirm Booking",
+    "SELECT_BRANCH_TITLE": "Choose the nearest branch",
+    "SELECT_BRANCH_DESC": "Find the nearest branch to your location. Choose the most suitable one for easier attendance.",
+    "SELECT_SPECIALIST_TITLE": "Choose the specialist and appointment",
+    "SELECT_SPECIALIST_DESC": "Select the suitable specialist for your health condition and pick an available time.",
+    "CONFIRM_BOOKING_TITLE": "Confirm Booking",
+    "CONFIRM_BOOKING_DESC": "Review your booking details and confirm to complete the process."
+  },
+   "SESSION": {
+    "SELECT_TYPE": "Select Session Type",
+    "TYPE_LABEL": "Session Type",
+    "TYPE_PLACEHOLDER": "-- Select Session --",
+    "BRANCH_LABEL": "Branch",
+    "BRANCH_PLACEHOLDER": "-- Select Branch --",
+    "NEXT": "Next"
+  },
+   "SPECIALIST": {
+    "SELECT_TITLE": "Select Specialist",
+    "NO_SPECIALISTS": "No specialists available for this branch"
+  },
+  "CALENDAR": {
+    "SUNDAY": "Sun",
+    "MONDAY": "Mon",
+    "TUESDAY": "Tue",
+    "WEDNESDAY": "Wed",
+    "THURSDAY": "Thu",
+    "FRIDAY": "Fri",
+    "SATURDAY": "Sat",
+    "NO_DATES": "No available dates this month"
+  },
+  "TIME": {
+    "AVAILABLE_TIMES": "Available Times",
+    "FROM": "From",
+    "TO": "To",
+    "NO_TIMES": "No available times for this day"
+  },
+  "BUTTONS": {
+    "NEXT": "Next",
+    "PREVIOUS": "Previous",
+     "CONFIRM": "Confirm Booking",
+    "GO_HOME": "Go Home",
+    "VIEW_BOOKING": "View Booking"
+  },
+   "CONFIRM_BOOKING": {
+    "SPECIALIST_IMAGE": "Specialist Image",
+    "BRANCH": "Branch",
+    "ADDRESS": "Address",
+    "PHONE": "Phone",
+    "DATE": "Date",
+    "TIME": "Time",
+    "FROM": "From",
+    "SUCCESS_IMAGE": "Booking Success Image",
+    "SUCCESS_TITLE": "Your appointment has been booked successfully!",
+    "SUCCESS_MESSAGE": "Booking details will be sent to your email, and you can track your bookings from your account."
+  },
+   "POPUP": {
+    "QR_ALT": "QR code",
+    "MESSAGE": "Download the Happy Fitness app and enjoy exclusive offers",
+    "APP_STORE": "App Store",
+    "GOOGLE_PLAY": "Google Play"
+  },
+   "PASSWORD_RESET": {
+    "HOME": "Home",
+    "LOGIN_IMAGE": "Login Image",
+    "TITLE": "Reset Password",
+    "EMAIL_LABEL": "Email",
+    "SEND_OTP": "Send OTP",
+    "SENDING": "Sending...",
+    "SUCCESS_MESSAGE": "Password has been successfully reset",
+  "RESET_LINK_MESSAGE": "A reset link has been sent to your email. If you don’t receive it within 5 minutes, please click the resend button.",
+  "RESEND": "Resend"
+  
+  },
+    "OTP": {
+    "HOME": "Home",
+    "LOGIN_IMAGE": "Login Image",
+    "TITLE": "Verify OTP",
+    "SUBTITLE": "We sent you a 4-digit verification code to your email",
+    "LABEL": "Verification Code",
+    "SUBMIT": "Verify Account",
+    "LOADING": "Verifying...",
+    "RESEND_INFO": "Didn't receive the code? Resend after 30 seconds",
+     "ERROR_INVALID": "The code must be 4 digits.",
+  "SUCCESS": "Verification successful!",
+  "ERROR_FAILED": "OTP verification failed."
+    
+  },
+   "RESET_PASSWORD": {
+    "HOME": "Home",
+    "LOGIN_IMAGE": "Login Image",
+    "TITLE": "Reset Password",
+    "NEW_PASSWORD": "New Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "SUBMIT": "Reset Password",
+    "LOADING": "Sending..."
+  }
+
+
   
  
 }

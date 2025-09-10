@@ -3,71 +3,59 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4 p-3">
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          [attr.aria-label]="'MODAL.CLOSE' | translate"></button>
       </div>
       <div class="text-center mb-3">
-        <img src="assets/Images/Enter OTP-cuate 1.svg" alt="Login Illustration" style="max-width: 200px;">
+        <img src="assets/Images/Enter OTP-cuate 1.svg" alt="{{ 'MODAL.LOGIN_ILLUSTRATION' | translate }}"
+          style="max-width: 200px;">
       </div>
-      <h5 class="text-center fw-bold mb-2">يرجى تسجيل الدخول أو إنشاء حساب جديد للمتابعة.</h5>
+      <h5 class="text-center fw-bold mb-2">{{ 'MODAL.LOGIN_MESSAGE' | translate }}</h5>
       <div class="d-flex justify-content-center gap-3 mt-3">
         <button class="btn btn-outline-secondary px-4" (click)="goToRegister()" data-bs-dismiss="modal">
-          إنشاء الحساب
+          {{ 'MODAL.REGISTER' | translate }}
         </button>
         <button class="btn btn-success px-4" (click)="goToLogin()" data-bs-dismiss="modal">
-          تسجيل الدخول
+          {{ 'MODAL.LOGIN' | translate }}
         </button>
       </div>
     </div>
   </div>
 </div>
 
-
 <!-- 👇 الصفحة تظهر بس لو المستخدم عامل Login -->
 @if (token) {
 <div class="container py-4 mt-lg-5">
 
-
-
   <!-- العنوان الرئيسي -->
   <h4 class="fw-bold text-success text-center py-4">
-    الآن تقدر تسوي الفحص الشامل وتتعرف على تفاصيل جسمك
+    {{ 'HOME.MAIN_TITLE' | translate }}
   </h4>
   <p class="text-muted text-center">
-    احصل على فحص و استشارة لاكتشاف الدهون و شد الترهلات و ازالة السيلوليت
+    {{ 'HOME.MAIN_SUBTITLE' | translate }}
   </p>
+
   <!-- نسخة الموبايل (Stepper أفقي أعلى الصفحة) -->
-  <div class="d-flex justify-content-between align-items-center px-2 py-3 d-md-none" dir="rtl">
+  <div class="d-flex justify-content-between align-items-center px-2 py-3 d-md-none" >
     <div class="text-center">
       <img [src]="step >= 2 ? 'assets/Images/Frame 1000005990.svg' : 'assets/Images/Frame 1000005993.svg'" width="70">
-      <div class="small">اختر الفرع</div>
+      <div class="small">{{ 'STEPS.SELECT_BRANCH' | translate }}</div>
     </div>
     <div class="text-center">
       <img [src]="step >= 3 ? 'assets/Images/Frame 1000005990.svg' : 'assets/Images/Frame 1000005991.svg'" width="70">
-      <div class="small">اختر الأخصائي</div>
+      <div class="small">{{ 'STEPS.SELECT_SPECIALIST' | translate }}</div>
     </div>
     <div class="text-center">
       <img [src]="step > 3 ? 'assets/Images/Frame 1000005990.svg' : 'assets/Images/Frame 1000005992.svg'" width="70">
-      <div class="small">تأكيد الحجز</div>
+      <div class="small">{{ 'STEPS.CONFIRM_BOOKING' | translate }}</div>
     </div>
   </div>
+
   <div class="row mt-4">
-    <!-- Left side (المحتوى) -->
-    <div class="col-md-8">
-      @switch (step) {
-      @case (1) {
-      <app-branch (next)="goToStep(2)"></app-branch>
-      }
-      @case (2) {
-      <app-spicialist (prev)="goToStep(1)" (next)="goToStep(3)"></app-spicialist>
-      }
-      @case (3) {
-      <app-confirm (prev)="goToStep(2)"></app-confirm>
-      }
-      }
-    </div>
+  
 
     <!-- Right side (steps indicator) نسخة الديسكتوب -->
-    <div class="col-md-4 d-none d-md-block" dir="rtl">
+    <div class="col-md-4 d-none d-md-block" >
       <div class="card p-3 rounded-4 shadow-sm">
 
         <!-- Step 1 -->
@@ -80,11 +68,10 @@
               } @else {
               <img src="assets/Images/Frame 1000005993.svg" style="width: 70px; height: 70px;">
               }
-              <h6 class="mb-0">اختر الفرع الأقرب لك</h6>
+              <h6 class="mb-0">{{ 'STEPS.SELECT_BRANCH_TITLE' | translate }}</h6>
             </div>
             <p class="text-muted small px-3">
-              ابحث عن أقرب فرع لموقعك الجغرافي <br>
-              اختر الفرع الأنسب لتسهيل حضورك للجلسة
+              {{ 'STEPS.SELECT_BRANCH_DESC' | translate }}
             </p>
           </div>
         </div>
@@ -99,11 +86,10 @@
               } @else {
               <img src="assets/Images/Frame 1000005991.svg" style="width: 70px; height: 70px;">
               }
-              <h6 class="mb-0">اختر الأخصائي و المعاد</h6>
+              <h6 class="mb-0">{{ 'STEPS.SELECT_SPECIALIST_TITLE' | translate }}</h6>
             </div>
             <p class="text-muted small px-3">
-              اختر الأخصائي المناسب لحالتك الصحية <br>
-              حدد الوقت المتاح والمناسب لك
+              {{ 'STEPS.SELECT_SPECIALIST_DESC' | translate }}
             </p>
           </div>
         </div>
@@ -118,16 +104,30 @@
               } @else {
               <img src="assets/Images/Frame 1000005992.svg" style="width: 70px; height: 70px;">
               }
-              <h6 class="mb-0">تأكيد الحجز</h6>
+              <h6 class="mb-0">{{ 'STEPS.CONFIRM_BOOKING_TITLE' | translate }}</h6>
             </div>
             <p class="text-muted small px-3">
-              راجع تفاصيل الحجز الخاصة بك <br>
-              قم بتأكيد الحجز لإكمال العملية
+              {{ 'STEPS.CONFIRM_BOOKING_DESC' | translate }}
             </p>
           </div>
         </div>
 
       </div>
+    </div>
+
+      <!-- Left side (المحتوى) -->
+    <div class="col-md-8">
+      @switch (step) {
+      @case (1) {
+      <app-branch (next)="goToStep(2)"></app-branch>
+      }
+      @case (2) {
+      <app-spicialist (prev)="goToStep(1)" (next)="goToStep(3)"></app-spicialist>
+      }
+      @case (3) {
+      <app-confirm (prev)="goToStep(2)"></app-confirm>
+      }
+      }
     </div>
   </div>
 </div>

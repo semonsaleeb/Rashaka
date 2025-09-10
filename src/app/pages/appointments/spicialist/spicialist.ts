@@ -7,6 +7,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
   selector: 'app-spicialist',
@@ -14,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   imports: [CommonModule, FormsModule,    MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule],
+    MatNativeDateModule, TranslateModule],
   templateUrl: './spicialist.html',
   styleUrls: ['./spicialist.scss']
 })
@@ -31,10 +33,12 @@ selectedTime: string = '';
 availableTimes: { start: string, end: string }[] = [];
 specialists: any[] = []; // افترض إنها موجودة
 dateRange = { from: new Date(), to: new Date(new Date().setDate(new Date().getDate() + 30)) };
-
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; 
   constructor(
     private stateService: AppointmentStateService,
-    private availabilityService: AvailabilityService
+    private availabilityService: AvailabilityService,
+    private translate: TranslateService,  private languageService: LanguageService
   ) {}
 
   ngOnInit() {
@@ -44,24 +48,36 @@ dateRange = { from: new Date(), to: new Date(new Date().setDate(new Date().getDa
     } else {
       console.warn('❌ No center selected');
     }
+      this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+  // Subscribe to language changes
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
   }
 
 
 loadSpecialists(centerId: number) {
-  this.availabilityService.getCentersAvailability({})
+  const sessionKey = this.stateService.getData()?.session_type_key;
+
+  if (!sessionKey) {
+    console.warn('⚠️ No session key selected');
+    return;
+  }
+
+  this.availabilityService.getCentersAvailability(sessionKey)
     .subscribe({
       next: (res: any) => {
         console.log('✅ API Response:', res);
 
         if (res?.status === 'success') {
-          // ✅ خزّن الرينج واستخرج الشهور المتاحة
           this.dateRange = res.range;
           this.extractMonthsFromRange();
 
-          // ✅ هات الفرع المطلوب
           const center = res.centers.find((c: any) => c.id === centerId);
 
-          // ✅ فلترة الأخصائيين → بس اللي عندهم مواعيد متاحة
           this.specialists = (center?.specialists || []).filter((sp: any) => {
             const availableDates = this.getAvailableDatesForSpecialist(sp);
             return availableDates.length > 0;
@@ -75,6 +91,8 @@ loadSpecialists(centerId: number) {
       }
     });
 }
+
+
 
 
 dateFilter = (date: Date | null): boolean => {

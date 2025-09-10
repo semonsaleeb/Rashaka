@@ -1,9 +1,10 @@
 
 import { Component, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-welcome-popup',
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './welcome-popup.html',
   styleUrl: './welcome-popup.scss'
 })

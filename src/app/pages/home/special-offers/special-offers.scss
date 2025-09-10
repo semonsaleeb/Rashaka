@@ -93,7 +93,7 @@ button.rounded-circle {
   .product-group {
     display: flex;
     flex-wrap: wrap;
-    justify-content: end;
+    // justify-content: end;
     gap: 1rem;
 
     @media (max-width: 768px) {
@@ -468,7 +468,7 @@ button.rounded-circle {
   .product-group {
     display: flex;
     flex-wrap: wrap;
-    justify-content: end;
+    // justify-content: end;
     gap: 1rem;
 
     @media (max-width: 768px) {
@@ -503,7 +503,7 @@ button.rounded-circle {
 
   .product-info {
     margin-right: 1rem;
-    justify-content: end;
+    // justify-content: end;
     padding: 1.5rem;
 
     .product-name {

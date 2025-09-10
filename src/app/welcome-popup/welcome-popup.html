@@ -1,17 +1,25 @@
 @if (show) {
   <div class="popup-backdrop">
     <div class="popup-box">
-      <button class="close-btn" (click)="close()"> <i class="fa-solid fa-x small-icon"></i> </button>
-      <img src="assets/Images/Group 9034.svg" class="qr-image" alt="QR code" />
+      <button class="close-btn" (click)="close()" [attr.aria-label]="'MODAL.CLOSE' | translate">
+        <i class="fa-solid fa-x small-icon"></i>
+      </button>
+
+      <img src="assets/Images/Group 9034.svg" class="qr-image" 
+           alt="{{ 'POPUP.QR_ALT' | translate }}" />
+
       <p class="popup-text mt-3">
-        نزّل تطبيق "الرشاقة السعيدة" واستفد من عروض حصرية
+        {{ 'POPUP.MESSAGE' | translate }}
       </p>
+
       <div class="store-buttons d-flex justify-content-center gap-3 flex-wrap mt-3">
         <a href="#">
-          <img src="assets/Images/Mobile app store badge (1).svg" alt="App Store" height="40" />
+          <img src="assets/Images/Mobile app store badge (1).svg" 
+               alt="{{ 'POPUP.APP_STORE' | translate }}" height="40" />
         </a>
         <a href="#">
-          <img src="assets/Images/Mobile app store badge.svg" alt="Google Play" height="40" />
+          <img src="assets/Images/Mobile app store badge.svg" 
+               alt="{{ 'POPUP.GOOGLE_PLAY' | translate }}" height="40" />
         </a>
       </div>
     </div>

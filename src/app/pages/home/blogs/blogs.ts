@@ -23,9 +23,6 @@ export class Blogs implements OnInit {
   currentSlideIndex = 0;
   visibleCards = 3;
   currentLang: string = 'ar';
-
-
-
   dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
   constructor(private blogService: BlogService, private translate: TranslateService, private languageService: LanguageService) {}

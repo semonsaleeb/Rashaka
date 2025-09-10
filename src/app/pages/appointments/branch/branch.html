@@ -1,27 +1,38 @@
-<div class="container my-4" dir="rtl">
+<div class="container my-4" >
   <div class="card shadow-sm border-0">
     <div class="card-body">
+
+      <!-- اختيار نوع السيشن -->
       <h5 class="card-title text-success mb-3">
-        <i class="bi bi-building me-2"></i>
-        اختيار الفرع
+        <i class="bi bi-person-check me-2"></i>
+        {{ 'SESSION.SELECT_TYPE' | translate }}
       </h5>
-
       <div class="mb-3">
-        <label for="branchSelect" class="form-label">الفرع</label>
-        <select id="branchSelect" class="form-select w-100 text-end" dir="rtl" [(ngModel)]="selectedBranchId">
-
-          <option [ngValue]="null">-- اختر فرع --</option>
-          @for (center of centers; track center.id) {
-          <option [ngValue]="center.id">{{ center.name }}</option>
-          }
+        <label for="sessionSelect" class="form-label">{{ 'SESSION.TYPE_LABEL' | translate }}</label>
+        <select id="sessionSelect" class="form-select w-100 text-end"  [(ngModel)]="selectedSessionKey"
+          (change)="loadCenters()">
+          <option [ngValue]="null">{{ 'SESSION.TYPE_PLACEHOLDER' | translate }}</option>
+          <option *ngFor="let s of sessionTypes" [ngValue]="s.key">
+            {{ currentLang === 'ar' ? s.name_ar : s.name }}
+          </option>
         </select>
-
       </div>
 
+      <!-- اختيار الفرع -->
+      <div class="mb-3" *ngIf="centers.length > 0">
+        <label for="branchSelect" class="form-label">{{ 'SESSION.BRANCH_LABEL' | translate }}</label>
+        <select id="branchSelect" class="form-select w-100 text-end"  [(ngModel)]="selectedBranchId">
+          <option [ngValue]="null">{{ 'SESSION.BRANCH_PLACEHOLDER' | translate }}</option>
+          <option *ngFor="let center of centers" [ngValue]="center.id">
+            {{ center.name }}
+          </option>
+        </select>
+      </div>
 
-      <button class="btn btn-success w-25" (click)="goNext()" [disabled]="!selectedBranchId">
-        التالي <i class="bi bi-arrow-left-circle ms-1"></i>
+      <button class="btn btn-success w-25" (click)="goNext()" [disabled]="!selectedBranchId || !selectedSessionKey">
+        {{ 'SESSION.NEXT' | translate }} <i class="bi bi-arrow-left-circle ms-1"></i>
       </button>
+
     </div>
   </div>
 </div>

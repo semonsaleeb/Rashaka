@@ -4,11 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, TranslateModule, CommonModule  ],
   templateUrl: './reset-password.html',
   styleUrls: ['./reset-password.scss']
 })
@@ -19,9 +22,23 @@ export class ResetPassword {
   message = '';
   errorMessage = '';
   loading = false;
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+  constructor(private translate: TranslateService, private languageService: LanguageService, private http: HttpClient, private router: Router) {}
 
-  constructor(private http: HttpClient, private router: Router) {}
 
+      ngOnInit(): void {
+
+  // Set initial language
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+  // Subscribe to language changes
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
+}
   resetPassword() {
     this.message = '';
     this.errorMessage = '';

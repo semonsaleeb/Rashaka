@@ -7,25 +7,43 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 import { CartStateService } from '../../services/cart-state-service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule , RouterModule],
+  imports: [FormsModule , RouterModule, TranslateModule, CommonModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
 export class Login {
   @Output() forgot = new EventEmitter<void>();
+  
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
   email = '';
   password = '';
   errorMessage = '';
   loading = false;
 
-  constructor(private http: HttpClient, private router: Router,   private authService: AuthService, private cartService: CartService,private cartState: CartStateService,) {}
+  constructor(private translate: TranslateService, private languageService: LanguageService,private http: HttpClient, private router: Router,   private authService: AuthService, private cartService: CartService,private cartState: CartStateService,) {}
 
+ 
+    ngOnInit(): void {
 
+  // Set initial language
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+  // Subscribe to language changes
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
+}
   
 login() {
   this.errorMessage = '';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Appointment } from '../../models/appointment.model';
@@ -12,31 +12,39 @@ export class AvailabilityService {
 
   constructor(private http: HttpClient) {}
 
-getCentersAvailability(params?: any): Observable<any> {
-  console.log('📡 Fetching centers availability');
+// getCentersAvailability(params?: any): Observable<any> {
+//   console.log('📡 Fetching centers availability');
+//   const token = localStorage.getItem('token');
+//   const headers = new HttpHeaders({
+//     Authorization: `Bearer ${token}`,
+//   });
+//   return this.http.get(`${this.centersUrl}/centers/availability`, { headers });
+// }
+
+
+  // Fetch session types
+  getSessionTypes(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(`${this.centersUrl}/session-types`, { headers });
+  }
+
+  // Fetch centers availability, optional session_type
+getCentersAvailability(session_type?: string): Observable<any> {
   const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-  });
-  return this.http.get(`${this.centersUrl}/centers/availability`, { headers });
+  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+  let params = new HttpParams();
+  if (session_type) {
+    params = params.set('session_type', session_type);
+  }
+
+  return this.http.get(`${this.centersUrl}/centers/availability`, { headers, params });
 }
 
 
-  // // Fetch session types
-  // getSessionTypes(): Observable<any> {
-  //   const token = localStorage.getItem('token');
-  //   const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-  //   return this.http.get(`${this.centersUrl}/session-types`, { headers });
-  // }
 
-  // // Fetch centers availability, optional session_type
-  // getCentersAvailability(session_type?: string): Observable<any> {
-  //   const token = localStorage.getItem('token');
-  //   const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-  //   const body = session_type ? { session_type } : {};
-  //   return this.http.post(`${this.centersUrl}/centers/availability`, body, { headers });
-  // }
 createAppointment(appointment: any): Observable<{ status: string; appointment: Appointment }> {
   const token = localStorage.getItem('token');
 

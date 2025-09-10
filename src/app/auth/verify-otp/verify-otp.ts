@@ -3,12 +3,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { transpileModule } from 'typescript';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
 
 
 @Component({
   selector: 'app-verify-otp',
   standalone: true,
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, TranslateModule],
   templateUrl: './verify-otp.html',
   styleUrls: ['./verify-otp.scss']
 })
@@ -18,14 +21,26 @@ export class VerifyOtp implements OnInit {
   message = '';
   errorMessage = '';
   loading = false;
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private translate: TranslateService, private languageService: LanguageService) {}
 
   ngOnInit() {
     const storedEmail = localStorage.getItem('otp-email');
     if (storedEmail) {
       this.email = storedEmail;
     }
+
+
+      this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
   }
 
   moveToNext(event: any, index: number) {
@@ -43,7 +58,7 @@ export class VerifyOtp implements OnInit {
     }
   }
 
- verifyOtp() {
+verifyOtp() {
   this.loading = true;
   this.errorMessage = '';
   this.message = '';
@@ -52,30 +67,30 @@ export class VerifyOtp implements OnInit {
   console.log('OTP entered:', code);
 
   if (code.length !== 4 || !/^\d{4}$/.test(code)) {
-    this.errorMessage = 'الرمز يجب أن يتكون من 4 أرقام.';
+    this.errorMessage = this.translate.instant('OTP.ERROR_INVALID'); // ✅
     this.loading = false;
     return;
   }
 
   const headers = { 'Accept': 'application/json' };
 
-  // ✅ Send OTP as integer
   this.http.post<any>(`${environment.apiBaseUrl}/verify-otp`, {
     email: this.email,
     otp: parseInt(code, 10)
   }, { headers }).subscribe({
     next: res => {
-      this.message = res.message || 'تم التحقق بنجاح!';
+      this.message = res.message || this.translate.instant('OTP.SUCCESS'); // ✅
       localStorage.setItem('reset-email', this.email);
       this.router.navigate(['/reset-password']);
       this.loading = false;
     },
     error: err => {
       console.error('OTP Verification Error:', err);
-      this.errorMessage = err.error?.message || 'فشل التحقق من الرمز.';
+      this.errorMessage = err.error?.message || this.translate.instant('OTP.ERROR_FAILED'); // ✅
       this.loading = false;
     }
   });
 }
+
 
 }

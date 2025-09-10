@@ -1,7 +1,7 @@
 <div class="specialist-step container py-3 " dir="rtl">
 
   <!-- اختيار الأخصائي -->
-  <h3 class="h5 fw-bold mb-3">اختر أخصائي</h3>
+  <h3 class="h5 fw-bold mb-3">{{ 'SPECIALIST.SELECT_TITLE' | translate }}</h3>
 
   @if (specialists.length > 0) {
   <div class="d-flex gap-2 overflow-auto">
@@ -25,7 +25,7 @@
     }
   </div>
   } @else {
-  <div class="alert alert-warning mt-3">لا يوجد أخصائيون لهذا الفرع</div>
+  <div class="alert alert-warning mt-3">{{ 'SPECIALIST.NO_SPECIALISTS' | translate }}</div>
   }
 
   <!-- اختيار التاريخ -->
@@ -54,13 +54,13 @@
       <table class="table text-center align-middle" dir="rtl">
         <thead>
           <tr>
-            <th class="text-secondary">الأحد</th>
-            <th class="text-secondary">الاثنين</th>
-            <th class="text-secondary">الثلاثاء</th>
-            <th class="text-secondary">الأربعاء</th>
-            <th class="text-secondary">الخميس</th>
-            <th class="text-secondary">الجمعة</th>
-            <th class="text-secondary">السبت</th>
+            <th class="text-secondary">{{ 'CALENDAR.SUNDAY' | translate }}</th>
+            <th class="text-secondary">{{ 'CALENDAR.MONDAY' | translate }}</th>
+            <th class="text-secondary">{{ 'CALENDAR.TUESDAY' | translate }}</th>
+            <th class="text-secondary">{{ 'CALENDAR.WEDNESDAY' | translate }}</th>
+            <th class="text-secondary">{{ 'CALENDAR.THURSDAY' | translate }}</th>
+            <th class="text-secondary">{{ 'CALENDAR.FRIDAY' | translate }}</th>
+            <th class="text-secondary">{{ 'CALENDAR.SATURDAY' | translate }}</th>
           </tr>
         </thead>
 
@@ -89,17 +89,15 @@
     </div>
     } @else {
     <p class="text-center text-muted my-3">
-      لا توجد مواعيد متاحة هذا الشهر
+      {{ 'CALENDAR.NO_DATES' | translate }}
     </p>
     }
   </div>
   }
 
-
-
   <!-- اختيار الوقت -->
   @if (availableTimes.length > 0) {
-  <h3 class="h5 fw-bold mt-3">الأوقات المتاحة</h3>
+  <h3 class="h5 fw-bold mt-3">{{ 'TIME.AVAILABLE_TIMES' | translate }}</h3>
   }
 
 <div class="my-3">
@@ -112,9 +110,9 @@
            [class.text-white]="selectedTime === time.start"
            style="cursor:pointer; min-width: 150px;"
            (click)="selectedTime = time.start">
-        <span>من {{ time.start }}</span>
+        <span>{{ 'TIME.FROM' | translate }} {{ time.start }}</span>
         <div class="vr"></div>
-        <span>إلى {{ time.end }}</span>
+        <span>{{ 'TIME.TO' | translate }} {{ time.end }}</span>
       </div>
     }
   </div>
@@ -129,9 +127,9 @@
              [class.text-white]="selectedTime === time.start"
              style="cursor:pointer;"
              (click)="selectedTime = time.start">
-          <span>من {{ time.start }}</span>
+          <span>{{ 'TIME.FROM' | translate }} {{ time.start }}</span>
           <div class="vr"></div>
-          <span>إلى {{ time.end }}</span>
+          <span>{{ 'TIME.TO' | translate }} {{ time.end }}</span>
         </div>
       </div>
     }
@@ -139,19 +137,15 @@
 
   @if (selectedDate && availableTimes.length === 0) {
     <div class="alert alert-info text-center mt-3">
-      لا توجد مواعيد متاحة في هذا اليوم
+      {{ 'TIME.NO_TIMES' | translate }}
     </div>
   }
 </div>
 
-
-
-
   <!-- أزرار التحكم -->
   <div class="d-flex justify-content-between mt-4">
     <button class="btn btn-success w-25" [disabled]="!selectedSpecialistId || !selectedDate || !selectedTime"
-      (click)="goNext()">التالي</button>
-    <button class="btn btn-outline-secondary w-25" (click)="prev.emit()">السابق</button>
-
+      (click)="goNext()">{{ 'BUTTONS.NEXT' | translate }}</button>
+    <button class="btn btn-outline-secondary w-25" (click)="prev.emit()">{{ 'BUTTONS.PREVIOUS' | translate }}</button>
   </div>
 </div>

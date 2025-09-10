@@ -6,6 +6,8 @@ import { Router, RouterModule } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
 
 declare var bootstrap: any;
 
@@ -29,7 +31,7 @@ export function strongPasswordValidator(): ValidatorFn {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule, CommonModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule, TranslateModule],
   templateUrl: './register.html',
   styleUrls: ['./register.scss']
 })
@@ -43,7 +45,25 @@ export class Register {
   showPassword = false;
   showConfirmPassword = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private authService: AuthService) {
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+    ngOnInit(): void {
+
+  // Set initial language
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+  // Subscribe to language changes
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
+}
+  constructor(private translate: TranslateService, private languageService: LanguageService,private fb: FormBuilder, private http: HttpClient, private router: Router, private authService: AuthService) {
+   
+   
+   
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
       email: ['',
