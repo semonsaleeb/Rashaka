@@ -1,8 +1,8 @@
-<h1 class="mb-4 text-center">الطلبات</h1>
+<h1 class="mb-4 text-center">{{ 'ORDERS.TITLE' | translate }}</h1>
 
 <!-- ✅ حالة التحميل -->
 @if (isLoading) {
-<div class="text-center">جاري التحميل...</div>
+<div class="text-center">{{ 'ORDERS.LOADING' | translate }}</div>
 }
 
 <!-- ✅ رسالة الخطأ -->
@@ -13,58 +13,95 @@
 <!-- ✅ لو فيه طلبات -->
 @if (groupedOrders.length > 0) {
 <div class="px-3 px-md-5" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
-   <ngb-carousel [activeId]="currentIndex.toString()"
-              [showNavigationIndicators]="false"
-              [showNavigationArrows]="false"
-              [keyboard]="true"
-              [wrap]="false"
-              [pauseOnHover]="false"
-              (slide)="onSlide($event)">
+ <ngb-carousel
+  #carousel
+  [interval]="0"                
+  [keyboard]="isMobile"        
+  [wrap]="false"
+  [showNavigationIndicators]="false"
+  [showNavigationArrows]="false"
+  [pauseOnHover]="false"
+  (slide)="onSlide($event)">
+
 
         @for (group of groupedOrders; track group; let i = $index) {
         <ng-template ngbSlide [id]="i.toString()">
-            <div class="row justify-content-center">
+            <div class="row ">
                 @for (order of group; track order) {
-                <div class="col-12 col-md-4 mb-4"> <!-- 1 product per slide mobile, 3 desktop -->
-                    <div class="order-card text-center p-4 rounded shadow-sm">
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="order-card  p-4 rounded border rounded-4">
 
-                        <!-- رقم الطلب + الحالة -->
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge bg-light text-dark px-3 py-2">#{{ order.order_id }}</span>
-                            <span class="status-badge" [ngClass]="{
-                      'text-success': order.status === 'تم التسليم',
-                      'text-danger': order.status === 'ملغي',
-                      'text-warning': order.status === 'قيد التنفيذ',
-                      'text-secondary': order.status === 'pending'
-                    }">
-                                {{ order.status }}
-                            </span>
+                        <!-- رقم الطلب + الحالة + الصورة -->
+                        <div class="d-flex align-items-start mb-3">
+
+
+
+                            <!-- بيانات الطلب -->
+                            <div class="flex-grow-1">
+                                <!-- رقم الطلب -->
+                                <span class="order-id-badge d-inline-block mb-2">
+                                    {{ 'ORDERS.ORDER_NUMBER' | translate }} {{ order.order_id }}
+                                </span>
+                                <br>
+                                <!-- الحالة -->
+                                <div class="status-badge mb-2" [ngClass]="{
+            'text-success': order.status === ('ORDERS.STATUS.DELIVERED' | translate),
+            'text-danger': order.status === ('ORDERS.STATUS.CANCELLED' | translate),
+            'text-warning': order.status === ('ORDERS.STATUS.IN_PROGRESS' | translate),
+            'text-secondary': order.status === ('ORDERS.STATUS.PENDING' | translate)
+         }">
+                                    {{ order.status }}
+                                </div>
+
+                                <!-- اسم المنتج -->
+                                <p class="fw-bold mb-0">
+                                    <span class="text-secondary">{{ 'ORDERS.PRODUCT' | translate }}</span> <br>
+                                    {{ currentLang === 'ar' ? order.items[0].product_name_ar :
+                                    order.items[0].product_name }}
+                                </p>
+                            </div>
+
+                            <!-- صورة المنتج -->
+                            @if (order.items?.length > 0) {
+                            <div class="product-image-wrapper me-3">
+                                <img [src]="order.items[0].product_images?.length ? encodeUrl(order.items[0].product_images[0]) : 'assets/no-image.png'"
+                                    alt="{{ order.items[0].product_name }}" class="product-image" />
+                            </div>
+                            } @else {
+                            <p class="text-muted">{{ 'ORDERS.NO_PRODUCTS' | translate }}</p>
+                            }
                         </div>
 
-                        <!-- صورة + بيانات المنتج الأول -->
-                        @if (order.items?.length > 0) {
-                        <div class="product-image-wrapper mb-3">
-                            <img [src]="order.items[0].product_images?.length ? encodeUrl(order.items[0].product_images[0]) : 'assets/no-image.png'"
-                                alt="{{ order.items[0].product_name }}" class="product-image rounded" width="100"
-                                height="100" />
-                        </div>
-                        <p class="fw-bold">{{ order.items[0].product_name }}</p>
-                        <p>الكمية: {{ order.items[0].quantity }}</p>
-                        } @else {
-                        <p class="text-muted">لا توجد منتجات</p>
-                        }
+
 
                         <!-- باقي التفاصيل -->
-                        <p><strong>المجموع:</strong> {{ order.total_price }} ر.س</p>
-                        <p><strong>طريقة الدفع:</strong>
-                            <span class="payment-method">{{ order.payment_method }}</span>
-                        </p>
-                        <p><strong>تاريخ الطلب:</strong> {{ order.created_at | date:'yyyy-MM-dd' }}</p>
+                 <div class="d-flex justify-content-between mb-2">
+  <strong class="text-secondary">{{ 'ORDERS.QUANTITY' | translate }}:</strong>
+  <span>{{ order.items[0].quantity }}</span>
+</div>
+
+<div class="d-flex justify-content-between mb-2">
+  <strong class="text-secondary">{{ 'ORDERS.CREATED_AT' | translate }}:</strong>
+  <span>{{ order.created_at | date:'yyyy-MM-dd' }}</span>
+</div>
+
+<div class="d-flex justify-content-between mb-2">
+  <strong class="text-secondary">{{ 'ORDERS.ORDERS_TOTAL' | translate }}:</strong>
+  <span>{{ order.total_price }} {{ 'ORDERS.CURRENCY' | translate }}</span>
+</div>
+
+<div class="d-flex justify-content-between mb-2">
+  <strong class="text-secondary">{{ 'ORDERS.PAYMENT_METHOD' | translate }}:</strong>
+  <span class="payment-method">{{ order.payment_method }}</span>
+</div>
+
+
                     </div>
                 </div>
                 }
             </div>
         </ng-template>
+
         }
     </ngb-carousel>
 
@@ -91,5 +128,5 @@
 </div>
 
 } @else if (!isLoading) {
-<p class="text-center">لا توجد طلبات بعد.</p>
+<p class="text-center">{{ 'ORDERS.NO_ORDERS' | translate }}</p>
 }

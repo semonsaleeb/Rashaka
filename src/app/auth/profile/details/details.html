@@ -1,46 +1,44 @@
-<div class="container p-lg-5 m-lg-5  text-end" dir="rtl">
+<div class="container p-lg-5 m-lg-5 text-end" dir="rtl">
   <form>
 
     <!-- معلومات الاتصال -->
-    <div class="  p-4 mb-4">
-      <h6 class="fw-bold mb-4">معلومات الاتصال</h6>
+    <div class="p-4 mb-4">
+      <h6 class="fw-bold mb-4">{{ 'ACCOUNT.CONTACT_INFO' | translate }}</h6>
 
       <div class="row g-3 align-items-center">
 
         <!-- البريد الإلكتروني -->
         <div class="col-md-6">
-          <label class="form-label">البريد الإلكتروني</label>
+          <label class="form-label">{{ 'ACCOUNT.EMAIL' | translate }}</label>
           <input type="email" class="form-control rounded-0" [value]="client.email" readonly>
         </div>
 
         <!-- رقم الجوال -->
         <div class="col-md-6">
-          <label class="form-label">رقم الجوال</label>
+          <label class="form-label">{{ 'ACCOUNT.PHONE' | translate }}</label>
           <div class="input-group">
             <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone"
               [readonly]="client.phone && client.phone.trim() !== ''">
             @if (!client.phone || client.phone.trim() === '') {
             <button class="btn btn-outline-success rounded-0" type="button">
-              أضف +
+              {{ 'ACCOUNT.ADD_PHONE' | translate }}
             </button>
             }
           </div>
         </div>
 
-
-
       </div>
     </div>
 
     <!-- معلوماتك الشخصية -->
-    <div class=" p-4 mb-4">
-      <h6 class="fw-bold mb-4">معلوماتك الشخصية</h6>
+    <div class="p-4 mb-4">
+      <h6 class="fw-bold mb-4">{{ 'ACCOUNT.PERSONAL_INFO' | translate }}</h6>
 
       <div class="row g-3">
 
         <!-- الاسم الأول -->
         <div class="col-md-6">
-          <label class="form-label">الاسم الأول</label>
+          <label class="form-label">{{ 'ACCOUNT.FIRST_NAME' | translate }}</label>
           <div class="input-group">
             <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
             <span class="input-group-text rounded-0"><i class="fas fa-pen"></i></span>
@@ -49,7 +47,7 @@
 
         <!-- اسم العائلة -->
         <div class="col-md-6">
-          <label class="form-label text-end">اسم العائلة</label>
+          <label class="form-label">{{ 'ACCOUNT.LAST_NAME' | translate }}</label>
           <div class="input-group">
             <input type="text" class="form-control rounded-0" name="lastName">
             <span class="input-group-text rounded-0"><i class="fas fa-pen"></i></span>
@@ -58,20 +56,19 @@
 
         <!-- كلمة المرور -->
         <div class="col-md-6">
-          <label class="form-label">كلمة مرور</label>
+          <label class="form-label">{{ 'ACCOUNT.PASSWORD' | translate }}</label>
           <div class="input-group">
-            <!-- <input type="password " class="form-control rounded-0" name="password"> -->
             <button type="button" class="btn btn-success rounded-0" routerLink="/forgot-password">
-                تغيير كلمة مرور 
+              {{ 'ACCOUNT.CHANGE_PASSWORD' | translate }}
             </button>
           </div>
         </div>
 
         <!-- تسجيل الخروج -->
-        <div class="col-md-6 d-flex align-items-end justify-content-center ">
-          <button class="dropdown-item text-dark border  rounded-pill w-50 text-center py-2"
+        <div class="col-md-6 d-flex align-items-end justify-content-center">
+          <button class="dropdown-item text-dark border rounded-pill w-50 text-center py-2"
             style="border-color: #6c757d;" (click)="logout()">
-            <img src="assets/Images/Frame 9049.svg"> تسجيل الخروج
+            <img src="assets/Images/Frame 9049.svg"> {{ 'ACCOUNT.LOGOUT' | translate }}
           </button>
         </div>
       </div>
@@ -79,7 +76,9 @@
 
     <!-- زر التحديث -->
     <div class="text-end">
-      <button type="submit" class="btn btn-success rounded-pill px-4 py-2">تحديث الحساب</button>
+      <button type="submit" class="btn btn-success rounded-pill px-4 py-2">
+        {{ 'ACCOUNT.UPDATE' | translate }}
+      </button>
     </div>
 
   </form>

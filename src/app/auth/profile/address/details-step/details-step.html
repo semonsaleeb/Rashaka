@@ -1,67 +1,117 @@
 <div class="m-lg-5 p-lg-5">
   <form>
-
     <!-- الاسم -->
     <div class="form-group mb-3 text-end">
-
-
       <div class="row">
         <!-- العمود الأول -->
         <div class="col-md-6 p-5 bg-white">
-          <h4>تفاصيل الموقع</h4>
+          <h4>{{ 'ADDRESS.LOCATION_DETAILS' | translate }}</h4>
+
           <!-- المحافظة -->
           <div class="form-group mb-3">
-            <label>المحافظة</label>
-            <input type="text" class="form-control" [(ngModel)]="form.government_name" name="government_name" required>
+            <label>{{ 'ADDRESS.GOVERNMENT' | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.government_name"
+              name="government_name"
+              required
+            />
           </div>
 
           <!-- المدينة -->
           <div class="form-group mb-3">
-            <label>المدينة</label>
-            <input type="text" class="form-control" [(ngModel)]="form.city_name" name="city_name" required>
+            <label>{{ 'ADDRESS.CITY' | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.city_name"
+              name="city_name"
+              required
+            />
           </div>
 
           <!-- الحي -->
           <div class="form-group mb-3">
-            <label>الحي</label>
-            <input type="text" class="form-control" [(ngModel)]="form.area_name" name="area_name" required>
+            <label>{{ 'ADDRESS.AREA' | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.area_name"
+              name="area_name"
+              required
+            />
           </div>
 
           <!-- اسم الشارع -->
           <div class="form-group mb-3">
-            <label>اسم الشارع</label>
-            <input type="text" class="form-control" [(ngModel)]="form.street_name" name="street_name" required>
+            <label>{{ 'ADDRESS.STREET' | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.street_name"
+              name="street_name"
+              required
+            />
           </div>
 
           <!-- رقم المبنى -->
           <div class="form-group mb-3">
-            <label>رقم المبنى</label>
-            <input type="text" class="form-control" [(ngModel)]="form.building_number" name="building_number" required>
+            <label>{{ 'ADDRESS.BUILDING' | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.building_number"
+              name="building_number"
+              required
+            />
           </div>
         </div>
 
         <!-- العمود الثاني -->
         <div class="col-md-6 p-5 bg-white">
-          <h4>تفاصيل التواصل الخاصة بك</h4>
-          <div class="form-group mb-3">
+          <h4>{{ 'ADDRESS.CONTACT_DETAILS' | translate }}</h4>
 
-            <label>الاسم</label>
-            <input type="text" class="form-control" [(ngModel)]="form.name" name="full_name" required>
+          <!-- الاسم -->
+          <div class="form-group mb-3">
+            <label>{{ 'ADDRESS.NAME' | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.name"
+              name="full_name"
+              required
+            />
           </div>
+
           <!-- رقم الهاتف -->
           <div class="form-group mb-3">
-            <label>رقم الهاتف</label>
-            <input type="text" class="form-control" [(ngModel)]="form.phone_number" name="phone_number" required>
+            <label>{{ 'ADDRESS.PHONE' | translate }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.phone_number"
+              name="phone_number"
+              required
+            />
           </div>
         </div>
       </div>
     </div>
 
-  <div class="d-flex flex-column flex-md-row gap-2">
-  <button class="btn btn-success w-100 w-md-25 mt-2 mt-md-3" (click)="submitForm()">حفظ العنوان</button>
-  <button class="btn btn-secondary w-100 w-md-25 mt-2 mt-md-3" (click)="goBackToMap()">رجوع</button>
-</div>
-
-
+    <div class="d-flex flex-column flex-md-row gap-2">
+      <button
+        class="btn btn-success w-100 w-md-25 mt-2 mt-md-3"
+        (click)="submitForm()"
+      >
+        {{ 'ADDRESS.SAVE' | translate }}
+      </button>
+      <button
+        class="btn btn-secondary w-100 w-md-25 mt-2 mt-md-3"
+        (click)="goBackToMap()"
+      >
+        {{ 'ADDRESS.BACK' | translate }}
+      </button>
+    </div>
   </form>
 </div>

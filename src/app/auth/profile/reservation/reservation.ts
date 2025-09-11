@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AvailabilityService } from '../../../services/availability.service';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 declare var bootstrap: any; // 👈 مهم عشان يشتغل الـ Modal
 
 @Component({
   selector: 'app-reservation',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, TranslateModule],
   templateUrl: './reservation.html',
   styleUrls: ['./reservation.scss']
 })
@@ -19,14 +21,29 @@ export class Reservation implements OnInit {
   // 👇 المتغير اللي كان عامللك Error
   appointmentToCancel: number | null = null;
 
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+
   constructor(
     private availabilityService: AvailabilityService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService, private languageService: LanguageService,
   ) {}
 
   ngOnInit() {
     this.fetchAppointments();
+            // Set initial language
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
   }
+  
 
   // 📌 تجيب كل المواعيد
 fetchAppointments() {

@@ -1,5 +1,7 @@
 <div class="p-lg-5 m-lg-5">
-  <h4 class="mb-3 text-center">اختر موقعك من الخريطة</h4>
+  <h4 class="mb-3 text-center">
+    {{ 'MAP.SELECT_LOCATION' | translate }}
+  </h4>
 
   <div
     class="position-relative"
@@ -25,7 +27,7 @@
           type="text"
           [(ngModel)]="searchQuery"
           class="form-control pe-5 rounded-1"
-          placeholder="ابحث عن موقع..."
+          [placeholder]="'MAP.SEARCH_PLACEHOLDER' | translate"
         />
       </div>
     </div>
@@ -36,7 +38,8 @@
       (click)="getCurrentLocation()"
       style="z-index: 1000;"
     >
-      <i class="fas fa-location-crosshairs"></i> تحديد موقعي
+      <i class="fas fa-location-crosshairs"></i>
+      {{ 'MAP.MY_LOCATION' | translate }}
     </button>
 
     <!-- ✅ زر تأكيد الموقع - أسفل يسار -->
@@ -45,7 +48,7 @@
       (click)="nextStep()"
       style="z-index: 1000;"
     >
-      تأكيد الموقع
+      {{ 'MAP.CONFIRM_LOCATION' | translate }}
     </button>
   </div>
 </div>

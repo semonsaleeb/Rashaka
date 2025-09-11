@@ -1,9 +1,9 @@
 <div class="container py-4">
-    <h2 class="mb-4">حجوزاتي</h2>
+    <h2 class="mb-4">{{ 'APPOINTMENTS.TITLE' | translate }}</h2>
 
     @if (loading) {
     <div class="text-center my-4">
-        ⏳ جاري التحميل...
+        ⏳ {{ 'APPOINTMENTS.LOADING' | translate }}
     </div>
     }
     @else if (errorMessage) {
@@ -18,22 +18,20 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">{{ appt.specialist.name }}</h5>
-                    <p class="card-text"><strong>التاريخ:</strong> {{ appt.date }}</p>
-                    <p class="card-text"><strong>الوقت:</strong> {{ appt.start }} - {{ appt.end }}</p>
+                    <p class="card-text"><strong>{{ 'APPOINTMENTS.DATE' | translate }}:</strong> {{ appt.date }}</p>
+                    <p class="card-text"><strong>{{ 'APPOINTMENTS.TIME' | translate }}:</strong> {{ appt.start }} - {{ appt.end }}</p>
                     <p class="card-text">
-                        <strong>المركز:</strong> {{ appt.center.name }} - {{ appt.center.city.name_ar }}
+                        <strong>{{ 'APPOINTMENTS.CENTER' | translate }}:</strong> {{ appt.center.name }} - {{ appt.center.city.name_ar }}
                     </p>
-                    <p class="card-text"><strong>الحالة:</strong> {{ appt.status }}</p>
+                    <p class="card-text"><strong>{{ 'APPOINTMENTS.STATUS' | translate }}:</strong> {{ appt.status }}</p>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <button class="btn btn-sm btn-danger" (click)="cancelAppointment(appt.id)">
-                        إلغاء
+                        {{ 'APPOINTMENTS.CANCEL' | translate }}
                     </button>
                     <!-- <button class="btn btn-sm btn-primary" (click)="goToUpdateTime(appt.id)">
-                        تعديل الوقت
+                        {{ 'APPOINTMENTS.UPDATE_TIME' | translate }}
                     </button> -->
-
-
                 </div>
             </div>
         </div>
@@ -42,12 +40,10 @@
     }
     @else {
     <div class="text-center text-muted">
-        لا يوجد مواعيد حالياً.
+        {{ 'APPOINTMENTS.NO_APPOINTMENTS' | translate }}
     </div>
     }
 </div>
-
-
 
 <!-- Cancel Modal -->
 <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
@@ -56,25 +52,29 @@
       
       <!-- زر الإغلاق -->
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <!-- صورة -->
-<div class="d-flex justify-content-center">
-  <img src="assets/Images/Cancel-bro 1.svg" 
-       alt="Cancel" 
-       style="max-width: 180px;" 
-       class="mb-3">
-</div>
+      <div class="d-flex justify-content-center">
+        <img src="assets/Images/Cancel-bro 1.svg" 
+             alt="Cancel" 
+             style="max-width: 180px;" 
+             class="mb-3">
+      </div>
 
       <!-- العنوان -->
-      <h5 class="fw-bold mb-2 text-danger">إلغاء الحجز!</h5>
-      <p class="text-muted mb-4">هل أنت متأكد أنك تريد إلغاء هذا الحجز؟</p>
+      <h5 class="fw-bold mb-2 text-danger">{{ 'APPOINTMENTS.CANCEL_TITLE' | translate }}</h5>
+      <p class="text-muted mb-4">{{ 'APPOINTMENTS.CANCEL_CONFIRM' | translate }}</p>
 
       <!-- الأزرار -->
       <div class="d-flex justify-content-center gap-3">
-        <button class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">إلغاء</button>
-        <button class="btn btn-success px-4" (click)="confirmCancel()">تأكيد</button>
+        <button class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+          {{ 'APPOINTMENTS.CLOSE' | translate }}
+        </button>
+        <button class="btn btn-success px-4" (click)="confirmCancel()">
+          {{ 'APPOINTMENTS.CONFIRM' | translate }}
+        </button>
       </div>
     </div>
   </div>

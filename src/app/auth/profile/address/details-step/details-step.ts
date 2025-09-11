@@ -3,18 +3,22 @@ import { FormsModule } from '@angular/forms';
 import { Location } from '@angular/common'; // لازم من هنا
 import { AddressData } from '../../../../../models/address.model';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../../services/language.service';
 
 @Component({
   selector: 'app-details-step',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, TranslateModule],
   templateUrl: './details-step.html',
   styleUrls: ['./details-step.scss']
 })
 export class DetailsStep implements OnChanges  {
   @Input() initialData: Partial<AddressData> | null = null;
   @Output() submit = new EventEmitter<AddressData>();
-  constructor(private location: Location, private router: Router) {}
+
+  constructor(private translate: TranslateService, private languageService: LanguageService,private location: Location, private router: Router) {}
+  
   showSteps = false;
   step = 2;
   form: AddressData = {
@@ -35,6 +39,22 @@ export class DetailsStep implements OnChanges  {
  @Input() clientName!: string;
  
 
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+  
+  ngOnInit(): void {
+
+        // Set initial language
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
+  }
 
   // ✅ Detect input changes to populate form (for editing)
 ngOnChanges(changes: SimpleChanges): void {

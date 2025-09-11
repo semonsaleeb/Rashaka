@@ -1,4 +1,4 @@
-<div class="subscription-page" dir="rtl">
+<div class="subscription-page" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
 
   <!-- حالة التحميل -->
   @if (isLoading) {
@@ -13,22 +13,22 @@
     <div class="col-md-8 d-flex gap-4">
 
       <!-- تفاصيل الاشتراك -->
-      <div class="flex-grow-1 p-4 border rounded-3  ">
+      <div class="flex-grow-1 p-4 border rounded-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <span [class.text-success]="activeSubscription.status === 'active'"
-            [class.text-warning]="activeSubscription.status === 'pending_activation'"
-            [class.text-danger]="activeSubscription.status === 'expired'">
-            @if (activeSubscription.status === 'active') { مفعل }
-            @else if (activeSubscription.status === 'pending_activation') { في انتظار التفعيل }
-            @else { منتهي }
+                [class.text-warning]="activeSubscription.status === 'pending_activation'"
+                [class.text-danger]="activeSubscription.status === 'expired'">
+            @if (activeSubscription.status === 'active') { {{ 'SUBSCRIPTION.STATUS.ACTIVE' | translate }} }
+            @else if (activeSubscription.status === 'pending_activation') { {{ 'SUBSCRIPTION.STATUS.PENDING' | translate }} }
+            @else { {{ 'SUBSCRIPTION.STATUS.EXPIRED' | translate }} }
           </span>
-          <h5 class="m-0">تفاصيل الاشتراك</h5>
+          <h5 class="m-0">{{ 'SUBSCRIPTION.DETAILS' | translate }}</h5>
         </div>
 
-        <p><strong>الاسم:</strong> {{ activeSubscription.name }}</p>
+        <p><strong>{{ 'SUBSCRIPTION.NAME' | translate }}:</strong> {{ activeSubscription.name }}</p>
 
         <hr>
-        <h6>المميزات:</h6>
+        <h6>{{ 'SUBSCRIPTION.FEATURES' | translate }}:</h6>
         <ul>
           @for (feature of activeSubscription.features; track feature) {
           <li>{{ feature }}</li>
@@ -38,16 +38,16 @@
 
       <!-- كود التفعيل -->
       @if (activeSubscription.status === 'pending_activation' && activeSubscription.activation_code) {
-      <div class="p-4 border rounded-3 bg-light shadow-sm text-center" style="min-width: 220px;">
-        <p>كود التفعيل</p>
+      <div class="p-4 border rounded-3 bg-light shadow-sm text-center" >
+        <p>{{ 'SUBSCRIPTION.ACTIVATION_CODE' | translate }}</p>
         <h5 class="bg-success text-white px-3 py-2 rounded">
           #{{ activeSubscription.activation_code }}
         </h5>
         <p class="text-muted small">
-          يرجى زيارة أحد الفروع لتفعيل اشتراكك
+          {{ 'SUBSCRIPTION.ACTIVATION_NOTE' | translate }}
         </p>
         <button class="btn btn-success w-100" (click)="visitBranch()">
-          عرض جميع الفروع
+          {{ 'SUBSCRIPTION.VIEW_BRANCHES' | translate }}
         </button>
       </div>
       }
@@ -57,11 +57,11 @@
 
   <!-- لو مفيش اشتراك -->
   @if (!isLoading && !activeSubscription) {
-  <div class="text-center p-5 border rounded-3 ">
+  <div class="text-center p-5 border rounded-3">
     <img src="assets/Images/Subscriber-amico 2.svg" alt="no sub" class="mb-3" style="max-width:200px;">
-    <p class="fw-bold">أنت غير مشترك في أي باقة حاليًا.</p>
-    <p>اختار الباقة اللي تناسبك وابدأ تجربتك معانا النهارده.</p>
-    <button class="btn btn-success" (click)="goToPackages()">عرض الباقات</button>
+    <p class="fw-bold">{{ 'SUBSCRIPTION.NO_ACTIVE' | translate }}</p>
+    <p>{{ 'SUBSCRIPTION.CHOOSE_PACKAGE' | translate }}</p>
+    <button class="btn btn-success" (click)="goToPackages()">{{ 'SUBSCRIPTION.VIEW_PACKAGES' | translate }}</button>
   </div>
   }
 </div>

@@ -1,4 +1,4 @@
-<div class="w-100 my-5 py-lg-5 py-2 px-0" dir="rtl">
+<div class="w-100 my-5 py-lg-5 py-2 px-0" >
   <!-- Success/Error Messages -->
   <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show mx-3" role="alert">
     {{ successMessage }}
@@ -15,12 +15,17 @@
     <div class="text-center w-100">
       <!-- Profile Image with Upload Controls -->
       <div class="mb-3 position-relative d-inline-block">
-        @if (client.image) {
-        <img [src]="client.image" alt="صورة المستخدم" class="rounded-circle border"
-          style="width: 100px; height: 100px; object-fit: cover;" />
-        } @else {
-        <i class="fas fa-user-circle text-secondary" style="font-size: 100px;"></i>
-        }
+        <!-- ✅ لو فيه صورة -->
+        <img *ngIf="client?.image; else defaultIcon"
+             [src]="client.image"
+             alt="{{ 'PROFILE.IMAGE_ALT' | translate }}"
+             class="rounded-circle border"
+             style="width: 100px; height: 100px; object-fit: cover;" />
+
+        <!-- ✅ لو مفيش صورة -->
+        <ng-template #defaultIcon>
+          <i class="fas fa-user-circle text-secondary" style="font-size: 100px;"></i>
+        </ng-template>
 
         <!-- Edit Button Dropdown (bottom right of image) -->
         <div class="position-absolute bottom-0 end-0">
@@ -31,20 +36,17 @@
               <i class="fas fa-edit"></i>
             </button>
 
-
-
-            <!-- IMPORTANT: add dropdown-menu class -->
             <ul ngbDropdownMenu class="dropdown-menu shadow">
               <li>
                 <label for="profileImage" class="dropdown-item m-0" style="cursor: pointer;">
-                  <i class="fas fa-upload"></i>تغيير الصورة
+                  <i class="fas fa-upload"></i> {{ 'PROFILE.CHANGE_IMAGE' | translate }}
                   <input id="profileImage" type="file" accept="image/jpeg, image/jpg, image/png, image/webp"
-                    (change)="onFileSelected($event)" style="display: none;" [disabled]="isLoading">
+                         (change)="onFileSelected($event)" style="display: none;" [disabled]="isLoading">
                 </label>
               </li>
-              <li *ngIf="client.image">
+              <li *ngIf="client?.image">
                 <button class="dropdown-item text-danger" (click)="deleteImage()" [disabled]="isLoading">
-                  <i class="fas fa-trash me-2"></i> حذف الصورة
+                  <i class="fas fa-trash me-2"></i> {{ 'PROFILE.DELETE_IMAGE' | translate }}
                 </button>
               </li>
             </ul>
@@ -54,13 +56,11 @@
         <!-- Loading Indicator -->
         <div *ngIf="isLoading" class="mt-2">
           <div class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="visually-hidden px-4">جاري التحميل...</span>
+            <span class="visually-hidden px-4">{{ 'PROFILE.LOADING' | translate }}</span>
           </div>
-          <small class="text-muted px-4">جاري معالجة الصورة...</small>
+          <small class="text-muted px-4">{{ 'PROFILE.PROCESSING_IMAGE' | translate }}</small>
         </div>
       </div>
-
-
 
       <!-- Name, Email -->
       <h5 class="mb-1">{{ client.name }}</h5>
@@ -71,36 +71,35 @@
         <div class="row justify-content-center g-3 flex-nowrap overflow-auto scroll-tabs">
           <div class="col-auto d-flex px-2">
             <a class="btn profile_btn flex-fill px-3" routerLink="details" routerLinkActive="active">
-              <img src="assets/Images/account-setting-03.svg" alt=""> &nbsp; تفاصيل الحساب
+              <img src="assets/Images/account-setting-03.svg" alt=""> &nbsp; {{ 'PROFILE.DETAILS' | translate }}
             </a>
           </div>
 
           <div class="col-auto d-flex px-2">
             <a class="btn profile_btn flex-fill px-3" routerLink="packages" routerLinkActive="active">
-              <img src="assets/Images/invoice-01.svg" alt=""> &nbsp; الاشتراكات
+              <img src="assets/Images/invoice-01.svg" alt=""> &nbsp; {{ 'PROFILE.PACKAGES' | translate }}
             </a>
           </div>
 
           <div class="col-auto d-flex px-2">
             <a class="btn profile_btn flex-fill px-3" routerLink="orders" routerLinkActive="active">
-              <img src="assets/Images/shopping-basket-03.svg" alt=""> &nbsp; الطلبات
+              <img src="assets/Images/shopping-basket-03.svg" alt=""> &nbsp; {{ 'PROFILE.ORDERS' | translate }}
             </a>
           </div>
 
           <div class="col-auto d-flex px-2">
             <a class="btn profile_btn flex-fill px-3" routerLink="reservations" routerLinkActive="active">
-              <img src="assets/Images/appointment-02.svg" alt=""> &nbsp; الحجوزات
+              <img src="assets/Images/appointment-02.svg" alt=""> &nbsp; {{ 'PROFILE.RESERVATIONS' | translate }}
             </a>
           </div>
 
           <div class="col-auto d-flex px-2">
             <a class="btn profile_btn flex-fill px-3" routerLink="addresses" routerLinkActive="active">
-              <img src="assets/Images/location-05 green.svg" alt=""> &nbsp; العنوان
+              <img src="assets/Images/location-05 green.svg" alt=""> &nbsp; {{ 'PROFILE.ADDRESSES' | translate }}
             </a>
           </div>
         </div>
       </div>
-
 
       <!-- Routed Component Shows Here -->
       <div class="card border rounded p-3 shadow-sm w-100">
@@ -111,6 +110,6 @@
   } @else if (errorMessage) {
   <p class="text-danger text-center mt-5">{{ errorMessage }}</p>
   } @else {
-  <p class="text-danger text-center mt-5">لا يوجد بيانات لعرضها. تأكد من تسجيل الدخول.</p>
+  <p class="text-danger text-center mt-5">{{ 'PROFILE.NO_DATA' | translate }}</p>
   }
 </div>

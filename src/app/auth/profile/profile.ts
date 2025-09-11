@@ -5,11 +5,13 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ClientService } from '../../services/client.service';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule, NgbDropdownModule],
+  imports: [CommonModule, RouterModule, NgbDropdownModule, TranslateModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss']
 })
@@ -20,23 +22,66 @@ export class Profile implements OnInit {
   errorMessage = '';
   successMessage = '';
 
-  constructor(private http: HttpClient, private clientService: ClientService) {}
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+  constructor(private translate: TranslateService, private languageService: LanguageService,private http: HttpClient, private clientService: ClientService) {}
+
+
+
+  
 
   ngOnInit(): void {
     this.loadProfile();
-  }
 
-  loadProfile(): void {
-    this.clientService.getProfile().subscribe({
-      next: (res) => {
-        this.client = res.client;
-      },
-      error: (err) => {
-        console.error('فشل جلب البيانات:', err);
-        this.errorMessage = 'حدث خطأ أثناء تحميل البيانات.';
-      }
+        // Set initial language
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
     });
   }
+
+loadProfile(): void {
+  this.clientService.getProfile().subscribe({
+    next: (res) => {
+      console.log("🔹 Full API Response:", res);
+
+      this.client = res.client; // 👈 خد الـ client بس
+
+      if (this.client?.image) {
+        this.checkImage(this.client.image).then((isValid) => {
+          if (!isValid) {
+            console.warn("⚠️ صورة غير صالحة، هنعرض صورة افتراضية");
+            this.client.image = 'assets/Images/default-user.png'; 
+          }
+        });
+      }
+    },
+    error: (err) => {
+      console.error('❌ فشل جلب البيانات:', err);
+      this.errorMessage = 'حدث خطأ أثناء تحميل البيانات.';
+    }
+  });
+}
+
+
+/**
+ * ✅ يتأكد إن الصورة صالحة (status 200)
+ */
+checkImage(url: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
+}
+
+
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];

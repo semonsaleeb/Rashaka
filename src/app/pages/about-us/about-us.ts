@@ -9,7 +9,7 @@ import { LanguageService } from '../../services/language.service';
 @Component({
   selector: 'app-about-us',
   standalone: true,
-  imports: [CommonModule, Branches, SucesStory, Downloadapp, TranslateModule],
+  imports: [CommonModule, Branches, SucesStory, TranslateModule],
   templateUrl: './about-us.html',
   styleUrls: ['./about-us.scss']
 })

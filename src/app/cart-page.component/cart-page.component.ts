@@ -8,18 +8,22 @@ import { Router, RouterModule } from '@angular/router';
 import { PromoResponse as ServicePromoResponse } from '../../models/PromoResponse';
 import { CartItem } from '../../models/CartItem';
 import { CartResponse } from '../../models/CartResponse';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../services/language.service';
 
 
 @Component({
   selector: 'app-cart-page.component',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './cart-page.component.html',
   styleUrls: ['./cart-page.component.scss']
 })
 export class CartPageComponent implements OnInit {
   // ================== Variables ==================
   progressValue = 80;
+ currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
   cartItems: CartItem[] = [];
 
@@ -46,7 +50,8 @@ export class CartPageComponent implements OnInit {
     private cartService: CartService,
     private cartState: CartStateService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService, private languageService: LanguageService
   ) {
     this.token = localStorage.getItem('token') || '';
   }
@@ -55,6 +60,15 @@ export class CartPageComponent implements OnInit {
   ngOnInit(): void {
     console.log('🟢 CartPageComponent INIT, token:', this.token);
     this.loadCart();
+
+     this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
   }
 
   // ================== Helpers ==================

@@ -2,14 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PricingService } from '../../../services/pricing.service';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
   selector: 'app-packages',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './packages.html',
   styleUrl: './packages.scss'
 })
-export class Packages  implements OnInit {
+export class Packages implements OnInit {
+
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+
   activeSubscription: {
     name: string;
     status: string;
@@ -19,10 +26,20 @@ export class Packages  implements OnInit {
 
   isLoading = true;
 
-  constructor(private router: Router, private pricingService: PricingService) { }
+  constructor(private translate: TranslateService, private languageService: LanguageService, private router: Router, private pricingService: PricingService) { }
 
   ngOnInit(): void {
     this.loadActiveSubscription();
+
+
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
   }
 
   loadActiveSubscription(): void {

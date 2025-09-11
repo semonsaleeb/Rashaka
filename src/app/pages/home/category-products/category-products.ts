@@ -183,28 +183,36 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   // ---------------------- products & favorites ----------------------
-  private fetchProductsAndFavorites(): void {
-    this.isLoading = true;
-    const token = localStorage.getItem('token');
 
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.allProducts = [...products];
-        this.filteredProducts = [...products];
-        this.categories = this.extractUniqueCategories(this.allProducts);
+private fetchProductsAndFavorites(categoryId?: number): void {
+  this.isLoading = true;
+  const token = localStorage.getItem('token');
 
-        // 🟢 بس load init للـ favorites
-        this.favoriteService.loadFavorites(token).subscribe({
-          next: () => { this.isLoading = false; },
-          error: () => { this.isLoading = false; }
-        });
-      },
-      error: (err) => {
-        console.error('Failed to load products:', err);
-        this.isLoading = false;
-      }
-    });
+  let products$;
+  if (categoryId && categoryId !== 0) {
+    products$ = this.productService.getProductsByCategory(categoryId);
+  } else {
+    products$ = this.productService.getProducts(); // 🟢 لو اختار "الكل"
   }
+
+  products$.subscribe({
+    next: (products) => {
+      this.allProducts = [...products];
+      this.filteredProducts = [...products];
+      this.categories = this.extractUniqueCategories(this.allProducts);
+
+      this.favoriteService.loadFavorites(token).subscribe({
+        next: () => (this.isLoading = false),
+        error: () => (this.isLoading = false),
+      });
+    },
+    error: (err) => {
+      console.error('Failed to load products:', err);
+      this.isLoading = false;
+    },
+  });
+}
+
 
 
   private loadProductsWithoutFavorites(products: Product[]): void {
@@ -309,8 +317,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
       const name = (p.name_ar ?? '').toLowerCase();
       const matchesSearch = q === '' || name.includes(q);
       const priceNum = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
-      const meetsMin = this.priceMin === null || priceNum >= this.priceMin;
-      const meetsMax = this.priceMax === null || priceNum <= this.priceMax;
+      const meetsMin = this.priceMin === null || Number( priceNum) >= this.priceMin;
+      const meetsMax = this.priceMax === null || Number( priceNum) <= this.priceMax;
       return matchesCategory && matchesSearch && meetsMin && meetsMax;
     });
     this.currentSlideIndex = 0;

@@ -9,11 +9,13 @@ import { FavoriteService } from '../services/favorite.service';
 import { FormsModule } from '@angular/forms';
 import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
 import { Product } from '../../models/Product';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [HttpClientModule, RouterModule, FormsModule, Downloadapp],
+  imports: [HttpClientModule, RouterModule, FormsModule, Downloadapp, TranslateModule],
   templateUrl: './favorites.html',
   styleUrl: './favorites.scss'
 })
@@ -22,18 +24,38 @@ export class Favorites implements OnInit {
   favorites: Product[] = [];
   isLoading = true;
 
+
+
+  
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+ 
+
   constructor(
     private productService: ProductService,
     private auth: AuthService,
     public router: Router,
     private cartService: CartService,
     public cartState: CartStateService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+     private translate: TranslateService,
+      private languageService: LanguageService
   ) {}
 
   ngOnInit(): void {
     this.loadFavorites();
     this.loadCart();
+
+     // Set initial language
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
   }
 
   /** ---------------- FAVORITES ---------------- */

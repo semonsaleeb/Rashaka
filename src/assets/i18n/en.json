@@ -228,7 +228,6 @@
     "LOGIN": "Login",
     "REGISTER": "Register"
   },
-  
   "MOBILE_MENU": {
     "TITLE": "Menu",
     "LOGIN": "Login",
@@ -246,10 +245,10 @@
     "BLOG": "Blog",
     "ABOUT_US": "About Us"
   },
-    "SUCCESS_STORIES_TITLE": "Our Clients' Success Stories",
-    "SUCCESS_STORIES_SUBTITLE": "\"Real Transformation Stories - Your Inspiration Starts Here\"<br>Take the first step now towards your dream body!",
-    "SUCCESS_STORIES_CTA": "Book Now",
-    "AUTH": {
+  "SUCCESS_STORIES_TITLE": "Our Clients' Success Stories",
+  "SUCCESS_STORIES_SUBTITLE": "\"Real Transformation Stories - Your Inspiration Starts Here\"<br>Take the first step now towards your dream body!",
+  "SUCCESS_STORIES_CTA": "Book Now",
+  "AUTH": {
     "HOME": "Home",
     "LOGIN_IMAGE_ALT": "Login Image",
     "WELCOME": "Welcome to Happy Fitness!",
@@ -258,40 +257,40 @@
     "LOGIN": "Login"
   },
   "LOGIN": {
-  "EMAIL": "Email",
-  "PASSWORD": "Password",
-  "FORGOT_PASSWORD": "Forgot your password?",
-  "SUBMIT": "Login",
-  "LOADING": "Logging in..."
-},
-"REGISTER": {
-  "NAME": "Name",
-  "EMAIL": "Email",
-  "PHONE": "Phone Number",
-  "PASSWORD": "Password",
-  "PASSWORD_PLACEHOLDER": "Password",
-  "PASSWORD_CONFIRM": "Confirm Password",
-  "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
-  "SUBMIT": "Register",
-  "ERRORS": {
-    "NAME_REQUIRED": "Please enter your full name",
-    "NAME_MAXLENGTH": "Name is too long, maximum 255 characters",
-    "EMAIL_REQUIRED": "Please enter your email",
-    "EMAIL_INVALID": "Please enter a valid email",
-    "EMAIL_MAXLENGTH": "Email is too long, maximum 255 characters",
-    "EMAIL_NOT_VERIFIED": "Email is not verified",
-    "EMAIL_PATTERN": "Please enter a valid email containing @ and .",
-    "PHONE_REQUIRED": "Please enter your phone number",
-    "PHONE_INVALID": "Invalid phone number, must be Egyptian (11 digits starting with 01) or Saudi (10 digits starting with 05 or +9665)",
-    "PASSWORD_REQUIRED": "Please enter a password",
-    "PASSWORD_WEAK": "Weak password, must contain uppercase, lowercase letters, numbers, and length ≥ 8",
-    "PASSWORD_MISMATCH": "Passwords do not match"
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "FORGOT_PASSWORD": "Forgot your password?",
+    "SUBMIT": "Login",
+    "LOADING": "Logging in..."
   },
-  "SUCCESS_TITLE": "Account created successfully!",
-  "SUCCESS_MESSAGE": "Welcome! Explore our services and start your experience now.",
-  "SUCCESS_BUTTON": "Go to Homepage"
-},
- "MODAL": {
+  "REGISTER": {
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "PHONE": "Phone Number",
+    "PASSWORD": "Password",
+    "PASSWORD_PLACEHOLDER": "Password",
+    "PASSWORD_CONFIRM": "Confirm Password",
+    "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
+    "SUBMIT": "Register",
+    "ERRORS": {
+      "NAME_REQUIRED": "Please enter your full name",
+      "NAME_MAXLENGTH": "Name is too long, maximum 255 characters",
+      "EMAIL_REQUIRED": "Please enter your email",
+      "EMAIL_INVALID": "Please enter a valid email",
+      "EMAIL_MAXLENGTH": "Email is too long, maximum 255 characters",
+      "EMAIL_NOT_VERIFIED": "Email is not verified",
+      "EMAIL_PATTERN": "Please enter a valid email containing @ and .",
+      "PHONE_REQUIRED": "Please enter your phone number",
+      "PHONE_INVALID": "Invalid phone number, must be Egyptian (11 digits starting with 01) or Saudi (10 digits starting with 05 or +9665)",
+      "PASSWORD_REQUIRED": "Please enter a password",
+      "PASSWORD_WEAK": "Weak password, must contain uppercase, lowercase letters, numbers, and length ≥ 8",
+      "PASSWORD_MISMATCH": "Passwords do not match"
+    },
+    "SUCCESS_TITLE": "Account created successfully!",
+    "SUCCESS_MESSAGE": "Welcome! Explore our services and start your experience now.",
+    "SUCCESS_BUTTON": "Go to Homepage"
+  },
+  "MODAL": {
     "CLOSE": "Close",
     "LOGIN_ILLUSTRATION": "Login Illustration",
     "LOGIN_MESSAGE": "Please login or create a new account to continue.",
@@ -313,7 +312,7 @@
     "CONFIRM_BOOKING_TITLE": "Confirm Booking",
     "CONFIRM_BOOKING_DESC": "Review your booking details and confirm to complete the process."
   },
-   "SESSION": {
+  "SESSION": {
     "SELECT_TYPE": "Select Session Type",
     "TYPE_LABEL": "Session Type",
     "TYPE_PLACEHOLDER": "-- Select Session --",
@@ -321,7 +320,7 @@
     "BRANCH_PLACEHOLDER": "-- Select Branch --",
     "NEXT": "Next"
   },
-   "SPECIALIST": {
+  "SPECIALIST": {
     "SELECT_TITLE": "Select Specialist",
     "NO_SPECIALISTS": "No specialists available for this branch"
   },
@@ -344,11 +343,11 @@
   "BUTTONS": {
     "NEXT": "Next",
     "PREVIOUS": "Previous",
-     "CONFIRM": "Confirm Booking",
+    "CONFIRM": "Confirm Booking",
     "GO_HOME": "Go Home",
     "VIEW_BOOKING": "View Booking"
   },
-   "CONFIRM_BOOKING": {
+  "CONFIRM_BOOKING": {
     "SPECIALIST_IMAGE": "Specialist Image",
     "BRANCH": "Branch",
     "ADDRESS": "Address",
@@ -360,13 +359,13 @@
     "SUCCESS_TITLE": "Your appointment has been booked successfully!",
     "SUCCESS_MESSAGE": "Booking details will be sent to your email, and you can track your bookings from your account."
   },
-   "POPUP": {
+  "POPUP": {
     "QR_ALT": "QR code",
     "MESSAGE": "Download the Happy Fitness app and enjoy exclusive offers",
     "APP_STORE": "App Store",
     "GOOGLE_PLAY": "Google Play"
   },
-   "PASSWORD_RESET": {
+  "PASSWORD_RESET": {
     "HOME": "Home",
     "LOGIN_IMAGE": "Login Image",
     "TITLE": "Reset Password",
@@ -374,11 +373,10 @@
     "SEND_OTP": "Send OTP",
     "SENDING": "Sending...",
     "SUCCESS_MESSAGE": "Password has been successfully reset",
-  "RESET_LINK_MESSAGE": "A reset link has been sent to your email. If you don’t receive it within 5 minutes, please click the resend button.",
-  "RESEND": "Resend"
-  
+    "RESET_LINK_MESSAGE": "A reset link has been sent to your email. If you don’t receive it within 5 minutes, please click the resend button.",
+    "RESEND": "Resend"
   },
-    "OTP": {
+  "OTP": {
     "HOME": "Home",
     "LOGIN_IMAGE": "Login Image",
     "TITLE": "Verify OTP",
@@ -387,12 +385,11 @@
     "SUBMIT": "Verify Account",
     "LOADING": "Verifying...",
     "RESEND_INFO": "Didn't receive the code? Resend after 30 seconds",
-     "ERROR_INVALID": "The code must be 4 digits.",
-  "SUCCESS": "Verification successful!",
-  "ERROR_FAILED": "OTP verification failed."
-    
+    "ERROR_INVALID": "The code must be 4 digits.",
+    "SUCCESS": "Verification successful!",
+    "ERROR_FAILED": "OTP verification failed."
   },
-   "RESET_PASSWORD": {
+  "RESET_PASSWORD": {
     "HOME": "Home",
     "LOGIN_IMAGE": "Login Image",
     "TITLE": "Reset Password",
@@ -400,9 +397,142 @@
     "CONFIRM_PASSWORD": "Confirm Password",
     "SUBMIT": "Reset Password",
     "LOADING": "Sending..."
+  },
+  "FAVORITES": {
+    "TITLE": "Favorites",
+    "PRODUCT": "Product",
+    "CLEAR_ALL": "Clear All",
+    "LOADING": "Loading favorites...",
+    "EMPTY_TITLE": "Your favorites list is empty!",
+    "EMPTY_DESC": "Add the products you wish to buy and come back to complete your order anytime.",
+    "BROWSE": "Browse Products",
+    "CURRENCY": "SAR",
+    "ADD_TO_CART": "Add to Cart"
+  },
+  "CART": {
+    "EMPTY_TITLE": "Your cart is empty!",
+    "EMPTY_DESC": "Add the products you want and come back later to complete your order.",
+    "START_SHOPPING": "Start Shopping",
+    "TITLE": "Shopping Cart",
+    "FREE_SHIPPING": "Free shipping on orders over",
+    "AMOUNT": "1000 SAR",
+    "CURRENCY": "SAR",
+    "SUMMARY": "Order Summary",
+    "ENTER_CODE": "Enter promo code",
+    "APPLY": "Apply",
+    "TOTAL": "Total",
+    "SHIPPING": "Shipping Fee",
+    "GRAND_TOTAL": "Grand Total",
+    "CHECKOUT": "Checkout",
+    "CLOSE": "Close",
+    "LOGIN_REQUIRED": "Please login or create an account to continue.",
+    "REGISTER": "Register",
+    "LOGIN": "Login"
+  },
+  "PROFILE": {
+    "IMAGE_ALT": "User profile picture",
+    "CHANGE_IMAGE": "Change Image",
+    "DELETE_IMAGE": "Delete Image",
+    "LOADING": "Loading...",
+    "PROCESSING_IMAGE": "Processing image...",
+    "DETAILS": "Account Details",
+    "PACKAGES": "Subscriptions",
+    "ORDERS": "Orders",
+    "RESERVATIONS": "Reservations",
+    "ADDRESSES": "Address",
+    "NO_DATA": "No data available. Please make sure you are logged in."
+  },
+  "APPOINTMENTS": {
+    "TITLE": "My Appointments",
+    "LOADING": "Loading...",
+    "DATE": "Date",
+    "TIME": "Time",
+    "CENTER": "Center",
+    "STATUS": "Status",
+    "CANCEL": "Cancel",
+    "UPDATE_TIME": "Update Time",
+    "NO_APPOINTMENTS": "No appointments available.",
+    "CANCEL_TITLE": "Cancel Appointment!",
+    "CANCEL_CONFIRM": "Are you sure you want to cancel this appointment?",
+    "CLOSE": "Close",
+    "CONFIRM": "Confirm"
+  },
+  "SUBSCRIPTION": {
+    "STATUS": {
+      "ACTIVE": "Active",
+      "PENDING": "Pending Activation",
+      "EXPIRED": "Expired"
+    },
+    "DETAILS": "Subscription Details",
+    "NAME": "Name",
+    "FEATURES": "Features",
+    "ACTIVATION_CODE": "Activation Code",
+    "ACTIVATION_NOTE": "Please visit one of our branches to activate your subscription.",
+    "VIEW_BRANCHES": "View All Branches",
+    "NO_ACTIVE": "You are not subscribed to any package currently.",
+    "CHOOSE_PACKAGE": "Choose the package that suits you and start your experience with us today.",
+    "VIEW_PACKAGES": "View Packages"
+  },
+  "ORDERS": {
+    "TITLE": "Orders",
+    "LOADING": "Loading...",
+    "ORDER_NUMBER": "Order No.",
+    "PRODUCT": "Product",
+    "STATUS": {
+      "DELIVERED": "Delivered",
+      "CANCELLED": "Cancelled",
+      "IN_PROGRESS": "In Progress",
+      "PENDING": "Pending"
+    },
+    "QUANTITY": "Quantity",
+    "NO_PRODUCTS": "No products",
+    "ORDERS_TOTAL": "Total",
+    "CURRENCY": "SAR",
+    "PAYMENT_METHOD": "Payment Method",
+    "CREATED_AT": "Order Date",
+    "NO_ORDERS": "No orders yet."
+  },
+  "ACCOUNT": {
+    "CONTACT_INFO": "Contact Information",
+    "EMAIL": "Email",
+    "PHONE": "Phone Number",
+    "ADD_PHONE": "Add +",
+    "PERSONAL_INFO": "Personal Information",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "PASSWORD": "Password",
+    "CHANGE_PASSWORD": "Change Password",
+    "LOGOUT": "Logout",
+    "UPDATE": "Update Account"
+  },
+  "ADDRESS": {
+    "DELETE": "Delete",
+    "DETAILS": "Address Details",
+    "NAME": "Name",
+    "ADDRESS": "Address",
+    "PHONE": "Phone Number",
+    "ADD_PHONE": "Add +",
+    "ADD_NEW": "Add New Address",
+    "ADD": "Add Address",
+    "ADDED_SUCCESS": "Address added successfully",
+    "DELETE_SUCCESS": "Deleted successfully",
+    "CONFIRM_DELETE": "Are you sure you want to delete this address?",
+    "CANCEL": "Cancel",
+    "OK": "OK",
+    "LOCATION_DETAILS": "Location Details",
+    "GOVERNMENT": "Governorate",
+    "CITY": "City",
+    "AREA": "Area",
+    "STREET": "Street Name",
+    "BUILDING": "Building Number",
+    "CONTACT_DETAILS": "Your Contact Details",
+    "SAVE": "Save Address",
+    "BACK": "Back"
+  },
+  "MAP": {
+    "SELECT_LOCATION": "Choose your location from the map",
+    "SEARCH_PLACEHOLDER": "Search for a location...",
+    "MY_LOCATION": "My Location",
+    "CONFIRM_LOCATION": "Confirm Location"
   }
-
-
-  
- 
 }

@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AddressData } from '../../../../../models/address.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../../services/language.service';
 
 
 L.Icon.Default.mergeOptions({
@@ -20,11 +22,32 @@ L.Icon.Default.mergeOptions({
 @Component({
   selector: 'app-map-step',
   standalone: true,
-  imports: [FormsModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule, TranslateModule],
   templateUrl: './map-step.html',
   styleUrls: ['./map-step.scss']
 })
 export class MapStep implements AfterViewInit {
+   currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
+
+
+
+    constructor(private translate: TranslateService, private languageService: LanguageService,private http: HttpClient) {}
+
+
+  ngOnInit(): void {
+
+        // Set initial language
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
+  }
   @Output() next = new EventEmitter<Partial<AddressData>>();
 
   location_type = 'home';
@@ -39,7 +62,6 @@ export class MapStep implements AfterViewInit {
   private map!: L.Map;
   private marker!: L.Marker;
 
-  constructor(private http: HttpClient) {}
 
   ngAfterViewInit(): void {
     delete (L.Icon.Default.prototype as any)._getIconUrl;

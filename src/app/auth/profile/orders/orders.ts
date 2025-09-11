@@ -4,41 +4,44 @@ import { OrderService } from '../../../services/order.service';
 import { Order } from '../../../../models/Order';
 import { NgbCarousel, NgbCarouselModule, NgbSlideEvent } from '@ng-bootstrap/ng-bootstrap';
 import { catchError, forkJoin, of } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 // import '@angular/localize/init';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, NgbCarouselModule],
+  imports: [CommonModule, NgbCarouselModule, TranslateModule],
   templateUrl: './orders.html',
   styleUrls: ['./orders.scss']
 })
 export class Orders implements OnInit, OnDestroy {
   @ViewChild(NgbCarousel) carousel!: NgbCarousel;
+ currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
   isLoading = true;
   errorMessage = '';
   groupedOrders: any[][] = [];
   currentIndex = 0;
   visibleCards = 3; // Default for desktop
+  isMobile = false;
+
   private resizeListener!: () => void;
 
-  constructor(private orderService: OrderService) { }
+  constructor(private translate: TranslateService, private languageService: LanguageService, private orderService: OrderService) { }
 
   // Update visible cards based on screen width
-  updateVisibleCards(): void {
-    const width = window.innerWidth;
-    if (width < 768) {
-      this.visibleCards = 1; // mobile
-    } else {
-      this.visibleCards = 3; // desktop
-    }
-    
-    // Regroup orders when screen size changes
-    if (this.groupedOrders.length > 0) {
-      this.regroupOrders();
-    }
+ updateVisibleCards(): void {
+  const width = window.innerWidth;
+  this.isMobile = width < 768;   // ✅ detect mobile
+
+  this.visibleCards = this.isMobile ? 1 : 3;
+
+  if (this.groupedOrders.length > 0) {
+    this.regroupOrders();
   }
+}
 
   // Regroup orders based on current visibleCards value
   regroupOrders(): void {
@@ -89,6 +92,16 @@ export class Orders implements OnInit, OnDestroy {
     };
     
     window.addEventListener('resize', this.resizeListener);
+
+
+       this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
   }
 
   ngOnDestroy() {

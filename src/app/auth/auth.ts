@@ -35,6 +35,9 @@ export class Auth {
       this.dir = lang === 'ar' ? 'rtl' : 'ltr';
     });
   }
+
+
+  
   setTab(tab: 'login' | 'register') {
     this.activeTab = tab;
   }

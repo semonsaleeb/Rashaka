@@ -6,13 +6,13 @@
     <div class="align-items-center mt-5 py-5 ">
       <img src="assets/Images/Add to Cart-cuate 1.svg" alt="" class="img-fluid" style="max-width: 200px;">
     </div>
-    <h4 class="mt-3">عربة التسوق فارغة!</h4>
+    <h4 class="mt-3">{{ 'CART.EMPTY_TITLE' | translate }}</h4>
     <p class="text-muted small">
-      أضف المنتجات اللي ترغب في شرائها وارجع لإتمام الطلب وقت ما تحب.
+      {{ 'CART.EMPTY_DESC' | translate }}
     </p>
 
     <button class="btn custom-green-btn mt-3 px-4 py-2" [routerLink]="['/home/category-products']">
-      ابدا التسوق
+      {{ 'CART.START_SHOPPING' | translate }}
     </button>
   </div>
   } @else {
@@ -21,7 +21,7 @@
   <div class=" text-center p-2 mb-4 py-5">
     <h5 class="text-center d-flex justify-content-center align-items-center gap-2">
       <img src="assets/Images/Frame 9033.svg" class="img-fluid" style="max-height: 28px;">
-      <span>عربة التسوق</span>
+      <span>{{ 'CART.TITLE' | translate }}</span>
       <span class="badge bg-success rounded-pill">{{ totalCartItemsCount }}</span>
     </h5>
   </div>
@@ -31,8 +31,8 @@
     <div class="col-12 col-lg-7">
       <h6 class="mb-4 text-end">
         <img src="assets/Images/delivery.svg" class="me-2" style="max-height: 22px;">
-        <span> شحن مجاني للطلبات أكثر من </span>
-        <strong>1000 ريال</strong>
+        <span>{{ 'CART.FREE_SHIPPING' | translate }}</span>
+        <strong>{{ 'CART.AMOUNT' | translate }}</strong>
       </h6>
 
       <div class="progress border border-c mb-3" style="height: 10px;">
@@ -62,13 +62,12 @@
               <!-- السعر -->
               <div class="small">
                 @if ((+item.sale_unit_price! > 0) && (+item.sale_unit_price! !== +item.unit_price!)) {
-                <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} ر.س</span>
-                <span class="text-muted text-decoration-line-through">{{ item.unit_price }} ر.س</span>
+                <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} {{ 'CART.CURRENCY' | translate }}</span>
+                <span class="text-muted text-decoration-line-through">{{ item.unit_price }} {{ 'CART.CURRENCY' | translate }}</span>
                 } @else {
-                <span class="fw-bold text-dark">{{ item.unit_price }} ر.س</span>
+                <span class="fw-bold text-dark">{{ item.unit_price }} {{ 'CART.CURRENCY' | translate }}</span>
                 }
               </div>
-
 
               <!-- أزرار التحكم -->
               <div class="d-flex align-items-center justify-content-between mt-2">
@@ -96,52 +95,52 @@
     <!-- Left Side: Order Summary -->
     <div class="col-12 col-lg-5">
       <div class="card shadow-sm border-1 rounded-4 p-4" style="background-color: #FAFAFA;">
-        <h6 class="text-end mb-3">ملخص الطلب</h6>
+        <h6 class="text-end mb-3">{{ 'CART.SUMMARY' | translate }}</h6>
 
         <!-- Promo Code -->
         <div class="input-group mb-3">
-          <input type="text" class="form-control text-end rounded-0" placeholder="ادخل الكود" [(ngModel)]="promoCode">
-          <button class="btn custom-green-btn rounded-0">تطبيق</button>
+          <input type="text" class="form-control text-end rounded-0" [placeholder]="'CART.ENTER_CODE' | translate" [(ngModel)]="promoCode">
+          <button class="btn custom-green-btn rounded-0">{{ 'CART.APPLY' | translate }}</button>
         </div>
 
         <!-- الأسعار -->
         <ul class="mb-3 text-end p-0 small">
           <li class="d-flex justify-content-between py-2">
-            <span>المجموع</span>
+            <span>{{ 'CART.TOTAL' | translate }}</span>
             <span>
               @if (totalSalePrice) {
               <span class="text-muted text-decoration-line-through me-2">
-                {{ totalPrice | number: '1.2-2' }} ر.س
+                {{ totalPrice | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}
               </span>
               <span class="fw-bold text-success">
-                {{ totalSalePrice | number: '1.2-2' }} ر.س
+                {{ totalSalePrice | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}
               </span>
               } @else {
               <span class="fw-bold">
-                {{ totalPrice | number: '1.2-2' }} ر.س
+                {{ totalPrice | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}
               </span>
               }
             </span>
           </li>
 
           <li class="d-flex justify-content-between py-2">
-            <span>رسوم شحن</span>
-            <span>30.00 ر.س</span>
+            <span>{{ 'CART.SHIPPING' | translate }}</span>
+            <span>30.00 {{ 'CART.CURRENCY' | translate }}</span>
           </li>
 
           <li class="d-flex justify-content-between fw-bold pt-3 border-top my-3">
-            <span>الإجمالي</span>
-            <span>{{ (totalSalePrice || totalPrice) + 30 | number: '1.2-2' }} ر.س</span>
+            <span>{{ 'CART.GRAND_TOTAL' | translate }}</span>
+            <span>{{ (totalSalePrice || totalPrice) + 30 | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}</span>
           </li>
         </ul>
 
         @if (!token) {
         <button class="btn custom-green-btn w-100 fw-bold" data-bs-toggle="modal" data-bs-target="#authModal">
-          إتمام الطلب
+          {{ 'CART.CHECKOUT' | translate }}
         </button>
         } @else {
         <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">
-          إتمام الطلب
+          {{ 'CART.CHECKOUT' | translate }}
         </button>
         }
 
@@ -151,7 +150,7 @@
             <div class="modal-content rounded-4 p-3">
               <!-- Close button -->
               <div class="d-flex justify-content-end">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" [attr.aria-label]="'CART.CLOSE' | translate"></button>
               </div>
 
               <!-- صورة -->
@@ -160,15 +159,15 @@
               </div>
 
               <!-- العنوان -->
-              <h5 class="text-center fw-bold mb-2">يرجى تسجيل الدخول أو إنشاء حساب جديد للمتابعة.</h5>
+              <h5 class="text-center fw-bold mb-2">{{ 'CART.LOGIN_REQUIRED' | translate }}</h5>
 
               <!-- الأزرار -->
               <div class="d-flex justify-content-center gap-3 mt-3">
                 <button class="btn btn-outline-secondary px-4" (click)="goToRegister()" data-bs-dismiss="modal">
-                  إنشاء الحساب
+                  {{ 'CART.REGISTER' | translate }}
                 </button>
                 <button class="btn btn-success px-4" (click)="goToLogin()" data-bs-dismiss="modal">
-                  تسجيل الدخول
+                  {{ 'CART.LOGIN' | translate }}
                 </button>
               </div>
             </div>

@@ -6,12 +6,14 @@ import { AddressData } from '../../../../models/address.model';
 import { DetailsStep } from './details-step/details-step';
 import { MapStep } from './map-step/map-step';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-address',
   standalone: true,
-  imports: [DetailsStep, MapStep, FormsModule],
+  imports: [DetailsStep, MapStep, FormsModule, TranslateModule],
   templateUrl: './address.html',
   styleUrl: './address.scss'
 })
@@ -28,14 +30,26 @@ export class Address implements OnInit {
   isEditing = false;
   pendingDeleteId: number | null = null; // لتخزين العنوان المراد حذفه
 
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+
   constructor(
     private addressService: AddressService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private translate: TranslateService, private languageService: LanguageService,
   ) { }
 
   ngOnInit(): void {
     this.fetchAddresses();
     this.loadClientProfile();
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
   }
 
   loadClientProfile() {
@@ -182,27 +196,27 @@ export class Address implements OnInit {
 
   // عند الضغط على حذف داخل Confirm Delete Modal
   confirmDelete() {
-  if (!this.pendingDeleteId) return;
+    if (!this.pendingDeleteId) return;
 
-  // امسك مودال Confirm Delete
-  const modalEl = document.getElementById('deleteConfirmModal');
-  const modal = modalEl ? bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl) : null;
+    // امسك مودال Confirm Delete
+    const modalEl = document.getElementById('deleteConfirmModal');
+    const modal = modalEl ? bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl) : null;
 
-  this.addressService.deleteAddress(this.pendingDeleteId).subscribe({
-    next: () => {
-      this.fetchAddresses();
-      this.openDeleteSuccessModal();
-      this.pendingDeleteId = null;
+    this.addressService.deleteAddress(this.pendingDeleteId).subscribe({
+      next: () => {
+        this.fetchAddresses();
+        this.openDeleteSuccessModal();
+        this.pendingDeleteId = null;
 
-      // إغلاق المودال بعد الحذف
-      if (modal) {
-        modal.hide();
+        // إغلاق المودال بعد الحذف
+        if (modal) {
+          modal.hide();
+        }
+      },
+      error: () => {
+        alert('فشل حذف العنوان');
       }
-    },
-    error: () => {
-      alert('فشل حذف العنوان');
-    }
-  });
-}
+    });
+  }
 
 }
