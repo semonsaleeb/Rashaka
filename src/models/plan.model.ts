@@ -15,6 +15,7 @@ export interface ActiveOffer {
   discount_value: string; // أو number لو عايز تتأكد من العمليات الحسابية
   start_date: string;     // ممكن تحوّله لـ Date لاحقًا
   end_date: string;
+  type: string;
 }
 
 export interface Plan {

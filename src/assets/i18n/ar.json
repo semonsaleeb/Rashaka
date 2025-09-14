@@ -241,6 +241,7 @@
     "PACKAGES": "الباقات",
     "SUCCESS_STORIES": "قصص النجاح",
     "FREE_CHECKUP": "فحص مجاني",
+        "CHECKUP":"حجز الفحوصات ",
     "OFFERS": "العروض",
     "BLOG": "المدونة",
     "ABOUT_US": "من نحن"
@@ -313,9 +314,9 @@
     "CONFIRM_BOOKING_DESC": "راجع تفاصيل الحجز الخاصة بك وقم بتأكيد الحجز لإكمال العملية."
   },
   "SESSION": {
-    "SELECT_TYPE": "اختيار نوع السيشن",
-    "TYPE_LABEL": "نوع السيشن",
-    "TYPE_PLACEHOLDER": "-- اختر السيشن --",
+    "SELECT_TYPE": "اختيار نوع الجلسة",
+    "TYPE_LABEL": "نوع الجلسة",
+    "TYPE_PLACEHOLDER": "-- اختر الجلسة --",
     "BRANCH_LABEL": "الفرع",
     "BRANCH_PLACEHOLDER": "-- اختر فرع --",
     "NEXT": "التالي"
@@ -413,7 +414,6 @@
     "EMPTY_TITLE": "عربة التسوق فارغة!",
     "EMPTY_DESC": "أضف المنتجات التي ترغب في شرائها وارجع لإتمام الطلب لاحقًا.",
     "START_SHOPPING": "ابدأ التسوق",
-    "TITLE": "عربة التسوق",
     "FREE_SHIPPING": "شحن مجاني للطلبات أكثر من",
     "AMOUNT": "1000 ر.س",
     "CURRENCY": "ر.س",
@@ -427,7 +427,20 @@
     "CLOSE": "إغلاق",
     "LOGIN_REQUIRED": "يرجى تسجيل الدخول أو إنشاء حساب جديد للمتابعة.",
     "REGISTER": "إنشاء الحساب",
-    "LOGIN": "تسجيل الدخول"
+    "LOGIN": "تسجيل الدخول",
+     "TITLE": "عربة التسوق",
+    "CONTACT_INFO": "معلومات الاتصال",
+    "EMAIL": "البريد الإلكتروني",
+    "PHONE": "رقم الجوال",
+    "SHIPPING_ADDRESS": "عنوان الشحن واستخدامه للطلب",
+    "SELECT_ADDRESS": "اختر عنوان الشحن",
+    "ADD_NEW_ADDRESS": "إضافة عنوان جديد",
+    "PAYMENT_CREDIT": "الدفع عن طريق ماي فاتورة (بطاقة ائتمان)",
+    "PAYMENT_CASH": "الدفع نقدًا",
+    "YOUR_ORDERS": "طلباتك",
+    "PROMO_PLACEHOLDER": "ادخل كود الخصم",
+    "SHIPPING_FEE": "رسوم شحن",
+    "PLACE_ORDER": "إتمام الطلب"
   },
   "PROFILE": {
     "IMAGE_ALT": "صورة المستخدم",
@@ -534,5 +547,36 @@
     "SEARCH_PLACEHOLDER": "ابحث عن موقع...",
     "MY_LOCATION": "تحديد موقعي",
     "CONFIRM_LOCATION": "تأكيد الموقع"
-  }
+  },
+    "USE_PACKAGE_BALANCE": "قم باستخدام رصيد الباقة المتاح لديك لإتمام عملية الدفع",
+      "SUBSCRIPTION": {
+    "STATUS_LABEL": "حالة الاشتراك",
+    "STATUS": {
+      "ACTIVE": "نشط",
+      "PENDING": "قيد التفعيل",
+      "EXPIRED": "منتهي"
+    },
+    "DETAILS": "تفاصيل الاشتراك",
+    "PACKAGE_TITLE": "النظام الغذائي",
+    "START": "تاريخ البداية",
+    "END": "تاريخ الانتهاء",
+    "NONE": "لا يوجد",
+    "FEATURES": "المميزات",
+    "ACTIVATION_TITLE": "يرجى زيارة أحد الفروع لتأكيد وتفعيل اشتراكك.",
+    "ACTIVATION_NOTE": "لتفعيل الاشتراك، يرجى زيارة أقرب فرع لك وإظهار كود التفعيل التالي لفريق العمل.",
+    "ACTIVATION_CODE": "كود التفعيل",
+    "VIEW_BRANCHES": "عرض جميع الفروع",
+    "NO_ACTIVE": "لا يوجد اشتراك نشط",
+    "CHOOSE_PACKAGE": "يرجى اختيار باقة للاشتراك",
+    "VIEW_PACKAGES": "عرض الباقات"
+  },
+  "FEATURE": "الميزة",
+  "TOTAL": "الإجمالي",
+  "USED": "المستخدم",
+  "REMAINING": "المتبقي"
+
+
+  
+ 
+
 }

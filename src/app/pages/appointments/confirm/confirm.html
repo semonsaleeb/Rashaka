@@ -8,9 +8,9 @@
         <div class="specialist-card d-flex align-items-center p-3 rounded mb-4 border bg-light">
           <div class="d-flex align-items-center gap-3">
             <!-- صورة الأخصائي -->
-            <img [src]="bookingData.specialist?.image || 'assets/Images/User.svg'" 
-                 alt="{{ 'CONFIRM_BOOKING.SPECIALIST_IMAGE' | translate }}" 
-                 class="rounded-circle border border-2" width="60" height="60">
+            <img [src]="bookingData.specialist?.image || 'assets/Images/User.svg'"
+              alt="{{ 'CONFIRM_BOOKING.SPECIALIST_IMAGE' | translate }}" class="rounded-circle border border-2"
+              width="60" height="60">
 
             <!-- بيانات الأخصائي -->
             <div>
@@ -29,19 +29,20 @@
           </li>
 
           @if (bookingData.center?.city?.name) {
-            <li class="mb-2 d-flex align-items-center">
-              <i class="bi bi-geo-alt text-danger me-2"></i>
-              <img src="assets/Images/house-01.svg" alt="" class="me-2" width="18">
-              <span class="fw-semibold">{{ 'CONFIRM_BOOKING.ADDRESS' | translate }}:</span> {{ bookingData.center?.city?.name }}
-            </li>
+          <li class="mb-2 d-flex align-items-center">
+            <i class="bi bi-geo-alt text-danger me-2"></i>
+            <img src="assets/Images/house-01.svg" alt="" class="me-2" width="18">
+            <span class="fw-semibold">{{ 'CONFIRM_BOOKING.ADDRESS' | translate }}:</span> {{
+            bookingData.center?.city?.name }}
+          </li>
           }
 
           @if (bookingData.center?.phone) {
-            <li class="mb-2 d-flex align-items-center">
-              <i class="bi bi-telephone text-success me-2"></i>
-              <img src="assets/Images/contact-02.svg" alt="" class="me-2" width="18">
-              <span class="fw-semibold">{{ 'CONFIRM_BOOKING.PHONE' | translate }}:</span> {{ bookingData.center?.phone }}
-            </li>
+          <li class="mb-2 d-flex align-items-center">
+            <i class="bi bi-telephone text-success me-2"></i>
+            <img src="assets/Images/contact-02.svg" alt="" class="me-2" width="18">
+            <span class="fw-semibold">{{ 'CONFIRM_BOOKING.PHONE' | translate }}:</span> {{ bookingData.center?.phone }}
+          </li>
           }
 
           <li class="mb-2 d-flex align-items-center">
@@ -52,7 +53,8 @@
 
           <li class="d-flex align-items-center">
             <i class="bi bi-clock text-warning me-2"></i>
-            <span class="fw-semibold">{{ 'CONFIRM_BOOKING.TIME' | translate }}:</span> {{ 'CONFIRM_BOOKING.FROM' | translate }} {{ bookingData.start }}
+            <span class="fw-semibold">{{ 'CONFIRM_BOOKING.TIME' | translate }}:</span> {{ 'CONFIRM_BOOKING.FROM' |
+            translate }} {{ bookingData.start }}
           </li>
         </ul>
       </div>
@@ -70,11 +72,11 @@
 <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4" style="border-radius: 12px;">
-      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" [attr.aria-label]="'MODAL.CLOSE' | translate"></button>
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
+        [attr.aria-label]="'MODAL.CLOSE' | translate"></button>
       <div style="text-align: center;">
-        <img src="assets/Images/Authentication-cuate 1.svg" 
-             alt="{{ 'CONFIRM_BOOKING.SUCCESS_IMAGE' | translate }}" 
-             class="mb-3" style="width:300px;">
+        <img src="assets/Images/Authentication-cuate 1.svg" alt="{{ 'CONFIRM_BOOKING.SUCCESS_IMAGE' | translate }}"
+          class="mb-3" style="width:300px;">
       </div>
       <h5 class="fw-bold">{{ 'CONFIRM_BOOKING.SUCCESS_TITLE' | translate }}</h5>
       <p class="text-muted small">{{ 'CONFIRM_BOOKING.SUCCESS_MESSAGE' | translate }}</p>

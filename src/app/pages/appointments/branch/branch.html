@@ -1,4 +1,4 @@
-<div class="container my-4" >
+<div class="container my-4">
   <div class="card shadow-sm border-0">
     <div class="card-body">
 
@@ -7,10 +7,17 @@
         <i class="bi bi-person-check me-2"></i>
         {{ 'SESSION.SELECT_TYPE' | translate }}
       </h5>
+      <!-- اختيار نوع السيشن -->
       <div class="mb-3">
-        <label for="sessionSelect" class="form-label">{{ 'SESSION.TYPE_LABEL' | translate }}</label>
-        <select id="sessionSelect" class="form-select w-100 text-end"  [(ngModel)]="selectedSessionKey"
-          (change)="loadCenters()">
+        <label class="form-label">{{ 'SESSION.TYPE_LABEL' | translate }}</label>
+
+        <!-- Free Mode -->
+        <input *ngIf="mode === 'free'" type="text" class="form-control text-end bg-light"
+          [value]="currentLang === 'ar' ? 'فحص مجاني' : 'Free Checkup'" disabled>
+
+        <!-- All Mode -->
+        <select *ngIf="mode === 'all'" id="sessionSelect" class="form-select w-100 text-end"
+          [(ngModel)]="selectedSessionKey" (change)="loadCenters()">
           <option [ngValue]="null">{{ 'SESSION.TYPE_PLACEHOLDER' | translate }}</option>
           <option *ngFor="let s of sessionTypes" [ngValue]="s.key">
             {{ currentLang === 'ar' ? s.name_ar : s.name }}
@@ -18,10 +25,11 @@
         </select>
       </div>
 
+
       <!-- اختيار الفرع -->
       <div class="mb-3" *ngIf="centers.length > 0">
         <label for="branchSelect" class="form-label">{{ 'SESSION.BRANCH_LABEL' | translate }}</label>
-        <select id="branchSelect" class="form-select w-100 text-end"  [(ngModel)]="selectedBranchId">
+        <select id="branchSelect" class="form-select w-100 text-end" [(ngModel)]="selectedBranchId">
           <option [ngValue]="null">{{ 'SESSION.BRANCH_PLACEHOLDER' | translate }}</option>
           <option *ngFor="let center of centers" [ngValue]="center.id">
             {{ center.name }}

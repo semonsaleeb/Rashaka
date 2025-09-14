@@ -39,12 +39,11 @@ export class Hero implements OnInit {
   }
 
   navigateToReservation() {
-    this.router.navigate(['/reservation']);
+    this.router.navigate(['/reservation/all']);
   }
 
   onGetStarted() {
-    console.log('Get started clicked');
-    // Add navigation or action here
+   this.router.navigate(['/reservation/all']);
   }
 
   nextSlide() {

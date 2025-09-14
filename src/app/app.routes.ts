@@ -85,7 +85,7 @@ export const routes: Routes = [
   { path: 'package-pricing-order', component: PackagePricingOrder },
   // Other Pages
   { path: 'about_us', component: AboutUs },
-  { path: 'reservation', component: Appointments },
+{ path: 'reservation/:mode', component: Appointments },
   { path: 'reservation/:id', component: Appointments },
 
 

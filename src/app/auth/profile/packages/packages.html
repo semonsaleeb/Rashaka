@@ -1,67 +1,150 @@
-<div class="subscription-page" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+<div class="subscription-page px-lg-5 mx-lg-5" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
 
-  <!-- حالة التحميل -->
+  <!-- Loading State -->
   @if (isLoading) {
   <div class="text-center py-5">
     <div class="spinner-border text-success" role="status"></div>
   </div>
   }
 
-  <!-- لو في اشتراك -->
+  <!-- Active Subscription -->
   @if (!isLoading && activeSubscription) {
-  <div class="row justify-content-center">
-    <div class="col-md-8 d-flex gap-4">
+  <div class="row g-4">
 
-      <!-- تفاصيل الاشتراك -->
+    <!-- Subscription Details -->
+    <div class="col-12 col-md-8 d-flex gap-4" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
       <div class="flex-grow-1 p-4 border rounded-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <span [class.text-success]="activeSubscription.status === 'active'"
-                [class.text-warning]="activeSubscription.status === 'pending_activation'"
-                [class.text-danger]="activeSubscription.status === 'expired'">
-            @if (activeSubscription.status === 'active') { {{ 'SUBSCRIPTION.STATUS.ACTIVE' | translate }} }
-            @else if (activeSubscription.status === 'pending_activation') { {{ 'SUBSCRIPTION.STATUS.PENDING' | translate }} }
-            @else { {{ 'SUBSCRIPTION.STATUS.EXPIRED' | translate }} }
+
+        <!-- Status -->
+        <div class="d-flex mb-3">
+          <span class="text-dark p-1 py-2">
+            {{ 'SUBSCRIPTION.STATUS_LABEL' | translate }}
           </span>
-          <h5 class="m-0">{{ 'SUBSCRIPTION.DETAILS' | translate }}</h5>
+
+          <span [ngClass]="{
+              'text-success shadow-success': activeSubscription.status === 'active',
+              'text-warning shadow-warning': activeSubscription.status === 'pending_activation',
+              'text-danger shadow-danger': activeSubscription.status === 'expired'
+            }">
+            @if (activeSubscription.status === 'active') {
+            {{ 'SUBSCRIPTION.STATUS.ACTIVE' | translate }}
+            }
+            @else if (activeSubscription.status === 'pending_activation') {
+            {{ 'SUBSCRIPTION.STATUS.PENDING' | translate }}
+            }
+            @else {
+            {{ 'SUBSCRIPTION.STATUS.EXPIRED' | translate }}
+            }
+          </span>
         </div>
 
-        <p><strong>{{ 'SUBSCRIPTION.NAME' | translate }}:</strong> {{ activeSubscription.name }}</p>
-
-        <hr>
-        <h6>{{ 'SUBSCRIPTION.FEATURES' | translate }}:</h6>
-        <ul>
-          @for (feature of activeSubscription.features; track feature) {
-          <li>{{ feature }}</li>
-          }
-        </ul>
-      </div>
-
-      <!-- كود التفعيل -->
-      @if (activeSubscription.status === 'pending_activation' && activeSubscription.activation_code) {
-      <div class="p-4 border rounded-3 bg-light shadow-sm text-center" >
-        <p>{{ 'SUBSCRIPTION.ACTIVATION_CODE' | translate }}</p>
-        <h5 class="bg-success text-white px-3 py-2 rounded">
-          #{{ activeSubscription.activation_code }}
+        <!-- Subscription Title -->
+        <h5 [ngClass]="{ 'text-end': currentLang === 'ar', 'text-start': currentLang === 'en' }">
+          {{ 'SUBSCRIPTION.DETAILS' | translate }}
         </h5>
-        <p class="text-muted small">
+
+        <!-- Subscription Card -->
+        <div class="p-5 bg-white border rounded-3"
+          [ngClass]="{ 'text-end': currentLang === 'ar', 'text-start': currentLang === 'en' }">
+
+          <!-- Package Name -->
+          <strong class="text-primary">{{ activeSubscription.type }}</strong>
+
+          <div class="py-2">
+            <span class="text-light p-2 rounded-1" style="background-color: #2581A2;">
+              {{ activeSubscription.name }}
+            </span>
+          </div>
+
+          <!-- Dates -->
+          <div class="d-flex gap-3 mt-2">
+            <span>
+              <strong>{{ 'SUBSCRIPTION.START' | translate }}:</strong>
+              {{ activeSubscription.start_date || ('SUBSCRIPTION.NONE' | translate) }}
+            </span>
+            <span>
+              <strong>{{ 'SUBSCRIPTION.END' | translate }}:</strong>
+              {{ activeSubscription.end_date || ('SUBSCRIPTION.NONE' | translate) }}
+            </span>
+          </div>
+
+          <!-- <div class="card shadow-sm my-3">
+            <div class="card-body ">
+              <p class="fs-4 text-success">
+               {{ currentLang === 'ar' ? 'الرصيد المجاني المتبقي' : 'Remaining Free Product Balance' }} : {{ freeProductBalance }}
+              </p>
+            </div>
+          </div> -->
+
+          <!-- Features -->
+          <div class="mt-4">
+            <h6>{{ 'SUBSCRIPTION.FEATURES' | translate }}:</h6>
+            <table class="table table-bordered table-striped text-center align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>{{ 'FEATURE' | translate }}</th>
+                  <th>{{ 'TOTAL' | translate }}</th>
+                  <th>{{ 'USED' | translate }}</th>
+                  <th>{{ 'REMAINING' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (feature of activeSubscription?.features; track feature.type) {
+                <tr>
+                  <td><strong>{{ feature.type }}</strong></td>
+                  <td>{{ feature.total }}</td>
+                  <td>{{ feature.used }}</td>
+                  <td>{{ feature.remaining }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activation Code Box -->
+    <div class="col-12 col-md-4">
+      @if (activeSubscription.status === 'pending_activation' && activeSubscription.activation_code) {
+      <div class="p-4 rounded-3 text-center ">
+
+        <!-- Notes -->
+        <p class="fw-semibold mb-1">
+          {{ 'SUBSCRIPTION.ACTIVATION_TITLE' | translate }}
+        </p>
+        <p class="text-muted small mb-3">
           {{ 'SUBSCRIPTION.ACTIVATION_NOTE' | translate }}
         </p>
-        <button class="btn btn-success w-100" (click)="visitBranch()">
+
+        <!-- Code -->
+        <span>{{ 'SUBSCRIPTION.ACTIVATION_CODE' | translate }}</span>
+        <h5 class="px-4 py-2 rounded fw-bold d-inline-block mb-3" style="background-color: #EAEAEA; color:#000;">
+          {{ activeSubscription.activation_code }}
+        </h5>
+
+        <!-- Button -->
+        <button class="btn btn-success w-100 rounded-1 fw-semibold" (click)="visitBranch()">
+          <i class="bi bi-arrow-repeat me-1"></i>
           {{ 'SUBSCRIPTION.VIEW_BRANCHES' | translate }}
         </button>
       </div>
       }
     </div>
+
   </div>
   }
 
-  <!-- لو مفيش اشتراك -->
+  <!-- No Subscription -->
   @if (!isLoading && !activeSubscription) {
   <div class="text-center p-5 border rounded-3">
     <img src="assets/Images/Subscriber-amico 2.svg" alt="no sub" class="mb-3" style="max-width:200px;">
     <p class="fw-bold">{{ 'SUBSCRIPTION.NO_ACTIVE' | translate }}</p>
     <p>{{ 'SUBSCRIPTION.CHOOSE_PACKAGE' | translate }}</p>
-    <button class="btn btn-success" (click)="goToPackages()">{{ 'SUBSCRIPTION.VIEW_PACKAGES' | translate }}</button>
+    <button class="btn btn-success" (click)="goToPackages()">
+      {{ 'SUBSCRIPTION.VIEW_PACKAGES' | translate }}
+    </button>
   </div>
   }
 </div>

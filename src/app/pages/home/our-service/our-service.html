@@ -11,9 +11,9 @@
         <div class="card-body">
           <h5 class="card-title fw-bold">{{ card.titleKey | translate }}</h5>
           <p class="card-text">{{ card.descriptionKey | translate }}</p>
-          <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" [routerLink]="['/reservation']">
+          <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" [routerLink]="['/reservation/all']">
+                       <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
             {{ 'SERVICES.BOOK_NOW' | translate }}
-            <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
           </button>
         </div>
       </div>
@@ -30,7 +30,7 @@
           <div class="card-body">
             <h5 class="card-title fw-bold">{{ card.titleKey | translate }}</h5>
             <p class="card-text">{{ card.descriptionKey | translate }}</p>
-            <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" [routerLink]="['/reservation']">
+            <button class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3" [routerLink]="['/reservation/all']">
               {{ 'SERVICES.BOOK_NOW' | translate }}
               <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg" class="ms-2" width="25" alt="Arrow Icon">
             </button>

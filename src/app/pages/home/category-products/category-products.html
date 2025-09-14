@@ -36,7 +36,7 @@
           <!-- Category Buttons -->
           <div class="category-buttons d-flex gap-2 py-3" [ngClass]="{'mobile-scroll': isMobile}">
             <!-- All button -->
-            <button (click)="filterByCategory('all')" class="fw-bold" [ngClass]="{
+            <button (click)="filterByCategorycarousel('all')" class="fw-bold" [ngClass]="{
             'btn': true,
             'btn-sm': true,
             'btn-success': selectedCategory === 'all',
@@ -46,15 +46,18 @@
             </button>
 
             <!-- Category buttons -->
-            <button *ngFor="let category of categories" (click)="filterByCategory(category.id)" class="fw-bold"
-              [ngClass]="{
-            'btn': true,
-            'btn-sm': true,
-            'btn-success': selectedCategory === category.id,
-            'btn-outline-success': selectedCategory !== category.id
-          }">
-              {{ currentLang === 'ar' ? category.name_ar : category.name }}
-            </button>
+           <button *ngFor="let category of categories; trackBy: trackByCategory" 
+        (click)="filterByCategorycarousel(category.id)" 
+        class="fw-bold"
+        [ngClass]="{
+          'btn': true,
+          'btn-sm': true,
+          'btn-success': selectedCategory === category.id,
+          'btn-outline-success': selectedCategory !== category.id
+        }">
+  {{ currentLang === 'ar' ? category.name_ar : category.name }}
+</button>
+
           </div>
 
 
@@ -98,7 +101,8 @@
 
                     <!-- Product Details -->
                     <div class="card-body  mx-3">
-                      <h6 class="card-title fw-bold text-black"> {{ currentLang === 'ar' ? product.name_ar : product.name }}</h6>
+                      <h6 class="card-title fw-bold text-black"> {{ currentLang === 'ar' ? product.name_ar :
+                        product.name }}</h6>
                       <p class="card-text">{{ currentLang === 'ar' ? product.description_ar : product.description }}</p>
                       <div>
                         <p class="fw-bold " style="font-size: 14px;">
@@ -175,7 +179,7 @@
             </div>
 
             <!-- Arrows (desktop only) -->
-            <div class="d-flex gap-2 d-none d-md-flex">
+            <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
               <button class="arrow-btn next" (click)="nextSlide()"
                 [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
               <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
@@ -484,7 +488,7 @@
       }
 
     </div>
-    <app-downloadapp ></app-downloadapp>
+    <app-downloadapp></app-downloadapp>
 
   </div>
 </div>

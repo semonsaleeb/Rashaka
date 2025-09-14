@@ -128,7 +128,7 @@
     <nav class="navbar navbar-expand-lg d-none d-lg-block bg-white mt-2 " [dir]="currentDirection">
       <div class="container-fluid">
         <div class="collapse navbar-collapse d-flex">
-          <ul class="navbar-nav d-flex flex-row gap-1">
+          <ul class="navbar-nav d-flex flex-row fs-6 gap-1">
             @for (item of navItems; track item.label) {
             <li class="nav-item position-relative">
               <a class="nav-link text-dark" [routerLink]="!item.hasDropdown ? item.path : null"
@@ -291,7 +291,8 @@
   <!-- Close menu inside overlay -->
   <div class="d-flex justify-content-between align-items-center p-3">
     <h1>{{ 'MOBILE_MENU.TITLE' | translate }}</h1>
-    <button class="btn w-100 text-start" (click)="toggleMobileMenu()">
+    <div class="px-5 mx-5"></div>
+    <button class="btn w-100 " (click)="toggleMobileMenu()">
       <img src="assets/Images/Frame 9001.svg" alt="Close" width="34" />
     </button>
   </div>
@@ -376,8 +377,19 @@
     routerLink="/home/packages" (click)="toggleMobileMenu()">{{ 'MOBILE_MENU.PACKAGES' | translate }}</a>
   <a class="d-block py-2 fs-3  fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
     routerLink="/home/sucesStory" (click)="toggleMobileMenu()">{{ 'MOBILE_MENU.SUCCESS_STORIES' | translate }}</a>
-  <a class="d-block py-2 fs-3  fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
-    routerLink="/reservation" (click)="toggleMobileMenu()">{{ 'MOBILE_MENU.FREE_CHECKUP' | translate }}</a>
+<!-- Checkup (كل الفحوصات) -->
+<a class="d-block py-2 fs-3 fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+   [routerLink]="['/reservation', 'all']"
+   (click)="toggleMobileMenu()">
+   {{ 'MOBILE_MENU.CHECKUP' | translate }}
+</a>
+
+<!-- Free Checkup -->
+<a class="d-block py-2 fs-3 fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
+   [routerLink]="['/reservation', 'free']"
+   (click)="toggleMobileMenu()">
+   {{ 'MOBILE_MENU.FREE_CHECKUP' | translate }}
+</a>
   <a class="d-block py-2 fs-3  fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
     routerLink="/home/special-offers" (click)="toggleMobileMenu()">{{ 'MOBILE_MENU.OFFERS' | translate }}</a>
   <a class="d-block py-2 fs-3  fw-bold text-dark text-decoration-none border border-1 m-2 rounded-3 p-3"
@@ -391,19 +403,54 @@
            <span class="fs-3 fw-bold px-2"> {{ currentLang === 'ar' ? 'العربية' : 'English' }}</span>
           </button>
 
-        <ul class="dropdown-menu" aria-labelledby="languageDropdown" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  <ul class="dropdown-menu w-50"
+    aria-labelledby="languageDropdown"
+    [ngClass]="{ 
+      'dropdown-menu-end': currentLang === 'ar', 
+      'dropdown-menu-start': currentLang === 'en' 
+    }"
+    [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
   <li>
-    <button class="dropdown-item fs-3 fw-bold text-end" (click)="switchLanguage('ar')">
+    <button class="dropdown-item fs-3 fw-bold"
+            (click)="switchLanguage('ar'); toggleMobileMenu()">
       العربية
     </button>
   </li>
+
   <li>
-    <button class="dropdown-item fs-3 fw-bold text-start" (click)="switchLanguage('en')">
+    <button class="dropdown-item fs-3 fw-bold"
+            (click)="switchLanguage('en'); toggleMobileMenu()">
       English
     </button>
   </li>
 </ul>
 
+
         </div>
 </div>
 }
+
+
+<div 
+  class="position-fixed mb-3" 
+  [style.left]="currentLang === 'ar' ? '10px' : 'auto'"
+  [style.right]="currentLang === 'en' ? '10px' : 'auto'"
+  [style.bottom]="'10px'"
+  style="z-index: 9999;"
+>
+  <!-- Desktop: أيقونة + نص -->
+  <a href="https://wa.me/966593936089" target="_blank"
+     class="btn d-none d-md-flex align-items-center border px-4 py-2 fs-6"
+     style="color: #25D366; background: #fff;">
+    <span class="ms-1">{{ 'header.whatsappText' | translate }}</span>
+    <i class="fab fa-whatsapp fs-5"></i>
+  </a>
+
+  <!-- Mobile: أيقونة فقط -->
+  <a href="https://wa.me/966593936089" target="_blank"
+     class="btn d-flex d-md-none align-items-center justify-content-center rounded-circle shadow"
+     style="color: #fff; background: #25D366; width: 50px; height: 50px;">
+    <i class="fab fa-whatsapp fs-4"></i>
+  </a>
+</div>

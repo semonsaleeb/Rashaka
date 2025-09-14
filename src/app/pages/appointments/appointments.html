@@ -119,7 +119,10 @@
     <div class="col-md-8">
       @switch (step) {
       @case (1) {
-      <app-branch (next)="goToStep(2)"></app-branch>
+<app-branch 
+  (next)="goToStep(2)" 
+  [mode]="selectedMode">
+</app-branch>
       }
       @case (2) {
       <app-spicialist (prev)="goToStep(1)" (next)="goToStep(3)"></app-spicialist>

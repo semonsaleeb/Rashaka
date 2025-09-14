@@ -241,6 +241,7 @@
     "PACKAGES": "Packages",
     "SUCCESS_STORIES": "Success Stories",
     "FREE_CHECKUP": "Free Checkup",
+    "CHECKUP":"Checkup ",
     "OFFERS": "Offers",
     "BLOG": "Blog",
     "ABOUT_US": "About Us"
@@ -427,7 +428,19 @@
     "CLOSE": "Close",
     "LOGIN_REQUIRED": "Please login or create an account to continue.",
     "REGISTER": "Register",
-    "LOGIN": "Login"
+    "LOGIN": "Login",
+    "CONTACT_INFO": "Contact Information",
+    "EMAIL": "Email",
+    "PHONE": "Phone Number",
+    "SHIPPING_ADDRESS": "Shipping Address",
+    "SELECT_ADDRESS": "Select a shipping address",
+    "ADD_NEW_ADDRESS": "Add New Address",
+    "PAYMENT_CREDIT": "Pay via MyFatoorah (Credit Card)",
+    "PAYMENT_CASH": "Cash on Delivery",
+    "YOUR_ORDERS": "Your Orders",
+    "PROMO_PLACEHOLDER": "Enter promo code",
+    "SHIPPING_FEE": "Shipping Fee",
+    "PLACE_ORDER": "Place Order"
   },
   "PROFILE": {
     "IMAGE_ALT": "User profile picture",
@@ -534,5 +547,32 @@
     "SEARCH_PLACEHOLDER": "Search for a location...",
     "MY_LOCATION": "My Location",
     "CONFIRM_LOCATION": "Confirm Location"
-  }
+  },
+    "USE_PACKAGE_BALANCE": "Use your available package balance to complete the payment",
+     "SUBSCRIPTION": {
+    "STATUS_LABEL": "Subscription Status",
+    "STATUS": {
+      "ACTIVE": "Active",
+      "PENDING": "Pending Activation",
+      "EXPIRED": "Expired"
+    },
+    "DETAILS": "Subscription Details",
+    "PACKAGE_TITLE": "Diet Plan",
+    "START": "Start Date",
+    "END": "End Date",
+    "NONE": "None",
+    "FEATURES": "Features",
+    "ACTIVATION_TITLE": "Please visit one of our branches to confirm and activate your subscription.",
+    "ACTIVATION_NOTE": "To activate your subscription, visit the nearest branch and show the following activation code to our staff.",
+    "ACTIVATION_CODE": "Activation Code",
+    "VIEW_BRANCHES": "View All Branches",
+    "NO_ACTIVE": "No Active Subscription",
+    "CHOOSE_PACKAGE": "Please choose a package to subscribe",
+    "VIEW_PACKAGES": "View Packages"
+  },
+  "FEATURE": "Feature",
+  "TOTAL": "Total",
+  "USED": "Used",
+  "REMAINING": "Remaining"
+
 }

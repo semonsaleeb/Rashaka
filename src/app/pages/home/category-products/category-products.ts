@@ -188,12 +188,9 @@ private fetchProductsAndFavorites(categoryId?: number): void {
   this.isLoading = true;
   const token = localStorage.getItem('token');
 
-  let products$;
-  if (categoryId && categoryId !== 0) {
-    products$ = this.productService.getProductsByCategory(categoryId);
-  } else {
-    products$ = this.productService.getProducts(); // 🟢 لو اختار "الكل"
-  }
+  const products$ = categoryId && categoryId !== 0
+    ? this.productService.getProductsByCategory(categoryId)
+    : this.productService.getProducts();
 
   products$.subscribe({
     next: (products) => {
@@ -201,6 +198,7 @@ private fetchProductsAndFavorites(categoryId?: number): void {
       this.filteredProducts = [...products];
       this.categories = this.extractUniqueCategories(this.allProducts);
 
+      // 🟢 بعد ما المنتجات تتجاب نجيب الفيفوريت
       this.favoriteService.loadFavorites(token).subscribe({
         next: () => (this.isLoading = false),
         error: () => (this.isLoading = false),
@@ -215,12 +213,12 @@ private fetchProductsAndFavorites(categoryId?: number): void {
 
 
 
-  private loadProductsWithoutFavorites(products: Product[]): void {
-    this.allProducts = products.map(p => ({ ...p, isFavorite: false }));
-    this.filteredProducts = [...this.allProducts];
-    this.categories = this.extractUniqueCategories(this.allProducts);
-    this.isLoading = false;
-  }
+  // private loadProductsWithoutFavorites(products: Product[]): void {
+  //   this.allProducts = products.map(p => ({ ...p, isFavorite: false }));
+  //   this.filteredProducts = [...this.allProducts];
+  //   this.categories = this.extractUniqueCategories(this.allProducts);
+  //   this.isLoading = false;
+  // }
 
   private extractUniqueCategories(products: Product[]): Category[] {
     const categoryMap = new Map<number, Category>();
@@ -252,25 +250,47 @@ private fetchProductsAndFavorites(categoryId?: number): void {
   }
 
   // ---------------------- filters ----------------------
-  filterByCategory(categoryId: number | 'all') {
-    this.selectedCategory = categoryId;
+filterByCategorycarousel(categoryId: number | 'all') {
+  this.selectedCategory = categoryId;
 
-    // حدث الـ query param في الـ URL بدون إعادة تحميل الصفحة
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { category_id: categoryId },
-      queryParamsHandling: 'merge', // يحافظ على أي params تانية موجودة
-    });
-
-    // حمل المنتجات بناءً على الكاتيجوري
-    if (categoryId === 'all') {
-      this.loadAllProducts();
-      // console.log("category all"+ this.loadAllProducts);
-
-    } else {
-      this.loadProductsByCategory(+categoryId);
-    }
+  if (categoryId === 'all') {
+    // رجّع كل المنتجات الأصلية
+    this.filteredProducts = [...this.allProducts];
+  } else {
+    // فلترة محلياً من اللي عندك
+    this.filteredProducts = this.allProducts.filter(p =>
+      p.categories.some(c => c.id === categoryId)
+    );
   }
+
+  // Reset السلايدر
+  this.currentSlideIndex = 0;
+}
+trackByCategory(index: number, category: Category): number {
+  return category.id;
+}
+
+
+
+filterByCategory(categoryId: number | 'all') {
+  this.selectedCategory = categoryId;
+
+  // بس حدث الـ query param
+  this.router.navigate([], {
+    relativeTo: this.route,
+    queryParams: { category_id: categoryId },
+    queryParamsHandling: 'merge',
+  });
+
+  if (categoryId === 'all') {
+    this.productService.getProducts()
+  } else {
+    this.productService.getProductsByCategory(categoryId)
+    
+  }
+}
+
+
 
   // المنتجات حسب الكاتيجوري
   loadProductsByCategory(categoryId: number) {

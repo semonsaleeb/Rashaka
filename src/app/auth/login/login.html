@@ -10,7 +10,6 @@
       required
     />
   </div>
-
 <div class="my-3 position-relative">
   <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
   
@@ -25,19 +24,16 @@
     required
   />
 
-  <!-- 👁️ Eye Icon داخل الـ input -->
+  <!-- Eye Icon inside input -->
   <span
-    class="position-absolute pt-4 top-50"
+    class="position-absolute my-3 top-50  translate-middle-y"
     [ngClass]="{
       'end-0 pe-3': currentLang === 'en',
       'start-0 ps-3': currentLang === 'ar'
     }"
-    style="cursor: pointer; transform: translateY(-50%);"
+    style="cursor: pointer;"
     (click)="togglePasswordVisibility()">
-    <i class="fas"
-       [class.fa-eye]="showPassword"
-       [class.fa-eye-slash]="!showPassword">
-    </i>
+    <i class="fas" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
   </span>
 </div>
 

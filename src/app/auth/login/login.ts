@@ -49,9 +49,12 @@ login() {
   this.errorMessage = '';
   this.loading = true;
 
-  const credentials = { email: this.email, password: this.password };
+  const credentials = { 
+    email: this.email, 
+    password: this.password,
+    device_name: navigator.userAgent || 'web' // 👈 هنا ضفنا اسم الجهاز
+  };
 
-  // Use AuthService login method
   this.authService.login(credentials).subscribe({
     next: (res) => {
       if (res.token && res.client) {
@@ -73,7 +76,7 @@ login() {
           error: (err) => console.error('Error fetching cart after login', err)
         });
 
-        // ✅ Redirect to previous page or default to home
+        // ✅ Redirect
         const redirect = localStorage.getItem('redirectAfterLogin') || '/';
         localStorage.removeItem('redirectAfterLogin');
         this.router.navigateByUrl(redirect);

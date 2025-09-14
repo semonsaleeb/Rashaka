@@ -1,112 +1,130 @@
-<div class="container my-5" dir="rtl">
-  <!-- عنوان الصفحة -->
+<div class="container my-5" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  <!-- Page title -->
   <div class="alert alert-light text-center p-2 mb-4">
     <h4 class="text-center">
       <img src="assets/Images/Frame 9033.svg" class="me-2">
-      <span>عربة التسوق</span>
+      <span>{{ 'CART.TITLE' | translate }}</span>
     </h4>
   </div>
 
   <div class="row g-4">
-    <!-- العمود الأيمن: نموذج البيانات -->
+    <!-- Right column: Data form -->
     <div class="col-lg-7">
       <form (ngSubmit)="placeOrder()">
-        <!-- معلومات الاتصال -->
-        <h5>معلومات الاتصال</h5>
+        <!-- Contact Information -->
+        <h5>{{ 'CART.CONTACT_INFO' | translate }}</h5>
         <div class="row mb-3">
+          
           <div class="col-md-6">
-            <label>البريد الإلكتروني</label>
-            <input type="email" class="form-control" [(ngModel)]="userEmail" name="email" [readonly]="isLoggedIn" required>
+            <label>{{ 'CART.EMAIL' | translate }}</label>
+            <input type="email" class="form-control" [(ngModel)]="userEmail" name="email" [readonly]="isLoggedIn"
+              required>
           </div>
           <div class="col-md-6">
-            <label>رقم الجوال</label>
-            <input type="tel" class="form-control" [(ngModel)]="userPhone" name="phone" [readonly]="isLoggedIn" required>
+            <label>{{ 'CART.PHONE' | translate }}</label>
+            <input type="tel" class="form-control" [(ngModel)]="userPhone" name="phone" [readonly]="isLoggedIn"
+              required>
           </div>
         </div>
 
-        <!-- اختيار عنوان الشحن -->
-        <h5>عنوان الشحن واستخدامه للطلب</h5>
+        <!-- Shipping address -->
+        <h5>{{ 'CART.SHIPPING_ADDRESS' | translate }}</h5>
         <div class="d-flex mb-3 align-items-center" style="gap: 10px;">
-          <select class="form-select flex-grow-1 w-50" 
-                  [(ngModel)]="selectedAddressId" 
-                  name="address" 
-                  (change)="onAddressChange()" 
-                  required>
-            <option value="" disabled selected>اختر عنوان الشحن</option>
+          <select class="form-select flex-grow-1 w-50" [(ngModel)]="selectedAddressId" name="address"
+            (change)="onAddressChange()" required>
+            <option value="" disabled selected>{{ 'CART.SELECT_ADDRESS' | translate }}</option>
             @for (addr of addresses; track addr.id) {
-              <option [value]="addr.id">
-                {{ addr.city_name }} - {{ addr.area_name }} - {{ addr.zip || '' }}
-              </option>
+            <option [value]="addr.id">
+              {{ addr.city_name }} - {{ addr.area_name }} - {{ addr.zip || '' }}
+            </option>
             }
           </select>
           <button type="button" class="btn btn-outline-primary" (click)="navigateToAddAddress()">
-            إضافة عنوان جديد
+            {{ 'CART.ADD_NEW_ADDRESS' | translate }}
           </button>
         </div>
 
-        <!-- اختيار طريقة الدفع -->
+        <!-- Payment Method -->
         <div class="mb-3">
-          <div>
-            <input type="radio" id="payment_credit_card" name="paymentMethod" value="credit_card" [(ngModel)]="paymentMethod" />
-            <label for="payment_credit_card">الدفع عن طريق ماي فاتورة (بطاقة ائتمان)</label>
+          <!-- Credit Card -->
+          <div class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
+            <input type="radio" id="payment_credit_card" name="paymentMethod" value="credit_card"
+              [(ngModel)]="paymentMethod" class="me-2" />
+            <label for="payment_credit_card" class="mb-0">
+              {{ 'CART.PAYMENT_CREDIT' | translate }}
+            </label>
           </div>
-          <div>
-            <input type="radio" id="payment_cash" name="paymentMethod" value="cash" [(ngModel)]="paymentMethod" />
-            <label for="payment_cash">الدفع نقدًا</label>
+
+          <!-- Cash -->
+          <div class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
+            <input type="radio" id="payment_cash" name="paymentMethod" value="cash" [(ngModel)]="paymentMethod"
+              class="me-2" />
+            <label for="payment_cash" class="mb-0">
+              {{ 'CART.PAYMENT_CASH' | translate }}
+            </label>
+          </div>
+
+          <!-- Free Product Balance -->
+          <div *ngIf="isLoggedIn && freeProductBalance > 0"
+            class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center alert alert-info">
+            <input type="radio" id="payment_free_balance" name="paymentMethod" value="free_balance"
+              [(ngModel)]="paymentMethod" class="me-2" />
+            <label for="payment_free_balance" class="mb-0 d-flex align-items-center">
+              <img src="assets/Images/Premium Quality.svg" class="me-2" />
+              <strong>{{ 'USE_PACKAGE_BALANCE' | translate }}</strong>
+              ({{ freeProductBalance }})
+            </label>
           </div>
         </div>
+
+
       </form>
     </div>
 
-    <!-- العمود الأيسر: ملخص الطلب -->
+    <!-- Left column: Order summary -->
     <div class="col-lg-5">
       <div class="card border-1 rounded-4 p-3" style="background-color: #FAFAFA;">
-        <h5 class="text-end mb-4">طلباتك</h5>
+        <h5 class="text-end mb-4">{{ 'CART.YOUR_ORDERS' | translate }}</h5>
 
-        <!-- المنتجات -->
+        <!-- Products -->
         <div class="mb-3">
           @for (item of cartItems; track item.id) {
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <img [src]="item.image || (item.images?.[0] || 'assets/default.png')" 
-                   alt="{{ item.product_name }}"
-                   class="me-2 mx-2"
-                   style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
-              <span class="flex-grow-1">
-                {{ item.product_name }} × {{ item.quantity }}
-              </span>
-              <span>
-                {{ (item.sale_unit_price ? item.sale_unit_price : item.unit_price) * item.quantity | number : '1.2-2' }} ر.س
-              </span>
-            </div>
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <img [src]="item.image || (item.images?.[0] || 'assets/default.png')" alt="{{ item.product_name }}"
+              class="me-2 mx-2" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+            <span class="flex-grow-1">
+              {{ item.product_name }} × {{ item.quantity }}
+            </span>
+            <span>
+              {{ (item.sale_unit_price ? item.sale_unit_price : item.unit_price) * item.quantity | number : '1.2-2' }}
+              {{ 'CART.CURRENCY' | translate }}
+            </span>
+          </div>
           }
         </div>
 
-        <!-- كود الخصم -->
+        <!-- Promo code -->
         <div class="input-group mb-3">
-          <input type="text" class="form-control rounded-0" placeholder="ادخل كود الخصم" [(ngModel)]="promoCode">
-          <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">تطبيق</button>
+          <input type="text" class="form-control rounded-0" placeholder="{{ 'CART.PROMO_PLACEHOLDER' | translate }}"
+            [(ngModel)]="promoCode">
+          <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">{{ 'CART.APPLY' | translate
+            }}</button>
         </div>
 
-        <!-- المجموع -->
+        <!-- Totals -->
         <ul class="list-unstyled text-end mb-4">
           <li class="d-flex justify-content-between py-2">
-            <span>رسوم شحن</span>
-            <span>{{ shippingFee | number : '1.2-2' }} ر.س</span>
-          </li> 
+            <span>{{ 'CART.SHIPPING_FEE' | translate }}</span>
+            <span>{{ shippingFee | number : '1.2-2' }} {{ 'CART.CURRENCY' | translate }}</span>
+          </li>
           <li class="d-flex justify-content-between fw-bold pt-3 border-top">
-            <span>الإجمالي</span>
-            <span>{{ (totalSalePrice + shippingFee) | number : '1.2-2' }} ر.س</span>
+            <span>{{ 'CART.TOTAL' | translate }}</span>
+            <span>{{ (totalSalePrice + shippingFee) | number : '1.2-2' }} {{ 'CART.CURRENCY' | translate }}</span>
           </li>
         </ul>
 
-        <!-- <div class="form-check text-end mb-3">
-          <input class="form-check-input" type="checkbox" id="terms">
-          <label class="form-check-label" for="terms">
-            لقد قرأت ووافقت على <a href="#">الشروط والأحكام</a>
-          </label>
-        </div> -->
-
-        <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">إتمام الطلب</button>
+        <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">{{ 'CART.PLACE_ORDER' | translate
+          }}</button>
       </div>
     </div>
   </div>

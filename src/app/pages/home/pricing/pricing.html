@@ -160,7 +160,7 @@ Carousel Mode
         }
       </div>
       <!-- Arrows -->
-      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
+      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex" dir="rtl">
         <!-- next = يمشي لقدّام (index++) -->
         <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
 
@@ -238,7 +238,7 @@ Grid Mode
                 [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
                 {{ plan.sessions }}
               </div>
-                <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
+              <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
                 [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'"
                 [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
 
@@ -326,7 +326,7 @@ Grid Mode
 
     <!-- Navigation -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 py-3">
-   <!-- Dots -->
+      <!-- Dots -->
       <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0">
         @for (i of getDotsArray(); track i) {
         <button (click)="goToSlide(i)" class="rounded-circle"
@@ -336,16 +336,16 @@ Grid Mode
         }
       </div>
       <!-- Arrows -->
-      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex">
-          <!-- next = يمشي لقدّام (index++) -->
+      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex" dir="rtl">
+        <!-- next = يمشي لقدّام (index++) -->
         <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
 
         <!-- prev = يرجع لورا (index--) -->
         <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= getMaxIndex()"></button>
-      
+
       </div>
 
-   
+
     </div>
   </div>
   } @else {
@@ -386,29 +386,31 @@ Grid Mode
               [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'inherit' : 'white'">
               {{ selectedPlanForPopup?.sessions }}
             </div>
-       <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
-     [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'"
-     [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+            <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
+              [style.color]="selectedPlanForPopup?.styleType === 'basic' ? 'white' : 'inherit'"
+              [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
 
-  <!-- نص السعر -->
-  <span>{{ 'PRICING.PRICE' | translate }}</span>
+              <!-- نص السعر -->
+              <span>{{ 'PRICING.PRICE' | translate }}</span>
 
-  <!-- السعر قبل الخصم -->
-  <span *ngIf="selectedPlanForPopup?.price_before !== null && selectedPlanForPopup?.price_before !== undefined"
-        [ngStyle]="{'text-decoration': selectedPlanForPopup?.price_after ? 'line-through' : 'none'}">
-    {{ selectedPlanForPopup?.price_before }}
-  </span>
+              <!-- السعر قبل الخصم -->
+              <span
+                *ngIf="selectedPlanForPopup?.price_before !== null && selectedPlanForPopup?.price_before !== undefined"
+                [ngStyle]="{'text-decoration': selectedPlanForPopup?.price_after ? 'line-through' : 'none'}">
+                {{ selectedPlanForPopup?.price_before }}
+              </span>
 
-  <!-- السعر بعد الخصم -->
-  <span *ngIf="selectedPlanForPopup?.price_after !== null && selectedPlanForPopup?.price_after !== undefined">
-    {{ selectedPlanForPopup?.price_after }}
-  </span>
+              <!-- السعر بعد الخصم -->
+              <span
+                *ngIf="selectedPlanForPopup?.price_after !== null && selectedPlanForPopup?.price_after !== undefined">
+                {{ selectedPlanForPopup?.price_after }}
+              </span>
 
-  <!-- العملة -->
-  <span *ngIf="selectedPlanForPopup?.price_after !== null || selectedPlanForPopup?.price_before !== null">
-    {{ 'PRICING.CURRENCY' | translate }}
-  </span>
-</div>
+              <!-- العملة -->
+              <span *ngIf="selectedPlanForPopup?.price_after !== null || selectedPlanForPopup?.price_before !== null">
+                {{ 'PRICING.CURRENCY' | translate }}
+              </span>
+            </div>
 
 
           </div>
@@ -424,8 +426,8 @@ Grid Mode
         'border-radius': '0',
         'font-size': '14px'
       }">
-  {{ getCitiesText(selectedPlanForPopup?.cities || []) }}
-</div>
+            {{ getCitiesText(selectedPlanForPopup?.cities || []) }}
+          </div>
 
 
           <div class="feature mt-4 mb-3">

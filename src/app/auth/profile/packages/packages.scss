@@ -72,6 +72,27 @@
     }
   }
 }
+/* ظل للأخضر */
+.text-success.shadow-success {
+   background-color: #19875431; /* نفس كود Bootstrap الأخضر */
+     padding: 5px;
+
+}
+
+/* ظل للأصفر */
+.text-warning.shadow-warning {
+  // box-shadow: 0 0 5px #ffc107; /* نفس كود Bootstrap الأصفر */
+  background-color: #ffc10713;
+  padding: 5px;
+}
+
+/* ظل للأحمر */
+.text-danger.shadow-danger {
+ background-color: #dc35463b; /* نفس كود Bootstrap الأحمر */
+   padding: 5px;
+
+
+}
 
 .badge {
   padding: 5px 10px;

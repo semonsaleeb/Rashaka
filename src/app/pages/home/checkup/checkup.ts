@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 
@@ -15,7 +15,7 @@ export class Checkup {
   currentLang: string = 'ar';
 
 // لو تستخدم ngx-translate
-  constructor(private translate: TranslateService,     private languageService: LanguageService) {
+  constructor(private router: Router, private translate: TranslateService,     private languageService: LanguageService) {
     this.isArabic = this.translate.getCurrentLang() === 'ar';
     
     this.translate.addLangs(['en', 'ar']);
@@ -35,7 +35,7 @@ export class Checkup {
   }
 
   onGetStarted() {
-    // console.log('Get started clicked');
-    // Add your navigation logic here
+      this.router.navigate(['/reservation/all']);
+
   }
 }
