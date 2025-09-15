@@ -110,7 +110,7 @@ export class ProductService {
       Authorization: `Bearer ${token}`
     });
 
-    const url = `${this.baseUrl}/client/free-product-balance`;
+    const url = `${this.baseUrl}/free-product-balance`;
     return this.http.get<FreeProductBalanceResponse>(url, { headers });
   }
 

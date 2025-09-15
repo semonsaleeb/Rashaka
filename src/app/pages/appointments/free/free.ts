@@ -1,26 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { Branch } from './branch/branch';
-import { Spicialist } from './spicialist/spicialist';
-import { Confirm } from './confirm/confirm';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../services/language.service';
-import { routes } from '../../app.routes';
-imports: [
-  RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })
-]
+import { LanguageService } from '../../../services/language.service';
+import { Branch } from '../branch/branch';
+import { Spicialist } from '../spicialist/spicialist';
+import { Confirm } from '../confirm/confirm';
+import { CommonModule } from '@angular/common';
 
 declare var bootstrap: any; 
 
 @Component({
-  selector: 'app-appointments',
-  standalone: true,
+  selector: 'app-free',
   imports: [Branch, Spicialist, Confirm, CommonModule, TranslateModule],
-  templateUrl: './appointments.html',
-  styleUrls: ['./appointments.scss']
+  templateUrl: './free.html',
+  styleUrl: './free.scss'
 })
-export class Appointments implements OnInit {
+export class Free implements OnInit {
   step = 1;
   token: string | null = null;
 

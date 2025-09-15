@@ -7,7 +7,7 @@ import { ClientService } from '../services/client.service';
 import { AddressService } from '../services/address.service';
 import { CartService } from '../services/cart.service';
 import { CartStateService } from '../services/cart-state-service';
-import { DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { PromoResponse } from '../../models/PromoResponse';
 import { PaymentService } from '../services/payment.service';
 import { OrderService } from '../services/order.service';
@@ -20,7 +20,7 @@ import { ProductService } from '../services/product';
   templateUrl: './place-order.html',
   styleUrls: ['./place-order.scss'],
   standalone: true,
-  imports: [FormsModule, DecimalPipe, TranslateModule]
+  imports: [FormsModule, DecimalPipe, TranslateModule, CommonModule]
 })
 export class PlaceOrder implements OnInit {
   currentLang: string = 'ar';
@@ -67,16 +67,17 @@ export class PlaceOrder implements OnInit {
       this.fetchAddresses();
 
       // جلب free product balance
-      this.productService.getFreeProductBalance(this.token).subscribe({
-        next: (res) => {
-          console.log('Remaining Free Product Balance:', res.data.balance.remaining);
-          // ممكن تخزنه في متغير في الكومبوننت لو هتستخدمه في الـ HTML
-          this.freeProductBalance = res.data.balance.remaining;
-        },
-        error: (err) => {
-          console.error('❌ Error fetching free product balance:', err);
-        }
-      });
+     this.productService.getFreeProductBalance(this.token).subscribe({
+  next: (res) => {
+    const remaining = res?.data?.balance?.remaining ?? 0; // لو undefined يرجع 0
+    console.log('Remaining Free Product Balance:', remaining);
+    this.freeProductBalance = remaining;
+  },
+  error: (err) => {
+    console.error('❌ Error fetching free product balance:', err);
+  }
+});
+
     }
 
     // تحميل السلة
@@ -323,29 +324,27 @@ export class PlaceOrder implements OnInit {
 
       console.log('بيانات الدفع المرسلة:', paymentData);
 
-      this.paymentService.initiatePayment(paymentData).subscribe({
-        next: (res: any) => {
-          console.log('استجابة ماي فاتورة:', res);
+     this.paymentService.initiatePayment(paymentData).subscribe({
+  next: (res: any) => {
+    console.log('استجابة ماي فاتورة:', res);
+    if (res.IsSuccess && res.Data?.InvoiceURL) {
+      localStorage.setItem(
+        'pendingPayment',
+        JSON.stringify({ orderId: orderRes.order_id, paymentId: res.Data.InvoiceId })
+      );
+      window.location.href = res.Data.InvoiceURL;
+    } else {
+      const errorMsg = res.Message || 'تعذر إنشاء رابط الدفع';
+      console.error('فشل في إنشاء الفاتورة:', errorMsg);
+      alert(errorMsg);
+    }
+  },
+  error: (err) => {
+    console.error('خطأ في خدمة الدفع:', err);
+    this.handlePaymentError(err);
+  }
+});
 
-          if (res.IsSuccess && res.Data?.InvoiceURL) {
-            // حفظ معلومات الدفع مؤقتاً
-            localStorage.setItem('pendingPayment', JSON.stringify({
-              orderId: orderRes.order_id,
-              paymentId: res.Data.InvoiceId
-            }));
-
-            window.location.href = res.Data.InvoiceURL;
-          } else {
-            const errorMsg = res.Message || 'تعذر إنشاء رابط الدفع';
-            console.error('فشل في إنشاء الفاتورة:', errorMsg);
-            alert(errorMsg);
-          }
-        },
-        error: (err) => {
-          console.error('خطأ في خدمة الدفع:', err);
-          this.handlePaymentError(err);
-        }
-      });
     } catch (e) {
       console.error('خطأ غير متوقع في معالجة الدفع:', e);
       alert('حدث خطأ غير متوقع أثناء معالجة الدفع');

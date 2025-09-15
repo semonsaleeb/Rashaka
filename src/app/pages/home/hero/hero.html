@@ -43,7 +43,7 @@
           <div class="slider-wrapper">
             <div class="slides d-flex" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
               <div class="slide" *ngFor="let image of sliderImages; let i = index">
-                <img [src]="image.src" [alt]="image.alt" class="slide-image">
+                <img [src]="image.src" [alt]="image.alt" class="slide-image" >
               </div>
             </div>
           </div>

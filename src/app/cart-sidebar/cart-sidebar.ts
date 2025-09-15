@@ -84,12 +84,12 @@ export class CartSidebar implements OnInit, OnDestroy {
     if (sidebarEl) {
       // 🟢 log لما يتفتح
       sidebarEl.addEventListener('shown.bs.offcanvas', () => {
-        console.log('🟢 cartSidebar opened!');
+        // console.log('🟢 cartSidebar opened!');
       });
 
       // 🔴 log لما يتقفل
       sidebarEl.addEventListener('hidden.bs.offcanvas', () => {
-        console.log('🔴 cartSidebar closed!');
+        // console.log('🔴 cartSidebar closed!');
       });
     }
 
@@ -171,6 +171,9 @@ export class CartSidebar implements OnInit, OnDestroy {
     }
     this.cartService.removeCartItem(productId).subscribe({ next: () => this.loadCart() });
   }
+trackByProductId(index: number, item: CartItem): number {
+  return item.product_id;
+}
 
 closeSidebar(): void {
   const sidebarEl = document.getElementById('cartSidebar');

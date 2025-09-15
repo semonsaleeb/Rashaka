@@ -31,7 +31,6 @@ export class BlogService {
 
   getBlogs(): Observable<Blog[]> {
     const url = `${this.baseUrl}${API_ENDPOINTS.blogs.getAll}`;
-    console.log('Fetching blogs from:', url); // Debugging
     
     return this.http.get<BlogsResponse>(url).pipe(
       map(response => {

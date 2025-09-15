@@ -23,6 +23,7 @@ import { PackagePricingOrder } from './package-pricing-order/package-pricing-ord
 import { Branches } from './pages/home/branches/branches';
 import { Appointments } from './pages/appointments/appointments';
 import { Packages } from './auth/profile/packages/packages';
+import { Free } from './pages/appointments/free/free';
 
 export const routes: Routes = [
   // Home page
@@ -85,7 +86,10 @@ export const routes: Routes = [
   { path: 'package-pricing-order', component: PackagePricingOrder },
   // Other Pages
   { path: 'about_us', component: AboutUs },
-{ path: 'reservation/:mode', component: Appointments },
+
+
+{ path: 'reservation/free', component: Free },
+{ path: 'reservation/all', component: Appointments },
   { path: 'reservation/:id', component: Appointments },
 
 

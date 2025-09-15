@@ -83,7 +83,6 @@ export class CartPageComponent implements OnInit {
 
   // ================== Load Cart ==================
   loadCart() {
-    console.log('📦 loadCart called, token:', this.token);
 
     if (this.token) {
       // ✅ Logged-in user

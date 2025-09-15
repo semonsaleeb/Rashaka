@@ -57,7 +57,6 @@ export class Home implements OnInit {
     this.languageService.currentLang$.subscribe(lang => {
       this.currentLang = lang;
       this.translate.use(lang); // ✅ غير اللغة وقت ما تتغير
-      console.log('🌍 Language in HomeComponent:', lang);
     });
 
     const token = localStorage.getItem('token');

@@ -1,0 +1,137 @@
+<!-- 👇 Popup Modal -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 p-3">
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          [attr.aria-label]="'MODAL.CLOSE' | translate"></button>
+      </div>
+      <div class="text-center mb-3">
+        <img src="assets/Images/Enter OTP-cuate 1.svg" alt="{{ 'MODAL.LOGIN_ILLUSTRATION' | translate }}"
+          style="max-width: 200px;">
+      </div>
+      <h5 class="text-center fw-bold mb-2">{{ 'MODAL.LOGIN_MESSAGE' | translate }}</h5>
+      <div class="d-flex justify-content-center gap-3 mt-3">
+        <button class="btn btn-outline-secondary px-4" (click)="goToRegister()" data-bs-dismiss="modal">
+          {{ 'MODAL.REGISTER' | translate }}
+        </button>
+        <button class="btn btn-success px-4" (click)="goToLogin()" data-bs-dismiss="modal">
+          {{ 'MODAL.LOGIN' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 👇 الصفحة تظهر بس لو المستخدم عامل Login -->
+@if (token) {
+<div class="container py-4 mt-lg-5">
+
+  <!-- العنوان الرئيسي -->
+  <h4 class="fw-bold text-success text-center py-4">
+    {{ 'HOME.MAIN_TITLE' | translate }}
+  </h4>
+  <p class="text-muted text-center">
+    {{ 'HOME.MAIN_SUBTITLE' | translate }}
+  </p>
+
+  <!-- نسخة الموبايل (Stepper أفقي أعلى الصفحة) -->
+  <div class="d-flex justify-content-between align-items-center px-2 py-3 d-md-none" >
+    <div class="text-center">
+      <img [src]="step >= 2 ? 'assets/Images/Frame 1000005990.svg' : 'assets/Images/Frame 1000005993.svg'" width="70">
+      <div class="small">{{ 'STEPS.SELECT_BRANCH' | translate }}</div>
+    </div>
+    <div class="text-center">
+      <img [src]="step >= 3 ? 'assets/Images/Frame 1000005990.svg' : 'assets/Images/Frame 1000005991.svg'" width="70">
+      <div class="small">{{ 'STEPS.SELECT_SPECIALIST' | translate }}</div>
+    </div>
+    <div class="text-center">
+      <img [src]="step > 3 ? 'assets/Images/Frame 1000005990.svg' : 'assets/Images/Frame 1000005992.svg'" width="70">
+      <div class="small">{{ 'STEPS.CONFIRM_BOOKING' | translate }}</div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+  
+
+    <!-- Right side (steps indicator) نسخة الديسكتوب -->
+    <div class="col-md-4 d-none d-md-block" >
+      <div class="card p-3 rounded-4 shadow-sm">
+
+        <!-- Step 1 -->
+        <div class="mb-4 d-flex align-items-start" [class.text-success]="step >= 2">
+          <i class="bi bi-geo-alt fs-4 me-3"></i>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              @if (step >= 2) {
+              <img src="assets/Images/Frame 1000005990.svg" style="width: 70px; height: 70px;">
+              } @else {
+              <img src="assets/Images/Frame 1000005993.svg" style="width: 70px; height: 70px;">
+              }
+              <h6 class="mb-0">{{ 'STEPS.SELECT_BRANCH_TITLE' | translate }}</h6>
+            </div>
+            <p class="text-muted small px-3">
+              {{ 'STEPS.SELECT_BRANCH_DESC' | translate }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="mb-4 d-flex align-items-start" [class.text-success]="step >= 3">
+          <i class="bi bi-person fs-4 me-3"></i>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              @if (step >= 3) {
+              <img src="assets/Images/Frame 1000005990.svg" style="width: 70px; height: 70px;">
+              } @else {
+              <img src="assets/Images/Frame 1000005991.svg" style="width: 70px; height: 70px;">
+              }
+              <h6 class="mb-0">{{ 'STEPS.SELECT_SPECIALIST_TITLE' | translate }}</h6>
+            </div>
+            <p class="text-muted small px-3">
+              {{ 'STEPS.SELECT_SPECIALIST_DESC' | translate }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="d-flex align-items-start" [class.text-success]="step > 3">
+          <i class="bi bi-check2-circle fs-4 me-3"></i>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              @if (step > 3) {
+              <img src="assets/Images/Frame 1000005990.svg" style="width: 70px; height: 70px;">
+              } @else {
+              <img src="assets/Images/Frame 1000005992.svg" style="width: 70px; height: 70px;">
+              }
+              <h6 class="mb-0">{{ 'STEPS.CONFIRM_BOOKING_TITLE' | translate }}</h6>
+            </div>
+            <p class="text-muted small px-3">
+              {{ 'STEPS.CONFIRM_BOOKING_DESC' | translate }}
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+      <!-- Left side (المحتوى) -->
+    <div class="col-md-8">
+      @switch (step) {
+      @case (1) {
+<app-branch 
+  (next)="goToStep(2)" 
+  [mode]="selectedMode">
+</app-branch>
+      }
+      @case (2) {
+      <app-spicialist (prev)="goToStep(1)" (next)="goToStep(3)"></app-spicialist>
+      }
+      @case (3) {
+      <app-confirm (prev)="goToStep(2)"></app-confirm>
+      }
+      }
+    </div>
+  </div>
+</div>
+}

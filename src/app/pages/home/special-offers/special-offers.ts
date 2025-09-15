@@ -59,7 +59,8 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private favoriteService: FavoriteService,
     private translate: TranslateService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+
   ) { }
 
   ngOnInit(): void {
@@ -239,6 +240,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
     this.cartItems = cart; // ⬅️ تحديث مباشر
     this.refreshCartCount();
+     this.cartState.updateItems(cart);
   }
 
   addToCart(product: Product, event?: Event): void {

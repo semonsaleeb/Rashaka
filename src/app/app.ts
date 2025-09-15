@@ -61,6 +61,8 @@ export class App implements OnInit {
     // 👇 تحديث الكارت عند أي تغيير
     this.cartState.cartItems$.subscribe(items => {
       this.cartItems = items;
+      console.log("cart items : " ,items);
+      
     });
   }
 }

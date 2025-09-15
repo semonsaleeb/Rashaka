@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      @for (item of cartItems; track item) {
+      @for (item of cartItems; track trackByProductId($index, item)) {
       <div class="card mb-3 shadow-sm border-1 rounded-4 p-2" style="background-color: #FAFAFA;">
         <div class="row g-2 align-items-center">
           <div class="col-3 text-center">
