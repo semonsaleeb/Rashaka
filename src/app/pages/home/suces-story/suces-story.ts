@@ -7,6 +7,8 @@ import { Branches } from '../branches/branches';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
+import { SuccessStory } from '../../../../models/SuccessStory';
+import { SuccessStoryService } from '../../../services/success-story';
 
 @Component({
   selector: 'app-suces-story',
@@ -15,12 +17,9 @@ import { LanguageService } from '../../../services/language.service';
   styleUrl: './suces-story.scss'
 })
 export class SucesStory {
-      @Input() mode: 'carousel' | 'grid' = 'grid';
-
-  isMobile = false;
-  currentIndex = 0;
-
-stories = [
+  
+  
+Opinions = [
   {
    id: 1,
     localVideo: 'assets/Images/فيديو اعلان فحص الجلسات.mp4',
@@ -55,95 +54,95 @@ stories = [
   // }
 ];
 
+@Input() mode: 'carousel' | 'grid' = 'grid';
 
+  isMobile = false;
+  currentIndex = 0;
+  stories: SuccessStory[] = [];
 
-  constructor(private sanitizer: DomSanitizer,
-     private translate: TranslateService,
-       private languageService: LanguageService) {
+  // swipe
+  touchStartX = 0;
+  touchEndX = 0;
+
+  constructor(
+    private sanitizer: DomSanitizer,
+    private translate: TranslateService,
+    private languageService: LanguageService,
+    private successStoryService: SuccessStoryService
+  ) {
     this.checkScreenSize();
   }
 
   ngOnInit(): void {
-    
     this.translate.use(this.languageService.getCurrentLanguage());
 
     // Listen for language changes
     this.languageService.currentLang$.subscribe(lang => {
       this.translate.use(lang);
     });
+
+    // Load stories from API
+    this.loadStories();
   }
-  
+
+  loadStories(): void {
+    this.successStoryService.getSuccessStories().subscribe({
+      next: (data) => this.stories = data,
+      error: (err) => console.error('Failed to load success stories', err)
+    });
+  }
 
   @HostListener('window:resize')
-  checkScreenSize() {
+  checkScreenSize(): void {
     this.isMobile = window.innerWidth <= 768;
   }
 
-getSafeYoutubeUrl(id: string | undefined) {
-  if (!id) return ''; // أو ممكن ترجع null
-  return this.sanitizer.bypassSecurityTrustResourceUrl(
-    `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
-  );
+ getCardClass(index: number): string {
+  // كل العناصر تظهر في Carousel، حتى لو واحدة
+  if (this.stories.length <= 1) return 'center';
+  
+  const total = this.stories.length;
+  const prev = (this.currentIndex - 1 + total) % total;
+  const next = (this.currentIndex + 1) % total;
+
+  if (index === this.currentIndex) return 'center';
+  if (index === prev) return 'left';
+  if (index === next) return 'right';
+  return 'hidden'; // العناصر الأخرى يمكن تخفيها أو ضع CSS مناسبة
 }
 
 
-  getCardClass(index: number): string {
-    const total = this.stories.length;
-    const prev = (this.currentIndex - 1 + total) % total;
-    const next = (this.currentIndex + 1) % total;
-
-    if (index === this.currentIndex) return 'center';
-    if (index === prev) return 'left';
-    if (index === next) return 'right';
-    return '';
+  nextSlide(): void {
+    this.currentIndex = (this.currentIndex + 1) % this.stories.length;
   }
 
-
-// لو عايز تحرك يمين/شمال برضه
-nextSlide() {
-  if (this.currentIndex < this.stories.length - 1) {
-    this.currentIndex++;
-  } else {
-    this.currentIndex = 0; // يرجع لأول فيديو
+  prevSlide(): void {
+    this.currentIndex = (this.currentIndex - 1 + this.stories.length) % this.stories.length;
   }
-}
 
-prevSlide() {
-  if (this.currentIndex > 0) {
-    this.currentIndex--;
-  } else {
-    this.currentIndex = this.stories.length - 1; // آخر فيديو
-  }
-}
-
-
-  goToSlide(index: number) {
+  goToSlide(index: number): void {
     this.currentIndex = index;
   }
 
-
-
-  // component.ts
-touchStartX = 0;
-touchEndX = 0;
-
-onTouchStart(event: TouchEvent) {
-  this.touchStartX = event.changedTouches[0].screenX;
-}
-
-onTouchEnd(event: TouchEvent) {
-  this.touchEndX = event.changedTouches[0].screenX;
-  this.handleSwipe();
-}
-
-handleSwipe() {
-  const swipeDistance = this.touchStartX - this.touchEndX;
-  if (swipeDistance > 50) {
-    this.nextSlide(); // سحب لليسار
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
   }
-  if (swipeDistance < -50) {
-    this.prevSlide(); // سحب لليمين
-  }
-}
 
+  onTouchEnd(event: TouchEvent): void {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.handleSwipe();
+  }
+
+  handleSwipe(): void {
+    const swipeDistance = this.touchStartX - this.touchEndX;
+    if (swipeDistance > 50) this.nextSlide();
+    if (swipeDistance < -50) this.prevSlide();
+  }
+
+  // getSafeYoutubeUrl(id?: string) {
+  //   if (!id) return '';
+  //   return this.sanitizer.bypassSecurityTrustResourceUrl(
+  //     https://www.youtube.com/embed/${id}?rel=0&modestbranding=1
+  //   );
+  // }
 }

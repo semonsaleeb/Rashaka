@@ -130,7 +130,7 @@ getGuestCart(): CartResponse {
   }
 
   applyPromocode(promocode: string, total_price: number): Observable<PromoResponse> {
-    return this.http.post<PromoResponse>(`${this.apiUrl}/client/order/apply-promocode`,
+    return this.http.post<PromoResponse>(`${this.apiUrl}/order/apply-promocode`,
       { promocode, total_price }, { headers: this.getHeaders() });
   }
 

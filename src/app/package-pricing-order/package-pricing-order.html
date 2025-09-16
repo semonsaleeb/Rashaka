@@ -66,7 +66,7 @@
             </li>
             <li class="d-flex justify-content-between fw-bold pt-3 border-top">
               <span>{{ 'SUBSCRIPTIONS.TOTAL' | translate }}</span>
-              <span>{{ (selectedPackage.price_after ?? selectedPackage.price_before) | number:'1.2-2' }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
+              <span>{{ totalPrice }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
             </li>
           </ul>
 

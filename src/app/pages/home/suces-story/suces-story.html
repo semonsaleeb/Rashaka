@@ -36,14 +36,12 @@
               </iframe>
             </div> -->
 
-            <div class="youtube-embed" *ngIf="story.type === 'local'">
+            <!-- <div class="youtube-embed" *ngIf="story.type === 'local'">
               <video width="100%" height="450px" controls preload="none" [attr.poster]="story.image">
                 <source [src]="story.localVideo" type="video/mp4">
                 متصفحك لا يدعم تشغيل الفيديو.
               </video>
-
-
-            </div>
+            </div> -->
 
           </div>
 
@@ -81,20 +79,34 @@
                 allowfullscreen>
               </iframe>
             </div> -->
+ <div class="story-card-custom" [ngClass]="getCardClass(i)">
+    
+    <!-- الصور -->
+   <div class="story-image-wrapper d-flex position-relative">
+  <img [src]="story.before_image" alt="Before Image" class="story-image" />
+  <img [src]="story.after_image" alt="After Image" class="story-image" />
 
-            <div class="youtube-embed" *ngIf="story.type === 'local'">
+  <!-- النص فوق الصور -->
+  <div class="story-info text-center">
+    <strong class="client-name">{{story.client_name}}</strong>
+    <p class="weight-change  bg-dark text-light">{{story.weight_change}}</p>
+  </div>
+</div>
+
+  </div>
+            <!-- <div class="youtube-embed" *ngIf="story.type === 'local'">
               <video width="100%" height="450px" controls preload="none" [attr.poster]="story.image">
                 <source [src]="story.localVideo" type="video/mp4">
                 متصفحك لا يدعم تشغيل الفيديو.
               </video>
 
-            </div>
+            </div> -->
           </div>
 
           }
         </div>
         <!-- Custom Arrows shown only if there are more than 1 story -->
-        @if (stories.length > 1) {
+        @if (stories.length > 0) {
         <div class="d-flex justify-content-between  align-items-center mt-4 ">
           <div class="d-flex gap-2">
             @for (story of stories; track story; let i = $index) {
@@ -129,10 +141,10 @@
         <p class="subtitle" [innerHTML]="'SUCCESS_STORIES_SUBTITLE' | translate"></p>
 
         <!-- CTA Button -->
-        <button class="btn btn-success cta-button" [routerLink]="['/reservation']">
+        <button class="btn btn-success cta-button" [routerLink]="['/reservation/all']">
           <span class="arrow-icon">
-            {{ 'SUCCESS_STORIES_CTA' | translate }}
             <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
+            {{ 'SUCCESS_STORIES_CTA' | translate }}
           </span>
         </button>
       </div>
@@ -140,31 +152,44 @@
     </div>
     <div class="header-gradient"></div>
   </div>
-  <div class="success-stories px-5 p-5">
+  <div class="success-stories px-5 p-5 ةغ-5">
     <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
     <div class="carousel-custom-wrapper position-relative">
-      <div class="story-deck d-flex justify-content-center align-items-center">
-        @for (story of stories; track story; let i = $index) {
-        <div class="story-card-custom" [ngClass]="getCardClass(i)">
-          <div class="story-image-wrapper">
-            <!-- <div class="circle-background"></div> -->
-            <img [src]="story.image" alt="Story Image" class="story-image" />
-            <h1>{{story.title}}</h1>
-            <p>{{story.description}}</p>
-          </div>
-          <div class="video-info">
-          </div>
-        </div>
-        }
-      </div>
+    <div class="story-deck d-flex justify-content-center align-items-center">
+  @for (story of stories; track story; let i = $index) {
+<div class="story-card-custom" [ngClass]="getCardClass(i)">
+  <!-- الصور -->
+  <div class="story-image-wrapper d-flex position-relative">
+    
+    <!-- Before -->
+    <div class="position-relative flex-fill text-center">
+      <img [src]="story.before_image" alt="Before Image" class="story-image" />
+      <strong class="weight-label">{{story.before_weight}}</strong>
+    </div>
+
+    <!-- After -->
+    <div class="position-relative flex-fill text-center">
+      <img [src]="story.after_image" alt="After Image" class="story-image" />
+      <strong class="weight-label">{{story.after_weight}}</strong>
+    </div>
+  </div>
+
+  <!-- النصوص تحت الصورتين -->
+  <div class="story-info text-center mt-3">
+    <strong class="client-name">{{story.client_name}}</strong>
+    <p class="weight-change">{{story.weight_change}}</p>
+  </div>
+</div>
+
+  <!-- <h2> {{story.client_name}} </h2> -->
+  }
+</div>
+
+
       <!-- Custom Arrows shown only if there are more than 1 story -->
-      @if (stories.length > 1) {
+      @if (stories.length > 0) {
       <div class="d-flex justify-content-between  align-items-center mt-4 ">
-        <!-- Arrows -->
-        <div class="d-flex gap-2">
-          <button class="arrow-btn prev" (click)="prevSlide()"></button>
-          <button class="arrow-btn next" (click)="nextSlide()"></button>
-        </div>
+       
         <!-- Dots -->
         <div class="d-flex gap-2">
           @for (story of stories; track story; let i = $index) {
@@ -172,6 +197,11 @@
             [attr.aria-label]="'Story ' + (i + 1)">
           </button>
           }
+        </div>
+         <!-- Arrows -->
+        <div class="d-flex gap-2" dir="ltr">
+          <button class="arrow-btn prev" (click)="prevSlide()"></button>
+          <button class="arrow-btn next" (click)="nextSlide()"></button>
         </div>
       </div>
       }

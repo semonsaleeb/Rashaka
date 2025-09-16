@@ -90,7 +90,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (feature of activeSubscription?.features; track feature.type) {
+                @for (feature of activeSubscription.features; track feature.type) {
                 <tr>
                   <td><strong>{{ feature.type }}</strong></td>
                   <td>{{ feature.total }}</td>

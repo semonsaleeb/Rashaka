@@ -100,7 +100,11 @@
         <!-- Promo Code -->
         <div class="input-group mb-3">
           <input type="text" class="form-control text-end rounded-0" [placeholder]="'CART.ENTER_CODE' | translate" [(ngModel)]="promoCode">
-          <button class="btn custom-green-btn rounded-0">{{ 'CART.APPLY' | translate }}</button>
+<button 
+  class="btn custom-green-btn rounded-0"
+  (click)="applyPromoCode()">
+  {{ 'CART.APPLY' | translate }}
+</button>
         </div>
 
         <!-- الأسعار -->

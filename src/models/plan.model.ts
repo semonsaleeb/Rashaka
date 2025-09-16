@@ -22,7 +22,7 @@ export interface Plan {
   id: number;
   type: string;
   title: string;
-  price_before?: string;
+  price_before?: number;
   price_after?: number;
   sessions: string;
   features: Feature[]; 

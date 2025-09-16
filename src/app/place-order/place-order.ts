@@ -129,6 +129,8 @@ export class PlaceOrder implements OnInit {
         .placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '')
         .subscribe({
           next: (orderRes) => {
+             console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
+  console.log('💳 طريقة الدفع المختارة:', this.paymentMethod);
             alert('تم تأكيد الطلب بنجاح بعد الدفع!');
             this.router.navigate(['/order-success', orderRes.order_id]);
           },
@@ -274,6 +276,8 @@ export class PlaceOrder implements OnInit {
       this.promoCode
     ).subscribe({
       next: (orderRes) => {
+         console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
+  console.log('💳 طريقة الدفع المختارة:', this.paymentMethod);
         // this.isLoading = false;
 
         if (!orderRes || !orderRes.order_id) {
