@@ -47,6 +47,8 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   compareProducts: Product[] = [];
   showComparePopup = false;
 
+    isMobile = false;
+
   private resizeListener = this.updateVisibleCards.bind(this);
   private GUEST_CART_KEY = 'guest_cart';
 
@@ -83,7 +85,13 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     });
 
 
-    
+     // -------------------------
+    // 1️⃣ Handle window resize
+    // -------------------------
+    this.resizeHandler();
+    window.addEventListener('resize', this.resizeHandler);
+
+
     this.translate.use(this.languageService.getCurrentLanguage());
 
     // Listen for language changes
@@ -184,16 +192,23 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
 
 
 
+loadProductsAndFavorites(): void {
+  this.productService.getOffer().subscribe(offerProducts => {
+    this.allProducts = offerProducts;
+    this.products = [...offerProducts];
 
-  loadProductsAndFavorites(): void {
-    this.productService.getOffer().subscribe(offerProducts => {
-      this.allProducts = offerProducts;
-      this.products = [...offerProducts];
+    // ⭐ لو موبايل → يبدأ من النص
+    if (this.isMobile && this.products.length > 0) {
+      this.currentSlideIndex = Math.floor((this.products.length - 1) / 2);
+    } else {
+      this.currentSlideIndex = 0;
+    }
 
-      const token = localStorage.getItem('token');
-      this.favoriteService.loadFavorites(token).subscribe(); // بس init
-    });
-  }
+    const token = localStorage.getItem('token');
+    this.favoriteService.loadFavorites(token).subscribe(); // بس init
+  });
+}
+
 
 
   /** ------------------- COMPARE ------------------- */
@@ -394,23 +409,52 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   }
 
   /** ------------------- SWIPE ------------------- */
+
+
   touchStartX = 0;
-  touchEndX = 0;
+touchEndX = 0;
 
-  onTouchStart(event: TouchEvent): void {
-    this.touchStartX = event.changedTouches[0].screenX;
-  }
+onTouchStart(event: TouchEvent): void {
+  this.touchStartX = event.changedTouches[0].screenX;
+  
+}
 
-  onTouchEnd(event: TouchEvent): void {
-    this.touchEndX = event.changedTouches[0].screenX;
-    this.handleSwipe();
-  }
+onTouchEnd(event: TouchEvent): void {
+  this.touchEndX = event.changedTouches[0].screenX;
+  this.handleSwipe();
+}
 
-  handleSwipe(): void {
-    const swipeDistance = this.touchEndX - this.touchStartX;
-    if (Math.abs(swipeDistance) > 50) {
-      if (swipeDistance > 0) this.nextSlide();
-      else this.prevSlide();
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) {
+    const isRTL = this.currentLang === 'ar';
+
+    if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
+      // سوايب يمين في LTR أو شمال في RTL → prev
+      this.nextSlide();
+    } else {
+      // سوايب شمال في LTR أو يمين في RTL → next
+      this.prevSlide();
     }
   }
+}
+
+
+
+// ---------------------- responsive ----------------------
+  // updateVisibleCards() {
+  //   if (window.innerWidth <= 768) this.visibleCards = 1;
+  //   else if (window.innerWidth <= 1024) this.visibleCards = 2;
+  //   else this.visibleCards = 3;
+  // }
+
+
+  checkIfMobile() {
+    this.isMobile = window.innerWidth <= 768;
+  }
+    private resizeHandler = () => {
+    this.updateVisibleCards();
+    this.checkIfMobile();
+  };
 }

@@ -185,7 +185,7 @@
   "MINUTES": "Minutes",
   "HOURS": "Hours",
   "DAYS": "Days",
-  "LIMITED_TIME": "Limited Time Offer",
+  "LIMITED_TIME": "Limited Time ",
   "OFFERS": "Offers",
   "OFFERS_DESC": "Enjoy the best discounts and deals tailored just for you.",
   "ALL": "All",
@@ -573,6 +573,8 @@
   "FEATURE": "Feature",
   "TOTAL": "Total",
   "USED": "Used",
-  "REMAINING": "Remaining"
+  "REMAINING": "Remaining",
+    "OUT_OF_STOCK": "Out of Stock"
+
 
 }

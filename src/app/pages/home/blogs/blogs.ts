@@ -24,6 +24,7 @@ export class Blogs implements OnInit {
   visibleCards = 3;
   currentLang: string = 'ar';
   dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
+  private readonly SWIPE_THRESHOLD = 50;
 
   constructor(private blogService: BlogService, private translate: TranslateService, private languageService: LanguageService) {}
 
@@ -70,18 +71,23 @@ export class Blogs implements OnInit {
     });
   }
 
-  loadBlogs(): void {
-    this.blogService.getBlogs().subscribe({
-      next: (blogs) => {
-        this.blogs = blogs;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load blogs:', err);
-        this.loading = false;
-      }
-    });
-  }
+loadBlogs(): void {
+  this.blogService.getBlogs().subscribe({
+    next: (blogs) => {
+      this.blogs = blogs;
+      this.loading = false;
+
+      // 🟢 خلي البداية من النص
+      const totalSlides = Math.ceil(this.blogs.length / this.visibleCards);
+      this.currentSlideIndex = Math.floor(totalSlides / 2);
+    },
+    error: (err) => {
+      console.error('Failed to load blogs:', err);
+      this.loading = false;
+    }
+  });
+}
+
 
   getSafeImage(url: string): string {
     return AssetUtils.getSafeImageUrl(url);
@@ -146,19 +152,39 @@ onTouchEnd(event: TouchEvent): void {
   this.touchEndX = event.changedTouches[0].screenX;
   this.handleSwipe();
 }
+  public getMaxIndex(): number {
+    return this.blogs.length - 1;
+  }
 
-handleSwipe(): void {
+  scrollRight(): void {
+    // يمشي لقدّام (لليمين بصريًا) = index + 1
+    const maxIndex = this.getMaxIndex();
+    if (this.currentSlideIndex < maxIndex) {
+      this.currentSlideIndex++;
+    }
+  }
+
+  scrollLeft(): void {
+    // يرجع لورا (لليسار بصريًا) = index - 1
+    if (this.currentSlideIndex > 0) {
+      this.currentSlideIndex--;
+    }
+  }
+private handleSwipe(): void {
   const swipeDistance = this.touchEndX - this.touchStartX;
 
-  if (Math.abs(swipeDistance) > 50) { // عتبة عشان ما يعتبرش اللمسة العادية Swipe
+  if (Math.abs(swipeDistance) > this.SWIPE_THRESHOLD) {
+    const isRTL = this.currentLang === 'ar';
+
     if (swipeDistance > 0) {
-      // 👉 Swipe يمين → روح للسابق
-      this.nextSlide();
+      // 👉 سوايب يمين
+      isRTL ? this.scrollRight() : this.scrollLeft();
     } else {
-      // 👈 Swipe شمال → روح للي بعده
-      this.prevSlide();
+      // 👈 سوايب شمال
+      isRTL ? this.scrollLeft() : this.scrollRight();
     }
   }
 }
+
 
 }

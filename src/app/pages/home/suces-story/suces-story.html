@@ -26,7 +26,7 @@
       <!-- ✅ الكاروسيل -->
       <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
         (touchend)="onTouchEnd($event)">
-        <div class="story-deck d-flex justify-content-center align-items-center">
+        <div class="story-deck-mobile d-flex justify-content-center align-items-center">
           @for (story of stories; track story; let i = $index) {
           <div class="story-card-custom" [ngClass]="getCardClass(i)">
             <!-- <div class="youtube-embed" *ngIf="story.type === 'youtube'">
@@ -70,7 +70,7 @@
     @else {
     <div class="success-stories  p-5" style="  background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
       <div class="carousel-custom-wrapper position-relative">
-        <div class="story-deck d-flex justify-content-center align-items-center">
+        <div class="story-deck-carousel d-flex justify-content-center align-items-center">
           @for (story of stories; track story; let i = $index) {
           <div class="story-card-custom" [ngClass]="getCardClass(i)">
             <!-- <div class="youtube-embed" *ngIf="story.type === 'youtube'">
@@ -79,21 +79,28 @@
                 allowfullscreen>
               </iframe>
             </div> -->
- <div class="story-card-custom" [ngClass]="getCardClass(i)">
-    
-    <!-- الصور -->
-   <div class="story-image-wrapper d-flex position-relative">
-  <img [src]="story.before_image" alt="Before Image" class="story-image" />
-  <img [src]="story.after_image" alt="After Image" class="story-image" />
+            <div class="story-card-custom" [ngClass]="getCardClass(i)">
 
-  <!-- النص فوق الصور -->
-  <div class="story-info text-center">
-    <strong class="client-name">{{story.client_name}}</strong>
-    <p class="weight-change  bg-dark text-light">{{story.weight_change}}</p>
-  </div>
-</div>
+              <!-- الصور -->
+              <div class="story-image-wrapper d-flex position-relative">
+                <!-- Before -->
+                <div class="position-relative flex-fill text-center">
+                  <img [src]="story.before_image" alt="Before Image" class="story-image" />
+                  <strong class="weight-label"> weight before: {{story.before_weight}}</strong>
+                </div>
 
-  </div>
+                <!-- After -->
+                <div class="position-relative flex-fill text-center">
+                  <img [src]="story.after_image" alt="After Image" class="story-image" />
+                  <strong class="weight-label"> wight after :{{story.after_weight}}</strong>
+                </div>
+                <div class="story-info text-center mt-3">
+                  <strong class="client-name">{{story.client_name}}</strong>
+                  <p class="weight-change">{{story.weight_change}}</p>
+                </div>
+              </div>
+
+            </div>
             <!-- <div class="youtube-embed" *ngIf="story.type === 'local'">
               <video width="100%" height="450px" controls preload="none" [attr.poster]="story.image">
                 <source [src]="story.localVideo" type="video/mp4">
@@ -155,41 +162,41 @@
   <div class="success-stories px-5 p-5 ةغ-5">
     <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
     <div class="carousel-custom-wrapper position-relative">
-    <div class="story-deck d-flex justify-content-center align-items-center">
-  @for (story of stories; track story; let i = $index) {
-<div class="story-card-custom" [ngClass]="getCardClass(i)">
-  <!-- الصور -->
-  <div class="story-image-wrapper d-flex position-relative">
-    
-    <!-- Before -->
-    <div class="position-relative flex-fill text-center">
-      <img [src]="story.before_image" alt="Before Image" class="story-image" />
-      <strong class="weight-label">{{story.before_weight}}</strong>
-    </div>
+      <div class="story-deck-grid d-flex justify-content-center align-items-center">
+        @for (story of stories; track story; let i = $index) {
+        <div class="story-card-custom" [ngClass]="getCardClass(i)">
+          <!-- الصور -->
+          <div class="story-image-wrapper d-flex position-relative">
 
-    <!-- After -->
-    <div class="position-relative flex-fill text-center">
-      <img [src]="story.after_image" alt="After Image" class="story-image" />
-      <strong class="weight-label">{{story.after_weight}}</strong>
-    </div>
-  </div>
+            <!-- Before -->
+            <div class="position-relative flex-fill text-center">
+              <img [src]="story.before_image" alt="Before Image" class="story-image" />
+              <strong class="weight-label">weight before: {{story.before_weight}}</strong>
+            </div>
 
-  <!-- النصوص تحت الصورتين -->
-  <div class="story-info text-center mt-3">
-    <strong class="client-name">{{story.client_name}}</strong>
-    <p class="weight-change">{{story.weight_change}}</p>
-  </div>
-</div>
+            <!-- After -->
+            <div class="position-relative flex-fill text-center">
+              <img [src]="story.after_image" alt="After Image" class="story-image" />
+              <strong class="weight-label"> wight after : {{story.after_weight}}</strong>
+            </div>
+          </div>
 
-  <!-- <h2> {{story.client_name}} </h2> -->
-  }
-</div>
+          <!-- النصوص تحت الصورتين -->
+          <div class="story-info text-center mt-3">
+            <strong class="client-name">{{story.client_name}}</strong>
+            <p class="weight-change">{{story.weight_change}}</p>
+          </div>
+        </div>
+
+        <!-- <h2> {{story.client_name}} </h2> -->
+        }
+      </div>
 
 
       <!-- Custom Arrows shown only if there are more than 1 story -->
       @if (stories.length > 0) {
       <div class="d-flex justify-content-between  align-items-center mt-4 ">
-       
+
         <!-- Dots -->
         <div class="d-flex gap-2">
           @for (story of stories; track story; let i = $index) {
@@ -198,7 +205,7 @@
           </button>
           }
         </div>
-         <!-- Arrows -->
+        <!-- Arrows -->
         <div class="d-flex gap-2" dir="ltr">
           <button class="arrow-btn prev" (click)="prevSlide()"></button>
           <button class="arrow-btn next" (click)="nextSlide()"></button>

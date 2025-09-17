@@ -94,10 +94,24 @@
 
 .story-deck {
   position: relative;
-  height: 720px;
+  height: auto;
   perspective: 1200px;
 }
-
+.story-deck-mobile{
+position: relative;
+  height: 420;
+  perspective: 1200px;
+}
+.story-deck-grid{
+position: relative;
+  height: 420px;
+  perspective: 1200px;
+}
+.story-deck-carousel{
+position: relative;
+  height: 420px;
+  perspective: 1200px;
+}
 .story-image-wrapper {
   position: relative; /* مهم علشان absolute يشتغل */
 }

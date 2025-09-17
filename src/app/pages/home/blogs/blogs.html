@@ -14,13 +14,13 @@
           </div>
         </a>
         <div class="card-body">
-           <h6 class="card-title fw-bold">
-    {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
-  </h6>
+          <h6 class="card-title fw-bold">
+            {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
+          </h6>
 
-  <p class="card-text text-muted two-lines-only"
-     [innerHTML]="parseContent(currentLang === 'ar' ? blog.content_ar : blog.content) | truncate:150">
-  </p>
+          <p class="card-text text-muted two-lines-only"
+            [innerHTML]="parseContent(currentLang === 'ar' ? blog.content_ar : blog.content) | truncate:150">
+          </p>
         </div>
         <div class="card-footer bg-transparent">
           <small class="text-muted">
@@ -55,9 +55,15 @@
       <!-- Carousel Container -->
       <div class="carousel-wrapper px-lg-3">
         <div class="position-relative overflow-hidden  mx-lg-5">
-          <div class="d-flex transition-transform  carousel-track"
-            [ngStyle]="{ transform: 'translateX(+' + (currentSlideIndex * (100/visibleCards)) + '%)' }"
-            (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+     <div class="d-flex transition-transform carousel-track"
+  [ngStyle]="{
+    transform: dir === 'rtl' 
+      ? 'translateX(' + (currentSlideIndex * (100 / visibleCards)) + '%)' 
+      : 'translateX(-' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+  }"
+  (touchstart)="onTouchStart($event)" 
+  (touchend)="onTouchEnd($event)">
+
 
             @for (blog of blogs; track blog) {
             <div class="carousel-slide p-3 px-lg-2">
@@ -72,12 +78,12 @@
                 <!-- Blog Body -->
                 <div class="card-body" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
                   <h6 class="card-title fw-bold">
-    {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
-  </h6>
+                    {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
+                  </h6>
 
-  <p class="card-text text-muted two-lines-only"
-     [innerHTML]="parseContent(currentLang === 'ar' ? blog.content_ar : blog.content) | truncate:150">
-  </p>
+                  <p class="card-text text-muted two-lines-only"
+                    [innerHTML]="parseContent(currentLang === 'ar' ? blog.content_ar : blog.content) | truncate:150">
+                  </p>
                   <small class="text-muted">
                     {{ 'BLOG.BY' | translate }}: {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }} |
                     {{ blog.created_at | date: 'dd/MM/yyyy' }}

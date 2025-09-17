@@ -66,9 +66,13 @@
         <!-- Carousel Container -->
         <div class="position-relative carousel-wrapper my-3">
           <div class="carousel-container">
-            <div class="d-flex transition-transform carousel-track" [ngStyle]="{
-  transform: 'translateX(' + (currentSlideIndex * (isMobile ? (100 / visibleCards) : (100 / visibleCards))) + '%)'
-}" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+        <div class="d-flex transition-transform carousel-track"
+  [ngStyle]="{ 
+    transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? -1 : 1)) + '%)' 
+  }"
+  (touchstart)="onTouchStart($event)" 
+  (touchend)="onTouchEnd($event)" 
+  [dir]="textDir">
               @for (product of filteredProducts; track product.id) {
               <div class="carousel-slide p-3">
                 <div class="card product-card rounded-4">
@@ -170,7 +174,7 @@
           <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
 
             <!-- Dots -->
-            <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0">
+            <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
               @for (i of getDotsArray(); track i) {
               <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex === i"
                 [class.bg-secondary]="currentSlideIndex !== i" style="width: 10px; height: 10px; border: none;">

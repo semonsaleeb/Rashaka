@@ -37,9 +37,15 @@ Carousel Mode
   @if (plans.length > 0) {
   <!-- Carousel Wrapper -->
   <div class="carousel-wrapper position-relative overflow-hidden px-lg-5" [dir]="textDir">
-    <div class="d-flex transition-transform carousel-track"
-      [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? -1 : 1)) + '%)' }"
-      (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
+<div class="d-flex transition-transform carousel-track"
+  [ngStyle]="{ 
+    transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? -1 : 1)) + '%)' 
+  }"
+  (touchstart)="onTouchStart($event)" 
+  (touchend)="onTouchEnd($event)" 
+  [dir]="textDir">
+
+
 
 
       @for (plan of plans; track trackPlan($index, plan)) {
@@ -151,14 +157,20 @@ Carousel Mode
 
 
       <!-- Dots -->
-      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0">
-        @for (i of getDotsArray(); track i) {
-        <button (click)="goToSlide(i)" class="rounded-circle"
-          [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
-          style="width:10px; height:10px; border:none;">
-        </button>
-        }
-      </div>
+     <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  @for (i of getDotsArray(); track i) {
+    <button 
+      (click)="goToSlide(i)" 
+      class="rounded-circle"
+      [ngClass]="{ 
+        'dot-active': currentSlideIndex === i, 
+        'dot-inactive': currentSlideIndex !== i 
+      }"
+      style="width:10px; height:10px; border:none;">
+    </button>
+  }
+</div>
+
       <!-- Arrows -->
       <div class="d-flex gap-2 px-lg-4 d-none d-md-flex" dir="rtl">
         <!-- next = يمشي لقدّام (index++) -->

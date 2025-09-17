@@ -62,6 +62,9 @@ export class Pricing implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+
+    const midIndex = Math.floor(this.getMaxIndex() / 2); // المنتصف
+  this.currentSlideIndex = midIndex;
     // حالة تسجيل الدخول (مزامنة مستمرة)
     this.isLoggedIn = this.auth.isLoggedIn();
     this.auth.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
@@ -94,7 +97,10 @@ export class Pricing implements OnInit, AfterViewInit {
 
 
   }
-
+private setInitialIndex(): void {
+  const midIndex = Math.floor(this.getMaxIndex() / 2);
+  this.currentSlideIndex = midIndex;
+}
   ngAfterViewInit(): void {
     // لا شيء هنا حاليًا، الاحتفاظ لو احتجنا future hooks
   }
@@ -117,27 +123,40 @@ export class Pricing implements OnInit, AfterViewInit {
     else this.visibleCards = 3;                 // ديسكتوب
     this.clampIndex();
   }
-
-  private clampIndex() {
-    const maxIndex = this.getMaxIndex();
-    if (this.currentSlideIndex > maxIndex) this.currentSlideIndex = maxIndex;
-    if (this.currentSlideIndex < 0) this.currentSlideIndex = 0;
+getActiveIndex(i: number): boolean {
+  if (this.currentLang === 'ar') {
+    // اعكس الاتجاه: لو آخر واحد هو أول واحد
+    return this.currentSlideIndex === (this.plans.length - 1 - i);
+  } else {
+    return this.currentSlideIndex === i;
   }
+}
+
+private clampIndex() {
+  const maxIndex = this.getMaxIndex();
+  if (this.currentSlideIndex > maxIndex) {
+    this.currentSlideIndex = maxIndex;
+  }
+
+  // شيل الجزء اللي بيرجع أي قيمة سالبة لـ 0
+  // لو عايز -1 يفضل مسموح
+}
 
   public getMaxIndex(): number {
     return this.plans.length - 1;
   }
 
 
-  getDotsArray() {
-    // عدد النقاط = عدد المواضع الممكنة
-    const total = this.getMaxIndex() + 1;
-    return Array(total).fill(0).map((_, i) => i);
-  }
+  getDotsArray(): number[] {
+  // عدد النقاط = عدد المواضع الممكنة
+  const total = this.getMaxIndex() + 1;
+  return Array.from({ length: total }, (_, i) => i);
+}
 
-  goToSlide(i: number) {
-    this.currentSlideIndex = Math.min(Math.max(i, 0), this.getMaxIndex());
-  }
+goToSlide(i: number): void {
+  this.currentSlideIndex = Math.min(Math.max(i, 0), this.getMaxIndex());
+}
+
 
   // الأسهم (متوافقة مع الأزرار في القالب)
   scrollRight(): void {
@@ -177,13 +196,15 @@ loadPackages(pkgId?: number, openPopup?: boolean): void {
         }));
 
         // Active offer (optional)
-        const active_offer = pkg.active_offer ? {
-          id: pkg.active_offer.id,
-          discount_type: pkg.active_offer.discount_type,
-          discount_value: pkg.active_offer.discount_value,
-          start_date: pkg.active_offer.start_date,
-          end_date: pkg.active_offer.end_date
-        } : undefined;
+        const active_offer = pkg.active_offer
+          ? {
+              id: pkg.active_offer.id,
+              discount_type: pkg.active_offer.discount_type,
+              discount_value: pkg.active_offer.discount_value,
+              start_date: pkg.active_offer.start_date,
+              end_date: pkg.active_offer.end_date
+            }
+          : undefined;
 
         return {
           id: pkg.id,
@@ -192,17 +213,38 @@ loadPackages(pkgId?: number, openPopup?: boolean): void {
           price_after: pkg.price_after,
           price_before: pkg.price_before,
           sessions: pkg.duration,
-          cities,        // store full array
-          features,      // store full feature objects
-          styleType: (['basic', 'premium', 'standard'][index % 3] as 'basic' | 'premium' | 'standard'),
-          active_offer   // store the active offer
+          cities,
+          features,
+          styleType: (
+            ['basic', 'premium', 'standard'][index % 3] as
+              | 'basic'
+              | 'premium'
+              | 'standard'
+          ),
+          active_offer
         };
       });
 
-      this.currentSlideIndex = 0;
+      // === اختيار السلايد الابتدائي ===
+      if (pkgId) {
+        // أولوية: لو جاي id من الرابط → نروحله
+        const foundIndex = this.plans.findIndex(p => p.id === pkgId);
+        this.currentSlideIndex = foundIndex !== -1 ? foundIndex : 0;
+      } else {
+        // مفيش id → حسب نوع الجهاز
+        if (this.visibleCards === 1) {
+          // موبايل → يبدأ من النص
+          this.currentSlideIndex = Math.floor(this.getMaxIndex() / 2);
+        } else {
+          // تابلت/ديسكتوب → يبدأ من أول كارت
+          this.currentSlideIndex = 0;
+        }
+      }
+
       this.clampIndex();
       this.isLoading = false;
 
+      // فتح البوب أب لو مطلوب
       if (openPopup && pkgId) {
         const pkg = this.plans.find(p => p.id === pkgId);
         if (pkg) this.openPopup(pkg);
@@ -214,6 +256,7 @@ loadPackages(pkgId?: number, openPopup?: boolean): void {
     }
   });
 }
+
 
 
 
@@ -334,19 +377,41 @@ getCitiesText(cities: City[]): string {
     this.handleSwipe();
   }
 
-  private handleSwipe(): void {
-    const swipeDistance = this.touchEndX - this.touchStartX;
 
-    if (Math.abs(swipeDistance) > this.SWIPE_THRESHOLD) {
-      if (swipeDistance > 0) {
-        // سوايب يمين => نرجع للكارت اللي قبله
-        this.scrollRight();
-      } else {
-        // سوايب شمال => نروح للكارت اللي بعده
-        this.scrollLeft();
-      }
+  scrollNext() {
+  if (this.currentLang === 'ar') {
+    this.currentSlideIndex--; // عربي: اليمين هو "التالي"
+  } else {
+    this.currentSlideIndex++; // إنجليزي: الشمال هو "التالي"
+  }
+  this.clampIndex();
+}
+
+scrollPrev() {
+  if (this.currentLang === 'ar') {
+    this.currentSlideIndex++; 
+  } else {
+    this.currentSlideIndex--;
+  }
+  this.clampIndex();
+}
+
+private handleSwipe(): void {
+  let swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > this.SWIPE_THRESHOLD) {
+    if (swipeDistance > 0) {
+      // سوايب يمين → الكارت اللي بعده
+      this.scrollLeft();
+    } else {
+      // سوايب شمال → الكارت اللي قبله
+      this.scrollRight();
     }
   }
+}
+
+
+
   goToLogin() {
     this.showLoginPopup = false;
     this.router.navigate(['/auth/login']);

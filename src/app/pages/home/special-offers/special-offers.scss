@@ -568,11 +568,11 @@ button.rounded-circle {
   color: #666;
 }
 
-.product-card .card-body {
+// .product-card .card-body {
 
-  display: flex;
-  flex-direction: column;
-}
+//   display: flex;
+//   flex-direction: column;
+// }
 
 .carousel-indicators {
   justify-content: center;
@@ -795,7 +795,7 @@ a.text-decoration-none:hover .card {
 
 
 .carousel-track {
-  direction: rtl;
+  // direction: rtl;
   flex-direction: row-reverse;
 }
 

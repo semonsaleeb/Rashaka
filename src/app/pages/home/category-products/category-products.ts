@@ -31,6 +31,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   filteredProducts: Product[] = [];
   categories: Category[] = [];
   selectedCategories: number[] = [];
+  lang: 'ar' | 'en' = 'ar'; // default Arabic
 
   progressValue = 80;
   isLoading = true;
@@ -608,4 +609,7 @@ filterByCategory(categoryId: number | 'all') {
   }
   getDotsArray(): number[] { return Array.from({ length: this.getTotalSlides() }, (_, i) => i); }
   goToSlide(index: number) { this.currentSlideIndex = Math.min(Math.max(index, 0), this.getTotalSlides() - 1); }
+  get textDir(): 'rtl' | 'ltr' {
+    return this.lang === 'ar' ? 'rtl' : 'ltr';
+  }
 }
