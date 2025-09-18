@@ -8,13 +8,14 @@ import { Router, RouterModule } from '@angular/router';
 import { FavoriteService } from '../services/favorite.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-cart-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './cart-sidebar.html',
   styleUrl: './cart-sidebar.scss'
 })
@@ -50,11 +51,21 @@ export class CartSidebar implements OnInit, OnDestroy {
   }
 
   // ✅ حفظ الكارت للـ guest
-  private saveGuestCart(cart: any[]): void {
-    localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
-    this.cartItems = cart;
-    this.refreshCartCount();
-  }
+private saveGuestCart(cart: CartItem[]): void {
+  // 1️⃣ حفظ في localStorage
+  localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+
+  // 2️⃣ تحديث الـ cartStateService
+  this.cartState.updateItems(cart.map(item => ({
+    ...item,
+    totalPrice: Number(item.total_price),
+    totalPriceAfterOffers: Number(item.total_price_after_offers),
+  })));
+
+  // 3️⃣ تحديث الـ cartItems المحلي
+  this.cartItems = cart;
+}
+
 
   // ✅ تحديث عدد العناصر
   private refreshCartCount(): void {
@@ -66,19 +77,26 @@ export class CartSidebar implements OnInit, OnDestroy {
   }
 
   // ✅ تحميل الكارت من الـ API
-  private loadCart(): void {
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        this.cartItems = response.data?.items || [];
-        this.refreshCartCount();
-      },
-      error: (err) => this.handleCartError(err)
-    });
-  }
+private loadCart(): void {
+  this.cartService.getCart().subscribe({
+    next: (response) => {
+      this.cartItems = response.data?.items || [];
+      this.refreshCartCount();
+      this.cdr.detectChanges(); // 🟢 يخبر Angular عن التغيير
+    },
+    error: (err) => this.handleCartError(err)
+  });
+}
+
 
   // ====================== LIFECYCLE ======================
 
   ngOnInit(): void {
+     if (!this.isLoggedIn()) {
+    this.cartItems = this.loadGuestCart();
+    this.refreshCartCount();
+    this.cdr.detectChanges(); // 🟢 مهم هنا
+  }
     const sidebarEl = document.getElementById('cartSidebar');
 
     if (sidebarEl) {

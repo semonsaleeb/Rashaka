@@ -72,66 +72,114 @@ export class CartPageComponent implements OnInit {
   }
 
   // ================== Helpers ==================
-  private toNumber(value: any): number {
-    const n = Number(value);
-    return isNaN(n) ? 0 : n;
+ private toNumber(value: any): number {
+  if (typeof value === 'string') {
+    value = value.replace(/,/g, ''); // 🟢 شيل الفواصل
   }
+  const n = Number(value);
+  return isNaN(n) ? 0 : n;
+}
 
   private round2(n: number): number {
     return Math.round((n + Number.EPSILON) * 100) / 100;
   }
 
   // ================== Load Cart ==================
-  loadCart() {
+loadCart() {
+  if (this.token) {
+    // ✅ Logged-in user → call backend API
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        const data: CartResponse = response?.data || {
+          items: [],
+          cart_total: 0,
+          sale_cart_total: 0,
+          discountAmount: 0,
+          totalQuantity: 0
+        };
 
-    if (this.token) {
-      // ✅ Logged-in user
-      this.cartService.getCart().subscribe({
-        next: (response) => {
-          const data: CartResponse = response?.data || {
-            items: [],
-            totalPrice: 0,
-            totalSalePrice: 0,
-            discountAmount: 0,
-            totalQuantity: 0
-          };
+        console.log("🟢 API CartResponse:", data); // <── هنا هتشوف كل الداتا من الـ API
 
-          this.processCartItems(data); // 🔥 هنمرر الـ object كله
-        },
-        error: (err) => console.error('❌ Error loading cart:', err)
-      });
-    } else {
-      // 👤 Guest user
-      const data = this.cartService.getGuestCart();
-      this.processCartItems(data);
-    }
+        this.processCartItems(data); 
+      },
+      error: (err) => console.error('❌ Error loading cart:', err)
+    });
+  } else {
+    // 👤 Guest user → use localStorage
+    const data = this.cartService.getGuestCart();
+
+    console.log("👤 Guest Cart (from localStorage):", data); // <── هنا هتشوف بيانات الضيف
+
+    this.processCartItems(data);
   }
+}
+
 
   /**
    * 🧮 دلوقتي هنستخدم القيم من الـ API مباشرة
    */
-  private processCartItems(data: CartResponse) {
-    const items = Array.isArray(data.items) ? data.items : [];
+  // private processCartItems(data: CartResponse) {
+  //   const items = Array.isArray(data.items) ? data.items : [];
 
-    this.cartItems = items.map((item) => ({
+  //   this.cartItems = items.map((item) => ({
+  //     ...item,
+  //     nameAr: item.product_name_ar || 'منتج بدون اسم',
+  //   }));
+
+  //   // ناخد القيم مباشرة من الـ backend
+  //   this.totalPrice = this.round2(this.toNumber(data.cart_total));
+  //   this.totalSalePrice = this.round2(this.toNumber(data.sale_cart_total));
+  //   // this.discountAmount = this.round2(this.toNumber(data.discountAmount));
+
+  //   // progress (مثال)
+  //   this.progressValue = Math.min((this.totalSalePrice / 1000) * 100, 100);
+
+  //   console.log('📊 Totals (from API):', {
+  //     totalPrice: this.totalPrice,
+  //     totalSalePrice: this.totalSalePrice,
+  //     discountAmount: this.discountAmount
+  //   });
+  // }
+
+  isLoggedIn(): boolean {
+  return !!this.token; // أو لو بتخزن التوكين في service/localStorage
+}
+
+private processCartItems(data: CartResponse) {
+  const items = Array.isArray(data.items) ? data.items : [];
+
+  console.log("🟢 Raw items from API/localStorage:", items);
+
+  this.cartItems = items.map((item) => {
+    console.log("📦 Single item before mapping:", item);
+
+    return {
       ...item,
       nameAr: item.product_name_ar || 'منتج بدون اسم',
-    }));
+      image: item.images?.[0] || '',
+      // أسعار موحدة من الـ API
+      unitPrice: this.toNumber(item.unit_price),
+      saleUnitPrice: this.toNumber(item.sale_unit_price),
+      totalPrice: this.toNumber(item.total_price),
+      totalPriceAfterOffers: this.toNumber(item.total_price_after_offers),
+    };
+  });
 
-    // ناخد القيم مباشرة من الـ backend
-    this.totalPrice = this.round2(this.toNumber(data.cart_total));
-    this.totalSalePrice = this.round2(this.toNumber(data.sale_cart_total));
-    // this.discountAmount = this.round2(this.toNumber(data.discountAmount));
+  console.log("✅ Mapped cartItems:", this.cartItems);
 
-    // progress (مثال)
-    this.progressValue = Math.min((this.totalSalePrice / 1000) * 100, 100);
+  // ناخد الإجماليات من الـ backend زي ما هي
+  this.totalPrice = this.round2(this.toNumber(data.cart_total));
+  this.totalSalePrice = this.round2(this.toNumber(data.sale_cart_total));
+  this.discountAmount = this.round2(this.toNumber(data.discount_value));
 
-    console.log('📊 Totals (from API):', {
-      totalPrice: this.totalPrice,
-      totalSalePrice: this.totalSalePrice,
-      discountAmount: this.discountAmount
-    });
-  }
+  this.progressValue = Math.min((this.totalSalePrice / 1000) * 100, 100);
+
+  console.log('📊 Totals (from API):', {
+    totalPrice: this.totalPrice,
+    totalSalePrice: this.totalSalePrice,
+    discountAmount: this.discountAmount
+  });
+}
 
 
 
@@ -287,4 +335,6 @@ export class CartPageComponent implements OnInit {
   closePopup() {
     this.showLoginPopup = false;
   }
+
+  
 }

@@ -6,6 +6,12 @@ import { CartItem } from '../../models/CartItem';
 @Injectable({ providedIn: 'root' })
 export class CartStateService {
   // 🟢 عدد المنتجات في الكارت
+
+  private parsePrice(value: string | number | undefined): number {
+  const num = Number(value?.toString().replace(/,/g, ''));
+  return isNaN(num) ? 0 : num;
+}
+
   private cartCountSource = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCountSource.asObservable();
 

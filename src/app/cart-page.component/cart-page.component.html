@@ -61,12 +61,26 @@
 
               <!-- السعر -->
               <div class="small">
-                @if ((+item.sale_unit_price! > 0) && (+item.sale_unit_price! !== +item.unit_price!)) {
-                <span class="fw-bold text-success ms-2">{{ item.sale_unit_price }} {{ 'CART.CURRENCY' | translate }}</span>
-                <span class="text-muted text-decoration-line-through">{{ item.unit_price }} {{ 'CART.CURRENCY' | translate }}</span>
-                } @else {
-                <span class="fw-bold text-dark">{{ item.unit_price }} {{ 'CART.CURRENCY' | translate }}</span>
-                }
+                <!-- @if ((+item.unit_price_after_offers! > 0) && (+item.unit_price_after_offers! !== +item.price!)) {
+    <span class="fw-bold text-success ms-2">
+      {{ item.totalPrice }} {{ 'CART.CURRENCY' | translate }}
+    </span>
+    <span class="text-muted text-decoration-line-through">
+      {{ item.total_price_after_offers }} {{ 'CART.CURRENCY' | translate }}
+    </span>
+  } @else {
+    <span class="fw-bold text-dark">
+      {{ item.totalPriceAfterOffers }} {{ 'CART.CURRENCY' | translate }}
+    </span>
+  } -->
+                <span class="fw-bold text-success ms-2">
+                  {{item.total_price_after_offers}} {{ 'CART.CURRENCY' | translate }}
+                </span>
+                <span class="text-muted text-decoration-line-through"
+                  *ngIf="item.totalPrice !== item.totalPriceAfterOffers">
+                  {{ item.totalPrice }} {{ 'CART.CURRENCY' | translate }}
+                </span>
+
               </div>
 
               <!-- أزرار التحكم -->
@@ -99,12 +113,11 @@
 
         <!-- Promo Code -->
         <div class="input-group mb-3">
-          <input type="text" class="form-control text-end rounded-0" [placeholder]="'CART.ENTER_CODE' | translate" [(ngModel)]="promoCode">
-<button 
-  class="btn custom-green-btn rounded-0"
-  (click)="applyPromoCode()">
-  {{ 'CART.APPLY' | translate }}
-</button>
+          <input type="text" class="form-control text-end rounded-0" [placeholder]="'CART.ENTER_CODE' | translate"
+            [(ngModel)]="promoCode">
+          <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">
+            {{ 'CART.APPLY' | translate }}
+          </button>
         </div>
 
         <!-- الأسعار -->
@@ -112,7 +125,7 @@
           <li class="d-flex justify-content-between py-2">
             <span>{{ 'CART.TOTAL' | translate }}</span>
             <span>
-              @if (totalSalePrice) {
+              @if (hasDiscount()) {
               <span class="text-muted text-decoration-line-through me-2">
                 {{ totalPrice | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}
               </span>
@@ -127,16 +140,15 @@
             </span>
           </li>
 
-          <li class="d-flex justify-content-between py-2">
-            <span>{{ 'CART.SHIPPING' | translate }}</span>
-            <span>30.00 {{ 'CART.CURRENCY' | translate }}</span>
-          </li>
-
           <li class="d-flex justify-content-between fw-bold pt-3 border-top my-3">
             <span>{{ 'CART.GRAND_TOTAL' | translate }}</span>
-            <span>{{ (totalSalePrice || totalPrice) + 30 | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}</span>
+            <span>
+              {{ (totalSalePrice || totalPrice) + 30 | number: '1.2-2' }}
+              {{ 'CART.CURRENCY' | translate }}
+            </span>
           </li>
         </ul>
+
 
         @if (!token) {
         <button class="btn custom-green-btn w-100 fw-bold" data-bs-toggle="modal" data-bs-target="#authModal">
@@ -154,7 +166,8 @@
             <div class="modal-content rounded-4 p-3">
               <!-- Close button -->
               <div class="d-flex justify-content-end">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" [attr.aria-label]="'CART.CLOSE' | translate"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  [attr.aria-label]="'CART.CLOSE' | translate"></button>
               </div>
 
               <!-- صورة -->

@@ -83,85 +83,61 @@ export class CategoryProducts implements OnInit, OnDestroy {
   ) { }
 
   // ---------------------- lifecycle ----------------------
-  ngOnInit(): void {
-    // -------------------------
-    // 1️⃣ Handle window resize
-    // -------------------------
-    this.resizeHandler();
-    window.addEventListener('resize', this.resizeHandler);
+ngOnInit(): void {
+  this.resizeHandler();
+  window.addEventListener('resize', this.resizeHandler);
 
-    // -------------------------
-    // 2️⃣ Load products dynamically when query param changes
-    // -------------------------
-    this.route.queryParams.subscribe(params => {
-      const categoryId = params['category_id'] ? Number(params['category_id']) : null;
+  this.route.queryParams.subscribe(params => {
+    const categoryId = params['category_id'] ? Number(params['category_id']) : null;
 
-      if (categoryId) {
-        this.productService.getProductsByCategory(categoryId).subscribe({
-          next: (products) => {
-            // console.log('📦 Products by category:', products);
+    if (categoryId) {
+      this.productService.getProductsByCategory(categoryId).subscribe({
+        next: (products) => {
+          this.allProducts = [...products];
+          this.filteredProducts = [...products];
+          this.categories = this.extractUniqueCategories(this.allProducts);
 
-            this.allProducts = [...products];
-            this.filteredProducts = [...products];
-            this.categories = this.extractUniqueCategories(this.allProducts);
-          },
-          error: (err) => console.error('Error fetching products by category:', err)
-        });
-      } else {
-        this.fetchProductsAndFavorites();
-      }
-    });
-
-    // -------------------------
-    // 3️⃣ Load cart
-    // -------------------------
-    this.loadCart();
-
-    // Subscribe to cart changes
-    this.cartState.cartItems$.subscribe(items => {
-      this.cartItems = items;
-      this.updateCartTotals();
-    });
-
-    // Update cart when offcanvas opens
-    const offcanvasEl = document.getElementById('cartSidebar');
-    if (offcanvasEl) {
-      offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
+          // 🟢 Set start slide in the middle (only on mobile)
+          if (this.isMobile) {
+            this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
+          } else {
+            this.currentSlideIndex = 0;
+          }
+        },
+        error: (err) => console.error('Error fetching products by category:', err)
+      });
+    } else {
+      this.fetchProductsAndFavorites();
     }
+  });
 
-    // -------------------------
-    // 4️⃣ Subscribe to favorites
-    // -------------------------
-    this.favoriteService.favorites$.subscribe(favs => {
-      const favoriteIds = new Set(favs.map(f => f.id));
+  this.loadCart();
 
-      this.allProducts = this.allProducts.map(p => ({
-        ...p,
-        isFavorite: favoriteIds.has(p.id)
-      }));
-      this.filteredProducts = this.filteredProducts.map(p => ({
-        ...p,
-        isFavorite: favoriteIds.has(p.id)
-      }));
+  this.cartState.cartItems$.subscribe(items => {
+    this.cartItems = items;
+    this.updateCartTotals();
+  });
 
-      this.cdr.detectChanges();
-    });
-
-
-    this.translate.use(this.languageService.getCurrentLanguage());
-
-    // Listen for language changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.translate.use(lang);
-    });
-
-    this.currentLang = this.languageService.getCurrentLanguage();
-
-    // Listen for language changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.currentLang = lang;
-    });
+  const offcanvasEl = document.getElementById('cartSidebar');
+  if (offcanvasEl) {
+    offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
   }
+
+  this.favoriteService.favorites$.subscribe(favs => {
+    const favoriteIds = new Set(favs.map(f => f.id));
+
+    this.allProducts = this.allProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
+    this.filteredProducts = this.filteredProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
+
+    this.cdr.detectChanges();
+  });
+
+  this.translate.use(this.languageService.getCurrentLanguage());
+  this.languageService.currentLang$.subscribe(lang => this.translate.use(lang));
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.languageService.currentLang$.subscribe(lang => this.currentLang = lang);
+}
+
 
 
 
@@ -294,30 +270,46 @@ filterByCategory(categoryId: number | 'all') {
 
 
   // المنتجات حسب الكاتيجوري
-  loadProductsByCategory(categoryId: number) {
-    this.productService.getProductsByCategory(categoryId).subscribe({
-      next: products => {
-        this.allProducts = [...products];
-        this.filteredProducts = [...products];
-        this.categories = this.extractUniqueCategories(this.allProducts);
-      },
-      error: err => console.error('Failed to load products by category:', err)
-    });
-  }
+loadProductsByCategory(categoryId: number) {
+  this.productService.getProductsByCategory(categoryId).subscribe({
+    next: products => {
+      this.allProducts = [...products];
+      this.filteredProducts = [...products];
+      this.categories = this.extractUniqueCategories(this.allProducts);
 
-  // كل المنتجات
-  loadAllProducts() {
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        // console.log("🔍 All Products from API:", products); // اطبع هنا
-        this.allProducts = [...products];
-        this.filteredProducts = [...products];
-        this.categories = this.extractUniqueCategories(this.allProducts);
-      },
-      error: (err) => console.error("Failed to load all products:", err)
-    });
-  }
+      // 🟢 Open in middle on mobile
+      if (this.isMobile) {
+        this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
+      } else {
+        this.currentSlideIndex = 0;
+      }
+    },
+    error: err => console.error('Failed to load products by category:', err)
+  });
+}
 
+// كل المنتجات
+loadAllProducts() {
+  this.productService.getProducts().subscribe({
+    next: (products) => {
+      this.allProducts = [...products];
+      this.filteredProducts = [...products];
+      this.categories = this.extractUniqueCategories(this.allProducts);
+
+      // 🟢 Open in middle on mobile
+      if (this.isMobile) {
+        this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
+      } else {
+        this.currentSlideIndex = 0;
+      }
+    },
+    error: (err) => console.error("Failed to load all products:", err)
+  });
+}
+
+getActiveProductIndex(): number {
+  return (this.currentSlideIndex * this.visibleCards) + Math.floor(this.visibleCards / 2);
+}
 
 
   filterBySearch(): void { this.applyCombinedFilters(); }
@@ -463,8 +455,8 @@ filterByCategory(categoryId: number | 'all') {
           quantity: 1,
           product_name: product.name ?? 'منتج بدون اسم',
           product_name_ar: product.name_ar ?? 'منتج بدون اسم',
-          unit_price: String(unitPrice),
-          sale_unit_price: String(saleUnitPrice),
+          unit_price: Number(unitPrice),
+          sale_unit_price: Number(saleUnitPrice),
           final_price: String(finalPrice),
           images: product.images ?? []
         });
@@ -561,6 +553,13 @@ filterByCategory(categoryId: number | 'all') {
     return this.cartItems.find(i => Number(i.product_id) === Number(product_id));
   }
 
+  // category-products.ts
+// get displayName(): string {
+//   return this.currentLang === 'ar'
+//     ? this.product?.name_ar ?? ''
+//     : this.product?.name ?? '';
+// }
+
   // ---------------------- compare ----------------------
   addToCompare(product: Product, event?: Event): void {
     if (event) {
@@ -600,7 +599,6 @@ filterByCategory(categoryId: number | 'all') {
   touchStartX = 0; touchEndX = 0;
   onTouchStart(event: TouchEvent) { this.touchStartX = event.changedTouches[0].screenX; }
   onTouchEnd(event: TouchEvent) { this.touchEndX = event.changedTouches[0].screenX; this.handleSwipe(); }
-  handleSwipe(): void { const swipeDistance = this.touchEndX - this.touchStartX; if (Math.abs(swipeDistance) > 50) { swipeDistance > 0 ? this.nextSlide() : this.prevSlide(); } }
   nextSlide(): void { const maxIndex = Math.max(0, this.getTotalSlides() - 1); if (this.currentSlideIndex < maxIndex) this.currentSlideIndex++; }
   prevSlide(): void { if (this.currentSlideIndex > 0) this.currentSlideIndex--; }
   getTotalSlides(): number {
@@ -612,4 +610,23 @@ filterByCategory(categoryId: number | 'all') {
   get textDir(): 'rtl' | 'ltr' {
     return this.lang === 'ar' ? 'rtl' : 'ltr';
   }
+  // handleSwipe(): void { const swipeDistance = this.touchEndX - this.touchStartX; if (Math.abs(swipeDistance) > 50) { swipeDistance > 0 ? this.nextSlide() : this.prevSlide(); } }
+
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) {
+    const isRTL = this.currentLang === 'ar';
+
+    if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
+      // سوايب يمين في LTR أو شمال في RTL → prev
+      this.prevSlide();
+    } else {
+      // سوايب شمال في LTR أو يمين في RTL → next
+      this.nextSlide();
+    }
+  }
+}
+
+  
 }

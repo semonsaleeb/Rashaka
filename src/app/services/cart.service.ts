@@ -36,27 +36,81 @@ export class CartService {
   }
 
   /** ----------------- GUEST CART RESPONSE ----------------- */
-getGuestCart(): CartResponse {
-  const items = this.loadGuestCart().map(i => {
-    const unit_price = Number(i.unit_price ?? "0");
-    const final_price = Number(i.final_price ?? "0");
 
-    return {
-      ...i,
-      unit_price: unit_price.toString(),
-      final_price: final_price.toString(),
-      total_price: (unit_price * i.quantity).toString(),
-      total_sale_price: (final_price * i.quantity).toString()
-    };
-  });
-
-  const cart_total = items.reduce((sum, i) => sum + Number(i.total_price), 0);
-  const sale_cart_total = items.reduce((sum, i) => sum + Number(i.total_sale_price), 0);
-  const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
-
-  return { items, cart_total, sale_cart_total, totalQuantity };
+  // جوه الكلاس
+ /** ----------------- HELPER ----------------- */
+private parsePrice(value: any): number {
+  if (value === null || value === undefined) return 0;
+  const num = Number(value);
+  return isNaN(num) ? 0 : num;
 }
 
+/** ----------------- NORMALIZE CART ITEM ----------------- */
+private normalizeItem(item: any, isGuest: boolean): CartItem {
+  const quantity = item.quantity ?? 1;
+
+  if (isGuest) {
+    // Guest user → data comes from localStorage
+    const price = this.parsePrice(item.unit_price);
+    const sale_price = this.parsePrice(item.sale_unit_price);
+
+    return {
+      id: item.id ?? 0,
+      product_id: item.product_id,
+      product_name: item.product_name ?? 'منتج بدون اسم',
+      product_name_ar: item.product_name_ar ?? 'منتج بدون اسم',
+      images: item.images ?? [],
+      quantity,
+      price,
+      sale_price,
+      total_price: price * quantity,
+      total_price_after_offers: (sale_price || price) * quantity,
+      final_price: String(sale_price || price),
+      unit_price_after_offers: String(sale_price || price),
+    };
+  } else {
+    // Logged-in user → data comes from API
+    const price = this.parsePrice(item.price);
+    const sale_price = this.parsePrice(item.sale_price ?? item.price);
+    const quantityAPI = item.cart_quantity ?? 1;
+
+    return {
+      id: item.id ?? 0,
+      product_id: item.id ?? 0,
+      product_name: item.name ?? 'منتج بدون اسم',
+      product_name_ar: item.name_ar ?? 'منتج بدون اسم',
+      images: item.images ?? [],
+      quantity: quantityAPI,
+      price,
+      sale_price,
+      total_price: price * quantityAPI,
+      total_price_after_offers: sale_price * quantityAPI,
+      final_price: String(sale_price),
+      unit_price_after_offers: String(sale_price),
+    };
+  }
+}
+
+
+
+
+  getGuestCart(): CartResponse {
+    const rawItems = this.loadGuestCart();
+    const items = rawItems.map(i => this.normalizeItem(i, true));
+
+    const cart_total = items.reduce((sum, i) => sum + Number(i.total_price), 0);
+    const sale_cart_total = items.reduce((sum, i) => sum + Number(i.total_price_after_offers), 0);
+    const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
+
+    return { items, cart_total, sale_cart_total, totalQuantity };
+  }
+
+  getCart(): Observable<{ status: string; data: CartResponse }> {
+    return this.http.get<{ status: string; data: CartResponse }>(
+      `${this.apiUrl}/cart`,
+      { headers: this.getHeaders().set('Accept', 'application/json') }
+    );
+  }
 
 
   /** ----------------- COUNT HELPERS ----------------- */
@@ -72,16 +126,39 @@ getGuestCart(): CartResponse {
   }
 
   /** ----------------- GUEST CART ACTIONS ----------------- */
-  addGuestItem(product: CartItem) {
-    const cart = this.loadGuestCart();
-    const existing = cart.find(i => i.product_id === product.product_id);
-    if (existing) {
-      existing.quantity += product.quantity;
-    } else {
-      cart.push(product);
-    }
-    this.saveGuestCart(cart);
+addGuestItem(product: CartItem) {
+  // 1️⃣ تحميل الكارت الحالي من localStorage
+  const cart = this.loadGuestCart();
+
+  // 2️⃣ Normalize للمنتج الجديد
+  const normalizedProduct = this.normalizeItem(product, true);
+
+  // 3️⃣ البحث عن المنتج لو موجود
+  const existing = cart.find(i => i.product_id === normalizedProduct.product_id);
+
+  if (existing) {
+    // ✅ تأكد من أن جميع القيم أرقام قبل الضرب
+    const price = Number(normalizedProduct.price) || 0;
+    const salePrice = Number(normalizedProduct.sale_price) || 0;
+    const quantity = Number(existing.quantity) || 0;
+
+    // ✅ تحديث القيم الرقمية
+    existing.quantity += quantity;
+    existing.total_price = price * existing.quantity;
+    existing.total_price_after_offers = salePrice * existing.quantity;
+    existing.final_price = String(salePrice);
+    existing.unit_price_after_offers = String(salePrice);
+  } else {
+    cart.push(normalizedProduct);
   }
+
+  // 4️⃣ حفظ الكارت بعد التعديل
+  this.saveGuestCart(cart);
+}
+
+
+
+
 
   updateGuestQuantity(productId: number, quantity: number) {
     const cart = this.loadGuestCart();
@@ -107,12 +184,6 @@ getGuestCart(): CartResponse {
     );
   }
 
-  getCart(): Observable<{ status: string; data: CartResponse }> {
-    return this.http.get<{ status: string; data: CartResponse }>(
-      `${this.apiUrl}/cart`,
-      { headers: this.getHeaders().set('Accept', 'application/json') }
-    );
-  }
 
   reduceCartItem(productId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/cart/reduce`, { product_id: productId },

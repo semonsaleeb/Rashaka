@@ -5,7 +5,7 @@ export interface Product {
   category_id: number;
   id: number;
   name: string;
-  name_ar?: string | null;
+  name_ar: string | null;
   description: string;
   description_ar: string;
   stock: number;

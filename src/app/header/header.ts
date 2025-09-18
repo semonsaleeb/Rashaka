@@ -33,7 +33,7 @@ export class Header implements OnInit {
 
   currentLang = 'ar';
   currentDirection: 'rtl' | 'ltr' = 'rtl';
-
+  token: string | null = null;
   selectedLanguage = 'العربية';
   searchQuery = '';
   isLoggedIn = false;
@@ -89,6 +89,8 @@ export class Header implements OnInit {
 
 
   ngOnInit(): void {
+        this.token = localStorage.getItem('token'); // 👈 تجيب التوكين من التخزين
+
     // -------------------------
     // 1️⃣ Update Cart Count
     // -------------------------
@@ -215,22 +217,27 @@ export class Header implements OnInit {
     return Array.from(categoryMap.values());
   }
 
-  updateCartCount(): void {
+ updateCartCount(): void {
+  if (this.token) {
     this.cartService.getCart().subscribe({
       next: (response) => {
-        this.cartCount = response.data.totalQuantity;
+        this.cartCount =Number( response.data.totalQuantity);
       },
       error: (err: HttpErrorResponse) => {
         const apiMessage = err?.error?.message;
         if (err.status === 401 || apiMessage === 'Unauthenticated.') {
-          this.cartCount = 0; // reset
+          this.cartCount = 0; // reset لو التوكين بايظ
         } else {
           console.error('Error fetching cart count:', err);
         }
       }
     });
-
+  } else {
+    // Guest cart → اشتغل على localStorage
+    this.cartCount = this.cartService.getGuestCartCount();
   }
+}
+
 
 
 
