@@ -12,23 +12,27 @@ import { LanguageService } from '../../../services/language.service';
   imports: [CommonModule, RouterModule, TranslateModule],
 })
 export class OurService {
-  cards = [
-    {
-      icon: 'assets/Images/22. Stethoscope.svg',
-      titleKey: 'SERVICES.CARD1.TITLE',
-      descriptionKey: 'SERVICES.CARD1.DESCRIPTION'
-    },
-    {
-      icon: 'assets/Images/Doctor.svg',
-      titleKey: 'SERVICES.CARD2.TITLE',
-      descriptionKey: 'SERVICES.CARD2.DESCRIPTION'
-    },
-    {
-      icon: 'assets/Images/Rice Bowl.svg',
-      titleKey: 'SERVICES.CARD3.TITLE',
-      descriptionKey: 'SERVICES.CARD3.DESCRIPTION'
-    }
-  ];
+ cards = [
+  {
+    icon: 'assets/Images/22. Stethoscope.svg',
+    titleKey: 'SERVICES.CARD1.TITLE',
+    descriptionKey: 'SERVICES.CARD1.DESCRIPTION',
+    link: '/reservation/free'
+  },
+  {
+    icon: 'assets/Images/Doctor.svg',
+    titleKey: 'SERVICES.CARD2.TITLE',
+    descriptionKey: 'SERVICES.CARD2.DESCRIPTION',
+    link: '/reservation/all'
+  },
+  {
+    icon: 'assets/Images/Rice Bowl.svg',
+    titleKey: 'SERVICES.CARD3.TITLE',
+    descriptionKey: 'SERVICES.CARD3.DESCRIPTION',
+    link: '/reservation/all'
+  }
+];
+
   direction: 'ltr' | 'rtl' = 'ltr';
 
   constructor(

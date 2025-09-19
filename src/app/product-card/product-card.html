@@ -2,43 +2,45 @@
 @if (!isLoading && product) {
 <div class="container py-4 mt-5" dir="rtl">
   <div class="row g-4">
-    <!-- Product Image + Thumbnails -->
-    <div class="col-md-5 rounded" style=" border: 1px solid #00000033;">
-      <div class="p-3 bg-white text-center position-relative">
-        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+ <!-- Product Image + Thumbnails -->
+<div class="col-md-5 rounded" style="border: 1px solid #00000033;">
+  <div class="p-3 bg-white text-center position-relative">
 
-          <!-- Favorite button -->
-          <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-2"
-            style="border-color: #00000033; z-index: 2;" (click)="toggleFavorite(product, $event)">
-            <i [ngClass]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-muted'"></i>
-          </button>
+    <!-- Favorite button -->
+    <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-2"
+      style="border-color: #00000033; z-index: 2;" (click)="toggleFavorite(product, $event)">
+      <i [ngClass]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-muted'"></i>
+    </button>
 
-
-
-          <!-- Carousel Images -->
-          <div class="carousel-inner">
-            @for (image of product.images; track image; let i = $index) {
-            <div class="carousel-item pt-5" [class.active]="i === 0">
-              <img [src]="image" class="img-fluid" style="height: 300px; object-fit: contain;" />
-            </div>
-            }
-          </div>
-        </div>
-
-        <!-- Thumbnails -->
-        <div class="d-flex justify-content-center gap-2 mt-2">
-          @for (image of product.images; track image) {
-          <img [src]="image" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: contain;" />
-          }
-        </div>
-      </div>
+    <!-- Main Image -->
+    <div class="mb-2">
+      <img 
+        [src]="product.images[selectedImageIndex]" 
+        class="img-fluid" 
+        style="height: 300px; object-fit: contain;"
+      />
     </div>
+
+    <!-- Thumbnails -->
+    <div class="d-flex justify-content-center gap-2 mt-2">
+      <img 
+        *ngFor="let image of product.images; let i = index"
+        [src]="image" 
+        class="img-thumbnail"
+        [class.border-primary]="i === selectedImageIndex"
+        style="width: 60px; height: 60px; object-fit: contain; cursor: pointer;"
+        (click)="selectedImageIndex = i"
+      />
+    </div>
+
+  </div>
+</div>
+
 
     <!-- Product Info -->
     <div class="col-md-7">
       <div class="p-4 bg-white h-100 d-flex flex-column">
-        <p *ngIf="product.is_top_seller"
-          class=" d-inline-flex align-items-center p-2 rounded w-25"
+        <p *ngIf="product.is_top_seller" class=" d-inline-flex align-items-center p-2 rounded w-25"
           style="border: 1px solid #00000033;">
           <img src="assets/Images/star-circle.svg" alt="" class="me-2 mx-2"> الأكثر مبيعاً
         </p>
@@ -92,10 +94,11 @@
         <!-- Add to cart -->
         <div class="d-flex gap-2 mb-3">
           <button class="btn px-4 d-flex align-items-center justify-content-center"
-            style="background-color:#7ED321; color:black; font-weight:600;" (click)="addToCart()">
+            style="background-color:#7ED321; color:black; font-weight:600;" (click)="addToCart(product, $event)">
             <img src="assets/Images/shopping-cart-add-01.svg" width="20" />
             <span class="ms-2">إضافة للعربة</span>
           </button>
+
         </div>
 
         <div class="d-flex gap-2 mb-3">

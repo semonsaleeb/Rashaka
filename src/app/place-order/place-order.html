@@ -14,7 +14,7 @@
         <!-- Contact Information -->
         <h5>{{ 'CART.CONTACT_INFO' | translate }}</h5>
         <div class="row mb-3">
-          
+
           <div class="col-md-6">
             <label>{{ 'CART.EMAIL' | translate }}</label>
             <input type="email" class="form-control" [(ngModel)]="userEmail" name="email" [readonly]="isLoggedIn"
@@ -96,9 +96,10 @@
               {{ item.product_name }} × {{ item.quantity }}
             </span>
             <span>
-              {{ (item.sale_unit_price ? item.sale_unit_price : item.unit_price) * item.quantity | number : '1.2-2' }}
+              {{ (item.sale_unit_price || item.unit_price) * item.quantity | number : '1.2-2' }}
               {{ 'CART.CURRENCY' | translate }}
             </span>
+
           </div>
           }
         </div>
@@ -123,8 +124,42 @@
           </li>
         </ul>
 
-        <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">{{ 'CART.PLACE_ORDER' | translate
-          }}</button>
+        <div class="d-flex gap-2">
+          <button class="btn custom-green-btn w-100 fw-bold" (click)="placeOrder()">
+            {{ 'CART.PLACE_ORDER' | translate }}
+          </button>
+
+          <button class="btn btn-danger w-100 fw-bold" (click)="cancelOrder()">
+            {{ 'CART.CANCEL_ORDER' | translate }}
+          </button>
+
+          <!-- Cancel Order Modal -->
+          <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cancelOrderModalLabel">   {{ 'CART.CANCEL_ORDER_TITLE' | translate }}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  {{ 'CART.CANCEL_ORDER_CONFIRMATION' | translate }}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ 'CART.NO' | translate }}
+                  </button>
+                  <button type="button" class="btn btn-danger" (click)="confirmCancelOrder()">
+                    {{ 'CART.YES_CANCEL' | translate }}
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
   </div>

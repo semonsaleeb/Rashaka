@@ -45,7 +45,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   selectedCategory: number | 'all' = 'all';
 
   currentLang: string = 'ar';
-  
+
   cartItems: CartItem[] = [];
   subtotal = 0;
   total = 0;
@@ -55,7 +55,9 @@ export class CategoryProducts implements OnInit, OnDestroy {
     { label: '0-1000', min: 0, max: 1000, selected: false },
     { label: '1000-1500', min: 1000, max: 1500, selected: false },
     { label: '1500-2000', min: 1500, max: 2000, selected: false },
-    { label: '2000-2500', min: 2000, max: 2500, selected: false }
+    { label: '2000-2500', min: 2000, max: 2500, selected: false },
+        { label: '2500-4000', min: 2500, max: 4000 , selected: false }
+
   ];
 
   compareProducts: any[] = [];
@@ -79,64 +81,77 @@ export class CategoryProducts implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    
   ) { }
 
   // ---------------------- lifecycle ----------------------
-ngOnInit(): void {
+  ngOnInit(): void {
+  // Handle responsive layout
   this.resizeHandler();
   window.addEventListener('resize', this.resizeHandler);
 
+  // ✅ Read category_id from URL query parameters
   this.route.queryParams.subscribe(params => {
     const categoryId = params['category_id'] ? Number(params['category_id']) : null;
 
-    if (categoryId) {
+    if (categoryId && !isNaN(categoryId)) {
+      // Pre-select the category
+      if (!this.selectedCategories.includes(categoryId)) {
+        this.selectedCategories.push(categoryId);
+      }
+
+      // Fetch products for this category
       this.productService.getProductsByCategory(categoryId).subscribe({
         next: (products) => {
           this.allProducts = [...products];
           this.filteredProducts = [...products];
           this.categories = this.extractUniqueCategories(this.allProducts);
 
-          // 🟢 Set start slide in the middle (only on mobile)
-          if (this.isMobile) {
-            this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
-          } else {
-            this.currentSlideIndex = 0;
-          }
+          // Set start slide (center for mobile)
+          this.currentSlideIndex = this.isMobile
+            ? Math.floor(this.getTotalSlides() / 2)
+            : 0;
+
+          // Apply filters including the pre-selected category
+          this.applyCombinedFilters();
         },
         error: (err) => console.error('Error fetching products by category:', err)
       });
     } else {
+      // Fetch all products if no category_id in URL
       this.fetchProductsAndFavorites();
     }
   });
 
+  // Load cart and subscribe to updates
   this.loadCart();
-
   this.cartState.cartItems$.subscribe(items => {
     this.cartItems = items;
     this.updateCartTotals();
   });
 
-  const offcanvasEl = document.getElementById('cartSidebar');
-  if (offcanvasEl) {
-    offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
-  }
-
+  // Subscribe to favorite changes
   this.favoriteService.favorites$.subscribe(favs => {
     const favoriteIds = new Set(favs.map(f => f.id));
-
     this.allProducts = this.allProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
     this.filteredProducts = this.filteredProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
-
     this.cdr.detectChanges();
   });
 
+  // Handle language changes
   this.translate.use(this.languageService.getCurrentLanguage());
   this.languageService.currentLang$.subscribe(lang => this.translate.use(lang));
   this.currentLang = this.languageService.getCurrentLanguage();
   this.languageService.currentLang$.subscribe(lang => this.currentLang = lang);
+
+  // Optional: reload cart when sidebar opens
+  const offcanvasEl = document.getElementById('cartSidebar');
+  if (offcanvasEl) {
+    offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
+  }
 }
+
 
 
 
@@ -161,32 +176,32 @@ ngOnInit(): void {
 
   // ---------------------- products & favorites ----------------------
 
-private fetchProductsAndFavorites(categoryId?: number): void {
-  this.isLoading = true;
-  const token = localStorage.getItem('token');
+  private fetchProductsAndFavorites(categoryId?: number): void {
+    this.isLoading = true;
+    const token = localStorage.getItem('token');
 
-  const products$ = categoryId && categoryId !== 0
-    ? this.productService.getProductsByCategory(categoryId)
-    : this.productService.getProducts();
+    const products$ = categoryId && categoryId !== 0
+      ? this.productService.getProductsByCategory(categoryId)
+      : this.productService.getProducts();
 
-  products$.subscribe({
-    next: (products) => {
-      this.allProducts = [...products];
-      this.filteredProducts = [...products];
-      this.categories = this.extractUniqueCategories(this.allProducts);
+    products$.subscribe({
+      next: (products) => {
+        this.allProducts = [...products];
+        this.filteredProducts = [...products];
+        this.categories = this.extractUniqueCategories(this.allProducts);
 
-      // 🟢 بعد ما المنتجات تتجاب نجيب الفيفوريت
-      this.favoriteService.loadFavorites(token).subscribe({
-        next: () => (this.isLoading = false),
-        error: () => (this.isLoading = false),
-      });
-    },
-    error: (err) => {
-      console.error('Failed to load products:', err);
-      this.isLoading = false;
-    },
-  });
-}
+        // 🟢 بعد ما المنتجات تتجاب نجيب الفيفوريت
+        this.favoriteService.loadFavorites(token).subscribe({
+          next: () => (this.isLoading = false),
+          error: () => (this.isLoading = false),
+        });
+      },
+      error: (err) => {
+        console.error('Failed to load products:', err);
+        this.isLoading = false;
+      },
+    });
+  }
 
 
 
@@ -227,89 +242,89 @@ private fetchProductsAndFavorites(categoryId?: number): void {
   }
 
   // ---------------------- filters ----------------------
-filterByCategorycarousel(categoryId: number | 'all') {
-  this.selectedCategory = categoryId;
+  filterByCategorycarousel(categoryId: number | 'all') {
+    this.selectedCategory = categoryId;
 
-  if (categoryId === 'all') {
-    // رجّع كل المنتجات الأصلية
-    this.filteredProducts = [...this.allProducts];
-  } else {
-    // فلترة محلياً من اللي عندك
-    this.filteredProducts = this.allProducts.filter(p =>
-      p.categories.some(c => c.id === categoryId)
-    );
+    if (categoryId === 'all') {
+      // رجّع كل المنتجات الأصلية
+      this.filteredProducts = [...this.allProducts];
+    } else {
+      // فلترة محلياً من اللي عندك
+      this.filteredProducts = this.allProducts.filter(p =>
+        p.categories.some(c => c.id === categoryId)
+      );
+    }
+
+    // Reset السلايدر
+    this.currentSlideIndex = 0;
+  }
+  trackByCategory(index: number, category: Category): number {
+    return category.id;
   }
 
-  // Reset السلايدر
-  this.currentSlideIndex = 0;
-}
-trackByCategory(index: number, category: Category): number {
-  return category.id;
-}
 
 
+  filterByCategory(categoryId: number | 'all') {
+    this.selectedCategory = categoryId;
 
-filterByCategory(categoryId: number | 'all') {
-  this.selectedCategory = categoryId;
+    // بس حدث الـ query param
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { category_id: categoryId },
+      queryParamsHandling: 'merge',
+    });
 
-  // بس حدث الـ query param
-  this.router.navigate([], {
-    relativeTo: this.route,
-    queryParams: { category_id: categoryId },
-    queryParamsHandling: 'merge',
-  });
+    if (categoryId === 'all') {
+      this.productService.getProducts()
+    } else {
+      this.productService.getProductsByCategory(categoryId)
 
-  if (categoryId === 'all') {
-    this.productService.getProducts()
-  } else {
-    this.productService.getProductsByCategory(categoryId)
-    
+    }
   }
-}
 
 
 
   // المنتجات حسب الكاتيجوري
-loadProductsByCategory(categoryId: number) {
-  this.productService.getProductsByCategory(categoryId).subscribe({
-    next: products => {
-      this.allProducts = [...products];
-      this.filteredProducts = [...products];
-      this.categories = this.extractUniqueCategories(this.allProducts);
+  loadProductsByCategory(categoryId: number) {
+    this.productService.getProductsByCategory(categoryId).subscribe({
+      next: products => {
+        this.allProducts = [...products];
+        this.filteredProducts = [...products];
+        this.categories = this.extractUniqueCategories(this.allProducts);
 
-      // 🟢 Open in middle on mobile
-      if (this.isMobile) {
-        this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
-      } else {
-        this.currentSlideIndex = 0;
-      }
-    },
-    error: err => console.error('Failed to load products by category:', err)
-  });
-}
+        // 🟢 Open in middle on mobile
+        if (this.isMobile) {
+          this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
+        } else {
+          this.currentSlideIndex = 0;
+        }
+      },
+      error: err => console.error('Failed to load products by category:', err)
+    });
+  }
 
-// كل المنتجات
-loadAllProducts() {
-  this.productService.getProducts().subscribe({
-    next: (products) => {
-      this.allProducts = [...products];
-      this.filteredProducts = [...products];
-      this.categories = this.extractUniqueCategories(this.allProducts);
+  // كل المنتجات
+  loadAllProducts() {
+    this.productService.getProducts().subscribe({
+      next: (products) => {
+        this.allProducts = [...products];
+        this.filteredProducts = [...products];
+        this.categories = this.extractUniqueCategories(this.allProducts);
 
-      // 🟢 Open in middle on mobile
-      if (this.isMobile) {
-        this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
-      } else {
-        this.currentSlideIndex = 0;
-      }
-    },
-    error: (err) => console.error("Failed to load all products:", err)
-  });
-}
+        // 🟢 Open in middle on mobile
+        if (this.isMobile) {
+          this.currentSlideIndex = Math.floor(this.getTotalSlides() / 2);
+        } else {
+          this.currentSlideIndex = 0;
+        }
+      },
+      error: (err) => console.error("Failed to load all products:", err)
+    });
+  }
 
-getActiveProductIndex(): number {
-  return (this.currentSlideIndex * this.visibleCards) + Math.floor(this.visibleCards / 2);
-}
+  getActiveProductIndex(): number {
+    return (this.currentSlideIndex * this.visibleCards) + Math.floor(this.visibleCards / 2);
+  }
 
 
   filterBySearch(): void { this.applyCombinedFilters(); }
@@ -323,19 +338,42 @@ getActiveProductIndex(): number {
     this.applyCombinedFilters();
   }
 
-  applyCombinedFilters(): void {
-    const q = this.searchQuery.toLowerCase().trim();
-    this.filteredProducts = this.allProducts.filter(p => {
-      const matchesCategory = this.selectedCategories.length === 0 || p.categories.some(c => this.selectedCategories.includes(c.id));
-      const name = (p.name_ar ?? '').toLowerCase();
-      const matchesSearch = q === '' || name.includes(q);
-      const priceNum = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
-      const meetsMin = this.priceMin === null || Number( priceNum) >= this.priceMin;
-      const meetsMax = this.priceMax === null || Number( priceNum) <= this.priceMax;
-      return matchesCategory && matchesSearch && meetsMin && meetsMax;
-    });
-    this.currentSlideIndex = 0;
-  }
+applyCombinedFilters(): void {
+  const q = this.searchQuery.toLowerCase().trim();
+
+  this.filteredProducts = this.allProducts.filter(p => {
+    const matchesCategory =
+      this.selectedCategories.length === 0 ||
+      p.categories?.some(c => this.selectedCategories.includes(c.id));
+
+    const name = (p.name_ar ?? '').toLowerCase();
+    const matchesSearch = q === '' || name.includes(q);
+
+    // Parse price safely
+    let priceNum = 0;
+    if (p.price !== null && p.price !== undefined) {
+      priceNum =
+        typeof p.price === 'string'
+          ? parseFloat(p.price.replace(/,/g, '')) || 0
+          : Number(p.price) || 0;
+    }
+
+    // Predefined ranges
+    const selectedRanges = this.predefinedRanges.filter(r => r.selected);
+    const matchesRange =
+      selectedRanges.length === 0 ||
+      selectedRanges.some(r => priceNum >= r.min && priceNum <= r.max);
+
+    // Price from inputs
+    const meetsMin = this.priceMin == null || priceNum >= this.priceMin;
+    const meetsMax = this.priceMax == null || priceNum <= this.priceMax;
+
+    return matchesCategory && matchesSearch && matchesRange && meetsMin && meetsMax;
+  });
+
+  this.currentSlideIndex = 0;
+}
+
 
   // ---------------------- auth ----------------------
   isLoggedIn(): boolean { return this.auth.isLoggedIn(); }
@@ -432,6 +470,8 @@ getActiveProductIndex(): number {
     this.cartState.updateCount(count);
   }
 
+
+
   // ---------------------- cart actions ----------------------
   addToCart(product: Product, event?: Event): void {
     if (event) {
@@ -439,9 +479,10 @@ getActiveProductIndex(): number {
       event.stopPropagation();
     }
 
-    const unitPrice = Number(product.price_before ?? product.price ?? product.original_price ?? 0);
-    const saleUnitPrice = Number(product.price_after ?? product.sale_price ?? 0);
+    const unitPrice = safeNumber(product.price_before ?? product.price ?? product.original_price ?? 0);
+    const saleUnitPrice = safeNumber(product.price_after ?? product.sale_price ?? 0);
     const finalPrice = saleUnitPrice > 0 ? saleUnitPrice : unitPrice;
+
 
     if (!this.isLoggedIn()) {
       const cart = this.loadGuestCart();
@@ -449,30 +490,32 @@ getActiveProductIndex(): number {
 
       if (existing) {
         existing.quantity += 1;
+        console.log("🔄 Updated Guest Cart Item:", existing);
       } else {
-        cart.push({
+        const newItem = {
           product_id: product.id,
-          quantity: 1,
           product_name: product.name ?? 'منتج بدون اسم',
           product_name_ar: product.name_ar ?? 'منتج بدون اسم',
-          unit_price: Number(unitPrice),
-          sale_unit_price: Number(saleUnitPrice),
+          quantity: 1,
+          unit_price: unitPrice,
+          sale_unit_price: saleUnitPrice || unitPrice,
           final_price: String(finalPrice),
           images: product.images ?? []
-        });
+        };
+
+        console.log("🆕 Adding New Guest Cart Item:", newItem);
+        cart.push(newItem);
       }
 
+      console.log("🛒 Guest Cart Before Save:", cart);
       this.saveGuestCart(cart);
-
-      // ❌ شيلنا الكود اللي بيفتح السلة أوتوماتيك
       return;
     }
 
-    // Logged-in user
     this.cartService.addToCart(product.id, 1).subscribe({
       next: () => {
+        console.log("✅ Added to Logged-in Cart:", product);
         this.loadCart();
-        // ❌ شيلنا الكود اللي بيفتح السلة أوتوماتيك
       },
       error: (err) => this.handleCartActionError(err)
     });
@@ -554,11 +597,11 @@ getActiveProductIndex(): number {
   }
 
   // category-products.ts
-// get displayName(): string {
-//   return this.currentLang === 'ar'
-//     ? this.product?.name_ar ?? ''
-//     : this.product?.name ?? '';
-// }
+  // get displayName(): string {
+  //   return this.currentLang === 'ar'
+  //     ? this.product?.name_ar ?? ''
+  //     : this.product?.name ?? '';
+  // }
 
   // ---------------------- compare ----------------------
   addToCompare(product: Product, event?: Event): void {
@@ -612,21 +655,29 @@ getActiveProductIndex(): number {
   }
   // handleSwipe(): void { const swipeDistance = this.touchEndX - this.touchStartX; if (Math.abs(swipeDistance) > 50) { swipeDistance > 0 ? this.nextSlide() : this.prevSlide(); } }
 
-handleSwipe(): void {
-  const swipeDistance = this.touchEndX - this.touchStartX;
+  handleSwipe(): void {
+    const swipeDistance = this.touchEndX - this.touchStartX;
 
-  if (Math.abs(swipeDistance) > 50) {
-    const isRTL = this.currentLang === 'ar';
+    if (Math.abs(swipeDistance) > 50) {
+      const isRTL = this.currentLang === 'ar';
 
-    if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
-      // سوايب يمين في LTR أو شمال في RTL → prev
-      this.prevSlide();
-    } else {
-      // سوايب شمال في LTR أو يمين في RTL → next
-      this.nextSlide();
+      if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
+        // سوايب يمين في LTR أو شمال في RTL → prev
+        this.prevSlide();
+      } else {
+        // سوايب شمال في LTR أو يمين في RTL → next
+        this.nextSlide();
+      }
     }
   }
+
+
 }
 
-  
+function safeNumber(value: any): number {
+  if (value == null) return 0;
+  if (typeof value === 'string') {
+    return Number(value.replace(/,/g, '')); // 🟢 يشيل الكوما
+  }
+  return Number(value);
 }

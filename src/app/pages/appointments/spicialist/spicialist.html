@@ -69,15 +69,20 @@
           <tr>
             @for (day of week; track $index) {
             <td>
-              @if (day) {
-              <button class="btn btn-sm border-0" [disabled]="!isDateAvailable(day)" [ngClass]="{
-                          'btn-danger': selectedDate === day && isDateAvailable(day),
-                          'btn-primary': isDateAvailable(day) && selectedDate !== day,
-                          ' text-muted': !isDateAvailable(day)
-                        }" (click)="selectDate(day)">
-                {{ day | date:'d' }}
-              </button>
-              } @else {
+            @if (day) {
+  <button 
+    class="btn btn-sm border-0"
+    [disabled]="!isDateAvailable(day)"
+    [ngClass]="{
+      'btn-danger': selectedDate === day && isDateAvailable(day),
+      'btn-primary': isDateAvailable(day) && selectedDate !== day,
+      'text-muted': !isDateAvailable(day)
+    }"
+    (click)="selectDate(day)">
+    {{ day | date:'d' }}
+  </button>
+}
+ @else {
               <span>&nbsp;</span>
               }
             </td>

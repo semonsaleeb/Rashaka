@@ -99,15 +99,15 @@
 
                     <!-- Product Details -->
                     <div class="card-body  mx-3">
-                     <!-- show first 30 chars and add "..." only if longer -->
-<h6 class="card-title fw-bold text-black">
-  {{
-    (currentLang === 'ar' ? product?.name_ar : product?.name) ?? '' | slice:0:30
-  }}
-  {{
-    ((currentLang === 'ar' ? product?.name_ar : product?.name) ?? '').length > 30 ? '...' : ''
-  }}
-</h6>
+                      <!-- show first 30 chars and add "..." only if longer -->
+                      <h6 class="card-title fw-bold text-black">
+                        {{
+                        (currentLang === 'ar' ? product?.name_ar : product?.name) ?? '' | slice:0:30
+                        }}
+                        {{
+                        ((currentLang === 'ar' ? product?.name_ar : product?.name) ?? '').length > 30 ? '...' : ''
+                        }}
+                      </h6>
 
 
 
@@ -424,14 +424,14 @@
             <div class="card-body  px-3 pb-4 d-flex flex-column justify-content-between flex-grow-1">
 
               <div>
-               <h6 class="card-title fw-bold text-black">
-  {{
-    (currentLang === 'ar' ? product?.name_ar : product?.name) ?? '' | slice:0:30
-  }}
-  {{
-    ((currentLang === 'ar' ? product?.name_ar : product?.name) ?? '').length > 30 ? '...' : ''
-  }}
-</h6>
+                <h6 class="card-title fw-bold text-black">
+                  {{
+                  (currentLang === 'ar' ? product?.name_ar : product?.name) ?? '' | slice:0:30
+                  }}
+                  {{
+                  ((currentLang === 'ar' ? product?.name_ar : product?.name) ?? '').length > 30 ? '...' : ''
+                  }}
+                </h6>
 
                 <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
                   {{ currentLang === 'ar' ? product.description_ar : product.description }}

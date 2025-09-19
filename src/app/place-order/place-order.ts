@@ -14,6 +14,8 @@ import { OrderService } from '../services/order.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../services/language.service';
 import { ProductService } from '../services/product';
+import { forkJoin } from 'rxjs';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-place-order',
@@ -56,98 +58,111 @@ export class PlaceOrder implements OnInit {
     private productService: ProductService,
   ) { }
 
+ngOnInit(): void {
+  // جلب التوكن والتحقق من تسجيل الدخول
+  this.token = localStorage.getItem('token') || '';
+  this.isLoggedIn = !!this.token;
 
-  ngOnInit(): void {
-    this.token = localStorage.getItem('token') || '';
-    this.isLoggedIn = !!this.token;
+  // إذا المستخدم مسجل دخول → تحميل البيانات الأساسية
+  if (this.isLoggedIn) {
+    this.loadClientProfile();
+    this.fetchAddresses();
 
-    // تحميل البيانات الأساسية لو المستخدم مسجل دخول
-    if (this.isLoggedIn) {
-      this.loadClientProfile();
-      this.fetchAddresses();
-
-      // جلب free product balance
-     this.productService.getFreeProductBalance(this.token).subscribe({
-  next: (res) => {
-    const remaining = res?.data?.balance?.remaining ?? 0; // لو undefined يرجع 0
-    console.log('Remaining Free Product Balance:', remaining);
-    this.freeProductBalance = remaining;
-  },
-  error: (err) => {
-    console.error('❌ Error fetching free product balance:', err);
-  }
-});
-
-    }
-
-    // تحميل السلة
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        const cartData = response?.data;
-        if (!cartData || !Array.isArray(cartData.items)) {
-          console.warn('Cart data is empty or invalid');
-          this.cartItems = [];
-          this.totalPrice = 0;
-          this.totalSalePrice = 0;
-          this.cartState.updateCount(0);
-          return;
-        }
-
-        this.cartItems = cartData.items;
-
-        this.totalPrice = this.cartItems.reduce(
-          (sum, item) => sum + item.quantity * parseFloat(item.unit_price),
-          0
-        );
-
-        this.totalSalePrice = this.cartItems.reduce(
-          (sum, item) =>
-            sum +
-            (item.sale_unit_price
-              ? item.quantity * parseFloat(item.sale_unit_price)
-              : item.quantity * parseFloat(item.unit_price)),
-          0
-        );
-
-        const totalQuantity = this.cartItems.reduce(
-          (sum, item) => sum + item.quantity,
-          0
-        );
-        this.cartState.updateCount(totalQuantity);
+    // جلب free product balance
+    this.productService.getFreeProductBalance(this.token).subscribe({
+      next: (res) => {
+        const remaining = res?.data?.balance?.remaining ?? 0;
+        console.log('Remaining Free Product Balance:', remaining);
+        this.freeProductBalance = remaining;
       },
       error: (err) => {
-        console.error('Error loading cart', err);
+        console.error('❌ Error fetching free product balance:', err);
       }
     });
+  }
 
-    // التحقق هل الصفحة تحتوي على باراميترات تأكيد الطلب بعد الدفع
-    const addressIdParam = this.route.snapshot.queryParamMap.get('addressId');
-    const promoCodeParam = this.route.snapshot.queryParamMap.get('promoCode');
-    if (addressIdParam) {
-      // إذا وجدت باراميترات، أكد الطلب مباشرة (مثلاً بعد الدفع)
-      this.cartService
-        .placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '')
-        .subscribe({
-          next: (orderRes) => {
-             console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
-  console.log('💳 طريقة الدفع المختارة:', this.paymentMethod);
-            alert('تم تأكيد الطلب بنجاح بعد الدفع!');
-            this.router.navigate(['/order-success', orderRes.order_id]);
-          },
-          error: (err) => {
-            console.error('❌ خطأ في تأكيد الطلب بعد الدفع:', err);
-            alert('حدث خطأ في تأكيد الطلب بعد الدفع.');
-          }
-        });
+  // تحميل السلة
+  this.cartService.getCart().subscribe({
+    next: (response) => {
+      const cartData = response?.data;
+      if (!cartData || !Array.isArray(cartData.items)) {
+        console.warn('Cart data is empty or invalid');
+        this.cartItems = [];
+        this.totalPrice = 0;
+        this.totalSalePrice = 0;
+        this.cartState.updateCount(0);
+        return;
+      }
+
+      // تحويل الأسعار من string إلى number
+   this.cartItems = cartData.items.map(item => {
+  // لو unit_price undefined حنخليه '0'
+  const unitPriceStr = (item.unit_price ?? '0').toString();
+  const unitPrice = parseFloat(unitPriceStr.replace(/,/g, '')) || 0;
+
+  const saleUnitPriceStr = item.sale_unit_price ? item.sale_unit_price.toString() : '0';
+  const saleUnitPrice = saleUnitPriceStr !== '0' 
+    ? parseFloat(saleUnitPriceStr.replace(/,/g, '')) 
+    : null;
+
+  return {
+    ...item,
+    unit_price: unitPrice,
+    sale_unit_price: saleUnitPrice
+  };
+});
+
+
+      // حساب الإجماليات
+      this.totalPrice = this.cartItems.reduce(
+        (sum, item) => sum + item.unit_price * item.quantity,
+        0
+      );
+      this.totalSalePrice = this.cartItems.reduce(
+        (sum, item) =>
+          sum + (item.sale_unit_price || item.unit_price) * item.quantity,
+        0
+      );
+
+      // تحديث عدد العناصر في السلة
+      const totalQuantity = this.cartItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+      this.cartState.updateCount(totalQuantity);
+    },
+    error: (err) => {
+      console.error('Error loading cart', err);
     }
+  });
 
-    this.translate.use(this.languageService.getCurrentLanguage());
+  // التحقق من باراميترات تأكيد الطلب بعد الدفع
+  const addressIdParam = this.route.snapshot.queryParamMap.get('addressId');
+  const promoCodeParam = this.route.snapshot.queryParamMap.get('promoCode');
 
-    // Listen for language changes
-    this.languageService.currentLang$.subscribe((lang) => {
-      this.translate.use(lang);
+  if (addressIdParam) {
+    this.cartService.placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '').subscribe({
+      next: (orderRes) => {
+        console.log('📦 Server Response from placeOrder:', orderRes);
+        console.log('💳 Payment Method:', this.paymentMethod);
+        alert('تم تأكيد الطلب بنجاح بعد الدفع!');
+        this.router.navigate(['/order-success', orderRes.order_id]);
+      },
+      error: (err) => {
+        console.error('❌ Error confirming order after payment:', err);
+        alert('حدث خطأ في تأكيد الطلب بعد الدفع.');
+      }
     });
   }
+
+  // إعداد اللغة الحالية
+  this.translate.use(this.languageService.getCurrentLanguage());
+
+  // الاستماع لتغييرات اللغة
+  this.languageService.currentLang$.subscribe(lang => {
+    this.translate.use(lang);
+  });
+}
 
 
 
@@ -508,32 +523,113 @@ export class PlaceOrder implements OnInit {
 
 
 
-
-  loadCart() {
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        this.cartItems = response.data.items;
-
-        this.totalPrice = this.cartItems.reduce(
-          (sum, item) => sum + item.quantity * parseFloat(item.unit_price),
-          0
-        );
-
-        this.totalSalePrice = this.cartItems.reduce(
-          (sum, item) =>
-            sum +
-            (item.sale_unit_price
-              ? item.quantity * parseFloat(item.sale_unit_price)
-              : item.quantity * parseFloat(item.unit_price)),
-          0
-        );
-
-        const totalQuantity = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        this.cartState.updateCount(totalQuantity);
-      },
-      error: (err) => {
-        console.error('Error loading cart', err);
+loadCart() {
+  this.cartService.getCart().subscribe({
+    next: (response) => {
+      const cartData = response?.data;
+      if (!cartData || !Array.isArray(cartData.items)) {
+        console.warn('Cart data is empty or invalid');
+        this.cartItems = [];
+        this.totalPrice = 0;
+        this.totalSalePrice = 0;
+        this.cartState.updateCount(0);
+        return;
       }
-    });
+
+      // Normalize prices: convert strings with commas to numbers
+      this.cartItems = cartData.items.map(item => {
+        const unitPrice = item.unit_price
+          ? parseFloat(item.unit_price.toString().replace(/,/g, ''))
+          : 0;
+        const saleUnitPrice = item.sale_unit_price
+          ? parseFloat(item.sale_unit_price.toString().replace(/,/g, ''))
+          : null;
+
+        return {
+          ...item,
+          unit_price: unitPrice,
+          sale_unit_price: saleUnitPrice,
+          total_price: unitPrice * item.quantity,
+          total_price_after_offers: (saleUnitPrice || unitPrice) * item.quantity
+        };
+      });
+
+      // Calculate totals
+      this.totalPrice = this.cartItems.reduce(
+        (sum, item) => sum + item.unit_price * item.quantity,
+        0
+      );
+
+      this.totalSalePrice = this.cartItems.reduce(
+        (sum, item) => sum + (item.sale_unit_price || item.unit_price) * item.quantity,
+        0
+      );
+
+      // Update cart count
+      const totalQuantity = this.cartItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+      this.cartState.updateCount(totalQuantity);
+    },
+    error: (err) => {
+      console.error('Error loading cart', err);
+    }
+  });
+}
+
+
+
+// In your component
+
+  /** افتح المودال لتأكيد الإلغاء */
+  openCancelModal() {
+    const modalEl = document.getElementById('cancelOrderModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
+      modal.show();
+    }
+  }
+
+  /** تأكيد الإلغاء → حذف جميع العناصر وإعادة التوجيه */
+  confirmCancelOrder() {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // Logged-in user → remove all items via API
+      this.cartService.getCart().subscribe({
+        next: (res) => {
+          const items = res.data.items;
+
+          // حذف كل المنتجات
+          const removeRequests = items.map(item => this.cartService.removeCartItem(item.product_id));
+
+          forkJoin(removeRequests).subscribe({
+            next: () => {
+              this.cartState.clearCart(); // تحديث حالة الكارت
+              this.router.navigate(['/']); // Redirect للصفحة الرئيسية
+            },
+            error: (err) => console.error('Error removing items:', err)
+          });
+        },
+        error: (err) => console.error('Error fetching cart:', err)
+      });
+    } else {
+      // Guest user → clear localStorage
+      this.cartService.clearGuestCart();
+      this.cartState.clearCart(); // تحديث الحالة
+      this.router.navigate(['/']); // Redirect للصفحة الرئيسية
+    }
+
+    // اغلاق المودال
+    const modalEl = document.getElementById('cancelOrderModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) modalInstance.hide();
+  }
+
+  /** دالة عامة لزر الإلغاء */
+  cancelOrder(): void {
+    this.openCancelModal();
   }
 }
+

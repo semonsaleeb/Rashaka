@@ -241,7 +241,7 @@
     "PACKAGES": "Packages",
     "SUCCESS_STORIES": "Success Stories",
     "FREE_CHECKUP": "Free Checkup",
-    "CHECKUP":"Checkup ",
+    "CHECKUP": "Checkup ",
     "OFFERS": "Offers",
     "BLOG": "Blog",
     "ABOUT_US": "About Us"
@@ -440,7 +440,13 @@
     "YOUR_ORDERS": "Your Orders",
     "PROMO_PLACEHOLDER": "Enter promo code",
     "SHIPPING_FEE": "Shipping Fee",
-    "PLACE_ORDER": "Place Order"
+    "PLACE_ORDER": "Place Order",
+    "CANCEL_ORDER": " Cancel Order",
+    "CANCEL_ORDER_CONFIRMATION": "Are you sure you want to cancel your order?",
+    "NO": "No",
+    "YES_CANCEL": "Yes, Cancel",
+      "CANCEL_ORDER_TITLE": "Cancel Order"
+
   },
   "PROFILE": {
     "IMAGE_ALT": "User profile picture",
@@ -548,8 +554,8 @@
     "MY_LOCATION": "My Location",
     "CONFIRM_LOCATION": "Confirm Location"
   },
-    "USE_PACKAGE_BALANCE": "Use your available package balance to complete the payment",
-     "SUBSCRIPTION": {
+  "USE_PACKAGE_BALANCE": "Use your available package balance to complete the payment",
+  "SUBSCRIPTION": {
     "STATUS_LABEL": "Subscription Status",
     "STATUS": {
       "ACTIVE": "Active",
@@ -574,7 +580,5 @@
   "TOTAL": "Total",
   "USED": "Used",
   "REMAINING": "Remaining",
-    "OUT_OF_STOCK": "Out of Stock"
-
-
+  "OUT_OF_STOCK": "Out of Stock"
 }

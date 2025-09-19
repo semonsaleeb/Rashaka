@@ -28,15 +28,15 @@ export class Blogs implements OnInit {
 
   constructor(private blogService: BlogService, private translate: TranslateService, private languageService: LanguageService) {}
 
-  ngOnInit(): void {
+ ngOnInit(): void {
   this.setVisibleCards();
   this.loadBlogs();
 
-  // Set initial language
+  // Load language immediately
   this.currentLang = this.languageService.getCurrentLanguage();
   this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
 
-  // Subscribe to language changes
+  // Subscribe for changes
   this.languageService.currentLang$.subscribe(lang => {
     this.currentLang = lang;
     this.dir = lang === 'ar' ? 'rtl' : 'ltr';

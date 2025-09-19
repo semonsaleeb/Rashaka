@@ -87,98 +87,108 @@ export class Header implements OnInit {
     public translate: TranslateService,
   ) { }
 
+selectedCategories: number[] = [];
 
-  ngOnInit(): void {
-        this.token = localStorage.getItem('token'); // 👈 تجيب التوكين من التخزين
+ ngOnInit(): void {
+  // -------------------------
+  // 0️⃣ Get token from localStorage
+  // -------------------------
+  this.token = localStorage.getItem('token');
 
-    // -------------------------
-    // 1️⃣ Update Cart Count
-    // -------------------------
-    this.updateCartCount(); // initial cart count
+  // -------------------------
+  // 1️⃣ Update Cart Count
+  // -------------------------
+  this.updateCartCount(); // initial cart count
+  this.cartState.cartCount$.subscribe(count => {
+    this.cartCount = count;
+  });
 
-    this.cartState.cartCount$.subscribe(count => {
-      this.cartCount = count;
-    });
+  // -------------------------
+  // 2️⃣ Subscribe to Favorite Count
+  // -------------------------
+  this.favoriteService.favoriteCount$.subscribe(count => {
+    this.favoriteCount = count;
+  });
 
-    // -------------------------
-    // 2️⃣ Subscribe to Favorite Count
-    // -------------------------
-    this.favoriteService.favoriteCount$.subscribe(count => {
-      this.favoriteCount = count;
-    });
+  // -------------------------
+  // 3️⃣ Handle Authentication & Favorites
+  // -------------------------
+  this.auth.isLoggedIn$.subscribe(status => {
+    this.isLoggedIn = status;
+    const clientData = localStorage.getItem('client');
+    this.client = (status && clientData) ? JSON.parse(clientData) : null;
 
-    // -------------------------
-    // 3️⃣ Handle Authentication & Favorites
-    // -------------------------
-    this.auth.isLoggedIn$.subscribe(status => {
-      this.isLoggedIn = status;
-      const clientData = localStorage.getItem('client');
-      this.client = (status && clientData) ? JSON.parse(clientData) : null;
-
-      if (status) {
-        const token = localStorage.getItem('token');
-        if (token) {
-          this.favoriteService.loadFavorites(token).subscribe({
-            next: (favorites) => {
-              this.favoriteService.setFavorites(favorites);
-            },
-            error: (err) => {
-              console.error('Failed to load favorites:', err);
-            }
-          });
-        }
-      } else {
-        const localFavs = this.favoriteService.getLocalFavorites();
-        this.favoriteService.setFavorites(localFavs);
+    if (status) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.favoriteService.loadFavorites(token).subscribe({
+          next: (favorites) => this.favoriteService.setFavorites(favorites),
+          error: (err) => console.error('Failed to load favorites:', err)
+        });
       }
-    });
-
-    // -------------------------
-    // 4️⃣ Load Categories
-    // -------------------------
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.categories = this.extractUniqueCategories(products);
-      },
-      error: (err) => {
-        console.error('Failed to fetch products:', err);
-      }
-    });
-
-    // -------------------------
-    // 5️⃣ Initialize Dropdown
-    // -------------------------
-    const defaultNavItem = this.navItems.find(i => i.hasDropdown);
-    if (defaultNavItem) {
-      this.toggleDropdown(defaultNavItem);
+    } else {
+      const localFavs = this.favoriteService.getLocalFavorites();
+      this.favoriteService.setFavorites(localFavs);
     }
+  });
 
-    // -------------------------
-    // 6️⃣ Load Products by URL query (category filter)
-    // -------------------------
-    this.route.queryParams.subscribe(params => {
-      const categoryId = params['category_id'];
-      if (categoryId && categoryId !== 'all') {
-        this.loadProductsByCategory(+categoryId);
-      } else if (categoryId === 'all') {
-        this.loadAllProducts();
-      }
-    });
+  // -------------------------
+  // 4️⃣ Load Categories
+  // -------------------------
+  this.productService.getProducts().subscribe({
+    next: (products) => {
+      this.categories = this.extractUniqueCategories(products);
+    },
+    error: (err) => console.error('Failed to fetch products:', err)
+  });
 
-      this.languageService.currentLang$.subscribe(lang => {
-      this.currentLang = lang;
-      this.currentDirection = lang === 'ar' ? 'rtl' : 'ltr';
-    });
+  // -------------------------
+  // 5️⃣ Initialize Dropdown
+  // -------------------------
+  const defaultNavItem = this.navItems.find(i => i.hasDropdown);
+  if (defaultNavItem) this.toggleDropdown(defaultNavItem);
 
-    
+  // -------------------------
+  // 6️⃣ Load Products by URL query (category filter)
+  // -------------------------
+  this.route.queryParams.subscribe(params => {
+    const categoryParam = params['category_id'];
 
-    this.translate.use(this.languageService.getCurrentLanguage());
+    if (!categoryParam || categoryParam === 'all') {
+      // Load all products
+      this.loadAllProducts();
+      this.selectedCategories = [];
+    } else {
+      // Support multiple category IDs separated by commas
+     const categoryIds = categoryParam
+  .split(',')
+  .map((id: string) => Number(id))
+  .filter((id: number) => !isNaN(id));
 
-    // Listen for language changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.translate.use(lang);
-    });
-  }
+
+      // Pre-select categories
+      this.selectedCategories = [...categoryIds];
+
+      // Load products for the selected categories
+categoryIds.forEach((id: number) => this.loadProductsByCategory(id));
+    }
+  });
+
+  // -------------------------
+  // 7️⃣ Language handling
+  // -------------------------
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.currentDirection = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  this.translate.use(this.currentLang);
+
+  // Listen for language changes
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.currentDirection = lang === 'ar' ? 'rtl' : 'ltr';
+    this.translate.use(lang);
+  });
+}
+
 
   // -------------------------
   // Helper methods
@@ -297,7 +307,7 @@ export class Header implements OnInit {
     });
   }
 onGetStarted() {
-  this.router.navigate(['/reservation']);
+  this.router.navigate(['/reservation/free']);
 }
 
 

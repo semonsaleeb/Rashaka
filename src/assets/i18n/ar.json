@@ -241,7 +241,7 @@
     "PACKAGES": "الباقات",
     "SUCCESS_STORIES": "قصص النجاح",
     "FREE_CHECKUP": "فحص مجاني",
-        "CHECKUP":"حجز الفحوصات ",
+    "CHECKUP": "حجز الفحوصات ",
     "OFFERS": "العروض",
     "BLOG": "المدونة",
     "ABOUT_US": "من نحن"
@@ -428,7 +428,7 @@
     "LOGIN_REQUIRED": "يرجى تسجيل الدخول أو إنشاء حساب جديد للمتابعة.",
     "REGISTER": "إنشاء الحساب",
     "LOGIN": "تسجيل الدخول",
-     "TITLE": "عربة التسوق",
+    "TITLE": "عربة التسوق",
     "CONTACT_INFO": "معلومات الاتصال",
     "EMAIL": "البريد الإلكتروني",
     "PHONE": "رقم الجوال",
@@ -440,7 +440,13 @@
     "YOUR_ORDERS": "طلباتك",
     "PROMO_PLACEHOLDER": "ادخل كود الخصم",
     "SHIPPING_FEE": "رسوم شحن",
-    "PLACE_ORDER": "إتمام الطلب"
+    "PLACE_ORDER": "إتمام الطلب",
+    "CANCEL_ORDER": "ألغاء الطلب",
+    "CANCEL_ORDER_CONFIRMATION": "هل أنت متأكد من إلغاء طلبك؟",
+    "NO": "لا",
+    "YES_CANCEL": "نعم، إلغاء",
+              "CANCEL_ORDER_TITLE": "إلغاء الطلب"
+
   },
   "PROFILE": {
     "IMAGE_ALT": "صورة المستخدم",
@@ -548,8 +554,8 @@
     "MY_LOCATION": "تحديد موقعي",
     "CONFIRM_LOCATION": "تأكيد الموقع"
   },
-    "USE_PACKAGE_BALANCE": "قم باستخدام رصيد الباقة المتاح لديك لإتمام عملية الدفع",
-      "SUBSCRIPTION": {
+  "USE_PACKAGE_BALANCE": "قم باستخدام رصيد الباقة المتاح لديك لإتمام عملية الدفع",
+  "SUBSCRIPTION": {
     "STATUS_LABEL": "حالة الاشتراك",
     "STATUS": {
       "ACTIVE": "نشط",
@@ -575,9 +581,4 @@
   "USED": "المستخدم",
   "REMAINING": "المتبقي",
   "OUT_OF_STOCK": "غير متوفر"
-
-
-  
- 
-
 }

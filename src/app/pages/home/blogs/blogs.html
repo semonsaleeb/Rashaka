@@ -55,14 +55,11 @@
       <!-- Carousel Container -->
       <div class="carousel-wrapper px-lg-3">
         <div class="position-relative overflow-hidden  mx-lg-5">
-     <div class="d-flex transition-transform carousel-track"
-  [ngStyle]="{
+          <div class="d-flex transition-transform carousel-track" [ngStyle]="{
     transform: dir === 'rtl' 
       ? 'translateX(' + (currentSlideIndex * (100 / visibleCards)) + '%)' 
       : 'translateX(-' + (currentSlideIndex * (100 / visibleCards)) + '%)'
-  }"
-  (touchstart)="onTouchStart($event)" 
-  (touchend)="onTouchEnd($event)">
+  }" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
 
 
             @for (blog of blogs; track blog) {

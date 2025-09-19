@@ -17,44 +17,45 @@ import { SuccessStoryService } from '../../../services/success-story';
   styleUrl: './suces-story.scss'
 })
 export class SucesStory {
-  
-  
-Opinions = [
-  {
-   id: 1,
-    localVideo: 'assets/Images/فيديو اعلان فحص الجلسات.mp4',
-    type: 'local',
-    title: 'قصة نجاح ١',
-    description: 'تجربة رائعة',
-    image: 'assets/Images/Group 9025.svg'
-  },
-  {
-    id: 2,
-    localVideo: 'assets/Images/ام محمد.MP4',
-    type: 'local',
-    title: 'قصة نجاح ٢',
-    description: 'نتائج مبهرة',
-    image: 'assets/Images/Group 9025.svg'
-  },
-  {
-    id: 3,
-    localVideo: 'assets/Images/تجارب ابطال الرشاقة السعيدة.mp4',
-    type: 'local',
-    title: 'قصة نجاح ٣',
-    description: 'تجربة ملهمة',
-    image: 'assets/Images/Group 9025.svg'
-  },
-  //   {
-  //   id: 4,
-  //   youtubeId: 'y6120QOlsfU',
-  //   type: 'youtube',
-  //   title: 'قصة نجاح ٢',
-  //   description: 'نتائج مبهرة',
-  //   image: 'assets/Images/Group 9025.svg'
-  // }
-];
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
-@Input() mode: 'carousel' | 'grid' = 'grid';
+  Opinions = [
+    {
+      id: 1,
+      localVideo: 'assets/Images/فيديو اعلان فحص الجلسات.mp4',
+      type: 'local',
+      title: 'قصة نجاح ١',
+      description: 'تجربة رائعة',
+      image: 'assets/Images/Group 9025.svg'
+    },
+    {
+      id: 2,
+      localVideo: 'assets/Images/ام محمد.MP4',
+      type: 'local',
+      title: 'قصة نجاح ٢',
+      description: 'نتائج مبهرة',
+      image: 'assets/Images/Group 9025.svg'
+    },
+    {
+      id: 3,
+      localVideo: 'assets/Images/تجارب ابطال الرشاقة السعيدة.mp4',
+      type: 'local',
+      title: 'قصة نجاح ٣',
+      description: 'تجربة ملهمة',
+      image: 'assets/Images/Group 9025.svg'
+    },
+    //   {
+    //   id: 4,
+    //   youtubeId: 'y6120QOlsfU',
+    //   type: 'youtube',
+    //   title: 'قصة نجاح ٢',
+    //   description: 'نتائج مبهرة',
+    //   image: 'assets/Images/Group 9025.svg'
+    // }
+  ];
+
+  @Input() mode: 'carousel' | 'grid' = 'grid';
 
   isMobile = false;
   currentIndex = 0;
@@ -68,7 +69,8 @@ Opinions = [
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
     private languageService: LanguageService,
-    private successStoryService: SuccessStoryService
+    private successStoryService: SuccessStoryService,
+
   ) {
     this.checkScreenSize();
   }
@@ -97,19 +99,19 @@ Opinions = [
     this.isMobile = window.innerWidth <= 768;
   }
 
- getCardClass(index: number): string {
-  // كل العناصر تظهر في Carousel، حتى لو واحدة
-  if (this.stories.length <= 1) return 'center';
-  
-  const total = this.stories.length;
-  const prev = (this.currentIndex - 1 + total) % total;
-  const next = (this.currentIndex + 1) % total;
+  getCardClass(index: number): string {
+    // كل العناصر تظهر في Carousel، حتى لو واحدة
+    if (this.stories.length <= 1) return 'center';
 
-  if (index === this.currentIndex) return 'center';
-  if (index === prev) return 'left';
-  if (index === next) return 'right';
-  return 'hidden'; // العناصر الأخرى يمكن تخفيها أو ضع CSS مناسبة
-}
+    const total = this.stories.length;
+    const prev = (this.currentIndex - 1 + total) % total;
+    const next = (this.currentIndex + 1) % total;
+
+    if (index === this.currentIndex) return 'center';
+    if (index === prev) return 'left';
+    if (index === next) return 'right';
+    return 'hidden'; // العناصر الأخرى يمكن تخفيها أو ضع CSS مناسبة
+  }
 
 
   nextSlide(): void {

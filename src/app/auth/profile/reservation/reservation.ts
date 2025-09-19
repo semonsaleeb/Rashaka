@@ -3,13 +3,14 @@ import { AvailabilityService } from '../../../services/availability.service';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
+import { CommonModule } from '@angular/common';
 
 declare var bootstrap: any; // 👈 مهم عشان يشتغل الـ Modal
 
 @Component({
   selector: 'app-reservation',
   standalone: true,
-  imports: [RouterModule, TranslateModule],
+  imports: [RouterModule, TranslateModule, CommonModule],
   templateUrl: './reservation.html',
   styleUrls: ['./reservation.scss']
 })

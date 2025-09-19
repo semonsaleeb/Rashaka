@@ -1,21 +1,30 @@
 @if (mode === 'carousel') {
 <div>
   <div class="success-stories p-5" style="background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap px-lg-5">
-      <!-- العنوان -->
-      <h2 class="section-title mb-0">
-        {{ 'SUCCESS_STORIES' | translate }}
-      </h2>
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap px-lg-5"
+     [ngClass]="currentLang === 'ar' ? 'flex-row-reverse' : 'flex-row'">
 
-      <!-- اللينك (يظهر فقط على الشاشات الكبيرة) -->
-      <a [routerLink]="['/home/sucesStory']"
-        class="btn btn-link view-all-btn text-light align-items-center gap-2 fs-5 p-0 d-none d-md-flex"
-        style="white-space: nowrap;">
+     <!-- اللينك (يظهر فقط على الشاشات الكبيرة) -->
+  <a [routerLink]="['/home/sucesStory']"
+     class="btn btn-link view-all-btn text-light align-items-center gap-2 fs-5 p-0 d-none d-md-flex"
+     [ngClass]="currentLang === 'ar' ? 'ms-0 me-3 flex-row-reverse' : 'ms-3 me-0 flex-row'"
+     style="white-space: nowrap;">
 
-        <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="{{ 'VIEW_ALL' | translate }}" width="25px">
-        {{ 'VIEW_ALL' | translate }}
-      </a>
-    </div>
+    <img src="assets/Images/circle-arrow-up-right-02 (1).svg"
+         alt="{{ 'VIEW_ALL' | translate }}"
+         width="25px"
+         [style.transform]="currentLang === 'ar' ? 'rotate(180deg)' : 'rotate(0deg)'">
+
+    {{ 'VIEW_ALL' | translate }}
+  </a>
+  <!-- العنوان -->
+  <h2 class="section-title mb-0" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
+    {{ 'SUCCESS_STORIES' | translate }}
+  </h2>
+
+  
+</div>
+
 
 
 
@@ -29,6 +38,27 @@
         <div class="story-deck-mobile d-flex justify-content-center align-items-center">
           @for (story of stories; track story; let i = $index) {
           <div class="story-card-custom" [ngClass]="getCardClass(i)">
+            <div class="story-image-wrapper d-flex position-relative">
+
+              <!-- Before -->
+              <div class="position-relative flex-fill text-center">
+                <img [src]="story.before_image" alt="Before Image" class="story-image" />
+                <strong class="weight-label"> before: {{story.before_weight}}</strong>
+              </div>
+
+              <!-- After -->
+              <div class="position-relative flex-fill text-center">
+                <img [src]="story.after_image" alt="After Image" class="story-image" />
+                <strong class="weight-label"> after: {{story.after_weight}}</strong>
+              </div>
+            </div>
+
+            <!-- النصوص تحت الصورتين -->
+            <div class="text-center mt-4">
+              <strong class="client-name fs-3">{{story.client_name}}</strong>
+              <p class="weight-change fs-3">{{story.weight_change}} -</p>
+            </div>
+
             <!-- <div class="youtube-embed" *ngIf="story.type === 'youtube'">
               <iframe [src]="getSafeYoutubeUrl(story.youtubeId)" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -53,7 +83,7 @@
 
       <!-- ✅ Dots تحت خالص -->
       @if (stories.length > 1) {
-      <div class="d-flex justify-content-center align-items-center mt-5 py-4">
+      <div class="d-flex justify-content-center align-items-center  py-4">
         <div class="d-flex gap-2">
           @for (story of stories; track story; let i = $index) {
           <button type="button" class="dot" [class.active]="i === currentIndex" (click)="currentIndex = i"
@@ -86,20 +116,20 @@
                 <!-- Before -->
                 <div class="position-relative flex-fill text-center">
                   <img [src]="story.before_image" alt="Before Image" class="story-image" />
-                  <strong class="weight-label"> weight before: {{story.before_weight}}</strong>
+                  <strong class="weight-label"> before: {{story.before_weight}}</strong>
                 </div>
 
                 <!-- After -->
                 <div class="position-relative flex-fill text-center">
                   <img [src]="story.after_image" alt="After Image" class="story-image" />
-                  <strong class="weight-label"> wight after :{{story.after_weight}}</strong>
+                  <strong class="weight-label"> after: {{story.after_weight}}</strong>
                 </div>
-                <div class="story-info text-center mt-3">
-                  <strong class="client-name">{{story.client_name}}</strong>
-                  <p class="weight-change">{{story.weight_change}}</p>
-                </div>
-              </div>
 
+              </div>
+              <div class=" text-center mt-5 ">
+                <strong class="client-name fs-3">{{story.client_name}}</strong><br>
+                <strong class="weight-change fs-3"> {{story.weight_change}} - </strong>
+              </div>
             </div>
             <!-- <div class="youtube-embed" *ngIf="story.type === 'local'">
               <video width="100%" height="450px" controls preload="none" [attr.poster]="story.image">
@@ -148,7 +178,7 @@
         <p class="subtitle" [innerHTML]="'SUCCESS_STORIES_SUBTITLE' | translate"></p>
 
         <!-- CTA Button -->
-        <button class="btn btn-success cta-button" [routerLink]="['/reservation/all']">
+        <button class="btn btn-success cta-button" [routerLink]="['/reservation/free']">
           <span class="arrow-icon">
             <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
             {{ 'SUCCESS_STORIES_CTA' | translate }}
@@ -177,14 +207,14 @@
             <!-- After -->
             <div class="position-relative flex-fill text-center">
               <img [src]="story.after_image" alt="After Image" class="story-image" />
-              <strong class="weight-label"> wight after : {{story.after_weight}}</strong>
+              <strong class="weight-label"> after : {{story.after_weight}}</strong>
             </div>
           </div>
 
           <!-- النصوص تحت الصورتين -->
-          <div class="story-info text-center mt-3">
-            <strong class="client-name">{{story.client_name}}</strong>
-            <p class="weight-change">{{story.weight_change}}</p>
+          <div class="story-info text-center mt-5">
+            <strong class="client-name text-dark">{{story.client_name}}</strong>
+            <p class="weight-change text-dark">{{story.weight_change}} -</p>
           </div>
         </div>
 

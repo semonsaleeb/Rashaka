@@ -83,13 +83,26 @@
 
                 <!-- لو ضيف -->
                 <ng-template #guestCart>
+                  <!-- {{item.unitPrice}} -->
+                  <!-- {{item.unit_price_after_offers}} -->
                   <span class="fw-bold text-success ms-2">
-                    {{ item.unit_price }} {{ 'CART.CURRENCY' | translate }}
+                    {{ item.total_price_after_offers }} {{ 'CART.CURRENCY' | translate }}
 
                   </span>
-                  <span class="text-muted text-decoration-line-through" *ngIf="item.unitPrice !== item.sale_unit_price">
-                    {{ item.sale_unit_price }} {{ 'CART.CURRENCY' | translate }}
+                  <span class="text-muted text-decoration-line-through" *ngIf="item.sale_unit_price !== undefined 
+             && toNumber(item.saleUnitPrice) < toNumber(item.unitPrice)">
+                    {{ toNumber(item.unit_price) }} {{ 'CART.CURRENCY' | translate }}
                   </span>
+                  <!-- <span class="fw-bold text-success ms-2" *ngIf="item.unit_price_after_offers !== null">
+  {{ item.unit_price_after_offers }} {{ 'CART.CURRENCY' | translate }}
+</span>
+
+<span class="text-muted text-decoration-line-through"
+      *ngIf="item.unit_price_after_offers !== null && item.unit_price_after_offers < item.unit_price">
+  {{ item.unit_price }} {{ 'CART.CURRENCY' | translate }}
+</span> -->
+
+
                 </ng-template>
 
 

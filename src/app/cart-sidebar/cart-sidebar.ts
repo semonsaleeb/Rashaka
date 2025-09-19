@@ -45,26 +45,75 @@ export class CartSidebar implements OnInit, OnDestroy {
   }
 
   // ✅ تحميل الكارت للـ guest
-  private loadGuestCart(): any[] {
-    const cart = localStorage.getItem(this.GUEST_CART_KEY);
-    return cart ? JSON.parse(cart) : [];
-  }
+ private loadGuestCart(): any[] {
+  const cart = localStorage.getItem(this.GUEST_CART_KEY);
+  const parsedCart = cart ? JSON.parse(cart) : [];
+
+  // 🟢 log للـ cart بعد التحميل
+  console.log("🛒 Guest Cart Loaded:", parsedCart);
+
+  // 🟢 log لكل منتج
+  parsedCart.forEach((item: any, i: number) => {
+    console.log(`Guest Product ${i + 1}:`, {
+      id: item.product_id,
+      name: item.product_name ?? item.product_name_ar ?? 'No name',
+      quantity: item.quantity,
+      price:Number( item.unit_price ?? item.price)
+    });
+  });
+
+  return parsedCart;
+}
+
+private normalizeProduct(item: any): CartItem {
+  // 🟢 حدد الأسعار
+  const rawUnitPrice = item.unit_price ?? item.price ?? item.original_price;
+  const rawSalePrice = item.unit_price_after_offers ?? item.sale_unit_price ?? item.sale_price;
+
+  const unitPrice: number = rawUnitPrice !== undefined ? Number(rawUnitPrice) : 0;
+  const salePrice: number | null =
+    rawSalePrice !== undefined ? Number(rawSalePrice) : null;
+
+  const quantity = Number(item.quantity ?? item.cart_quantity ?? 1);
+
+  return {
+    product_id: item.product_id ?? item.id,
+    product_name: item.product_name ?? item.name,
+    product_name_ar: item.product_name_ar ?? item.name_ar,
+    images: item.images ?? (item.image ? [item.image] : []),
+
+    unit_price: unitPrice,
+    unit_price_after_offers: salePrice?.toString(), // number | null
+
+    quantity,
+
+    total_price: unitPrice * quantity,
+    total_price_after_offers: (salePrice ?? unitPrice) * quantity,
+  };
+}
+
+
+
+
+toNumber(value: string | number | undefined): number {
+  return Number(value ?? 0);
+}
+
 
   // ✅ حفظ الكارت للـ guest
-private saveGuestCart(cart: CartItem[]): void {
+private saveGuestCart(cart: any[]): void {
+  const normalizedCart = cart.map(item => this.normalizeProduct(item));
+
   // 1️⃣ حفظ في localStorage
-  localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+  localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(normalizedCart));
 
   // 2️⃣ تحديث الـ cartStateService
-  this.cartState.updateItems(cart.map(item => ({
-    ...item,
-    totalPrice: Number(item.total_price),
-    totalPriceAfterOffers: Number(item.total_price_after_offers),
-  })));
+  this.cartState.updateItems(normalizedCart);
 
-  // 3️⃣ تحديث الـ cartItems المحلي
-  this.cartItems = cart;
+  // 3️⃣ تحديث الكارت المحلي
+  this.cartItems = normalizedCart;
 }
+
 
 
   // ✅ تحديث عدد العناصر
@@ -81,12 +130,17 @@ private loadCart(): void {
   this.cartService.getCart().subscribe({
     next: (response) => {
       this.cartItems = response.data?.items || [];
+
+      // 🟢 اعمل log لكل المنتجات
+      console.log("🛒 Cart Items Loaded:", this.cartItems);
+
       this.refreshCartCount();
       this.cdr.detectChanges(); // 🟢 يخبر Angular عن التغيير
     },
     error: (err) => this.handleCartError(err)
   });
 }
+
 
 
   // ====================== LIFECYCLE ======================

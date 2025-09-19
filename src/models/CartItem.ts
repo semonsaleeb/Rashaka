@@ -40,6 +40,7 @@ images?: string[];
   sale_price?:  number;
   total_price?: string | number;
   total_price_after_offers?: string | number;
+  original_price?:string;
  quantity: number;
  stock_quantity?: number;
   // اللي ضفتهم إنت في processCartItems
