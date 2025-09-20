@@ -86,8 +86,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
   ) { }
 
   // ---------------------- lifecycle ----------------------
-  ngOnInit(): void {
-  // Handle responsive layout
+ngOnInit(): void {
+  // ✅ Handle responsive layout
   this.resizeHandler();
   window.addEventListener('resize', this.resizeHandler);
 
@@ -108,10 +108,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
           this.filteredProducts = [...products];
           this.categories = this.extractUniqueCategories(this.allProducts);
 
-          // Set start slide (center for mobile)
-          this.currentSlideIndex = this.isMobile
-            ? Math.floor(this.getTotalSlides() / 2)
-            : 0;
+          // ✅ اضبط البداية حسب اللغة
+          this.setInitialSlide();
 
           // Apply filters including the pre-selected category
           this.applyCombinedFilters();
@@ -124,14 +122,14 @@ export class CategoryProducts implements OnInit, OnDestroy {
     }
   });
 
-  // Load cart and subscribe to updates
+  // ✅ Load cart and subscribe to updates
   this.loadCart();
   this.cartState.cartItems$.subscribe(items => {
     this.cartItems = items;
     this.updateCartTotals();
   });
 
-  // Subscribe to favorite changes
+  // ✅ Subscribe to favorite changes
   this.favoriteService.favorites$.subscribe(favs => {
     const favoriteIds = new Set(favs.map(f => f.id));
     this.allProducts = this.allProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
@@ -139,18 +137,41 @@ export class CategoryProducts implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   });
 
-  // Handle language changes
+  // ✅ Handle language changes
   this.translate.use(this.languageService.getCurrentLanguage());
-  this.languageService.currentLang$.subscribe(lang => this.translate.use(lang));
   this.currentLang = this.languageService.getCurrentLanguage();
-  this.languageService.currentLang$.subscribe(lang => this.currentLang = lang);
 
-  // Optional: reload cart when sidebar opens
+  this.languageService.currentLang$.subscribe(lang => {
+  this.currentLang = lang;
+  this.textDir = lang === 'ar' ? 'rtl' : 'ltr';
+});
+
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.translate.use(lang);
+
+    // ✅ لما اللغة تتغير اضبط مكان البداية
+    this.setInitialSlide();
+  });
+
+  // ✅ Optional: reload cart when sidebar opens
   const offcanvasEl = document.getElementById('cartSidebar');
   if (offcanvasEl) {
     offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
   }
 }
+
+// 🔥 Helper function
+private setInitialSlide(): void {
+  if (this.currentLang === 'ar') {
+    // ابدأ من آخر سلايد (يمين)
+    this.currentSlideIndex = Math.max(this.filteredProducts.length - this.visibleCards, 0);
+  } else {
+    // ابدأ من أول سلايد (شمال)
+    this.currentSlideIndex = 0;
+  }
+}
+
 
 
 
@@ -650,26 +671,29 @@ applyCombinedFilters(): void {
   }
   getDotsArray(): number[] { return Array.from({ length: this.getTotalSlides() }, (_, i) => i); }
   goToSlide(index: number) { this.currentSlideIndex = Math.min(Math.max(index, 0), this.getTotalSlides() - 1); }
-  get textDir(): 'rtl' | 'ltr' {
-    return this.lang === 'ar' ? 'rtl' : 'ltr';
-  }
+textDir: 'rtl' | 'ltr' = 'ltr';
+
   // handleSwipe(): void { const swipeDistance = this.touchEndX - this.touchStartX; if (Math.abs(swipeDistance) > 50) { swipeDistance > 0 ? this.nextSlide() : this.prevSlide(); } }
+  private readonly SWIPE_THRESHOLD = 50;
 
-  handleSwipe(): void {
-    const swipeDistance = this.touchEndX - this.touchStartX;
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
 
-    if (Math.abs(swipeDistance) > 50) {
-      const isRTL = this.currentLang === 'ar';
+  if (Math.abs(swipeDistance) > 50) {
+    const isRTL = this.currentLang === 'ar';
 
-      if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
-        // سوايب يمين في LTR أو شمال في RTL → prev
-        this.prevSlide();
-      } else {
-        // سوايب شمال في LTR أو يمين في RTL → next
-        this.nextSlide();
-      }
+    if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
+      // سوايب يمين في LTR → prev
+      // سوايب شمال في RTL → prev
+      this.prevSlide();
+    } else {
+      // سوايب شمال في LTR → next
+      // سوايب يمين في RTL → next
+      this.nextSlide();
     }
   }
+}
+
 
 
 }

@@ -13,120 +13,102 @@
 <!-- ✅ لو فيه طلبات -->
 @if (groupedOrders.length > 0) {
 <div class="px-3 px-md-5" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
- <ngb-carousel
-  #carousel
-  [interval]="0"                
-  [keyboard]="isMobile"        
-  [wrap]="false"
-  [showNavigationIndicators]="false"
-  [showNavigationArrows]="false"
-  [pauseOnHover]="false"
-  (slide)="onSlide($event)">
-
+    <ngb-carousel #carousel [interval]="0" [keyboard]="isMobile" [wrap]="false" [showNavigationIndicators]="false"
+        [showNavigationArrows]="false" [pauseOnHover]="false" (slide)="onSlide($event)">
 
         @for (group of groupedOrders; track group; let i = $index) {
         <ng-template ngbSlide [id]="i.toString()">
-            <div class="row ">
+            <div class="row">
                 @for (order of group; track order) {
                 <div class="col-12 col-md-4 mb-4">
-                    <div class="order-card  p-4 rounded border rounded-4">
+                    <div class="order-card p-4 rounded border rounded-4 d-flex flex-column h-100">
 
-                        <!-- رقم الطلب + الحالة + الصورة -->
-                        <div class="d-flex align-items-start mb-3">
-
-
-
-                            <!-- بيانات الطلب -->
-                            <div class="flex-grow-1">
-                                <!-- رقم الطلب -->
-                                <span class="order-id-badge d-inline-block mb-2">
+                        <!-- الجزء اللي فوق -->
+                        <div>
+                            <!-- الهيدر -->
+                            <div class="d-flex justify-content-between mb-3"
+                                [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+                                <span class="order-id-badge">
                                     {{ 'ORDERS.ORDER_NUMBER' | translate }} {{ order.order_id }}
                                 </span>
-                                <br>
-                                <!-- الحالة -->
-                                <div class="status-badge mb-2" [ngClass]="{
-            'text-success': order.status === ('ORDERS.STATUS.DELIVERED' | translate),
-            'text-danger': order.status === ('ORDERS.STATUS.CANCELLED' | translate),
-            'text-warning': order.status === ('ORDERS.STATUS.IN_PROGRESS' | translate),
-            'text-secondary': order.status === ('ORDERS.STATUS.PENDING' | translate)
-         }">
+                                <div class="status-badge" [ngClass]="{
+             'text-success': order.status === ('ORDERS.STATUS.DELIVERED' | translate),
+             'text-danger': order.status === ('ORDERS.STATUS.CANCELLED' | translate),
+             'text-warning': order.status === ('ORDERS.STATUS.IN_PROGRESS' | translate),
+             'text-secondary': order.status === ('ORDERS.STATUS.PENDING' | translate)
+           }">
                                     {{ order.status }}
                                 </div>
-
-                                <!-- اسم المنتج -->
-                                <p class="fw-bold mb-0">
-                                    <span class="text-secondary">{{ 'ORDERS.PRODUCT' | translate }}</span> <br>
-                                    {{ currentLang === 'ar' ? order.items[0].product_name_ar :
-                                    order.items[0].product_name }}
-                                </p>
                             </div>
 
-                            <!-- صورة المنتج -->
-                            @if (order.items?.length > 0) {
-                            <div class="product-image-wrapper me-3">
-                                <img [src]="order.items[0].product_images?.length ? encodeUrl(order.items[0].product_images[0]) : 'assets/no-image.png'"
-                                    alt="{{ order.items[0].product_name }}" class="product-image" />
+                            <!-- المنتجات -->
+                            <div class="order-items mt-3">
+                                @for (item of order.items; track item) {
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="product-image-wrapper me-3">
+                                        <img [src]="item.product_images?.length ? encodeUrl(item.product_images[0]) : 'assets/no-image.png'"
+                                            alt="{{ item.product_name }}" class="product-image" />
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="fw-bold mb-1">
+                                            {{ currentLang === 'ar' ? item.product_name_ar : item.product_name }}
+                                        </p>
+                                        <div>
+                                            <strong class="text-secondary">{{ 'ORDERS.QUANTITY' | translate }}:</strong>
+                                            <span>{{ item.quantity }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                } @empty {
+                                <p class="text-muted">{{ 'ORDERS.NO_PRODUCTS' | translate }}</p>
+                                }
                             </div>
-                            } @else {
-                            <p class="text-muted">{{ 'ORDERS.NO_PRODUCTS' | translate }}</p>
-                            }
                         </div>
 
+                        <!-- التفاصيل في الآخر -->
+                        <div class="mt-auto mt-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong class="text-secondary">{{ 'ORDERS.CREATED_AT' | translate }}:</strong>
+                                <span>{{ order.created_at | date:'yyyy-MM-dd' }}</span>
+                            </div>
 
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong class="text-secondary">{{ 'ORDERS.ORDERS_TOTAL' | translate }}:</strong>
+                                <span>{{ order.total_price }} {{ 'ORDERS.CURRENCY' | translate }}</span>
+                            </div>
 
-                        <!-- باقي التفاصيل -->
-                 <div class="d-flex justify-content-between mb-2">
-  <strong class="text-secondary">{{ 'ORDERS.QUANTITY' | translate }}:</strong>
-  <span>{{ order.items[0].quantity }}</span>
-</div>
-
-<div class="d-flex justify-content-between mb-2">
-  <strong class="text-secondary">{{ 'ORDERS.CREATED_AT' | translate }}:</strong>
-  <span>{{ order.created_at | date:'yyyy-MM-dd' }}</span>
-</div>
-
-<div class="d-flex justify-content-between mb-2">
-  <strong class="text-secondary">{{ 'ORDERS.ORDERS_TOTAL' | translate }}:</strong>
-  <span>{{ order.total_price }} {{ 'ORDERS.CURRENCY' | translate }}</span>
-</div>
-
-<div class="d-flex justify-content-between mb-2">
-  <strong class="text-secondary">{{ 'ORDERS.PAYMENT_METHOD' | translate }}:</strong>
-  <span class="payment-method">{{ order.payment_method }}</span>
-</div>
-
-
+                            <div class="d-flex justify-content-between mb-0">
+                                <strong class="text-secondary">{{ 'ORDERS.PAYMENT_METHOD' | translate }}:</strong>
+                                <span class="payment-method">{{ order.payment_method }}</span>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
                 }
             </div>
         </ng-template>
-
         }
     </ngb-carousel>
 
-    <!-- ✅ أزرار التنقل + النقاط -->
+    <!-- ✅ التنقل -->
     <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
-
         <!-- النقاط -->
         <div class="d-flex gap-2 justify-content-center justify-content-md-start" dir="ltr">
             @for (group of groupedOrders; track group; let i = $index) {
-            <button type="button" class="dot btn btn-sm " [class.active]="i === currentIndex"
+            <button type="button" class="dot btn btn-sm" [class.active]="i === currentIndex"
                 (click)="goToSlide(i)"></button>
             }
         </div>
 
-
         <!-- الأسهم -->
-        <div class="d-flex gap-2 d-none d-md-flex"> <!-- hide on mobile (sm < 768px), show md+ -->
+        <div class="d-flex gap-2 d-none d-md-flex">
             <button class="arrow-btn next" (click)="nextSlide()"
                 [disabled]="currentIndex === groupedOrders.length - 1"></button>
             <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentIndex === 0"></button>
         </div>
-
     </div>
 </div>
-
 } @else if (!isLoading) {
 <p class="text-center">{{ 'ORDERS.NO_ORDERS' | translate }}</p>
 }

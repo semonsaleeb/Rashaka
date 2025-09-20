@@ -105,6 +105,13 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     this.languageService.currentLang$.subscribe(lang => {
       this.currentLang = lang;
     });
+     if (this.currentLang === 'ar') {
+    // يبدأ من آخر سلايد (يمين)
+    this.currentSlideIndex = this.products.length - this.visibleCards;
+  } else {
+    // يبدأ من أول سلايد (شمال)
+    this.currentSlideIndex = 0;
+  }
 
   }
 

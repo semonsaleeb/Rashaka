@@ -22,7 +22,7 @@
 
         <div class="d-flex justify-content-center justify-content-lg-start mx-2"
           [ngClass]="{'flex-row-reverse': currentLang === 'ar'}">
-          <button [routerLink]="['/reservation/all']"
+          <button [routerLink]="['/reservation/free']"
             class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center py-2 my-3 position-relative custom-btn px-3"
             (click)="onGetStarted()" [ngClass]="{ 'ms-auto': currentLang === 'ar', 'me-auto': currentLang !== 'ar' }">
  <img [ngClass]="{ 'ms-2': currentLang === 'ar', 'me-2': currentLang !== 'ar' }"

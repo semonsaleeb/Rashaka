@@ -35,7 +35,7 @@ export class Checkup {
   }
 
   onGetStarted() {
-      this.router.navigate(['/reservation/all']);
+      this.router.navigate(['/reservation/free']);
 
   }
 }

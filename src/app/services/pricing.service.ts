@@ -107,5 +107,16 @@ export class PricingService {
   }
 
 
+getUserSubscription(): Observable<any> {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('Authentication required');
+
+  const headers = new HttpHeaders({
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  });
+
+  return this.http.get<any>(`${this.baseUrl}/web-package`, { headers });
+}
 
 }

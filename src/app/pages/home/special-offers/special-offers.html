@@ -38,12 +38,9 @@
     <!-- Carousel Container -->
     <div class="carousel-wrapper">
       <div class="position-relative overflow-hidden  ">
-<div class="d-flex transition-transform carousel-track"
-  [ngStyle]="{
+        <div class="d-flex transition-transform carousel-track" [ngStyle]="{
     transform: 'translateX(' + (currentSlideIndex * (100 / visibleCards) * (currentLang === 'ar' ? -1 : 1)) + '%)'
-  }"
-  (touchstart)="onTouchStart($event)" 
-  (touchend)="onTouchEnd($event)">
+  }" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
 
 
 
@@ -94,7 +91,7 @@
                   @if (product.sale_price && product.sale_price !== product.original_price) {
                   <div class="mb-2">
                     <p class="fw-bold text-secondary mb-1" style="font-size: 14px;">
-                       <span style="text-decoration: line-through;">
+                      <span style="text-decoration: line-through;">
                         {{ product.original_price }}{{ 'CURRENCY' | translate }}
                       </span>
                       &nbsp;
@@ -102,7 +99,7 @@
                         {{ product.sale_price }}{{ 'CURRENCY' | translate }}
                       </span>
                       &nbsp;
-                     
+
                       &nbsp;
                       <!-- الشرط على المخزون -->
                       @if (product.stock === 0) {
@@ -191,21 +188,21 @@
 
 <!-- Grid Mode -->
 @if (mode === 'grid') {
-<div class="py-5 px-5 mt-4">
+<div class="">
   <!-- Offers Banner -->
   <img src="assets/Images/Group 9049 (1).svg" alt="{{ 'OFFERS' | translate }}"
-    class="img-fluid pt-5 py-5 mt-5 d-block mx-auto mb-4">
+    class=" mt-lg-5 d-block mx-auto mt-5 py-2" height="150px">
 
   <!-- Heading -->
-  <h2 class="fw-bold d-flex justify-content-center flex-wrap gap-2 mb-5">
+  <h2 class="fw-bold d-flex justify-content-center flex-wrap gap-2 mb-3">
     {{ 'OFFERS' | translate }}
   </h2>
 
-  <p class="text-muted d-flex justify-content-center flex-wrap gap-2 mb-5">
+  <p class="text-muted d-flex justify-content-center flex-wrap gap-2 mb-3">
     {{ 'OFFERS_DESC' | translate }}
   </p>
 
-  <div class="d-flex justify-content-center gap-3 mb-4 category-scroll">
+  <div class="d-flex justify-content-center gap-3  category-scroll">
     <!-- Category buttons -->
     <!-- All button -->
     <button #allBtn class="btn custom-green-btn px-4 py-2" tabindex="0"

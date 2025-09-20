@@ -64,9 +64,16 @@
         <!-- Carousel Container -->
         <div class="position-relative carousel-wrapper my-3">
           <div class="carousel-container">
-            <div class="d-flex transition-transform carousel-track" [ngStyle]="{ 
-  transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? 1 : -1)) + '%)' 
-}" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
+           <div class="d-flex transition-transform carousel-track"
+  [ngStyle]="{
+    transform: textDir === 'rtl'
+      ? 'translateX(+' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+      : 'translateX(-' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+  }"
+  [dir]="textDir"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)">
+
               @for (product of filteredProducts; track product.id) {
               <div class="carousel-slide p-3">
                 <div class="card product-card rounded-4">

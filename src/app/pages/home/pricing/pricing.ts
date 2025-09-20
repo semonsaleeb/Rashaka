@@ -61,42 +61,65 @@ export class Pricing implements OnInit, AfterViewInit {
     private languageService: LanguageService
   ) { }
 
+  // ngOnInit() {
+
+  //   const midIndex = Math.floor(this.getMaxIndex() / 2); // المنتصف
+  // this.currentSlideIndex = midIndex;
+  //   // حالة تسجيل الدخول (مزامنة مستمرة)
+  //   this.isLoggedIn = this.auth.isLoggedIn();
+  //   this.auth.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
+
+  //   // استجابة للشاشة
+  //   this.updateVisibleCards();
+
+  //   // تحميل الباقات مع باراميتر اختيار باقة وفتح Popup
+  //   this.route.queryParams.subscribe(params => {
+  //     const openPopup = params['openPopup'] === 'true';
+  //     const pkgId = Number(params['id']);
+  //     this.loadPackages(pkgId, openPopup);
+  //   });
+
+
+  //   this.translate.use(this.languageService.getCurrentLanguage());
+
+  //   // Listen for language changes
+  //   this.languageService.currentLang$.subscribe(lang => {
+  //     this.translate.use(lang);
+  //   });
+
+  //   this.currentLang = this.languageService.getCurrentLanguage();
+
+  //   // Listen for language changes
+  //   this.languageService.currentLang$.subscribe(lang => {
+  //     this.currentLang = lang;
+  //   });
+
+
+
+  // }
   ngOnInit() {
+  this.isLoggedIn = this.auth.isLoggedIn();
+  this.auth.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
 
-    const midIndex = Math.floor(this.getMaxIndex() / 2); // المنتصف
-  this.currentSlideIndex = midIndex;
-    // حالة تسجيل الدخول (مزامنة مستمرة)
-    this.isLoggedIn = this.auth.isLoggedIn();
-    this.auth.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
+  this.updateVisibleCards();
 
-    // استجابة للشاشة
-    this.updateVisibleCards();
+  // تحميل الباقات
+  this.route.queryParams.subscribe(params => {
+    const openPopup = params['openPopup'] === 'true';
+    const pkgId = Number(params['id']);
+    this.loadPackages(pkgId, openPopup);
+  });
 
-    // تحميل الباقات مع باراميتر اختيار باقة وفتح Popup
-    this.route.queryParams.subscribe(params => {
-      const openPopup = params['openPopup'] === 'true';
-      const pkgId = Number(params['id']);
-      this.loadPackages(pkgId, openPopup);
-    });
-
-
-    this.translate.use(this.languageService.getCurrentLanguage());
-
-    // Listen for language changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.translate.use(lang);
-    });
-
-    this.currentLang = this.languageService.getCurrentLanguage();
-
-    // Listen for language changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.currentLang = lang;
-    });
-
-
-
+  // تحميل الاشتراك الحالي
+  if (this.isLoggedIn) {
+    this.loadUserSubscription();
   }
+    this.languageService.currentLang$.subscribe(lang => {
+  this.currentLang = lang;
+  this.textDir = lang === 'ar' ? 'rtl' : 'ltr';
+});
+}
+
 private setInitialIndex(): void {
   const midIndex = Math.floor(this.getMaxIndex() / 2);
   this.currentSlideIndex = midIndex;
@@ -411,6 +434,25 @@ private handleSwipe(): void {
 }
 
 
+private loadUserSubscription(): void {
+  if (!this.isLoggedIn) return;
+
+  this.pricingService.getUserSubscription().subscribe({
+    next: (res) => {
+      this.activeSubscription = res.package;
+      this.subscribedPlanId = res.package?.id ?? null;
+      console.log('🎯 Active subscription:', this.subscribedPlanId);
+    },
+    error: (err) => {
+      console.error('فشل تحميل الاشتراك الحالي', err);
+      this.activeSubscription = null;
+      this.subscribedPlanId = null;
+    }
+  });
+}
+
+
+
 
   goToLogin() {
     this.showLoginPopup = false;
@@ -428,7 +470,6 @@ private handleSwipe(): void {
   }
 
 
-  get textDir(): 'rtl' | 'ltr' {
-    return this.lang === 'ar' ? 'rtl' : 'ltr';
-  }
+textDir: 'rtl' | 'ltr' = 'ltr';
+
 }

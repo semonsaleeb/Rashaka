@@ -501,7 +501,8 @@
       "DELIVERED": "تم التسليم",
       "CANCELLED": "ملغي",
       "IN_PROGRESS": "قيد التنفيذ",
-      "PENDING": "قيد الانتظار"
+      "PENDING": "قيد الانتظار",
+      "PRICE":"السعر"
     },
     "QUANTITY": "الكمية",
     "NO_PRODUCTS": "لا توجد منتجات",

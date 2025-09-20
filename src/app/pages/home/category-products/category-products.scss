@@ -129,6 +129,16 @@
       }
     }
   }
+.carousel-track {
+  unicode-bidi: normal !important;
+}
+.carousel-track[dir="rtl"] {
+  direction: rtl;
+}
+
+.carousel-track[dir="ltr"] {
+  direction: ltr;
+}
 
   .arrow-btn {
     width: 36px;

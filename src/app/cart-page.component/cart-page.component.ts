@@ -26,6 +26,7 @@ export class CartPageComponent implements OnInit {
   dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
   cartItems: CartItem[] = [];
+  shippingFee: number = 30;
 
   /** إجمالي قبل الخصم (سعر الوحدة الأصلي * الكمية) */
   totalPrice: number = 0;

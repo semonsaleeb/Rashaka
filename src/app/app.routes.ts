@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { provideRouter, Routes, withInMemoryScrolling, withRouterConfig } from '@angular/router';
 
 // Standalone Components
 import { Auth } from './auth/auth';
@@ -63,7 +63,7 @@ export const routes: Routes = [
       { path: 'reservations', component: Reservation },
       { path: 'packages', component: Packages },
       { path: 'addresses', component: Address },
-      { path: 'orders', component: Orders }, 
+      { path: 'orders', component: Orders },
     ]
   },
 
@@ -77,22 +77,31 @@ export const routes: Routes = [
   { path: 'home/blog/:id', component: SingleBlog },
   { path: 'home/branches', component: Branches },
 
-
   // Cart & Favorites
   { path: 'cart', component: CartPageComponent },
   { path: 'product/:id', component: ProductCard },
   { path: 'placeOrder', component: PlaceOrder },
   { path: 'favorites', component: Favorites },
   { path: 'package-pricing-order', component: PackagePricingOrder },
+
   // Other Pages
   { path: 'about_us', component: AboutUs },
 
-
-{ path: 'reservation/free', component: Free },
-{ path: 'reservation/all', component: Appointments },
+  { path: 'reservation/free', component: Free },
+  { path: 'reservation/all', component: Appointments },
   { path: 'reservation/:id', component: Appointments },
-
 
   // Fallback
   { path: '**', redirectTo: '' }
 ];
+
+export const appRouting = provideRouter(
+  routes,
+  withRouterConfig({
+    onSameUrlNavigation: 'reload' // ✅ كده صح
+  }),
+  withInMemoryScrolling({
+    scrollPositionRestoration: 'enabled',
+    anchorScrolling: 'enabled'
+  })
+);

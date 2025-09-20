@@ -501,7 +501,9 @@
       "DELIVERED": "Delivered",
       "CANCELLED": "Cancelled",
       "IN_PROGRESS": "In Progress",
-      "PENDING": "Pending"
+      "PENDING": "Pending",
+            "PRICE":"السعر"
+
     },
     "QUANTITY": "Quantity",
     "NO_PRODUCTS": "No products",

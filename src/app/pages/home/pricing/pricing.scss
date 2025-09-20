@@ -346,7 +346,7 @@
 
 .carousel-track {
   display: flex;
-  flex-direction: row-reverse;
+  // flex-direction: row-reverse;
   // direction: rtl; /* RTL fix */
   transition: transform 0.5s ease-in-out;
   scroll-behavior: smooth;

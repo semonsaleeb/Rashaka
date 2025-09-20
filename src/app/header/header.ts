@@ -9,7 +9,7 @@ import { CartStateService } from '../services/cart-state-service';
 import { CartIconComponent } from '../cart-icon.component/cart-icon.component';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import {  ProductService } from '../services/product';
+import { ProductService } from '../services/product';
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -52,16 +52,16 @@ export class Header implements OnInit {
 
 
   navItems = [
-  { label: 'الرئيسية', labelEn: 'Home', path: '/', hasDropdown: false, active: false },
-  { label: 'المتجر', labelEn: 'Shop', path: null, hasDropdown: true, showDropdown: true, active: false },
-  { label: 'الاشتراكات', labelEn: 'Subscriptions', path: '/home/packages', hasDropdown: false, active: false },
-  { label: 'قصص نجاح عملائنا', labelEn:'success-stories', path: '/home/sucesStory', hasDropdown: false, active: false },
-{ label: 'الفحوصات ', labelEn: 'Checkup', path: '/reservation/all', hasDropdown: false, active: false },
-{ label: 'الفحوصات المجانيه', labelEn: 'Free Checkup', path: '/reservation/free', hasDropdown: false, active: false },
-  { label: 'العروض', labelEn: 'Offers', path: '/home/special-offers', hasDropdown: false, active: false },
-  { label: 'المدونة ', labelEn: 'Blogs', path: '/home/blogs', hasDropdown: false, active: false },
-  { label: 'عن رشاقة ', labelEn: 'About Us', path: '/about_us', hasDropdown: false, active: false },
-];
+    { label: 'الرئيسية', labelEn: 'Home', path: '/', hasDropdown: false, active: false },
+    { label: 'المتجر', labelEn: 'Shop', path: null, hasDropdown: true, showDropdown: true, active: false },
+    { label: 'الاشتراكات', labelEn: 'Subscriptions', path: '/home/packages', hasDropdown: false, active: false },
+    { label: 'قصص نجاح عملائنا', labelEn: 'success-stories', path: '/home/sucesStory', hasDropdown: false, active: false },
+    { label: 'الفحوصات ', labelEn: 'Checkup', path: '/reservation/all', hasDropdown: false, active: false },
+    { label: 'الفحوصات المجانيه', labelEn: 'Free Checkup', path: '/reservation/free', hasDropdown: false, active: false },
+    { label: 'العروض', labelEn: 'Offers', path: '/home/special-offers', hasDropdown: false, active: false },
+    { label: 'المدونة ', labelEn: 'Blogs', path: '/home/blogs', hasDropdown: false, active: false },
+    { label: 'عن رشاقة ', labelEn: 'About Us', path: '/about_us', hasDropdown: false, active: false },
+  ];
 
 
 
@@ -87,107 +87,107 @@ export class Header implements OnInit {
     public translate: TranslateService,
   ) { }
 
-selectedCategories: number[] = [];
+  selectedCategories: number[] = [];
 
- ngOnInit(): void {
-  // -------------------------
-  // 0️⃣ Get token from localStorage
-  // -------------------------
-  this.token = localStorage.getItem('token');
+  ngOnInit(): void {
+    // -------------------------
+    // 0️⃣ Get token from localStorage
+    // -------------------------
+    this.token = localStorage.getItem('token');
 
-  // -------------------------
-  // 1️⃣ Update Cart Count
-  // -------------------------
-  this.updateCartCount(); // initial cart count
-  this.cartState.cartCount$.subscribe(count => {
-    this.cartCount = count;
-  });
+    // -------------------------
+    // 1️⃣ Update Cart Count
+    // -------------------------
+    this.updateCartCount(); // initial cart count
+    this.cartState.cartCount$.subscribe(count => {
+      this.cartCount = count;
+    });
 
-  // -------------------------
-  // 2️⃣ Subscribe to Favorite Count
-  // -------------------------
-  this.favoriteService.favoriteCount$.subscribe(count => {
-    this.favoriteCount = count;
-  });
+    // -------------------------
+    // 2️⃣ Subscribe to Favorite Count
+    // -------------------------
+    this.favoriteService.favoriteCount$.subscribe(count => {
+      this.favoriteCount = count;
+    });
 
-  // -------------------------
-  // 3️⃣ Handle Authentication & Favorites
-  // -------------------------
-  this.auth.isLoggedIn$.subscribe(status => {
-    this.isLoggedIn = status;
-    const clientData = localStorage.getItem('client');
-    this.client = (status && clientData) ? JSON.parse(clientData) : null;
+    // -------------------------
+    // 3️⃣ Handle Authentication & Favorites
+    // -------------------------
+    this.auth.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+      const clientData = localStorage.getItem('client');
+      this.client = (status && clientData) ? JSON.parse(clientData) : null;
 
-    if (status) {
-      const token = localStorage.getItem('token');
-      if (token) {
-        this.favoriteService.loadFavorites(token).subscribe({
-          next: (favorites) => this.favoriteService.setFavorites(favorites),
-          error: (err) => console.error('Failed to load favorites:', err)
-        });
+      if (status) {
+        const token = localStorage.getItem('token');
+        if (token) {
+          this.favoriteService.loadFavorites(token).subscribe({
+            next: (favorites) => this.favoriteService.setFavorites(favorites),
+            error: (err) => console.error('Failed to load favorites:', err)
+          });
+        }
+      } else {
+        const localFavs = this.favoriteService.getLocalFavorites();
+        this.favoriteService.setFavorites(localFavs);
       }
-    } else {
-      const localFavs = this.favoriteService.getLocalFavorites();
-      this.favoriteService.setFavorites(localFavs);
-    }
-  });
+    });
 
-  // -------------------------
-  // 4️⃣ Load Categories
-  // -------------------------
-  this.productService.getProducts().subscribe({
-    next: (products) => {
-      this.categories = this.extractUniqueCategories(products);
-    },
-    error: (err) => console.error('Failed to fetch products:', err)
-  });
+    // -------------------------
+    // 4️⃣ Load Categories
+    // -------------------------
+    this.productService.getProducts().subscribe({
+      next: (products) => {
+        this.categories = this.extractUniqueCategories(products);
+      },
+      error: (err) => console.error('Failed to fetch products:', err)
+    });
 
-  // -------------------------
-  // 5️⃣ Initialize Dropdown
-  // -------------------------
-  const defaultNavItem = this.navItems.find(i => i.hasDropdown);
-  if (defaultNavItem) this.toggleDropdown(defaultNavItem);
+    // -------------------------
+    // 5️⃣ Initialize Dropdown
+    // -------------------------
+    const defaultNavItem = this.navItems.find(i => i.hasDropdown);
+    if (defaultNavItem) this.toggleDropdown(defaultNavItem);
 
-  // -------------------------
-  // 6️⃣ Load Products by URL query (category filter)
-  // -------------------------
-  this.route.queryParams.subscribe(params => {
-    const categoryParam = params['category_id'];
+    // -------------------------
+    // 6️⃣ Load Products by URL query (category filter)
+    // -------------------------
+    this.route.queryParams.subscribe(params => {
+      const categoryParam = params['category_id'];
 
-    if (!categoryParam || categoryParam === 'all') {
-      // Load all products
-      this.loadAllProducts();
-      this.selectedCategories = [];
-    } else {
-      // Support multiple category IDs separated by commas
-     const categoryIds = categoryParam
-  .split(',')
-  .map((id: string) => Number(id))
-  .filter((id: number) => !isNaN(id));
+      if (!categoryParam || categoryParam === 'all') {
+        // Load all products
+        this.loadAllProducts();
+        this.selectedCategories = [];
+      } else {
+        // Support multiple category IDs separated by commas
+        const categoryIds = categoryParam
+          .split(',')
+          .map((id: string) => Number(id))
+          .filter((id: number) => !isNaN(id));
 
 
-      // Pre-select categories
-      this.selectedCategories = [...categoryIds];
+        // Pre-select categories
+        this.selectedCategories = [...categoryIds];
 
-      // Load products for the selected categories
-categoryIds.forEach((id: number) => this.loadProductsByCategory(id));
-    }
-  });
+        // Load products for the selected categories
+        categoryIds.forEach((id: number) => this.loadProductsByCategory(id));
+      }
+    });
 
-  // -------------------------
-  // 7️⃣ Language handling
-  // -------------------------
-  this.currentLang = this.languageService.getCurrentLanguage();
-  this.currentDirection = this.currentLang === 'ar' ? 'rtl' : 'ltr';
-  this.translate.use(this.currentLang);
+    // -------------------------
+    // 7️⃣ Language handling
+    // -------------------------
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.currentDirection = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+    this.translate.use(this.currentLang);
 
-  // Listen for language changes
-  this.languageService.currentLang$.subscribe(lang => {
-    this.currentLang = lang;
-    this.currentDirection = lang === 'ar' ? 'rtl' : 'ltr';
-    this.translate.use(lang);
-  });
-}
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.currentDirection = lang === 'ar' ? 'rtl' : 'ltr';
+      this.translate.use(lang);
+    });
+  }
 
 
   // -------------------------
@@ -227,26 +227,26 @@ categoryIds.forEach((id: number) => this.loadProductsByCategory(id));
     return Array.from(categoryMap.values());
   }
 
- updateCartCount(): void {
-  if (this.token) {
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        this.cartCount =Number( response.data.totalQuantity);
-      },
-      error: (err: HttpErrorResponse) => {
-        const apiMessage = err?.error?.message;
-        if (err.status === 401 || apiMessage === 'Unauthenticated.') {
-          this.cartCount = 0; // reset لو التوكين بايظ
-        } else {
-          console.error('Error fetching cart count:', err);
+  updateCartCount(): void {
+    if (this.token) {
+      this.cartService.getCart().subscribe({
+        next: (response) => {
+          this.cartCount = Number(response.data.totalQuantity);
+        },
+        error: (err: HttpErrorResponse) => {
+          const apiMessage = err?.error?.message;
+          if (err.status === 401 || apiMessage === 'Unauthenticated.') {
+            this.cartCount = 0; // reset لو التوكين بايظ
+          } else {
+            console.error('Error fetching cart count:', err);
+          }
         }
-      }
-    });
-  } else {
-    // Guest cart → اشتغل على localStorage
-    this.cartCount = this.cartService.getGuestCartCount();
+      });
+    } else {
+      // Guest cart → اشتغل على localStorage
+      this.cartCount = this.cartService.getGuestCartCount();
+    }
   }
-}
 
 
 
@@ -306,9 +306,9 @@ categoryIds.forEach((id: number) => this.loadProductsByCategory(id));
       }
     });
   }
-onGetStarted() {
-  this.router.navigate(['/reservation/free']);
-}
+  onGetStarted() {
+    this.router.navigate(['/reservation/free']);
+  }
 
 
 
@@ -386,22 +386,22 @@ onGetStarted() {
 
   // selectedLanguage: string = 'العربية';
 
-// switchLanguage(lang: string) {
-//   this.selectedLanguage = lang;
-//   console.log('Trying to switch language to:', lang);
+  // switchLanguage(lang: string) {
+  //   this.selectedLanguage = lang;
+  //   console.log('Trying to switch language to:', lang);
 
-//   // نتأكد أن الفانكشن موجودة
-//   if (typeof (window as any).changeLanguage === 'function') {
-//     try {
-//       (window as any).changeLanguage(lang);
-//       console.log('✅ changeLanguage executed successfully');
-//     } catch (error) {
-//       console.error('❌ Error while executing changeLanguage:', error);
-//     }
-//   } else {
-//     console.warn('⚠️ window.changeLanguage is not defined!');
-//   }
-// }
+  //   // نتأكد أن الفانكشن موجودة
+  //   if (typeof (window as any).changeLanguage === 'function') {
+  //     try {
+  //       (window as any).changeLanguage(lang);
+  //       console.log('✅ changeLanguage executed successfully');
+  //     } catch (error) {
+  //       console.error('❌ Error while executing changeLanguage:', error);
+  //     }
+  //   } else {
+  //     console.warn('⚠️ window.changeLanguage is not defined!');
+  //   }
+  // }
   switchLanguage(lang: string) {
     this.languageService.setLanguage(lang);
   }

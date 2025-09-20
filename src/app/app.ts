@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 // Components
 import { Header } from './header/header';
@@ -47,8 +47,14 @@ export class App implements OnInit {
   constructor(
     private cartState: CartStateService,
     private languageService: LanguageService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {
+     this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // 👈 دايماً يطلع فوق
+      }
+    });
     // إعداد اللغات
     translate.addLangs(['en', 'ar']);
     translate.setDefaultLang('ar');
@@ -56,7 +62,7 @@ export class App implements OnInit {
     const savedLang = this.languageService.getCurrentLanguage();
     translate.use(savedLang);
   }
-
+  
   ngOnInit() {
     // 👇 تحديث الكارت عند أي تغيير
     this.cartState.cartItems$.subscribe(items => {

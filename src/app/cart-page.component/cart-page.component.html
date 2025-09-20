@@ -139,7 +139,10 @@
               }
             </span>
           </li>
-
+  <li class="d-flex justify-content-between py-2">
+            <span>{{ 'CART.SHIPPING_FEE' | translate }}</span>
+            <span>{{ shippingFee | number : '1.2-2' }} {{ 'CART.CURRENCY' | translate }}</span>
+          </li>
           <li class="d-flex justify-content-between fw-bold pt-3 border-top my-3">
             <span>{{ 'CART.GRAND_TOTAL' | translate }}</span>
             <span>
