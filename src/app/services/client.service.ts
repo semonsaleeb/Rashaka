@@ -52,4 +52,12 @@ export class ClientService {
       // Note: Don't set Content-Type for FormData - let browser set it automatically
     });
   }
+
+
+  // داخل ClientService
+updateProfile(data: { name: string; email: string; phone: string }): Observable<any> {
+  const headers = this.getHeaders();
+  return this.http.put<any>(this.baseUrl, data, { headers });
+}
+
 }

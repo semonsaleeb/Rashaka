@@ -411,6 +411,7 @@
     "ADD_TO_CART": "إضافة للعربة"
   },
   "CART": {
+        "PAYMENTMETHOD":"طريقة الدفع",
     "EMPTY_TITLE": "عربة التسوق فارغة!",
     "EMPTY_DESC": "أضف المنتجات التي ترغب في شرائها وارجع لإتمام الطلب لاحقًا.",
     "START_SHOPPING": "ابدأ التسوق",
@@ -523,7 +524,11 @@
     "PASSWORD": "كلمة مرور",
     "CHANGE_PASSWORD": "تغيير كلمة مرور",
     "LOGOUT": "تسجيل الخروج",
-    "UPDATE": "تحديث الحساب"
+    "UPDATE": "تحديث الحساب",
+    "SUCCESS": "نجاح",
+    "CLOSE": "إغلاق",
+    "PROFILE_UPDATED_MESSAGE": "تم تحديث الملف الشخصي بنجاح!",
+    "OK": "موافق"
   },
   "ADDRESS": {
     "DELETE": "حذف",

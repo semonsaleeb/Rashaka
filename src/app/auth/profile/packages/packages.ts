@@ -33,35 +33,37 @@ export class Packages implements OnInit {
     private productService: ProductService,
   ) {}
 
-  ngOnInit(): void {
-    this.loadActiveSubscription();
+ngOnInit(): void {
+  this.loadActiveSubscription();
 
-    this.currentLang = this.languageService.getCurrentLanguage();
-    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  // إعداد اللغة والاتجاه
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
 
-    
-    this.languageService.currentLang$.subscribe(lang => {
-      this.currentLang = lang;
-      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    });
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
+
+  // التوكن والتحقق من تسجيل الدخول
   this.token = localStorage.getItem('token') || '';
-    this.isLoggedIn = !!this.token;
+  this.isLoggedIn = !!this.token;
 
-
-     this.productService.getFreeProductBalance(this.token).subscribe({
-        next: (res) => {
-          console.log('Remaining Free Product Balance:', res.data.balance.remaining);
-          // ممكن تخزنه في متغير في الكومبوننت لو هتستخدمه في الـ HTML
-          this.freeProductBalance = res.data.balance.remaining;
-        },
-        error: (err) => {
-          console.error('❌ Error fetching free product balance:', err);
-        }
-      });
-
-  
-    
+  // جلب free product balance
+  if (this.isLoggedIn) {
+    this.productService.getFreeProductBalance(this.token).subscribe({
+      next: (res) => {
+        const remaining = res.data?.free_product_remaining ?? 0;
+        console.log('Remaining Free Product Balance:', remaining);
+        this.freeProductBalance = remaining;
+      },
+      error: (err) => {
+        console.error('❌ Error fetching free product balance:', err);
+      }
+    });
   }
+}
+
 
   loadActiveSubscription(): void {
     this.isLoading = true;

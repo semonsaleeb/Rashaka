@@ -3,3 +3,23 @@
     color :black;
     border: none;
 }
+/* details.scss */
+input, textarea {
+  text-align: left; /* default */
+}
+
+input, textarea {
+  text-align: left; // default
+}
+
+.rtl input, .rtl textarea {
+  text-align: right;
+}
+
+label {
+  text-align: left !important; // default
+}
+
+.rtl label {
+  text-align: right !important;
+}

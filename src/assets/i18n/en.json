@@ -411,6 +411,7 @@
     "ADD_TO_CART": "Add to Cart"
   },
   "CART": {
+    "PAYMENTMETHOD":"Payment Method",
     "EMPTY_TITLE": "Your cart is empty!",
     "EMPTY_DESC": "Add the products you want and come back later to complete your order.",
     "START_SHOPPING": "Start Shopping",
@@ -524,7 +525,11 @@
     "PASSWORD": "Password",
     "CHANGE_PASSWORD": "Change Password",
     "LOGOUT": "Logout",
-    "UPDATE": "Update Account"
+    "UPDATE": "Update Account",
+    "SUCCESS": "Success",
+    "CLOSE": "Close",
+    "PROFILE_UPDATED_MESSAGE": "Profile updated successfully!",
+    "OK": "OK"
   },
   "ADDRESS": {
     "DELETE": "Delete",

@@ -6,22 +6,6 @@ import { environment } from '../../environments/environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
 import { Product } from '../../models/Product';
 
-interface FreeProductBalanceResponse {
-  status: string;
-  message: string;
-  data: {
-    package: {
-      client_package_id: number | null;
-      package_id: number | null;
-      package_name: string | null;
-    };
-    balance: {
-      total: number;
-      used: number;
-      remaining: number;
-    };
-  };
-}
 
 @Injectable({
   providedIn: 'root'
@@ -104,15 +88,15 @@ export class ProductService {
   /**
    * Get client's free product balance from active package
    */
-  getFreeProductBalance(token: string): Observable<FreeProductBalanceResponse> {
-    const headers = new HttpHeaders({
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`
-    });
+ getFreeProductBalance(token: string): Observable<ApiResponse<FreeProductBalanceResponse>> {
+  const headers = new HttpHeaders({
+    Accept: 'application/json',
+    Authorization: `Bearer ${token}`
+  });
 
-    const url = `${this.baseUrl}/free-product-balance`;
-    return this.http.get<FreeProductBalanceResponse>(url, { headers });
-  }
+  const url = `${this.baseUrl}/free-product-balance`;
+  return this.http.get<ApiResponse<FreeProductBalanceResponse>>(url, { headers });
+}
 
   // Helper method to construct full URL
   private getFullUrl(endpoint: string): string {

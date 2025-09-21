@@ -42,6 +42,8 @@ export class PlaceOrder implements OnInit {
   shippingFee: number = 30;
   freeProductBalance: number = 0; 
 
+  // currentLang: string = 'en'; // أو '' حسب الحاجة
+  dir: 'ltr' | 'rtl' = 'ltr'; // ⬅️ أضف هذا المتغير
 
   constructor(
     private http: HttpClient,
@@ -59,29 +61,26 @@ export class PlaceOrder implements OnInit {
   ) { }
 
 ngOnInit(): void {
-  // جلب التوكن والتحقق من تسجيل الدخول
+  // 1️⃣ التحقق من التوكن وتسجيل الدخول
   this.token = localStorage.getItem('token') || '';
   this.isLoggedIn = !!this.token;
 
-  // إذا المستخدم مسجل دخول → تحميل البيانات الأساسية
+  // 2️⃣ تحميل بيانات المستخدم إذا مسجل دخول
   if (this.isLoggedIn) {
     this.loadClientProfile();
     this.fetchAddresses();
 
-    // جلب free product balance
+    // جلب رصيد الـ Free Product
     this.productService.getFreeProductBalance(this.token).subscribe({
-      next: (res) => {
-        const remaining = res?.data?.balance?.remaining ?? 0;
-        console.log('Remaining Free Product Balance:', remaining);
-        this.freeProductBalance = remaining;
+      next: (res: { status: string; message: string; data: FreeProductBalanceResponse }) => {
+        this.freeProductBalance = res.data?.free_product_remaining ?? 0;
+        console.log('Remaining Free Product Balance:', this.freeProductBalance);
       },
-      error: (err) => {
-        console.error('❌ Error fetching free product balance:', err);
-      }
+      error: (err) => console.error('❌ Error fetching free product balance:', err)
     });
   }
 
-  // تحميل السلة
+  // 3️⃣ تحميل السلة
   this.cartService.getCart().subscribe({
     next: (response) => {
       const cartData = response?.data;
@@ -95,48 +94,29 @@ ngOnInit(): void {
       }
 
       // تحويل الأسعار من string إلى number
-   this.cartItems = cartData.items.map(item => {
-  // لو unit_price undefined حنخليه '0'
-  const unitPriceStr = (item.unit_price ?? '0').toString();
-  const unitPrice = parseFloat(unitPriceStr.replace(/,/g, '')) || 0;
-
-  const saleUnitPriceStr = item.sale_unit_price ? item.sale_unit_price.toString() : '0';
-  const saleUnitPrice = saleUnitPriceStr !== '0' 
-    ? parseFloat(saleUnitPriceStr.replace(/,/g, '')) 
-    : null;
-
-  return {
-    ...item,
-    unit_price: unitPrice,
-    sale_unit_price: saleUnitPrice
-  };
-});
-
+      this.cartItems = cartData.items.map(item => {
+        const unitPrice = parseFloat((item.unit_price ?? '0').toString().replace(/,/g, '')) || 0;
+        const saleUnitPrice = item.sale_unit_price
+          ? parseFloat(item.sale_unit_price.toString().replace(/,/g, ''))
+          : null;
+        return { ...item, unit_price: unitPrice, sale_unit_price: saleUnitPrice };
+      });
 
       // حساب الإجماليات
-      this.totalPrice = this.cartItems.reduce(
-        (sum, item) => sum + item.unit_price * item.quantity,
-        0
-      );
+      this.totalPrice = this.cartItems.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
       this.totalSalePrice = this.cartItems.reduce(
-        (sum, item) =>
-          sum + (item.sale_unit_price || item.unit_price) * item.quantity,
+        (sum, item) => sum + (item.sale_unit_price || item.unit_price) * item.quantity,
         0
       );
 
       // تحديث عدد العناصر في السلة
-      const totalQuantity = this.cartItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
+      const totalQuantity = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
       this.cartState.updateCount(totalQuantity);
     },
-    error: (err) => {
-      console.error('Error loading cart', err);
-    }
+    error: (err) => console.error('❌ Error loading cart', err)
   });
 
-  // التحقق من باراميترات تأكيد الطلب بعد الدفع
+  // 4️⃣ التحقق من باراميترات تأكيد الطلب بعد الدفع
   const addressIdParam = this.route.snapshot.queryParamMap.get('addressId');
   const promoCodeParam = this.route.snapshot.queryParamMap.get('promoCode');
 
@@ -144,7 +124,6 @@ ngOnInit(): void {
     this.cartService.placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '').subscribe({
       next: (orderRes) => {
         console.log('📦 Server Response from placeOrder:', orderRes);
-        console.log('💳 Payment Method:', this.paymentMethod);
         alert('تم تأكيد الطلب بنجاح بعد الدفع!');
         this.router.navigate(['/order-success', orderRes.order_id]);
       },
@@ -155,14 +134,20 @@ ngOnInit(): void {
     });
   }
 
-  // إعداد اللغة الحالية
-  this.translate.use(this.languageService.getCurrentLanguage());
+  // 5️⃣ ضبط اللغة والـ dir
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  this.translate.use(this.currentLang);
 
-  // الاستماع لتغييرات اللغة
+  // الاستماع لتغييرات اللغة وتحديث dir تلقائيًا
   this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
     this.translate.use(lang);
   });
 }
+
+
 
 
 

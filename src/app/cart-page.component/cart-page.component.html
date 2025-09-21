@@ -1,4 +1,4 @@
-<div class="container my-4" dir="rtl">
+<div class="container my-4" >
 
   <!-- إذا كانت العربة فارغة -->
   @if (cartItems.length === 0) {
@@ -29,7 +29,7 @@
   <div class="row g-4">
     <!-- Right Side: Cart Items -->
     <div class="col-12 col-lg-7">
-      <h6 class="mb-4 text-end">
+      <h6 class="mb-4 ">
         <img src="assets/Images/delivery.svg" class="me-2" style="max-height: 22px;">
         <span>{{ 'CART.FREE_SHIPPING' | translate }}</span>
         <strong>{{ 'CART.AMOUNT' | translate }}</strong>
@@ -56,8 +56,10 @@
 
           <!-- تفاصيل المنتج -->
           <div class="col-9">
-            <div class="card-body text-end p-2">
-              <h6 class="card-title fw-bold">{{ item.product_name_ar }}</h6>
+            <div class="card-body  p-2">
+<h6 class="card-title fw-bold">
+  {{ currentLang === 'ar' ? item.product_name_ar : item.product_name }}
+</h6>
 
               <!-- السعر -->
               <div class="small">
@@ -109,11 +111,11 @@
     <!-- Left Side: Order Summary -->
     <div class="col-12 col-lg-5">
       <div class="card shadow-sm border-1 rounded-4 p-4" style="background-color: #FAFAFA;">
-        <h6 class="text-end mb-3">{{ 'CART.SUMMARY' | translate }}</h6>
+        <h6 class=" mb-3">{{ 'CART.SUMMARY' | translate }}</h6>
 
         <!-- Promo Code -->
         <div class="input-group mb-3">
-          <input type="text" class="form-control text-end rounded-0" [placeholder]="'CART.ENTER_CODE' | translate"
+          <input type="text" class="form-control  rounded-0" [placeholder]="'CART.ENTER_CODE' | translate"
             [(ngModel)]="promoCode">
           <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">
             {{ 'CART.APPLY' | translate }}
@@ -121,7 +123,7 @@
         </div>
 
         <!-- الأسعار -->
-        <ul class="mb-3 text-end p-0 small">
+        <ul class="mb-3  p-0 small">
           <li class="d-flex justify-content-between py-2">
             <span>{{ 'CART.TOTAL' | translate }}</span>
             <span>

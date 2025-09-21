@@ -1,29 +1,47 @@
-<div class="container p-lg-5 m-lg-5 text-end" dir="rtl">
+<div class="container p-lg-5 m-lg-5" [dir]="dir" [class.rtl]="currentLang==='ar'" [class.ltr]="currentLang==='en'">
   <form>
 
     <!-- معلومات الاتصال -->
     <div class="p-4 mb-4">
       <h6 class="fw-bold mb-4">{{ 'ACCOUNT.CONTACT_INFO' | translate }}</h6>
 
-      <div class="row g-3 align-items-center">
+      <div class="row g-3 ">
 
         <!-- البريد الإلكتروني -->
         <div class="col-md-6">
-          <label class="form-label">{{ 'ACCOUNT.EMAIL' | translate }}</label>
-          <input type="email" class="form-control rounded-0" [value]="client.email" readonly>
+          <label class="form-label"  [class.text-end]="currentLang === 'ar'"
+       [class.text-start]="currentLang === 'en'">{{ 'ACCOUNT.EMAIL' | translate }}</label>
+          <div class="input-group">
+            <input 
+              type="email" 
+              class="form-control rounded-0"
+              [(ngModel)]="client.email"
+              [ngModelOptions]="{standalone: true}"
+              [disabled]="!isEditingEmail"
+              (blur)="disableEditing('email')"
+            >
+            <span class="input-group-text rounded-0" (click)="enableEditing('email')" style="cursor: pointer;">
+              <i class="fas fa-pen"></i>
+            </span>
+          </div>
         </div>
 
         <!-- رقم الجوال -->
         <div class="col-md-6">
-          <label class="form-label">{{ 'ACCOUNT.PHONE' | translate }}</label>
+          <label class="form-label"  [class.text-end]="currentLang === 'ar'"
+       [class.text-start]="currentLang === 'en'">{{ 'ACCOUNT.PHONE' | translate }}</label>
           <div class="input-group">
-            <input type="text" class="form-control rounded-0" name="phone" [(ngModel)]="client.phone"
-              [readonly]="client.phone && client.phone.trim() !== ''">
-            @if (!client.phone || client.phone.trim() === '') {
-            <button class="btn btn-outline-success rounded-0" type="button">
-              {{ 'ACCOUNT.ADD_PHONE' | translate }}
-            </button>
-            }
+            <input 
+              type="text" 
+              class="form-control rounded-0"
+              [(ngModel)]="client.phone"
+              [ngModelOptions]="{standalone: true}"
+              [disabled]="!isEditingPhone"
+              (blur)="disableEditing('phone')"
+            >
+            <span class="input-group-text rounded-0" (click)="enableEditing('phone')" style="cursor: pointer;">
+              <i class="fas fa-pen"></i>
+            </span>
           </div>
         </div>
 
@@ -40,19 +58,22 @@
         <div class="col-md-6">
           <label class="form-label">{{ 'ACCOUNT.FIRST_NAME' | translate }}</label>
           <div class="input-group">
-            <input type="text" class="form-control rounded-0" name="name" [(ngModel)]="client.name">
-            <span class="input-group-text rounded-0"><i class="fas fa-pen"></i></span>
+            <input 
+              type="text" 
+              class="form-control rounded-0"
+              [(ngModel)]="client.name"
+              [ngModelOptions]="{standalone: true}"
+              [disabled]="!isEditingName"
+              (blur)="disableEditing('name')"
+            >
+            <span class="input-group-text rounded-0" (click)="enableEditing('name')" style="cursor: pointer;">
+              <i class="fas fa-pen"></i>
+            </span>
           </div>
         </div>
-
-        <!-- اسم العائلة -->
-        <!-- <div class="col-md-6">
-          <label class="form-label">{{ 'ACCOUNT.LAST_NAME' | translate }}</label>
-          <div class="input-group">
-            <input type="text" class="form-control rounded-0" name="lastName">
-            <span class="input-group-text rounded-0"><i class="fas fa-pen"></i></span>
-          </div>
-        </div> -->
+        <div class="col-md-6">
+</div>
+      <div class="row g-3">
 
         <!-- كلمة المرور -->
         <div class="col-md-6">
@@ -65,20 +86,50 @@
         </div>
 
         <!-- تسجيل الخروج -->
-        <div class="col-md-6 d-flex align-items-end justify-content-center">
+        <div class="col-md-6 d-flex align-items-end ">
           <button class="dropdown-item text-dark border rounded-pill w-50 text-center py-2"
             style="border-color: #6c757d;" (click)="logout()">
             <img src="assets/Images/Frame 9049.svg"> {{ 'ACCOUNT.LOGOUT' | translate }}
           </button>
         </div>
+        </div>
       </div>
     </div>
 
     <!-- زر التحديث -->
-    <div class="text-end">
-      <button type="submit" class="btn btn-success rounded-pill px-4 py-2">
+    <div class="">
+      <button type="button" class="btn btn-success rounded-pill px-4 py-2" (click)="updateProfile()">
         {{ 'ACCOUNT.UPDATE' | translate }}
       </button>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="profileUpdatedModal" tabindex="-1" aria-labelledby="profileUpdatedModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+         <div class="modal-header d-flex">
+  <!-- Close button on the left -->
+  <button type="button" class="btn-close me-auto" data-bs-dismiss="modal"
+          [attr.aria-label]="'ACCOUNT.CLOSE' | translate">
+  </button>
+
+  <!-- Title aligned to the right -->
+  <h5 class="modal-title ms-auto" id="profileUpdatedModalLabel">
+    {{ 'ACCOUNT.SUCCESS' | translate }}
+  </h5>
+</div>
+
+          <div class="modal-body">
+            {{ 'ACCOUNT.PROFILE_UPDATED_MESSAGE' | translate }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" (click)="goHome()" data-bs-dismiss="modal">
+              {{ 'ACCOUNT.OK' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
   </form>

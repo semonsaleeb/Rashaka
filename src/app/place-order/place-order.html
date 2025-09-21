@@ -1,4 +1,4 @@
-<div class="container my-5" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+<div class="container my-5" [dir]="dir">
   <!-- Page title -->
   <div class="alert alert-light text-center p-2 mb-4">
     <h4 class="text-center">
@@ -12,7 +12,7 @@
     <div class="col-lg-7">
       <form (ngSubmit)="placeOrder()">
         <!-- Contact Information -->
-        <h5>{{ 'CART.CONTACT_INFO' | translate }}</h5>
+        <h5 class="text-primary">{{ 'CART.CONTACT_INFO' | translate }}</h5>
         <div class="row mb-3">
 
           <div class="col-md-6">
@@ -28,7 +28,7 @@
         </div>
 
         <!-- Shipping address -->
-        <h5>{{ 'CART.SHIPPING_ADDRESS' | translate }}</h5>
+        <h5 class="text-primary">{{ 'CART.SHIPPING_ADDRESS' | translate }}</h5>
         <div class="d-flex mb-3 align-items-center" style="gap: 10px;">
           <select class="form-select flex-grow-1 w-50" [(ngModel)]="selectedAddressId" name="address"
             (change)="onAddressChange()" required>
@@ -46,26 +46,28 @@
 
         <!-- Payment Method -->
         <div class="mb-3">
+          <h5 class="text-primary">{{ 'CART.PAYMENTMETHOD' | translate }}</h5>
+
           <!-- Credit Card -->
-          <div class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
+          <div class=" border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
             <input type="radio" id="payment_credit_card" name="paymentMethod" value="credit_card"
               [(ngModel)]="paymentMethod" class="me-2" />
             <label for="payment_credit_card" class="mb-0">
-              {{ 'CART.PAYMENT_CREDIT' | translate }}
+              &nbsp; {{ 'CART.PAYMENT_CREDIT' | translate }}
             </label>
           </div>
 
           <!-- Cash -->
-          <div class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
+          <div class=" border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
             <input type="radio" id="payment_cash" name="paymentMethod" value="cash" [(ngModel)]="paymentMethod"
               class="me-2" />
             <label for="payment_cash" class="mb-0">
-              {{ 'CART.PAYMENT_CASH' | translate }}
+              &nbsp; {{ 'CART.PAYMENT_CASH' | translate }}
             </label>
           </div>
 
           <!-- Free Product Balance -->
-          <div *ngIf="isLoggedIn && freeProductBalance > 0"
+          <!-- <div *ngIf="isLoggedIn && freeProductBalance > 0"
             class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center alert alert-info">
             <input type="radio" id="payment_free_balance" name="paymentMethod" value="free_balance"
               [(ngModel)]="paymentMethod" class="me-2" />
@@ -74,7 +76,7 @@
               <strong>{{ 'USE_PACKAGE_BALANCE' | translate }}</strong>
               ({{ freeProductBalance }})
             </label>
-          </div>
+          </div> -->
         </div>
 
 
@@ -84,7 +86,7 @@
     <!-- Left column: Order summary -->
     <div class="col-lg-5">
       <div class="card border-1 rounded-4 p-3" style="background-color: #FAFAFA;">
-        <h5 class="text-end mb-4">{{ 'CART.YOUR_ORDERS' | translate }}</h5>
+        <h5 class=" mb-4">{{ 'CART.YOUR_ORDERS' | translate }}</h5>
 
         <!-- Products -->
         <div class="mb-3">
@@ -113,7 +115,7 @@
         </div>
 
         <!-- Totals -->
-        <ul class="list-unstyled text-end mb-4">
+        <ul class="list-unstyled  mb-4">
           <li class="d-flex justify-content-between py-2">
             <span>{{ 'CART.SHIPPING_FEE' | translate }}</span>
             <span>{{ shippingFee | number : '1.2-2' }} {{ 'CART.CURRENCY' | translate }}</span>
@@ -138,10 +140,18 @@
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="cancelOrderModalLabel">   {{ 'CART.CANCEL_ORDER_TITLE' | translate }}</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header d-flex justify-content-between">
+                  <!-- زر الـ Close على الشمال -->
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    [attr.aria-label]="'CART.CLOSE' | translate">
+                  </button>
+
+                  <!-- العنوان على اليمين -->
+                  <h5 class="modal-title text-end flex-grow-1" id="cancelOrderModalLabel">
+                    {{ 'CART.CANCEL_ORDER_TITLE' | translate }}
+                  </h5>
                 </div>
+
                 <div class="modal-body">
                   {{ 'CART.CANCEL_ORDER_CONFIRMATION' | translate }}
                 </div>

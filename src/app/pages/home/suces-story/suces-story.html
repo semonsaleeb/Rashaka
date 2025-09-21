@@ -9,13 +9,11 @@
      class="btn btn-link view-all-btn text-light align-items-center gap-2 fs-5 p-0 d-none d-md-flex"
      [ngClass]="currentLang === 'ar' ? 'ms-0 me-3 flex-row-reverse' : 'ms-3 me-0 flex-row'"
      style="white-space: nowrap;">
+    {{ 'VIEW_ALL' | translate }}
 
     <img src="assets/Images/circle-arrow-up-right-02 (1).svg"
-         alt="{{ 'VIEW_ALL' | translate }}"
-         width="25px"
-         [style.transform]="currentLang === 'ar' ? 'rotate(180deg)' : 'rotate(0deg)'">
+         alt="{{ 'VIEW_ALL' | translate }}">
 
-    {{ 'VIEW_ALL' | translate }}
   </a>
   <!-- العنوان -->
   <h2 class="section-title mb-0" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
@@ -153,7 +151,7 @@
             }
           </div>
           <!-- Arrows -->
-          <div class="d-flex gap-2">
+          <div class="d-flex gap-2" dir="rtl">
             <button class="arrow-btn next" (click)="nextSlide()"></button>
             <button class="arrow-btn prev" (click)="prevSlide()"></button>
           </div>
