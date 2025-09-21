@@ -88,25 +88,32 @@ export class OrderService {
   }
 
   // Place a new order
-  placeOrder(addressId: number, paymentMethod: string, promoCode?: string): Observable<any> {
-    const token = localStorage.getItem('token') || '';
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
+placeOrder(
+  addressId: number,
+  paymentMethod: string,
+  promoCode?: string,
+  freeBalanceAmount?: number // <-- add this parameter
+): Observable<any> {
+  const token = localStorage.getItem('token') || '';
+  const headers = new HttpHeaders({
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  });
 
-    const body = {
-      address_id: addressId,
-      payment_method: paymentMethod,
-      promocode: promoCode || ''
-    };
+  const body = {
+    address_id: addressId,
+    payment_method: paymentMethod,
+    promocode: promoCode || '',
+    free_balance: freeBalanceAmount || 0 // <-- include balance
+  };
 
-    return this.http.post(
-      `${this.baseUrl}/order`,
-      body,
-      { headers }
-    );
-  }
+  return this.http.post(
+    `${this.baseUrl}/order`,
+    body,
+    { headers }
+  );
+}
+
 
 
   // src/app/services/order.service.ts
