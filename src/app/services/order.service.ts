@@ -92,7 +92,8 @@ placeOrder(
   addressId: number,
   paymentMethod: string,
   promoCode?: string,
-  freeBalanceAmount?: number // <-- add this parameter
+  applyFreeBalance: boolean = false,
+  freeBalanceAmount?: number
 ): Observable<any> {
   const token = localStorage.getItem('token') || '';
   const headers = new HttpHeaders({
@@ -104,14 +105,11 @@ placeOrder(
     address_id: addressId,
     payment_method: paymentMethod,
     promocode: promoCode || '',
-    free_balance: freeBalanceAmount || 0 // <-- include balance
+    apply_free_balance: applyFreeBalance,          // ✅ include this
+    free_balance_amount: freeBalanceAmount || 0    // ✅ include the exact amount
   };
 
-  return this.http.post(
-    `${this.baseUrl}/order`,
-    body,
-    { headers }
-  );
+  return this.http.post(`${this.baseUrl}/order`, body, { headers });
 }
 
 

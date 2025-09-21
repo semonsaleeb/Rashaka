@@ -287,7 +287,7 @@ placeOrder(): void {
     this.paymentMethod,
     this.promoCode,
     this.applyFreeBalance,
-    freeBalanceToApply
+     this.freeBalanceAmount 
   ).subscribe({
     next: (orderRes) => {
       console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
