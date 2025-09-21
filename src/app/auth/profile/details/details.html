@@ -9,17 +9,12 @@
 
         <!-- البريد الإلكتروني -->
         <div class="col-md-6">
-          <label class="form-label"  [class.text-end]="currentLang === 'ar'"
-       [class.text-start]="currentLang === 'en'">{{ 'ACCOUNT.EMAIL' | translate }}</label>
+          <label class="form-label w-100 w-100" [class.text-end]="currentLang === 'ar'" [class.text-start]="currentLang === 'en'">{{
+            'ACCOUNT.EMAIL' | translate }}</label>
           <div class="input-group">
-            <input 
-              type="email" 
-              class="form-control rounded-0"
-              [(ngModel)]="client.email"
-              [ngModelOptions]="{standalone: true}"
-              [disabled]="!isEditingEmail"
-              (blur)="disableEditing('email')"
-            >
+            
+            <input type="email" class="form-control rounded-0" [(ngModel)]="client.email"
+              [ngModelOptions]="{standalone: true}" [disabled]="!isEditingEmail" (blur)="disableEditing('email')">
             <span class="input-group-text rounded-0" (click)="enableEditing('email')" style="cursor: pointer;">
               <i class="fas fa-pen"></i>
             </span>
@@ -28,17 +23,11 @@
 
         <!-- رقم الجوال -->
         <div class="col-md-6">
-          <label class="form-label"  [class.text-end]="currentLang === 'ar'"
-       [class.text-start]="currentLang === 'en'">{{ 'ACCOUNT.PHONE' | translate }}</label>
+          <label class="form-label w-100" [class.text-end]="currentLang === 'ar'" [class.text-start]="currentLang === 'en'">{{
+            'ACCOUNT.PHONE' | translate }}</label>
           <div class="input-group">
-            <input 
-              type="text" 
-              class="form-control rounded-0"
-              [(ngModel)]="client.phone"
-              [ngModelOptions]="{standalone: true}"
-              [disabled]="!isEditingPhone"
-              (blur)="disableEditing('phone')"
-            >
+            <input type="text" class="form-control rounded-0" [(ngModel)]="client.phone"
+              [ngModelOptions]="{standalone: true}" [disabled]="!isEditingPhone" (blur)="disableEditing('phone')">
             <span class="input-group-text rounded-0" (click)="enableEditing('phone')" style="cursor: pointer;">
               <i class="fas fa-pen"></i>
             </span>
@@ -56,42 +45,36 @@
 
         <!-- الاسم الأول -->
         <div class="col-md-6">
-          <label class="form-label">{{ 'ACCOUNT.FIRST_NAME' | translate }}</label>
+          <label class="form-label w-100 text-end">{{ 'ACCOUNT.FIRST_NAME' | translate }}</label>
           <div class="input-group">
-            <input 
-              type="text" 
-              class="form-control rounded-0"
-              [(ngModel)]="client.name"
-              [ngModelOptions]="{standalone: true}"
-              [disabled]="!isEditingName"
-              (blur)="disableEditing('name')"
-            >
+            <input type="text" class="form-control rounded-0" [(ngModel)]="client.name"
+              [ngModelOptions]="{standalone: true}" [disabled]="!isEditingName" (blur)="disableEditing('name')">
             <span class="input-group-text rounded-0" (click)="enableEditing('name')" style="cursor: pointer;">
               <i class="fas fa-pen"></i>
             </span>
           </div>
         </div>
         <div class="col-md-6">
-</div>
-      <div class="row g-3">
+        </div>
+        <div class="row g-3">
 
-        <!-- كلمة المرور -->
-        <div class="col-md-6">
-          <label class="form-label">{{ 'ACCOUNT.PASSWORD' | translate }}</label>
-          <div class="input-group">
-            <button type="button" class="btn btn-success rounded-0" routerLink="/forgot-password">
-              {{ 'ACCOUNT.CHANGE_PASSWORD' | translate }}
+          <!-- كلمة المرور -->
+          <div class="col-md-6">
+            <label class="form-label w-100">{{ 'ACCOUNT.PASSWORD' | translate }}</label>
+            <div class="input-group">
+              <button type="button" class="btn btn-success rounded-0" routerLink="/forgot-password">
+                {{ 'ACCOUNT.CHANGE_PASSWORD' | translate }}
+              </button>
+            </div>
+          </div>
+
+          <!-- تسجيل الخروج -->
+          <div class="col-md-6 d-flex align-items-end ">
+            <button class="dropdown-item text-dark border rounded-pill w-50 text-center py-2"
+              style="border-color: #6c757d;" (click)="logout()">
+              <img src="assets/Images/Frame 9049.svg"> {{ 'ACCOUNT.LOGOUT' | translate }}
             </button>
           </div>
-        </div>
-
-        <!-- تسجيل الخروج -->
-        <div class="col-md-6 d-flex align-items-end ">
-          <button class="dropdown-item text-dark border rounded-pill w-50 text-center py-2"
-            style="border-color: #6c757d;" (click)="logout()">
-            <img src="assets/Images/Frame 9049.svg"> {{ 'ACCOUNT.LOGOUT' | translate }}
-          </button>
-        </div>
         </div>
       </div>
     </div>
@@ -108,17 +91,17 @@
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-         <div class="modal-header d-flex">
-  <!-- Close button on the left -->
-  <button type="button" class="btn-close me-auto" data-bs-dismiss="modal"
-          [attr.aria-label]="'ACCOUNT.CLOSE' | translate">
-  </button>
+          <div class="modal-header d-flex">
+            <!-- Close button on the left -->
+            <button type="button" class="btn-close me-auto" data-bs-dismiss="modal"
+              [attr.aria-label]="'ACCOUNT.CLOSE' | translate">
+            </button>
 
-  <!-- Title aligned to the right -->
-  <h5 class="modal-title ms-auto" id="profileUpdatedModalLabel">
-    {{ 'ACCOUNT.SUCCESS' | translate }}
-  </h5>
-</div>
+            <!-- Title aligned to the right -->
+            <h5 class="modal-title ms-auto" id="profileUpdatedModalLabel">
+              {{ 'ACCOUNT.SUCCESS' | translate }}
+            </h5>
+          </div>
 
           <div class="modal-body">
             {{ 'ACCOUNT.PROFILE_UPDATED_MESSAGE' | translate }}
