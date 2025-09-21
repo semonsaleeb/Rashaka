@@ -107,4 +107,22 @@ export class OrderService {
       { headers }
     );
   }
+
+
+  // src/app/services/order.service.ts
+updateOrderStatus(orderId: number, status: 'confirmed' | 'shipped' | 'delivered' | 'cancelled'): Observable<any> {
+  const token = localStorage.getItem('token') || '';
+  const headers = new HttpHeaders({
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  });
+
+  const body = {
+    order_id: orderId,
+    status: status
+  };
+
+  return this.http.post(`${this.baseUrl}/order/update-status`, body, { headers });
+}
+
 }

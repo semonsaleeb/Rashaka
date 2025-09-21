@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 import { CommonModule } from '@angular/common';
+import { Appointment } from '../../../../models/appointment.model';
 
 declare var bootstrap: any; // 👈 مهم عشان يشتغل الـ Modal
 
@@ -104,6 +105,18 @@ fetchAppointments() {
 
     this.appointmentToCancel = null;
   }
+
+// editAppointment(appt: Appointment) {
+//   // 1- احفظ البيانات الحالية في State Service
+//   this.appointmentState.setData(appt);
+
+//   // 2- توجه للـ Component المناسب حسب النوع
+//   if (this.selectedMode === 'free') {
+//     this.router.navigate(['/reservation/free']);
+//   } else {
+//     this.router.navigate(['/reservation/all']);
+//   }
+// }
 
   // 📌 تعديل وقت الموعد (باستخدام prompt حالياً)
   updateAppointmentTime(id: number) {

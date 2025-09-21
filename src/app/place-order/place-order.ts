@@ -71,13 +71,19 @@ ngOnInit(): void {
     this.fetchAddresses();
 
     // جلب رصيد الـ Free Product
-    this.productService.getFreeProductBalance(this.token).subscribe({
-      next: (res: { status: string; message: string; data: FreeProductBalanceResponse }) => {
-        this.freeProductBalance = res.data?.free_product_remaining ?? 0;
-        console.log('Remaining Free Product Balance:', this.freeProductBalance);
-      },
-      error: (err) => console.error('❌ Error fetching free product balance:', err)
-    });
+    // بعد جلب رصيد المنتج المجاني
+this.productService.getFreeProductBalance(this.token).subscribe({
+  next: (res: any) => {
+    this.freeProductBalance = res.data?.free_product_remaining ?? 0;
+    this.maxFreeBalance=this.freeProductBalance
+    console.log('Remaining Free Product Balance:', this.freeProductBalance);
+
+    // تعيين القيمة الافتراضية
+    this.setDefaultFreeBalanceAmount();
+  },
+  error: (err) => console.error('❌ Error fetching free product balance:', err)
+});
+
   }
 
   // 3️⃣ تحميل السلة
@@ -232,75 +238,87 @@ ngOnInit(): void {
     this.router.navigate(['/profile/addresses']);
   }
 
-
-  placeOrder(): void {
-    // 1. التحقق من البيانات الأساسية قبل الإرسال
-    if (!this.client || !this.client.id) {
-      console.error('بيانات العميل غير متوفرة');
-      alert('خطأ في بيانات العميل، يرجى تسجيل الدخول مرة أخرى');
-      return;
-    }
-
-    if (!this.selectedAddressId) {
-      console.error('لم يتم اختيار عنوان الشحن');
-      alert('من فضلك اختر عنوان شحن صالح');
-      return;
-    }
-
-    if (!this.paymentMethod) {
-      console.error('لم يتم اختيار طريقة الدفع');
-      alert('من فضلك اختر طريقة دفع صالحة');
-      return;
-    }
-
-    // 2. التحقق من وجود عناصر في السلة
-    if (!this.cartItems || this.cartItems.length === 0) {
-      console.error('السلة فارغة');
-      alert('لا يوجد منتجات في سلة التسوق');
-      return;
-    }
-
-    // 3. التحقق من اتصال الإنترنت
-    if (!navigator.onLine) {
-      console.error('لا يوجد اتصال بالإنترنت');
-      alert('تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت');
-      return;
-    }
-
-    // 4. إظهار مؤشر تحميل
-    // this.isLoading = true;
-
-    this.cartService.placeOrder(
-      this.selectedAddressId,
-      this.paymentMethod,
-      this.promoCode
-    ).subscribe({
-      next: (orderRes) => {
-         console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
-  console.log('💳 طريقة الدفع المختارة:', this.paymentMethod);
-        // this.isLoading = false;
-
-        if (!orderRes || !orderRes.order_id) {
-          console.error('استجابة الطلب غير صالحة:', orderRes);
-          alert('استجابة غير متوقعة من الخادم');
-          return;
-        }
-
-        if (this.paymentMethod === 'credit_card') {
-          this.handleCreditCardPayment(orderRes);
-        } else if (this.paymentMethod === 'cash') {
-          this.handleCashPayment(orderRes);
-        } else {
-          console.error('طريقة دفع غير معروفة:', this.paymentMethod);
-          alert('طريقة الدفع غير مدعومة');
-        }
-      },
-      error: (err) => {
-        // this.isLoading = false;
-        this.handleOrderError(err);
-      }
-    });
+placeOrder(): void {
+  // 1️⃣ التحقق من بيانات العميل
+  if (!this.client || !this.client.id) {
+    console.error('بيانات العميل غير متوفرة');
+    alert('خطأ في بيانات العميل، يرجى تسجيل الدخول مرة أخرى');
+    return;
   }
+
+  // 2️⃣ التحقق من عنوان الشحن
+  if (!this.selectedAddressId) {
+    console.error('لم يتم اختيار عنوان الشحن');
+    alert('من فضلك اختر عنوان شحن صالح');
+    return;
+  }
+
+  // 3️⃣ التحقق من طريقة الدفع
+  if (!this.paymentMethod) {
+    console.error('لم يتم اختيار طريقة الدفع');
+    alert('من فضلك اختر طريقة دفع صالحة');
+    return;
+  }
+
+  // 4️⃣ التحقق من وجود منتجات في السلة
+  if (!this.cartItems || this.cartItems.length === 0) {
+    console.error('السلة فارغة');
+    alert('لا يوجد منتجات في سلة التسوق');
+    return;
+  }
+
+  // 5️⃣ التحقق من اتصال الإنترنت
+  if (!navigator.onLine) {
+    console.error('لا يوجد اتصال بالإنترنت');
+    alert('تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت');
+    return;
+  }
+
+  // 6️⃣ حساب قيمة الرصيد المجاني الممكن استخدامه
+  let freeBalanceToApply = 0;
+  if (this.applyFreeBalance && this.freeProductBalance > 0) {
+    const totalCartPrice = this.cartItems.reduce((sum, item) => sum + item.total_price, 0);
+    freeBalanceToApply = Math.min(this.freeBalanceAmount || totalCartPrice, this.freeProductBalance, totalCartPrice);
+  }
+
+  // 7️⃣ إرسال الطلب
+  this.cartService.placeOrder(
+    this.selectedAddressId,
+    this.paymentMethod,
+    this.promoCode,
+    this.applyFreeBalance,
+    freeBalanceToApply
+  ).subscribe({
+    next: (orderRes) => {
+      console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
+      console.log('💳 طريقة الدفع المختارة:', this.paymentMethod);
+
+      if (!orderRes || !orderRes.order_id) {
+        console.error('استجابة الطلب غير صالحة:', orderRes);
+        alert('استجابة غير متوقعة من الخادم');
+        return;
+      }
+
+      // التعامل مع الدفع
+      if (this.paymentMethod === 'credit_card') {
+        this.handleCreditCardPayment(orderRes);
+      } else if (this.paymentMethod === 'cash') {
+        this.handleCashPayment(orderRes);
+      } else {
+        console.error('طريقة دفع غير معروفة:', this.paymentMethod);
+        alert('طريقة الدفع غير مدعومة');
+      }
+    },
+    error: (err) => {
+      console.error('❌ حدث خطأ أثناء إرسال الطلب:', err);
+      if (err.error?.message) {
+        alert(err.error.message);
+      } else {
+        alert('فشل إرسال الطلب. حاول مرة أخرى.');
+      }
+    }
+  });
+}
 
   // معالجة الدفع بالبطاقة الائتمانية
   private handleCreditCardPayment(orderRes: any): void {
@@ -356,20 +374,50 @@ ngOnInit(): void {
   }
 
 
-  // معالجة الدفع نقداً عند الاستلام
   private handleCashPayment(orderRes: any): void {
-    if (!orderRes.order_id) {
-      console.error('معرف الطلب غير متوفر في الاستجابة:', orderRes);
-      alert('استجابة غير متوقعة من الخادم');
-      return;
-    }
-
-    alert('تم تأكيد الطلب والدفع سيتم نقدًا عند الاستلام.');
-    this.router.navigate(['/order-success', orderRes.order_id]).catch(e => {
-      console.error('خطأ في التوجيه إلى صفحة النجاح:', e);
-      alert('تم تأكيد الطلب ولكن حدث خطأ في التوجيه');
-    });
+  if (!orderRes.order_id) {
+    console.error('معرف الطلب غير متوفر في الاستجابة:', orderRes);
+    alert('استجابة غير متوقعة من الخادم');
+    return;
   }
+
+  // تحديث الحالة إلى 'shipped'
+  this.orderService.updateOrderStatus(orderRes.order_id, 'shipped').subscribe({
+    next: (res) => {
+      console.log('✅ تم تحديث حالة الطلب إلى شحن:', res);
+
+      // فتح المودال بدلاً من alert
+      const modalEl = document.getElementById('cashOrderModal');
+      if (modalEl) {
+        const modal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
+        modal.show();
+      }
+    },
+    error: (err) => {
+      console.error('❌ فشل تحديث حالة الطلب:', err);
+      alert('تم تأكيد الطلب ولكن حدث خطأ في تحديث الحالة.');
+      this.router.navigate(['/order-success', orderRes.order_id]).catch(e => console.error(e));
+    }
+  });
+}
+
+// دوال الأزرار في المودال
+goHome() {
+  const modalEl = document.getElementById('cashOrderModal');
+  const modalInstance = bootstrap.Modal.getInstance(modalEl);
+  if (modalInstance) modalInstance.hide();
+  this.router.navigate(['/']);
+}
+
+goOrders() {
+  const modalEl = document.getElementById('cashOrderModal');
+  const modalInstance = bootstrap.Modal.getInstance(modalEl);
+  if (modalInstance) modalInstance.hide();
+  this.router.navigate(['/profile/orders']);
+}
+
+
+
 
   // معالجة أخطاء الطلب
   private handleOrderError(err: any): void {
@@ -549,5 +597,101 @@ loadCart() {
   cancelOrder(): void {
     this.openCancelModal();
   }
+
+
+
+  // Variables
+
+applyFreeBalance: boolean = false; // checkbox
+freeBalanceAmount: number = 0; // القيمة اللي هيستخدمها
+totalOrderPrice: number = 200; // سعر الطلب النهائي بعد الخصومات
+maxFreeBalance: number = 0;
+
+// // عند تغيير checkbox
+// onFreeBalanceToggle() {
+//   if (!this.applyFreeBalance) {
+//     this.freeBalanceAmount = 0;
+//   } else {
+//     this.calculateMaxFreeBalance();
+//   }
+// }
+
+// تحديد الحد الأقصى للقيمة المسموح بها
+calculateMaxFreeBalance() {
+  this.maxFreeBalance = Math.min(this.freeProductBalance, this.totalOrderPrice);
+  if (this.freeBalanceAmount > this.maxFreeBalance) {
+    this.freeBalanceAmount = this.maxFreeBalance;
+  }
+}
+
+// عند تغيير checkbox
+onFreeBalanceToggle() {
+  if (!this.applyFreeBalance) {
+    this.freeBalanceAmount = 0;
+  } else {
+    this.maxFreeBalance = this.freeProductBalance; // الحد الأقصى = رصيد المنتج المجاني
+    if (this.freeBalanceAmount > this.maxFreeBalance) {
+      this.freeBalanceAmount = this.maxFreeBalance;
+    }
+  }
+}
+
+// تحقق من صحة الإدخال
+// validateFreeBalance() {
+//   if (this.freeBalanceAmount > this.freeProductBalance) {
+//     this.freeBalanceAmount = this.freeProductBalance;
+//   } else if (this.freeBalanceAmount < 0) {
+//     this.freeBalanceAmount = 0;
+//   }
+// }
+
+setDefaultFreeBalanceAmount() {
+  const total = this.totalSalePrice + this.shippingFee;
+  this.freeBalanceAmount = Math.min(total, this.freeProductBalance);
+}
+// عند اختيار طريقة الدفع بالرصيد المجاني
+onFreeBalanceRadioSelect() {
+  if (this.paymentMethod === 'free_balance') {
+    // الحد الأقصى = رصيد المنتجات المجانية
+    this.maxFreeBalance = this.freeProductBalance;
+
+    // القيمة الافتراضية = أقل بين المجموع أو الرصيد
+    const total = this.totalSalePrice + this.shippingFee;
+    this.freeBalanceAmount = Math.min(total, this.maxFreeBalance);
+  } else {
+    this.freeBalanceAmount = 0; // لو غيرت طريقة الدفع
+  }
+}
+
+// التحقق من صحة الإدخال
+validateFreeBalance() {
+  if (this.freeBalanceAmount > this.maxFreeBalance) {
+    this.freeBalanceAmount = this.maxFreeBalance;
+  } else if (this.freeBalanceAmount < 0) {
+    this.freeBalanceAmount = 0;
+  }
+}
+
+// أزرار الزيادة والنقصان
+incrementFreeBalance() {
+  if (this.freeBalanceAmount < this.freeProductBalance) {
+    this.freeBalanceAmount += 1;
+  }
+}
+
+decrementFreeBalance() {
+  if (this.freeBalanceAmount > 0) {
+    this.freeBalanceAmount -= 1;
+  }
+}
+get remainingBalance(): number {
+  return this.freeProductBalance - this.freeBalanceAmount;
+}
+
+get grandTotal(): number {
+  const total = this.totalSalePrice + this.shippingFee;
+  return total <= this.freeProductBalance ? total : this.freeProductBalance;
+}
+
 }
 

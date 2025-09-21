@@ -61,6 +61,12 @@ ngOnInit(): void {
     console.log('📌 Current mode:', this.selectedMode);
     this.step = 1; // reset steps كل مرة تدخل Path جديد
   });
+
+  //  const appointmentToEdit = this.appointmentState.getData();
+  // if (appointmentToEdit && Object.keys(appointmentToEdit).length > 0) {
+  //   this.editingAppointment = appointmentToEdit;
+  //   this.step = 1; // أو أي خطوة مناسبة لعرض النموذج
+  // }
 }
 
 

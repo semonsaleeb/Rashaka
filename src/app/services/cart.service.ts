@@ -195,10 +195,29 @@ addGuestItem(product: CartItem) {
       { headers: this.getHeaders() });
   }
 
-  placeOrder(address_id: number, payment_method: string, promocode?: string): Observable<PlaceOrderResponse> {
-    return this.http.post<PlaceOrderResponse>(`${this.apiUrl}/place-order`,
-      { address_id, payment_method, promocode }, { headers: this.getHeaders() });
-  }
+  // placeOrder(address_id: number, payment_method: string, promocode?: string): Observable<PlaceOrderResponse> {
+  //   return this.http.post<PlaceOrderResponse>(`${this.apiUrl}/place-order`,
+  //     { address_id, payment_method, promocode }, { headers: this.getHeaders() });
+  // }
+  placeOrder(
+  address_id: number,
+  payment_method: string,
+  promocode?: string,
+  apply_free_balance?: boolean,
+  free_balance_amount?: number
+): Observable<PlaceOrderResponse> {
+  const body: any = {
+    address_id,
+    payment_method,
+  };
+
+  if (promocode) body.promocode = promocode;
+  if (apply_free_balance) body.apply_free_balance = apply_free_balance;
+  if (free_balance_amount) body.free_balance_amount = free_balance_amount;
+
+  return this.http.post<PlaceOrderResponse>(`${this.apiUrl}/place-order`, body, { headers: this.getHeaders() });
+}
+
 
   applyPromocode(promocode: string, total_price: number): Observable<PromoResponse> {
     return this.http.post<PromoResponse>(`${this.apiUrl}/order/apply-promocode`,

@@ -495,6 +495,8 @@
   },
   "ORDERS": {
     "TITLE": "الطلبات",
+     "CASH_SUCCESS": "تم تأكيد الطلب بنجاح",
+    "CASH_SHIPPED_MSG": "تم تأكيد الدفع نقدًا وسيتم شحنة قريبا.",
     "LOADING": "جاري التحميل...",
     "ORDER_NUMBER": "رقم الطلب",
     "PRODUCT": "المنتج",
@@ -586,5 +588,21 @@
   "TOTAL": "الإجمالي",
   "USED": "المستخدم",
   "REMAINING": "المتبقي",
-  "OUT_OF_STOCK": "غير متوفر"
+  "OUT_OF_STOCK": "غير متوفر",
+   "BUTTON": {
+    "HOME": "الرئيسية",
+    "ORDERS": "الطلبات"
+  },
+  
+  "CART_CREDIT": {
+    "PAYMENT_CASH": "الدفع نقداً عند الاستلام",
+    "PAYMENT_CREDIT": "بطاقات مدى / ائتمان",
+    "CARD_NAME": "الاسم على البطاقة",
+    "CARD_NUMBER": "رقم البطاقة",
+    "EXPIRY_DATE": "MM/YY",
+    "CVC": "الرمز السري"
+  },
+  "MAX_AVAILABLE":"الحد الأقصى المتاح"
+
+
 }

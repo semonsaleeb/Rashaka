@@ -16,65 +16,69 @@
   <div class="container">
     <div class="row g-4">
       @for (appt of appointments; track appt.id) {
-        <div class="col-12 col-md-4">
-          <div class="booking-card p-4 rounded shadow-sm bg-white border">
+       <div class="col-12 col-md-4">
+  <div class="booking-card p-4 rounded shadow-sm bg-white border">
 
-            <!-- Specialist Info -->
-            <div class="specialist-card d-flex align-items-center p-3 rounded mb-4 border bg-light">
-              <div class="d-flex align-items-center gap-3">
-                <!-- صورة الأخصائي -->
-                <img [src]="appt.specialist?.image || 'assets/Images/User.svg'"
-                  alt="{{ 'CONFIRM_BOOKING.SPECIALIST_IMAGE' | translate }}"
-                  class="rounded-circle border border-2"
-                  width="60" height="60">
-
-                <!-- بيانات الأخصائي -->
-                <div>
-                  <h5 class="mb-1 fw-semibold text-dark">{{ appt.specialist?.name }}</h5>
-                  <div class="stars text-warning small">★★★★★</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Booking Details -->
-            <ul class="list-unstyled mb-0">
-              <li class="mb-2 d-flex align-items-center">
-                <i class="bi bi-building text-primary me-2"></i>
-                <img src="assets/Images/location-01 (1).svg" alt="" class="me-2" width="18">
-                <span class="fw-semibold">{{ 'CONFIRM_BOOKING.BRANCH' | translate }}:</span> {{ appt.center?.name }}
-              </li>
-
-              @if (appt.center?.city?.name) {
-              <li class="mb-2 d-flex align-items-center">
-                <i class="bi bi-geo-alt text-danger me-2"></i>
-                <img src="assets/Images/house-01.svg" alt="" class="me-2" width="18">
-                <span class="fw-semibold">{{ 'CONFIRM_BOOKING.ADDRESS' | translate }}:</span> {{ appt.center?.city?.name }}
-              </li>
-              }
-
-              @if (appt.center?.phone) {
-              <li class="mb-2 d-flex align-items-center">
-                <i class="bi bi-telephone text-success me-2"></i>
-                <img src="assets/Images/contact-02.svg" alt="" class="me-2" width="18">
-                <span class="fw-semibold">{{ 'CONFIRM_BOOKING.PHONE' | translate }}:</span> {{ appt.center?.phone }}
-              </li>
-              }
-
-              <li class="mb-2 d-flex align-items-center">
-                <i class="bi bi-calendar-event text-info me-2"></i>
-                <img src="assets/Images/calendar-02.svg" alt="" class="me-2" width="18">
-                <span class="fw-semibold">{{ 'CONFIRM_BOOKING.DATE' | translate }}:</span> {{ appt.date }}
-              </li>
-
-              <li class="d-flex align-items-center">
-                <i class="bi bi-clock text-warning me-2"></i>
-                <span class="fw-semibold">{{ 'CONFIRM_BOOKING.TIME' | translate }}:</span>
-                {{ 'CONFIRM_BOOKING.FROM' | translate }} {{ appt.start }}
-              </li>
-            </ul>
-
-          </div>
+    <!-- Specialist Info -->
+    <div class="specialist-card d-flex align-items-center p-3 rounded mb-4 border bg-light">
+      <div class="d-flex align-items-center gap-3">
+        <img [src]="appt.specialist?.image || 'assets/Images/User.svg'"
+             alt="{{ 'CONFIRM_BOOKING.SPECIALIST_IMAGE' | translate }}"
+             class="rounded-circle border border-2"
+             width="60" height="60">
+        <div>
+          <h5 class="mb-1 fw-semibold text-dark">{{ appt.specialist?.name }}</h5>
+          <div class="stars text-warning small">★★★★★</div>
         </div>
+      </div>
+    </div>
+
+    <!-- Booking Details -->
+    <ul class="list-unstyled mb-0">
+      <li class="mb-2 d-flex align-items-center">
+        <i class="bi bi-building text-primary me-2"></i>
+        <img src="assets/Images/location-01 (1).svg" alt="" class="me-2" width="18">
+        <span class="fw-semibold">{{ 'CONFIRM_BOOKING.BRANCH' | translate }}:</span> {{ appt.center?.name }}
+      </li>
+      @if (appt.center?.city?.name) {
+      <li class="mb-2 d-flex align-items-center">
+        <i class="bi bi-geo-alt text-danger me-2"></i>
+        <img src="assets/Images/house-01.svg" alt="" class="me-2" width="18">
+        <span class="fw-semibold">{{ 'CONFIRM_BOOKING.ADDRESS' | translate }}:</span> {{ appt.center?.city?.name }}
+      </li>
+      }
+      @if (appt.center?.phone) {
+      <li class="mb-2 d-flex align-items-center">
+        <i class="bi bi-telephone text-success me-2"></i>
+        <img src="assets/Images/contact-02.svg" alt="" class="me-2" width="18">
+        <span class="fw-semibold">{{ 'CONFIRM_BOOKING.PHONE' | translate }}:</span> {{ appt.center?.phone }}
+      </li>
+      }
+      <li class="mb-2 d-flex align-items-center">
+        <i class="bi bi-calendar-event text-info me-2"></i>
+        <img src="assets/Images/calendar-02.svg" alt="" class="me-2" width="18">
+        <span class="fw-semibold">{{ 'CONFIRM_BOOKING.DATE' | translate }}:</span> {{ appt.date }}
+      </li>
+      <li class="d-flex align-items-center">
+        <i class="bi bi-clock text-warning me-2"></i>
+        <span class="fw-semibold">{{ 'CONFIRM_BOOKING.TIME' | translate }}:</span>
+        {{ 'CONFIRM_BOOKING.FROM' | translate }} {{ appt.start }}
+      </li>
+    </ul>
+
+    <!-- Edit & Delete Buttons -->
+    <div class="d-flex justify-content-between mt-3">
+      <!-- <button class="btn btn-outline-primary flex-grow-1 me-2" (click)="editAppointment(appt.id)">
+        {{ 'APPOINTMENTS.EDIT' | translate }}
+      </button> -->
+      <button class="btn btn-outline-danger flex-grow-1" (click)="cancelAppointment(appt.id)">
+        {{ 'APPOINTMENTS.CANCEL' | translate }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
       }
     </div>
   </div>

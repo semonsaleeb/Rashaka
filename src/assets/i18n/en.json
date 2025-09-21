@@ -495,6 +495,8 @@
   },
   "ORDERS": {
     "TITLE": "Orders",
+       "CASH_SUCCESS": "Order Confirmed Successfully",
+    "CASH_SHIPPED_MSG": "Payment confirmed as cash and order status is shipped.",
     "LOADING": "Loading...",
     "ORDER_NUMBER": "Order No.",
     "PRODUCT": "Product",
@@ -587,5 +589,19 @@
   "TOTAL": "Total",
   "USED": "Used",
   "REMAINING": "Remaining",
-  "OUT_OF_STOCK": "Out of Stock"
+  "OUT_OF_STOCK": "Out of Stock",
+  "BUTTON": {
+    "HOME": "Home",
+    "ORDERS": "Orders"
+  },
+  "CART_CREDIT": {
+    "PAYMENT_CASH": "Cash on Delivery",
+    "PAYMENT_CREDIT": "Credit / Mada Card",
+    "CARD_NAME": "Name on Card",
+    "CARD_NUMBER": "Card Number",
+    "EXPIRY_DATE": "MM/YY",
+    "CVC": "CVC"
+  },
+    "MAX_AVAILABLE":"Max available"
+
 }
