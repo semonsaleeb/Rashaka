@@ -602,6 +602,8 @@
     "EXPIRY_DATE": "MM/YY",
     "CVC": "CVC"
   },
-    "MAX_AVAILABLE":"Max available"
+    "MAX_AVAILABLE":"Max available",
+    "CLIENT_REVIEWS": " Client Reviews " 
+
 
 }

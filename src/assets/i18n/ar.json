@@ -602,7 +602,7 @@
     "EXPIRY_DATE": "MM/YY",
     "CVC": "الرمز السري"
   },
-  "MAX_AVAILABLE":"الحد الأقصى المتاح"
-
+  "MAX_AVAILABLE":"الحد الأقصى المتاح",
+"CLIENT_REVIEWS": "اراء عملائنا"
 
 }
