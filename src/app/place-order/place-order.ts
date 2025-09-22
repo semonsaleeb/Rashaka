@@ -29,21 +29,26 @@ export class PlaceOrder implements OnInit {
   token: string = '';
   addresses: any[] = [];
   selectedAddressId: number | null = null;
-  paymentMethod: string = 'cash'; // أو 'myfatoorah' حسب اختيارك الافتراضي
+  paymentMethod: string = 'cash'; // or 'credit_card' / 'free_balance' etc.
   promoCode: string = '';
   userEmail: string = '';
   userPhone: string = '';
   isLoggedIn: boolean = false;
   client: any;
   cartItems: any[] = [];
-  totalPrice = 0;
-  totalSalePrice = 0;
+  totalPrice: number = 0;        // cart_total from API (before offers)
+  totalSalePrice: number = 0;    // sale_cart_total from API (after offers)
   addressId: number = 1;
   shippingFee: number = 30;
-  freeProductBalance: number = 0; 
+  freeProductBalance: number = 0;
+  discountValue: number = 0;
+  dir: 'ltr' | 'rtl' = 'ltr';
 
-  // currentLang: string = 'en'; // أو '' حسب الحاجة
-  dir: 'ltr' | 'rtl' = 'ltr'; // ⬅️ أضف هذا المتغير
+  // Free-balance UI
+  applyFreeBalance: boolean = false;
+  freeBalanceAmount: number = 0;
+  totalOrderPrice: number = 0; // optional: used by some UI calc, we keep updated
+  maxFreeBalance: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -60,115 +65,156 @@ export class PlaceOrder implements OnInit {
     private productService: ProductService,
   ) { }
 
-ngOnInit(): void {
-  // 1️⃣ التحقق من التوكن وتسجيل الدخول
-  this.token = localStorage.getItem('token') || '';
-  this.isLoggedIn = !!this.token;
+  ngOnInit(): void {
+    // 1️⃣ Token & login
+    this.token = localStorage.getItem('token') || '';
+    this.isLoggedIn = !!this.token;
 
-  // 2️⃣ تحميل بيانات المستخدم إذا مسجل دخول
-  if (this.isLoggedIn) {
-    this.loadClientProfile();
-    this.fetchAddresses();
+    // 2️⃣ Load client/profile/addresses if logged in
+    if (this.isLoggedIn) {
+      this.loadClientProfile();
+      this.fetchAddresses();
 
-    // جلب رصيد الـ Free Product
-    // بعد جلب رصيد المنتج المجاني
-this.productService.getFreeProductBalance(this.token).subscribe({
-  next: (res: any) => {
-    this.freeProductBalance = res.data?.free_product_remaining ?? 0;
-    this.maxFreeBalance=this.freeProductBalance
-    console.log('Remaining Free Product Balance:', this.freeProductBalance);
+      // fetch free product balance
+      this.productService.getFreeProductBalance(this.token).subscribe({
+        next: (res: any) => {
+          this.freeProductBalance = this.toNumber(res?.data?.free_product_remaining ?? 0);
+          this.maxFreeBalance = this.freeProductBalance;
+          console.log('Remaining Free Product Balance:', this.freeProductBalance);
 
-    // تعيين القيمة الافتراضية
-    this.setDefaultFreeBalanceAmount();
-  },
-  error: (err) => console.error('❌ Error fetching free product balance:', err)
-});
-
-  }
-
-  // 3️⃣ تحميل السلة
-  this.cartService.getCart().subscribe({
-    next: (response) => {
-      const cartData = response?.data;
-      if (!cartData || !Array.isArray(cartData.items)) {
-        console.warn('Cart data is empty or invalid');
-        this.cartItems = [];
-        this.totalPrice = 0;
-        this.totalSalePrice = 0;
-        this.cartState.updateCount(0);
-        return;
-      }
-
-      // تحويل الأسعار من string إلى number
-      this.cartItems = cartData.items.map(item => {
-        const unitPrice = parseFloat((item.unit_price ?? '0').toString().replace(/,/g, '')) || 0;
-        const saleUnitPrice = item.sale_unit_price
-          ? parseFloat(item.sale_unit_price.toString().replace(/,/g, ''))
-          : null;
-        return { ...item, unit_price: unitPrice, sale_unit_price: saleUnitPrice };
+          // set default free balance (will use current totals)
+          this.setDefaultFreeBalanceAmount();
+        },
+        error: (err) => console.error('❌ Error fetching free product balance:', err)
       });
+    }
 
-      // حساب الإجماليات
-      this.totalPrice = this.cartItems.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
-      this.totalSalePrice = this.cartItems.reduce(
-        (sum, item) => sum + (item.sale_unit_price || item.unit_price) * item.quantity,
-        0
-      );
+    // 3️⃣ Load cart (use central method)
+    this.loadCart();
 
-      // تحديث عدد العناصر في السلة
-      const totalQuantity = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-      this.cartState.updateCount(totalQuantity);
-    },
-    error: (err) => console.error('❌ Error loading cart', err)
-  });
+    // 4️⃣ check query params (confirm order after payment)
+    const addressIdParam = this.route.snapshot.queryParamMap.get('addressId');
+    const promoCodeParam = this.route.snapshot.queryParamMap.get('promoCode');
 
-  // 4️⃣ التحقق من باراميترات تأكيد الطلب بعد الدفع
-  const addressIdParam = this.route.snapshot.queryParamMap.get('addressId');
-  const promoCodeParam = this.route.snapshot.queryParamMap.get('promoCode');
+    if (addressIdParam) {
+      this.cartService.placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '', false, 0).subscribe({
+        next: (orderRes) => {
+          console.log('📦 Server Response from placeOrder:', orderRes);
+          alert('تم تأكيد الطلب بنجاح بعد الدفع!');
+          this.router.navigate(['/order-success', orderRes.order_id]);
+        },
+        error: (err) => {
+          console.error('❌ Error confirming order after payment:', err);
+          alert('حدث خطأ في تأكيد الطلب بعد الدفع.');
+        }
+      });
+    }
 
-  if (addressIdParam) {
-    this.cartService.placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '').subscribe({
-      next: (orderRes) => {
-        console.log('📦 Server Response from placeOrder:', orderRes);
-        alert('تم تأكيد الطلب بنجاح بعد الدفع!');
-        this.router.navigate(['/order-success', orderRes.order_id]);
-      },
-      error: (err) => {
-        console.error('❌ Error confirming order after payment:', err);
-        alert('حدث خطأ في تأكيد الطلب بعد الدفع.');
-      }
+    // 5️⃣ language & dir
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+    this.translate.use(this.currentLang);
+
+    // subscribe lang changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      this.translate.use(lang);
     });
   }
 
-  // 5️⃣ ضبط اللغة والـ dir
-  this.currentLang = this.languageService.getCurrentLanguage();
-  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
-  this.translate.use(this.currentLang);
-
-  // الاستماع لتغييرات اللغة وتحديث dir تلقائيًا
-  this.languageService.currentLang$.subscribe(lang => {
-    this.currentLang = lang;
-    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    this.translate.use(lang);
-  });
-}
-
-
-
-
-
+  // ========================= Utilities =========================
   private getHeaders() {
     return new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': `Bearer ${this.token}`
     });
   }
-  applyPromoCode() {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${this.token}`
+
+  private toNumber(value: any): number {
+    if (value === null || value === undefined) return 0;
+    // remove commas if string and convert
+    const s = String(value).replace(/,/g, '');
+    const n = Number(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  private round2(n: number): number {
+    return Math.round((n + Number.EPSILON) * 100) / 100;
+  }
+
+  // update totals state from API cartData object
+  private updateTotalsFromApi(cartData: any) {
+    this.cartItems = (cartData.items || []).map((item: any) => {
+      const unitPrice = this.toNumber(item.unit_price);
+      const saleUnitPrice = item.sale_unit_price != null ? this.toNumber(item.sale_unit_price) : null;
+      return {
+        ...item,
+        unit_price: unitPrice,
+        sale_unit_price: saleUnitPrice,
+        total_price: this.toNumber(item.total_price) || unitPrice * (item.quantity || 1),
+        total_price_after_offers: this.toNumber(item.total_price_after_offers) || (saleUnitPrice || unitPrice) * (item.quantity || 1)
+      };
     });
 
+    // totals from backend (preferred)
+    this.totalPrice = this.toNumber(cartData.cart_total);
+    this.totalSalePrice = this.toNumber(cartData.sale_cart_total);
+    this.discountValue = this.toNumber(cartData.discount_value);
+
+    // update other values if provided
+    if (cartData.remaining_free_balance !== undefined) {
+      this.freeProductBalance = this.toNumber(cartData.remaining_free_balance);
+    }
+
+    // update cart count
+    const totalQuantity = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    this.cartState.updateCount(totalQuantity);
+
+    // update UI helpers
+    this.totalOrderPrice = this.totalSalePrice - this.discountValue;
+    this.maxFreeBalance = Math.min(this.freeProductBalance, this.totalOrderPrice);
+    // ensure freeBalanceAmount does not exceed new max
+    if (this.freeBalanceAmount > this.maxFreeBalance) this.freeBalanceAmount = this.maxFreeBalance;
+  }
+
+  // ========================= Cart load =========================
+  loadCart() {
+    this.cartService.getCart().subscribe({
+      next: (response: any) => {
+        console.log('📦 Full Cart API Response:', response);
+        const cartData = response?.data;
+        if (!cartData || !Array.isArray(cartData.items)) {
+          console.warn('Cart data is empty or invalid');
+          this.cartItems = [];
+          this.totalPrice = 0;
+          this.totalSalePrice = 0;
+          this.discountValue = 0;
+          this.cartState.updateCount(0);
+          return;
+        }
+
+        // Use backend-provided totals (no manual calc)
+        this.updateTotalsFromApi(cartData);
+
+        console.log('Cart Totals from API:', {
+          total: this.totalPrice,
+          saleTotal: this.totalSalePrice,
+          discount: this.discountValue,
+          shippingFee: this.shippingFee,
+          freeProductBalance: this.freeProductBalance,
+          freeBalanceApplied: this.freeBalanceAmount
+        });
+      },
+      error: (err) => {
+        console.error('❌ Error loading cart', err);
+      }
+    });
+  }
+
+  // ========================= Promo =========================
+  applyPromoCode() {
+    const headers = this.getHeaders();
     const body = {
       promocode: this.promoCode,
       total_price: this.totalPrice
@@ -176,10 +222,15 @@ this.productService.getFreeProductBalance(this.token).subscribe({
 
     this.http.post<PromoResponse>(`${environment.apiBaseUrl}/order/apply-promocode`, body, { headers })
       .subscribe({
-        next: (res) => {
-          if (res.success) {
-            this.totalSalePrice = res.new_total;
-            alert(`تم تطبيق الكود: ${res.promocode}`);
+        next: (res: any) => {
+          if (res && res.success) {
+            // use toNumber in case API returns string
+            this.totalSalePrice = this.toNumber(res.new_total);
+            // discountValue might be returned; update if available
+            if (res.discount_value !== undefined) {
+              this.discountValue = this.toNumber(res.discount_value);
+            }
+            alert(`تم تطبيق الكود: ${res.promocode || this.promoCode}`);
           } else {
             alert('رمز الخصم غير صالح');
           }
@@ -190,13 +241,15 @@ this.productService.getFreeProductBalance(this.token).subscribe({
         }
       });
   }
+
+  // ========================= Client & Addresses =========================
   loadClientProfile() {
     this.clientService.getProfile().subscribe({
-      next: (res) => {
+      next: (res: any) => {
         this.client = res.client;
         console.log('✅ Client loaded:', this.client);
-        this.userEmail = this.client.email || '';
-        this.userPhone = this.client.phone || '';
+        this.userEmail = this.client?.email || '';
+        this.userPhone = this.client?.phone || '';
       },
       error: (err) => {
         console.error('❌ Failed to load client profile:', err);
@@ -206,9 +259,9 @@ this.productService.getFreeProductBalance(this.token).subscribe({
 
   fetchAddresses() {
     this.addressService.getAllAddresses().subscribe({
-      next: (res) => {
+      next: (res: any) => {
         console.log('Addresses API response:', res);
-        this.addresses = res.data || res; // جرب ترجع البيانات من res.data أو من res مباشرة
+        this.addresses = res.data || res || [];
         if (this.addresses.length > 0) {
           this.selectedAddressId = this.addresses[0].id;
         }
@@ -219,79 +272,72 @@ this.productService.getFreeProductBalance(this.token).subscribe({
     });
   }
 
-
-
-
   onAddressChange() {
     const selectedAddr = this.addresses.find(addr => addr.id === this.selectedAddressId);
     if (selectedAddr) {
-      this.shippingFee = selectedAddr.fee || 0;
+      this.shippingFee = this.toNumber(selectedAddr.fee || 0);
     }
 
     if (!this.selectedAddressId) {
       alert('من فضلك اختر عنوان شحن');
     }
-    // ما فيش redirect هنا لأن الزرار منفصل مسؤول عن الإضافة.
   }
 
   navigateToAddAddress() {
     this.router.navigate(['/profile/addresses']);
   }
 
-placeOrder(): void {
-  // 1️⃣ التحقق من بيانات العميل
+  // ========================= Place order =========================
+ placeOrder(): void {
+  // validations
   if (!this.client || !this.client.id) {
     console.error('بيانات العميل غير متوفرة');
     alert('خطأ في بيانات العميل، يرجى تسجيل الدخول مرة أخرى');
     return;
   }
 
-  // 2️⃣ التحقق من عنوان الشحن
   if (!this.selectedAddressId) {
     console.error('لم يتم اختيار عنوان الشحن');
     alert('من فضلك اختر عنوان شحن صالح');
     return;
   }
 
-  // 3️⃣ التحقق من طريقة الدفع
   if (!this.paymentMethod) {
     console.error('لم يتم اختيار طريقة الدفع');
     alert('من فضلك اختر طريقة دفع صالحة');
     return;
   }
 
-  // 4️⃣ التحقق من وجود منتجات في السلة
   if (!this.cartItems || this.cartItems.length === 0) {
     console.error('السلة فارغة');
     alert('لا يوجد منتجات في سلة التسوق');
     return;
   }
 
-  // 5️⃣ التحقق من اتصال الإنترنت
   if (!navigator.onLine) {
     console.error('لا يوجد اتصال بالإنترنت');
     alert('تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت');
     return;
   }
 
-  // 6️⃣ حساب قيمة الرصيد المجاني الممكن استخدامه
+  // compute free balance to actually apply
   let freeBalanceToApply = 0;
   if (this.applyFreeBalance && this.freeProductBalance > 0) {
-    const totalCartPrice = this.cartItems.reduce((sum, item) => sum + item.total_price, 0);
+    const base = this.totalSalePrice - this.discountValue;
+    const totalCartPrice = Math.max(0, base);
     freeBalanceToApply = Math.min(this.freeBalanceAmount || totalCartPrice, this.freeProductBalance, totalCartPrice);
   }
 
-  // 7️⃣ إرسال الطلب
+  // place order (pass the actual freeBalanceToApply)
   this.cartService.placeOrder(
-    this.selectedAddressId,
+    this.selectedAddressId!,
     this.paymentMethod,
     this.promoCode,
     this.applyFreeBalance,
-     this.freeBalanceAmount 
+    freeBalanceToApply
   ).subscribe({
-    next: (orderRes) => {
+    next: (orderRes: any) => {
       console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
-      console.log('💳 طريقة الدفع المختارة:', this.paymentMethod);
 
       if (!orderRes || !orderRes.order_id) {
         console.error('استجابة الطلب غير صالحة:', orderRes);
@@ -299,11 +345,20 @@ placeOrder(): void {
         return;
       }
 
-      // التعامل مع الدفع
+      // 🟢 بعد نجاح الطلب: فضي الكارت واعمل reset للقيم
+      this.cartState.clearCart();
+      localStorage.removeItem('cart');
+      this.freeBalanceAmount = 0;
+      this.promoCode = '';
+      this.applyFreeBalance = false;
+
+      // handle payment according to method
       if (this.paymentMethod === 'credit_card') {
         this.handleCreditCardPayment(orderRes);
       } else if (this.paymentMethod === 'cash') {
         this.handleCashPayment(orderRes);
+      } else if (this.paymentMethod === 'free_balance') {
+        this.router.navigate(['/order-success', orderRes.order_id]);
       } else {
         console.error('طريقة دفع غير معروفة:', this.paymentMethod);
         alert('طريقة الدفع غير مدعومة');
@@ -311,86 +366,99 @@ placeOrder(): void {
     },
     error: (err) => {
       console.error('❌ حدث خطأ أثناء إرسال الطلب:', err);
-      if (err.error?.message) {
-        alert(err.error.message);
-      } else {
-        alert('فشل إرسال الطلب. حاول مرة أخرى.');
-      }
+      this.handleOrderError(err);
     }
   });
 }
 
-  // معالجة الدفع بالبطاقة الائتمانية
-  private handleCreditCardPayment(orderRes: any): void {
-    try {
-      const totalAmount = Number(orderRes.total_price) + Number(this.shippingFee);
 
-      if (isNaN(totalAmount) || totalAmount <= 0) {
-        console.error('المبلغ الإجمالي غير صالح');
-        alert('خطأ في حساب المبلغ الإجمالي');
-        return;
+  // ========================= Payment handlers =========================
+private handleCreditCardPayment(orderRes: any): void {
+  try {
+    const orderTotal = this.toNumber(orderRes.total_price);
+    const totalAmount = this.round2(orderTotal );
+
+    if (isNaN(totalAmount) || totalAmount <= 0) {
+      console.error('المبلغ الإجمالي غير صالح');
+      alert('خطأ في حساب المبلغ الإجمالي');
+      return;
+    }
+
+    const paymentData = {
+      CustomerName: this.client?.name || 'عميل جديد',
+      NotificationOption: 'Lnk',
+      InvoiceValue: totalAmount,
+      CustomerEmail: this.userEmail,
+      CustomerMobile: this.userPhone,
+      CallBackUrl: `${window.location.origin}/payment-success?orderId=${orderRes.order_id}`,
+      ErrorUrl: `${window.location.origin}/payment-failure?orderId=${orderRes.order_id}`,
+      Language: 'AR',
+      DisplayCurrencyIso: 'SAR',
+      CustomerReference: orderRes.order_id
+    };
+
+    console.log('بيانات الدفع المرسلة:', paymentData);
+
+    this.paymentService.initiatePayment(paymentData).subscribe({
+      next: (res: any) => {
+        console.log('استجابة ماي فاتورة:', res);
+
+        if (res.IsSuccess && res.Data?.InvoiceURL) {
+          // 🟡 ما تفضيش الكارت هنا
+          // خزن بيانات الدفع المعلق
+          localStorage.setItem(
+            'pendingPayment',
+            JSON.stringify({ orderId: orderRes.order_id, paymentId: res.Data.InvoiceId })
+          );
+
+          // تحويل المستخدم لصفحة الدفع
+          window.location.href = res.Data.InvoiceURL;
+        } else {
+          const errorMsg = res.Message || 'تعذر إنشاء رابط الدفع';
+          console.error('فشل في إنشاء الفاتورة:', errorMsg);
+          alert(errorMsg);
+        }
+      },
+      error: (err) => {
+        console.error('خطأ في خدمة الدفع:', err);
+        this.handlePaymentError(err);
+        // ❌ ما تفضيش الكارت
       }
-
-      const paymentData = {
-        CustomerName: this.client?.name || 'عميل جديد',
-        NotificationOption: 'Lnk',
-        InvoiceValue: totalAmount,
-        CustomerEmail: this.userEmail,
-        CustomerMobile: this.userPhone,
-        CallBackUrl: `${window.location.origin}/payment-success?orderId=${orderRes.order_id}`,
-        ErrorUrl: `${window.location.origin}/payment-failure?orderId=${orderRes.order_id}`,
-        Language: 'AR',
-        DisplayCurrencyIso: 'SAR',
-        CustomerReference: orderRes.order_id
-      };
-
-      console.log('بيانات الدفع المرسلة:', paymentData);
-
-     this.paymentService.initiatePayment(paymentData).subscribe({
-  next: (res: any) => {
-    console.log('استجابة ماي فاتورة:', res);
-    if (res.IsSuccess && res.Data?.InvoiceURL) {
-      localStorage.setItem(
-        'pendingPayment',
-        JSON.stringify({ orderId: orderRes.order_id, paymentId: res.Data.InvoiceId })
-      );
-      window.location.href = res.Data.InvoiceURL;
-    } else {
-      const errorMsg = res.Message || 'تعذر إنشاء رابط الدفع';
-      console.error('فشل في إنشاء الفاتورة:', errorMsg);
-      alert(errorMsg);
-    }
-  },
-  error: (err) => {
-    console.error('خطأ في خدمة الدفع:', err);
-    this.handlePaymentError(err);
+    });
+  } catch (e) {
+    console.error('خطأ غير متوقع في معالجة الدفع:', e);
+    alert('حدث خطأ غير متوقع أثناء معالجة الدفع');
+    // ❌ ما تفضيش الكارت
   }
-});
-
-    } catch (e) {
-      console.error('خطأ غير متوقع في معالجة الدفع:', e);
-      alert('حدث خطأ غير متوقع أثناء معالجة الدفع');
-    }
-  }
+}
 
 
-  private handleCashPayment(orderRes: any): void {
+
+private handleCashPayment(orderRes: any): void {
   if (!orderRes.order_id) {
     console.error('معرف الطلب غير متوفر في الاستجابة:', orderRes);
     alert('استجابة غير متوقعة من الخادم');
     return;
   }
 
-  // تحديث الحالة إلى 'shipped'
   this.orderService.updateOrderStatus(orderRes.order_id, 'shipped').subscribe({
     next: (res) => {
       console.log('✅ تم تحديث حالة الطلب إلى شحن:', res);
 
-      // فتح المودال بدلاً من alert
+      // 🟢 فضي الكارت بعد الدفع الكاش
+      this.cartState.clearCart();
+      localStorage.removeItem('cart');
+      this.freeBalanceAmount = 0;
+      this.promoCode = '';
+      this.applyFreeBalance = false;
+
+      // show modal
       const modalEl = document.getElementById('cashOrderModal');
       if (modalEl) {
         const modal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
         modal.show();
+      } else {
+        this.router.navigate(['/order-success', orderRes.order_id]);
       }
     },
     error: (err) => {
@@ -401,25 +469,135 @@ placeOrder(): void {
   });
 }
 
-// دوال الأزرار في المودال
-goHome() {
-  const modalEl = document.getElementById('cashOrderModal');
-  const modalInstance = bootstrap.Modal.getInstance(modalEl);
-  if (modalInstance) modalInstance.hide();
-  this.router.navigate(['/']);
+  goHome() {
+    const modalEl = document.getElementById('cashOrderModal');
+    const modalInstance = modalEl ? bootstrap.Modal.getInstance(modalEl) : null;
+    if (modalInstance) modalInstance.hide();
+    this.router.navigate(['/']);
+  }
+
+  goOrders() {
+    const modalEl = document.getElementById('cashOrderModal');
+    const modalInstance = modalEl ? bootstrap.Modal.getInstance(modalEl) : null;
+    if (modalInstance) modalInstance.hide();
+    this.router.navigate(['/profile/orders']);
+  }
+
+  // ========================= Cancel order / clear cart =========================
+  openCancelModal() {
+    const modalEl = document.getElementById('cancelOrderModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
+      modal.show();
+    }
+  }
+
+  confirmCancelOrder() {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // Logged-in user → remove all items via API
+      this.cartService.getCart().subscribe({
+        next: (res: any) => {
+          const items = res.data?.items || [];
+          const removeRequests = items.map((item: any) => this.cartService.removeCartItem(item.product_id));
+          forkJoin(removeRequests).subscribe({
+            next: () => {
+              this.cartState.clearCart();
+              this.router.navigate(['/']);
+            },
+            error: (err) => console.error('Error removing items:', err)
+          });
+        },
+        error: (err) => console.error('Error fetching cart:', err)
+      });
+    } else {
+      // Guest user → clear localStorage
+      this.cartService.clearGuestCart();
+      this.cartState.clearCart();
+      this.router.navigate(['/']);
+    }
+
+    const modalEl = document.getElementById('cancelOrderModal');
+    const modalInstance = modalEl ? bootstrap.Modal.getInstance(modalEl) : null;
+    if (modalInstance) modalInstance.hide();
+  }
+
+  cancelOrder(): void {
+    this.openCancelModal();
+  }
+
+  // ========================= Free balance helpers =========================
+calculateMaxFreeBalance() {
+  // السعر الأساسي: إجمالي السعر بعد الخصم + الشحن
+  const base = Math.max(0, this.totalSalePrice);
+
+  // لو freeProductBalance أكبر من السعر، نخلي الحد الأقصى هو السعر (base)
+  // لو freeProductBalance أصغر من السعر، نخلي الحد الأقصى هو freeProductBalance
+  this.maxFreeBalance = this.freeProductBalance >= base ? base : this.freeProductBalance;
+
+  // لو القيمة اللي مدخلة أكبر من المسموح بيه، نرجعها للحد الأقصى
+  if (this.freeBalanceAmount > this.maxFreeBalance) {
+    this.freeBalanceAmount = this.maxFreeBalance;
+  }
 }
 
-goOrders() {
-  const modalEl = document.getElementById('cashOrderModal');
-  const modalInstance = bootstrap.Modal.getInstance(modalEl);
-  if (modalInstance) modalInstance.hide();
-  this.router.navigate(['/profile/orders']);
-}
 
+  onFreeBalanceToggle() {
+    if (!this.applyFreeBalance) {
+      this.freeBalanceAmount = 0;
+    } else {
+      this.calculateMaxFreeBalance();
+    }
+  }
 
+  setDefaultFreeBalanceAmount() {
+    const total = Math.max(0, this.totalSalePrice  - this.discountValue);
+    this.freeBalanceAmount = Math.min(total, this.freeProductBalance);
+  }
 
+  onFreeBalanceRadioSelect() {
+    if (this.paymentMethod === 'free_balance') {
+      this.calculateMaxFreeBalance();
+      this.freeBalanceAmount = Math.min(this.maxFreeBalance, this.freeProductBalance);
+    } else {
+      this.freeBalanceAmount = 0;
+    }
+  }
 
-  // معالجة أخطاء الطلب
+  validateFreeBalance() {
+    if (this.freeBalanceAmount > this.maxFreeBalance) {
+      this.freeBalanceAmount = this.maxFreeBalance;
+    } else if (this.freeBalanceAmount < 0) {
+      this.freeBalanceAmount = 0;
+    }
+  }
+
+  incrementFreeBalance() {
+    if (this.freeBalanceAmount < this.maxFreeBalance) {
+      this.freeBalanceAmount = this.round2(this.freeBalanceAmount + 1);
+    }
+  }
+
+  decrementFreeBalance() {
+    if (this.freeBalanceAmount > 0) {
+      this.freeBalanceAmount = this.round2(this.freeBalanceAmount - 1);
+    }
+  }
+
+  get remainingBalance(): number {
+    return this.round2(this.freeProductBalance - this.freeBalanceAmount);
+  }
+
+  get grandTotal(): number {
+    // total after offers + shipping - free balance applied - discount (discount already applied in totalSalePrice if backend returns it)
+    // Use: sale total + shipping - discountValue - freeBalanceAmount
+    const base = this.totalSalePrice - this.discountValue;
+    const afterFree = base - (this.applyFreeBalance ? this.freeBalanceAmount : 0);
+    return this.round2(afterFree > 0 ? afterFree : 0);
+  }
+
+  // ========================= Error handlers =========================
   private handleOrderError(err: any): void {
     let errorMessage = 'حدث خطأ أثناء إتمام الطلب';
 
@@ -449,7 +627,6 @@ goOrders() {
     alert(errorMessage);
   }
 
-  // معالجة أخطاء الدفع
   private handlePaymentError(err: any): void {
     let errorMessage = 'حدث خطأ أثناء معالجة الدفع';
 
@@ -475,8 +652,6 @@ goOrders() {
     alert(errorMessage);
   }
 
-
-
   private decodeToken(token: string): any {
     try {
       const payload = token.split('.')[1];
@@ -486,212 +661,4 @@ goOrders() {
       return null;
     }
   }
-
-
-
-loadCart() {
-  this.cartService.getCart().subscribe({
-    next: (response) => {
-      const cartData = response?.data;
-      if (!cartData || !Array.isArray(cartData.items)) {
-        console.warn('Cart data is empty or invalid');
-        this.cartItems = [];
-        this.totalPrice = 0;
-        this.totalSalePrice = 0;
-        this.cartState.updateCount(0);
-        return;
-      }
-
-      // Normalize prices: convert strings with commas to numbers
-      this.cartItems = cartData.items.map(item => {
-        const unitPrice = item.unit_price
-          ? parseFloat(item.unit_price.toString().replace(/,/g, ''))
-          : 0;
-        const saleUnitPrice = item.sale_unit_price
-          ? parseFloat(item.sale_unit_price.toString().replace(/,/g, ''))
-          : null;
-
-        return {
-          ...item,
-          unit_price: unitPrice,
-          sale_unit_price: saleUnitPrice,
-          total_price: unitPrice * item.quantity,
-          total_price_after_offers: (saleUnitPrice || unitPrice) * item.quantity
-        };
-      });
-
-      // Calculate totals
-      this.totalPrice = this.cartItems.reduce(
-        (sum, item) => sum + item.unit_price * item.quantity,
-        0
-      );
-
-      this.totalSalePrice = this.cartItems.reduce(
-        (sum, item) => sum + (item.sale_unit_price || item.unit_price) * item.quantity,
-        0
-      );
-
-      // Update cart count
-      const totalQuantity = this.cartItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-      this.cartState.updateCount(totalQuantity);
-    },
-    error: (err) => {
-      console.error('Error loading cart', err);
-    }
-  });
 }
-
-
-
-// In your component
-
-  /** افتح المودال لتأكيد الإلغاء */
-  openCancelModal() {
-    const modalEl = document.getElementById('cancelOrderModal');
-    if (modalEl) {
-      const modal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
-      modal.show();
-    }
-  }
-
-  /** تأكيد الإلغاء → حذف جميع العناصر وإعادة التوجيه */
-  confirmCancelOrder() {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-      // Logged-in user → remove all items via API
-      this.cartService.getCart().subscribe({
-        next: (res) => {
-          const items = res.data.items;
-
-          // حذف كل المنتجات
-          const removeRequests = items.map(item => this.cartService.removeCartItem(item.product_id));
-
-          forkJoin(removeRequests).subscribe({
-            next: () => {
-              this.cartState.clearCart(); // تحديث حالة الكارت
-              this.router.navigate(['/']); // Redirect للصفحة الرئيسية
-            },
-            error: (err) => console.error('Error removing items:', err)
-          });
-        },
-        error: (err) => console.error('Error fetching cart:', err)
-      });
-    } else {
-      // Guest user → clear localStorage
-      this.cartService.clearGuestCart();
-      this.cartState.clearCart(); // تحديث الحالة
-      this.router.navigate(['/']); // Redirect للصفحة الرئيسية
-    }
-
-    // اغلاق المودال
-    const modalEl = document.getElementById('cancelOrderModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    if (modalInstance) modalInstance.hide();
-  }
-
-  /** دالة عامة لزر الإلغاء */
-  cancelOrder(): void {
-    this.openCancelModal();
-  }
-
-
-
-  // Variables
-
-applyFreeBalance: boolean = false; // checkbox
-freeBalanceAmount: number = 0; // القيمة اللي هيستخدمها
-totalOrderPrice: number = 200; // سعر الطلب النهائي بعد الخصومات
-maxFreeBalance: number = 0;
-
-// // عند تغيير checkbox
-// onFreeBalanceToggle() {
-//   if (!this.applyFreeBalance) {
-//     this.freeBalanceAmount = 0;
-//   } else {
-//     this.calculateMaxFreeBalance();
-//   }
-// }
-
-// تحديد الحد الأقصى للقيمة المسموح بها
-calculateMaxFreeBalance() {
-  this.maxFreeBalance = Math.min(this.freeProductBalance, this.totalOrderPrice);
-  if (this.freeBalanceAmount > this.maxFreeBalance) {
-    this.freeBalanceAmount = this.maxFreeBalance;
-  }
-}
-
-// عند تغيير checkbox
-onFreeBalanceToggle() {
-  if (!this.applyFreeBalance) {
-    this.freeBalanceAmount = 0;
-  } else {
-    this.maxFreeBalance = this.freeProductBalance; // الحد الأقصى = رصيد المنتج المجاني
-    if (this.freeBalanceAmount > this.maxFreeBalance) {
-      this.freeBalanceAmount = this.maxFreeBalance;
-    }
-  }
-}
-
-// تحقق من صحة الإدخال
-// validateFreeBalance() {
-//   if (this.freeBalanceAmount > this.freeProductBalance) {
-//     this.freeBalanceAmount = this.freeProductBalance;
-//   } else if (this.freeBalanceAmount < 0) {
-//     this.freeBalanceAmount = 0;
-//   }
-// }
-
-setDefaultFreeBalanceAmount() {
-  const total = this.totalSalePrice + this.shippingFee;
-  this.freeBalanceAmount = Math.min(total, this.freeProductBalance);
-}
-// عند اختيار طريقة الدفع بالرصيد المجاني
-onFreeBalanceRadioSelect() {
-  if (this.paymentMethod === 'free_balance') {
-    // الحد الأقصى = رصيد المنتجات المجانية
-    this.maxFreeBalance = this.freeProductBalance;
-
-    // القيمة الافتراضية = أقل بين المجموع أو الرصيد
-    const total = this.totalSalePrice + this.shippingFee;
-    this.freeBalanceAmount = Math.min(total, this.maxFreeBalance);
-  } else {
-    this.freeBalanceAmount = 0; // لو غيرت طريقة الدفع
-  }
-}
-
-// التحقق من صحة الإدخال
-validateFreeBalance() {
-  if (this.freeBalanceAmount > this.maxFreeBalance) {
-    this.freeBalanceAmount = this.maxFreeBalance;
-  } else if (this.freeBalanceAmount < 0) {
-    this.freeBalanceAmount = 0;
-  }
-}
-
-// أزرار الزيادة والنقصان
-incrementFreeBalance() {
-  if (this.freeBalanceAmount < this.freeProductBalance) {
-    this.freeBalanceAmount += 1;
-  }
-}
-
-decrementFreeBalance() {
-  if (this.freeBalanceAmount > 0) {
-    this.freeBalanceAmount -= 1;
-  }
-}
-get remainingBalance(): number {
-  return this.freeProductBalance - this.freeBalanceAmount;
-}
-
-get grandTotal(): number {
-  const total = this.totalSalePrice + this.shippingFee;
-  return total <= this.freeProductBalance ? total : this.freeProductBalance;
-}
-
-}
-

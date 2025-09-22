@@ -10,4 +10,5 @@ export interface PlaceOrderResponse {
   discount: number;
   promocode: string | null;
   items: any[];
+  discountValue:string;
 }

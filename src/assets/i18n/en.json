@@ -496,7 +496,7 @@
   "ORDERS": {
     "TITLE": "Orders",
        "CASH_SUCCESS": "Order Confirmed Successfully",
-    "CASH_SHIPPED_MSG": "Payment confirmed as cash and order status is shipped.",
+    "CASH_SHIPPED_MSG": "You will be contacted by the shipping company to deliver your order as soon as possible.",
     "LOADING": "Loading...",
     "ORDER_NUMBER": "Order No.",
     "PRODUCT": "Product",
