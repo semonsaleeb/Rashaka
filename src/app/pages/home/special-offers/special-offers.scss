@@ -165,7 +165,9 @@ button.rounded-circle {
         color: #999;
       }
     }
-
+.Quantity_Controls{
+  padding-top: 2px; padding-bottom: 2px;
+}
     .view-details {
       display: inline-block;
       padding: 0.5rem 1rem;
@@ -317,6 +319,22 @@ button.rounded-circle {
 }
 
 
+.card-title {
+  max-width: 100%; /* أو أي عرض مناسب */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.one-line-desc {
+  display: block;              /* مهم */
+  width: 100%;                 /* أو 90% لو عايزة مسافة يمين/شمال */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+}
+
 /* Override Bootstrap btn-outline-success */
 .btn-outline-success {
   color: #7AD03A;
@@ -340,7 +358,7 @@ button.rounded-circle {
   align-items: center;
   justify-content: center;
   padding: 0;
-  font-size: 14px;
+  font-size: 50px;
   transition: all 0.2s ease-in-out;
 
   i {
@@ -348,6 +366,7 @@ button.rounded-circle {
     /* Ensure no override */
     color: inherit;
     /* Use parent color */
+    font-size: 16px;
   }
 
   &:hover {
@@ -807,14 +826,14 @@ a.text-decoration-none:hover .card {
   border: 1px solid #00000059;
   transition: all 0.3s ease;
 
-  padding: 2px 6px; // أصغر عرض وارتفاع للزر
+  // padding: 2px 6px; // أصغر عرض وارتفاع للزر
   font-size: 20px; // لتكبير الأيقونة أو النص بداخل الزر
-  line-height: 1;
+  // line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25px; // حجم مخصص إذا أردت مربع صغير
-  height: 25px;
+  width: 24px; // حجم مخصص إذا أردت مربع صغير
+  height: 24px;
 }
 
 .custom-increase-btn i {

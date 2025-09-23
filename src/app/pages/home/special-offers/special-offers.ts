@@ -16,11 +16,12 @@ import { Product } from '../../../../models/Product';
 import { Category } from '../../../../models/Category';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
+import { TruncatePipe } from '../../../truncate-pipe';
 
 @Component({
   selector: 'app-special-offers',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, Downloadapp, ComparePopup, TranslateModule],
+  imports: [CommonModule, TruncatePipe, RouterModule, FormsModule, Downloadapp, ComparePopup, TranslateModule],
   templateUrl: './special-offers.html',
   styleUrls: ['./special-offers.scss'],
   providers: [ProductService]

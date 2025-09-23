@@ -16,11 +16,12 @@ import { Product } from '../../../../models/Product';
 import { Category } from '../../../../models/Category';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
+import { TruncatePipe } from '../../../truncate-pipe';
 
 @Component({
   selector: 'app-category-products',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule, Downloadapp, ComparePopup, TranslateModule],
+  imports: [CommonModule,TruncatePipe, HttpClientModule, RouterModule, FormsModule, Downloadapp, ComparePopup, TranslateModule],
   templateUrl: './category-products.html',
   styleUrls: ['./category-products.scss']
 })

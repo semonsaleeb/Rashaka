@@ -80,11 +80,11 @@
 
                 <!-- Card Body -->
                 <div class="card-body mx-lg-3  px-3" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
-                  <h6 class="card-title fw-bold mb-2" style="font-size: 15px;">{{ currentLang === 'ar' ? product.name_ar
-                    :
-                    product.name }}</h6>
-                  <p class="card-text text-muted mb-3 " style="font-size: 15px; max-height: 40px; overflow: hidden;">
-                    {{ currentLang === 'ar' ? product.description_ar : product.description }}
+                  <h6 class="card-title fw-bold mb-2 ">
+                    {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}
+                  </h6>
+                  <p class="card-text text-muted mb-3">
+                    {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:40 }}
                   </p>
 
                   <!-- Price Section -->
@@ -114,29 +114,32 @@
 
                   <!-- Cart Interaction -->
                   @if (isInCart(product.id)) {
-                  <div class="d-flex align-items-center justify-content-center px-3 py-1 mt-2 gap-2 border rounded-4"
+                  <div
+                    class="d-flex align-items-center justify-content-center px-3  mt-2 gap-2 border border-secondary rounded-4"
                     style="direction: rtl;">
 
                     <!-- Quantity Controls -->
-                    <div class="d-flex align-items-center gap-2 ">
+                    <div class="d-flex align-items-center gap-2 Quantity_Controls">
                       <!-- Increase Button -->
                       <button class="btn custom-increase-btn btn-sm "
                         (click)="increaseQuantity(product.id); $event.stopPropagation()">
                         <i class="fa-solid fa-plus"></i>
                       </button>
                       <!-- Quantity Display -->
-                      <span class="fw-bold custom-qty-display text-center ">
+                      <span class="fw-bold custom-qty-display text-center px-4 ">
                         {{ getCartItem(product.id)?.quantity }}
                       </span>
                       <!-- Remove Button -->
-                      <button class="btn custom-remove-btn btn-sm"
-                        (click)="removeItem(product.id); $event.stopPropagation()">
-                        <img src="assets/Images/delete-02.svg">
+                      <button class="btn custom-increase-btn btn-sm"
+                        (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                        <i class="fa-solid fa-minus"></i>
+
+                        <!-- <img src="assets/Images/delete-02.svg"> -->
                       </button>
                     </div>
                   </div>
                   } @else {
-                  <button class="btn btn-outline-dark btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
+                  <button class="btn btn-outline-secondary btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
                     style="font-size: 1.2rem; padding: 0.25rem 0.5rem;" (click)="addToCart(product, $event)"
                     data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
                     <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
@@ -247,10 +250,13 @@
           </div>
 
           <div class="card-body  px-3 mx-lg-3 pb-4">
-            <h6 class="card-title fw-bold mb-2">{{ currentLang === 'ar' ? product.name_ar : product.name }}</h6>
-            <p class="card-text text-muted mb-3" style="font-size: 13px; max-height: 40px; overflow: hidden;">
-              {{ currentLang === 'ar' ? product.description_ar : product.description }}
+            <h6 class="card-title fw-bold mb-2 ">
+              {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}
+            </h6>
+            <p class="card-text text-muted mb-3">
+              {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:55 }}
             </p>
+
             <!-- Price Section -->
             @if (product.sale_price && product.sale_price !== product.original_price) {
             <div class="mb-2">
@@ -271,14 +277,18 @@
             }
 
             @if (isInCart(product.id)) {
-            <div class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border rounded-4"
+            <div
+              class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-4"
               style="direction: rtl;">
               <!-- Quantity Controls -->
-              <div class="d-flex align-items-center gap-2">
-                <button class="btn custom-remove-btn btn-sm" (click)="removeItem(product.id); $event.stopPropagation()">
-                  <img src="assets/Images/delete-02.svg">
+              <div class="d-flex align-items-center gap-2 Quantity_Controls">
+                <button class="btn custom-increase-btn btn-sm"
+                  (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                  <i class="fa-solid fa-minus"></i>
+
+                  <!-- <img src="assets/Images/delete-02.svg"> -->
                 </button>
-                <span class="fw-bold custom-qty-display text-center">
+                <span class="fw-bold custom-qty-display text-center px-4">
                   {{ getCartItem(product.id)?.quantity }}
                 </span>
                 <button class="btn custom-increase-btn btn-sm"
@@ -288,7 +298,7 @@
               </div>
             </div>
             } @else {
-            <button class="btn btn-outline-dark btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
+            <button class="btn btn-outline-secondary btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
               style="font-size: 0.9rem; padding: 0.25rem 0.5rem;" (click)="addToCart(product, $event)"
               data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
               <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
@@ -365,21 +375,27 @@
           </div>
 
           <div class="card-body mx-lg-3  px-2 pb-3">
-            <h6 class="card-title fw-bold mb-1" style="font-size: 0.9rem;">{{ currentLang === 'ar' ? product.name_ar :
-              product.name }}</h6>
-            <p class="card-text text-muted mb-2" style="font-size: 0.75rem; max-height: 36px; overflow: hidden;">
-              {{ currentLang === 'ar' ? product.description_ar : product.description }}
+            <h6 class="card-title fw-bold mb-2 ">
+              {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:15 }}
+            </h6>
+            <p class="card-text text-muted mb-3">
+              {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:19 }}
             </p>
 
+
             @if (isInCart(product.id)) {
-            <div class="d-flex align-items-center justify-content-center px-2 mt-1 gap-1 border rounded-3"
+            <div
+              class="d-flex align-items-center justify-content-center px-2 mt-1 gap-1 border border-secondary rounded-3"
               style="direction: rtl;">
               <!-- Quantity Controls - Mobile optimized -->
-              <div class="d-flex align-items-center gap-1">
-                <button class="btn custom-remove-btn btn-xs" (click)="removeItem(product.id); $event.stopPropagation()">
-                  <img src="assets/Images/delete-02.svg" style="width: 14px;">
+              <div class="d-flex align-items-center gap-1 ">
+                <button class="btn custom-increase-btn btn-sm"
+                  (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                  <i class="fa-solid fa-minus"></i>
+
+                  <!-- <img src="assets/Images/delete-02.svg"> -->
                 </button>
-                <span class="fw-bold custom-qty-display text-center" style="font-size: 0.8rem;">
+                <span class="fw-bold custom-qty-display text-center px-4" style="font-size: 0.8rem;">
                   {{ getCartItem(product.id)?.quantity }}
                 </span>
                 <button class="btn custom-increase-btn btn-xs"
@@ -389,7 +405,7 @@
               </div>
             </div>
             } @else {
-            <button class="btn btn-outline-dark btn-xs bg-white mt-2 text-black rounded-4 custom-hover"
+            <button class="btn btn-outline-secondary btn-xs bg-white mt-2 text-black rounded-4 custom-hover"
               style="font-size: 1rem; padding: 0.25rem 0.5rem;"
               (click)="addToCart(product, $event); $event.stopPropagation()" data-bs-toggle="offcanvas"
               data-bs-target="#cartSidebar" aria-controls="cartSidebar">
