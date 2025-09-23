@@ -42,64 +42,68 @@
   </div>
 
   <!-- Mobile Carousel -->
+ <div class="services-carousel-wrapper d-block d-md-none">
   <div
-    id="servicesCarousel"
-    class="carousel slide d-block d-md-none"
-    data-bs-ride="carousel"
-    data-bs-touch="true"
+    class="d-flex transition-transform carousel-track"
+    [ngStyle]="{
+      transform: direction === 'rtl'
+        ? 'translateX(+' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+        : 'translateX(-' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+    }"
+    (touchstart)="onTouchStart($event)"
+    (touchend)="onTouchEnd($event)"
   >
-    <div class="carousel-inner">
+    <div
+      class="carousel-card"
+      *ngFor="let card of cards"
+      style="flex: 0 0 100%; max-width: 100%;"
+    >
       <div
-        class="carousel-item"
-        *ngFor="let card of cards; let i = index"
-        [class.active]="i === 0"
+        class="card border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative mx-auto"
+        style="max-width: 90%; z-index: 2;"
       >
-        <div
-          class="card border border-dark border-1 rounded-4 text-center py-2 shadow-sm position-relative mx-auto"
-          style="max-width: 90%; z-index: 2;"
-        >
-          <img
-            src="assets/Images/Frame 37.svg"
-            alt="Frame"
-            style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);"
-          />
-          <img
-            [src]="card.icon"
-            class="card-img-top mx-auto mt-3"
-            style="width: 60px;"
-            [alt]="card.titleKey | translate"
-          />
-          <div class="card-body">
-            <h5 class="card-title fw-bold">{{ card.titleKey | translate }}</h5>
-            <p class="card-text">{{ card.descriptionKey | translate }}</p>
-            <button
-              class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3"
-              [routerLink]="[card.link]"
-            >
-              <img
-                src="assets/Images/circle-arrow-up-right-02 (2) green.svg"
-                class="ms-2"
-                width="25"
-                alt="Arrow Icon"
-              />
-              {{ 'SERVICES.BOOK_NOW' | translate }}
-            </button>
-          </div>
+        <img
+          src="assets/Images/Frame 37.svg"
+          alt="Frame"
+          style="position: absolute; top: 1px; left: 4px; width: 50px; z-index: 0; transform: rotate(4deg);"
+        />
+        <img
+          [src]="card.icon"
+          class="card-img-top mx-auto mt-3"
+          style="width: 60px;"
+          [alt]="card.titleKey | translate"
+        />
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{ card.titleKey | translate }}</h5>
+          <p class="card-text">{{ card.descriptionKey | translate }}</p>
+          <button
+            class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3"
+            [routerLink]="[card.link]"
+          >
+            <img
+              src="assets/Images/circle-arrow-up-right-02 (2) green.svg"
+              class="ms-2"
+              width="25"
+              alt="Arrow Icon"
+            />
+            {{ 'SERVICES.BOOK_NOW' | translate }}
+          </button>
         </div>
       </div>
     </div>
-
-    <!-- Indicators -->
-    <div class="carousel-indicators">
-      <button
-        *ngFor="let card of cards; let i = index"
-        type="button"
-        data-bs-target="#servicesCarousel"
-        [attr.data-bs-slide-to]="i"
-        [class.active]="i === 0"
-        [attr.aria-current]="i === 0 ? 'true' : null"
-        [attr.aria-label]="'Slide ' + (i + 1)"
-      ></button>
-    </div>
   </div>
+
+  <!-- Indicators -->
+  <div class="carousel-indicators mt-3 d-flex justify-content-center gap-2">
+    <button
+      *ngFor="let card of cards; let i = index"
+      type="button"
+      class="indicator-dot"
+      [class.active]="i === currentSlideIndex"
+      (click)="goToSlide(i)"
+      [attr.aria-label]="'Slide ' + (i + 1)"
+    ></button>
+  </div>
+</div>
+
 </div>

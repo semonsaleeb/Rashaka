@@ -1,150 +1,73 @@
+<!-- قسم آراء العملاء (Carousel Mode) -->
 @if (mode === 'carousel') {
 <div>
-  <div class="success-stories p-5" style="background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
-  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap px-lg-5"
-    >
+  <div class="success-stories  p-5" style="background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
 
-     <!-- اللينك (يظهر فقط على الشاشات الكبيرة) -->
-  <!-- <a [routerLink]="['/home/sucesStory']"
-     class="btn btn-link view-all-btn text-light align-items-center gap-2 fs-5 p-0 d-none d-md-flex"
-     [ngClass]="currentLang === 'ar' ? 'ms-0 me-3 flex-row-reverse' : 'ms-3 me-0 flex-row'"
-     style="white-space: nowrap;">
-    {{ 'VIEW_ALL' | translate }}
-
-    <img src="assets/Images/circle-arrow-up-right-02 (1).svg"
-         alt="{{ 'VIEW_ALL' | translate }}">
-
-  </a> -->
-  <!-- العنوان -->
-  <h2 class="section-title mb-0" [ngClass]="currentLang === 'ar' ? 'text-start' : 'text-end'">
+    <!-- العنوان -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap px-lg-5 mx-lg-4">
+      <h2 class="section-title mb-0" [ngClass]="currentLang === 'ar' ? 'text-start' : 'text-end'">
         {{ 'CLIENT_REVIEWS' | translate }}
+      </h2>
+    </div>
 
-    <!-- {{ 'SUCCESS_STORIES' | translate }} -->
-  </h2>
+    <div class="client-reviews">
 
-  
-</div>
+      <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event, 'review')">
 
+        <!-- الكروت -->
+        <div class="review-deck d-flex justify-content-center align-items-center">
+          <ng-container *ngFor="let review of reviews; let i = index">
+            <div class="review-card-custom" [ngClass]="getReviewCardClass(i)">
+              <div class="review-video">
+                <ng-container *ngIf="review.video_url.includes('youtube'); else mp4">
+                  <iframe [src]="review.video_url | safeUrl" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+                </ng-container>
 
+                <ng-template #mp4>
+                  <video controls preload="none">
+                    <source [src]="review.video_url" type="video/mp4" />
+                  </video>
+                </ng-template>
+              </div>
 
-
-    <!-- ✅ نسخة الموبايل -->
-    @if (isMobile) {
- <div class="reviews p-2" style="background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
-
-  <!-- ✅ الكاروسيل -->
-  <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
-       (touchend)="onTouchEnd($event)">
-    <div class="story-deck-mobile d-flex justify-content-center align-items-center">
-      @for (review of reviews; track review; let i = $index) {
-      <div class="story-card-custom" [ngClass]="getCardClass(i)">
-
-        <!-- الفيديو -->
-        <div class="review-video text-center mt-5">
-          @if (review.video_url.includes('youtube')) {
-            <iframe
-              width="100%"
-              height="250"
-              [src]="review.video_url | safeUrl"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen>
-            </iframe>
-          }
-          @else {
-            <video width="100%" height="250" controls preload="none">
-              <source [src]="review.video_url" type="video/mp4">
-              متصفحك لا يدعم تشغيل الفيديو.
-            </video>
-          }
+              <div class="review-info text-center mt-3">
+                <h5 class="client-name">{{ review.client_name }}</h5>
+              </div>
+            </div>
+          </ng-container>
         </div>
 
-        <!-- النصوص -->
-        <!-- <div class="text-center mt-4">
-          <strong class="client-name fs-3">{{review.client_name}}</strong>
-          <p class="review-description fs-5">{{review.description}}</p>
-        </div> -->
-      </div>
-      }
-    </div>
-  </div>
-
-  <!-- ✅ Dots تحت خالص -->
-  @if (reviews.length >= 1) {
-  <div class="d-flex justify-content-center align-items-center py-4">
-    <div class="d-flex gap-2">
-      @for (review of reviews; track review; let i = $index) {
-      <button type="button" class="dot" [class.active]="i === currentIndex"
-              (click)="currentIndex = i"
-              [attr.aria-label]="'Review ' + (i + 1)">
-      </button>
-      }
-    </div>
-  </div>
-  }
-</div>
-
-    }
-
-    <!-- ✅ نسخة الديسكتوب -->
-    @else {
-   <div class="client-reviews p-5">
-  <div class="carousel-custom-wrapper position-relative">
-
-    <!-- عرض الريفيو الحالي -->
-    @if (reviews.length > 0) {
-      <div class="review-video">
-        @if (reviews[currentReviewIndex].video_url.includes('youtube')) {
-          <iframe
-            width="100%"
-            height="250"
-            [src]="reviews[currentReviewIndex].video_url | safeUrl"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
-        }
-
-        @else {
-          <video width="100%" height="250" controls preload="none">
-            <source [src]="reviews[currentReviewIndex].video_url" type="video/mp4">
-            متصفحك لا يدعم تشغيل الفيديو.
-          </video>
-        }
-
-        <h5 class="mt-3 text-white">{{ reviews[currentReviewIndex].client_name }}</h5>
-        <p class="text-light">{{ reviews[currentReviewIndex].description }}</p>
       </div>
 
-      <!-- Dots + Arrows -->
-      <div class="d-flex justify-content-between align-items-center mt-4">
+      <!-- Dots + Arrows (برا الكروت لكن جوا نفس السيكشن) -->
+      <div *ngIf="reviews.length > 0"
+        class="dotsInMobile px-5 mx-4 arrow-position d-flex   flex-wrap">
+
+        <!-- Dots -->
         <div class="d-flex gap-2">
-          @for (review of reviews; track review; let i = $index) {
-            <button
-              type="button"
-              class="dot"
-              [class.active]="i === currentReviewIndex"
-              (click)="currentReviewIndex = i"
-              [attr.aria-label]="'Review ' + (i + 1)">
-            </button>
-          }
+          <button *ngFor="let review of reviews; let i = index" type="button" class="dot"
+            [class.active]="i === currentReviewIndex" (click)="goToReview(i)" [attr.aria-label]="'Review ' + (i + 1)">
+          </button>
         </div>
 
-        <div class="d-flex gap-2" dir="rtl">
-          <button class="arrow-btn next" (click)="nextReview()"></button>
-          <button class="arrow-btn prev" (click)="prevReview()"></button>
+        <!-- Arrows -->
+        <div class="d-flex gap-2" dir="ltr" *ngIf="!isMobile">
+          <button class="arrow-btn prev" (click)="nextReview()"></button>
+          <button class="arrow-btn next" (click)="prevReview()"></button>
         </div>
+
       </div>
-    }
+
+    </div>
   </div>
 </div>
 
-    }
-  </div>
-
-</div>
 }
 
+<!-- قسم قصص النجاح (Grid Mode) -->
 @if (mode === 'grid') {
 <div>
   <div class="header-section">
@@ -161,19 +84,20 @@
           </span>
         </button>
       </div>
-
     </div>
     <div class="header-gradient"></div>
   </div>
-  <div class="success-stories px-5 p-5 ةغ-5">
+
+  <div class="success-stories px-5 p-5">
     <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
-    <div class="carousel-custom-wrapper position-relative">
+
+    <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event, 'story')">
       <div class="story-deck-grid d-flex justify-content-center align-items-center">
         @for (story of stories; track story; let i = $index) {
-        <div class="story-card-custom" [ngClass]="getCardClass(i)">
+        <div class="story-card-custom" [ngClass]="getStoryCardClass(i)">
           <!-- الصور -->
           <div class="story-image-wrapper d-flex position-relative">
-
             <!-- Before -->
             <div class="position-relative flex-fill text-center">
               <img [src]="story.before_image" alt="Before Image" class="story-image" />
@@ -183,43 +107,42 @@
             <!-- After -->
             <div class="position-relative flex-fill text-center">
               <img [src]="story.after_image" alt="After Image" class="story-image" />
-              <strong class="weight-label"> after : {{story.after_weight}}</strong>
+              <strong class="weight-label">after: {{story.after_weight}}</strong>
             </div>
           </div>
 
           <!-- النصوص تحت الصورتين -->
-          <div class="story-info text-center mt-5">
+          <div class="story-info text-center my-5">
             <strong class="client-name text-dark">{{story.client_name}}</strong>
+            <br>
             <p class="weight-change text-dark">{{story.weight_change}} -</p>
           </div>
         </div>
-
-        <!-- <h2> {{story.client_name}} </h2> -->
         }
       </div>
 
-
-      <!-- Custom Arrows shown only if there are more than 1 story -->
+      <!-- Custom Arrows and Dots الخاصة بقصص النجاح -->
       @if (stories.length > 0) {
-      <div class="d-flex justify-content-between  align-items-center mt-4 ">
-
+      <div class="d-flex justify-content-between align-items-center mt-5 py-5">
         <!-- Dots -->
         <div class="d-flex gap-2">
           @for (story of stories; track story; let i = $index) {
-          <button type="button" class="dot" [class.active]="i === currentIndex" (click)="currentIndex = i"
+          <button type="button" class="dot" [class.active]="i === currentStoryIndex" (click)="goToStory(i)"
             [attr.aria-label]="'Story ' + (i + 1)">
           </button>
           }
         </div>
+
         <!-- Arrows -->
         <div class="d-flex gap-2" dir="ltr">
-          <button class="arrow-btn prev" (click)="prevSlide()"></button>
-          <button class="arrow-btn next" (click)="nextSlide()"></button>
+          <button class="arrow-btn prev" (click)="prevStory()"></button>
+          <button class="arrow-btn next" (click)="nextStory()"></button>
         </div>
       </div>
       }
     </div>
   </div>
+
   <app-checkup></app-checkup>
   <app-branches></app-branches>
   <app-downloadapp></app-downloadapp>

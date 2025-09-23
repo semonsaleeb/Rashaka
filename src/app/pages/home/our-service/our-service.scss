@@ -52,3 +52,25 @@
   border-radius: 50px; /* يديكِ مستطيل مستقيم من النص وأطراف مدورة */
   margin-top: 2px;
 }
+.services-carousel-wrapper {
+  overflow: hidden;
+  position: relative;
+
+  .carousel-track {
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+  }
+
+  .indicator-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ccc;
+    transition: background-color 0.3s;
+
+    &.active {
+      background-color: #333;
+    }
+  }
+}
