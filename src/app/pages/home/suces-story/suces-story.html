@@ -31,7 +31,7 @@
                 </ng-container>
 
                 <ng-template #mp4>
-                  <video controls preload="none">
+                   <video controls preload="metadata">
                     <source [src]="review.video_url" type="video/mp4" />
                   </video>
                 </ng-template>
