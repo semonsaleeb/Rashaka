@@ -97,13 +97,18 @@
   <!-- Indicators -->
   <div class="carousel-indicators mt-3 d-flex justify-content-center gap-2">
     <button
-      *ngFor="let card of cards; let i = index"
-      type="button"
-      class="indicator-dot"
-      [class.active]="i === currentSlideIndex"
-      (click)="goToSlide(i)"
-      [attr.aria-label]="'Slide ' + (i + 1)"
-    ></button>
+            class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3"
+            [routerLink]="[card.link]"
+          >
+            <img
+              src="assets/Images/circle-arrow-up-right-02 (2) green.svg"
+              class="ms-2"
+              width="25"
+              alt="Arrow Icon"
+            />
+            {{ card.button | translate }}
+            <!-- {{ 'SERVICES.BOOK_NOW' | translate }} -->
+          </button>
   </div>
 </div>
 
