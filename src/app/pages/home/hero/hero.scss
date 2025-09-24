@@ -136,6 +136,16 @@
   height: 100%;
   // overflow: hidden;
 }
+.highlight-wrapper {
+  font-size: 1rem !important; /* mobile */
+}
+
+@media (min-width: 768px) {
+  .highlight-wrapper {
+    font-size: 6rem !important; /* desktop */
+  }
+}
+
 .highlight::before {
   content: "";
   position: absolute;

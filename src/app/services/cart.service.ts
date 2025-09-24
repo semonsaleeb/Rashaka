@@ -1,6 +1,6 @@
 // cart.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CartItem } from '../../models/CartItem';
@@ -199,25 +199,45 @@ addGuestItem(product: CartItem) {
   //   return this.http.post<PlaceOrderResponse>(`${this.apiUrl}/place-order`,
   //     { address_id, payment_method, promocode }, { headers: this.getHeaders() });
   // }
+
+
+
   placeOrder(
-  address_id: number,
-  payment_method: string,
-  promocode?: string,
-  apply_free_balance?: boolean,
-  free_balance_amount?: number
-): Observable<PlaceOrderResponse> {
-  const body: any = {
-    address_id,
-    payment_method,
-  };
+    addressId: number,
+    paymentMethod: string,
+    promocode?: string,
+    applyFreeBalance: boolean = false,
+    freeBalanceAmount: number = 0
+  ): Observable<any> {
+    // إعداد الـ params
+    let params = new HttpParams()
+      .set('address_id', addressId)
+      .set('payment_method', paymentMethod);
 
-  if (promocode) body.promocode = promocode;
-  if (apply_free_balance) body.apply_free_balance = apply_free_balance;
-  if (free_balance_amount) body.free_balance_amount = free_balance_amount;
+    if (promocode && promocode.trim() !== '') {
+      params = params.set('promocode', promocode);
+    }
 
-  return this.http.post<PlaceOrderResponse>(`${this.apiUrl}/place-order`, body, { headers: this.getHeaders() });
+    if (applyFreeBalance) {
+      params = params
+        .set('apply_free_balance', 'true')
+        .set('free_balance_amount', freeBalanceAmount.toString());
+    }
+
+    // إعداد الـ headers (لو مطلوب authorization)
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    // إرسال الريكوست
+    return this.http.post(`${this.apiUrl}/submit`, {}, { params, headers });
+  }
+
+
+// Add this method to check payment status when user returns from MyFatoorah
+checkPaymentStatus(orderId: string): Observable<any> {
+  return this.http.get(`${this.apiUrl}/orders/${orderId}/status`);
 }
-
 
   applyPromocode(promocode: string, total_price: number): Observable<PromoResponse> {
     return this.http.post<PromoResponse>(`${this.apiUrl}/order/apply-promocode`,

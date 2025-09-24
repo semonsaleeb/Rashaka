@@ -164,108 +164,109 @@ get totalPrice(): number {
 }
 
 
+confirmSubscription(): void {
+  if (!this.selectedPackage) return;
 
-  confirmSubscription(): void {
-    if (!this.selectedPackage) return;
-
-    try {
-      this.isLoading = true;
+  try {
+    this.isLoading = true;
 
     console.log('✅ selectedPackage:', this.selectedPackage);
     console.log('✅ totalPrice:', this.totalPrice, typeof this.totalPrice);
-      if (this.paymentMethod === 'credit_card') {
-        // حساب المبلغ الكلي (ممكن تضيف رسوم إضافية زي الشحن لو عندك)
-        const totalAmount = Number(this.totalPrice);
 
-        if (isNaN(totalAmount) || totalAmount <= 0) {
-          console.error('المبلغ الكلي غير صالح');
-          alert('خطأ في حساب المبلغ الكلي');
+    // Use backend API for both payment methods
+    this.pricingService
+      .subscribeToPackageFromWeb(
+        this.selectedPackage.id, 
+        this.paymentMethod, 
+        false
+      )
+      .subscribe({
+        next: (res: any) => {
           this.isLoading = false;
-          return;
-        }
+          console.log('📦 استجابة السيرفر من subscribeToPackageFromWeb:', res);
 
-        // إعداد بيانات الدفع
-        const paymentData = {
-          CustomerName: this.user?.name || 'عميل جديد',
-          CustomerEmail: this.user?.email || 'guest@example.com',
-          CustomerMobile: this.user?.phone || '966000000000',
-          NotificationOption: 'Lnk',
-          InvoiceValue: this.totalPrice,
-          CallBackUrl: `${window.location.origin}/payment-success?packageId=${this.selectedPackage.id}`,
-          ErrorUrl: `${window.location.origin}/payment-failure?packageId=${this.selectedPackage.id}`,
-          Language: 'AR',
-          DisplayCurrencyIso: 'SAR',
-          CustomerReference: this.selectedPackage.id
-        };
-
-        console.log('📦 بيانات الدفع المرسلة:', paymentData);
-
-        this.paymentService.initiatePayment(paymentData).subscribe({
-          next: (res: any) => {
-            this.isLoading = false;
-            console.log('💳 استجابة ماي فاتورة:', res);
-
-            if (res?.IsSuccess && res?.Data?.InvoiceURL) {
-              // تخزين بيانات الدفع pending
-              localStorage.setItem(
-                'pendingPayment',
-                JSON.stringify({
-                  packageId: this.selectedPackage?.id,
-                  paymentId: res.Data.InvoiceId
-                })
-              );
-
-              // تحويل المستخدم لصفحة الدفع
-              window.location.href = res.Data.InvoiceURL;
-            } else {
-              const errorMsg = res?.Message || 'تعذر إنشاء رابط الدفع';
-              console.error('❌ فشل في إنشاء الفاتورة:', errorMsg);
-              alert(errorMsg);
-            }
-          },
-          error: (err) => {
-            this.isLoading = false;
-            console.error('⚠️ خطأ في خدمة الدفع:', err);
-            alert('حدث خطأ أثناء إنشاء الدفع');
+          // Handle different response scenarios based on API guide
+          if (res.status === 'success') {
+            // ✅ Payment completed successfully (cash/zero-total or already paid card)
+            this.handleSuccessfulSubscription(res);
+            
+          } else if (res.status === 'requires_payment_action') {
+            // 🔵 Card payment required - redirect to payment URL
+            this.handleCreditCardSubscription(res);
+            
+          } else if (res.status === 'error') {
+            // ❌ Error case
+            alert(res.message || 'حدث خطأ أثناء إنشاء الاشتراك');
+          } else {
+            // Unexpected response
+            console.error('استجابة غير متوقعة:', res);
+            alert('استجابة غير متوقعة من الخادم');
           }
-        });
+        },
+        error: (err: any) => {
+          this.isLoading = false;
+          console.error('❌ خطأ في خدمة الاشتراك:', err);
+          this.handleSubscriptionError(err);
+        }
+      });
 
-      } else {
-        // الدفع كاش
-        this.pricingService
-          .subscribeToPackageFromWeb(this.selectedPackage.id, this.paymentMethod, false)
-          .subscribe({
-            next: (res: any) => {
-              this.isLoading = false;
-              console.log('✅ Subscription API Response:', res);
-
-              if (res.status === 'success') {
-                this.subscriptionData = {
-                  name: this.selectedPackage?.title,
-                  sessions: this.selectedPackage?.sessions,
-                  activation_code:
-                    res.subscription?.activation_code || res.activation_code || null
-                };
-                this.showPopup = true;
-              } else {
-                alert('حدث خطأ أثناء الاشتراك: ' + (res.message || 'Unknown error'));
-              }
-            },
-            error: (err) => {
-              this.isLoading = false;
-              console.error('❌ Subscription API Error:', err);
-              alert('حدث خطأ أثناء الاشتراك');
-            }
-          });
-      }
-    } catch (e) {
-      this.isLoading = false;
-      console.error('خطأ غير متوقع في confirmSubscription:', e);
-      alert('حدث خطأ غير متوقع أثناء معالجة الاشتراك');
-    }
+  } catch (e) {
+    this.isLoading = false;
+    console.error('خطأ غير متوقع في confirmSubscription:', e);
+    alert('حدث خطأ غير متوقع أثناء معالجة الاشتراك');
   }
+}
 
+private handleSuccessfulSubscription(res: any): void {
+  // ✅ Subscription completed successfully
+  this.subscriptionData = {
+    name: this.selectedPackage?.title,
+    sessions: this.selectedPackage?.sessions,
+    activation_code: res.data?.activation_code || res.subscription?.activation_code || null
+  };
+  this.showPopup = true;
+  
+  console.log('✅ الاشتراك مكتمل بنجاح:', res);
+}
 
+private handleCreditCardSubscription(res: any): void {
+  try {
+    if (res.data?.payment_url) {
+      // Store pending payment info
+      localStorage.setItem(
+        'pendingPayment',
+        JSON.stringify({ 
+          packageId: this.selectedPackage?.id,
+          orderId: res.data.order_id,
+          invoiceId: res.data.invoice_id 
+        })
+      );
+
+      // Redirect to MyFatoorah payment page (URL comes from backend)
+      console.log('Redirecting to payment URL:', res.data.payment_url);
+      window.location.href = res.data.payment_url;
+    } else {
+      console.error('No payment URL provided');
+      alert('خطأ في رابط الدفع');
+    }
+  } catch (e) {
+    console.error('خطأ غير متوقع في معالجة الدفع:', e);
+    alert('حدث خطأ غير متوقع أثناء معالجة الدفع');
+  }
+}
+
+private handleSubscriptionError(err: any): void {
+  // Handle specific error cases based on API guide
+  if (err.status === 422) {
+    alert('خطأ في البيانات المرسلة');
+  } else if (err.status === 402) {
+    alert('فشل في عملية الدفع، يرجى المحاولة مرة أخرى');
+  } else if (err.status === 409) {
+    alert('لديك عملية دفع معلقة. يرجى إكمالها أولاً');
+  } else {
+    alert('حدث خطأ أثناء الاشتراك: ' + (err.message || 'Unknown error'));
+  }
+}
 
   closePopup() {
     this.showPopup = false;

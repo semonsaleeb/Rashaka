@@ -37,11 +37,11 @@ export class Hero implements OnInit {
   }
 
   navigateToReservation() {
-    this.router.navigate(['/reservation/all']);
+    this.router.navigate(['/reservation/free']);
   }
 
   onGetStarted() {
-    this.router.navigate(['/reservation/all']);
+    this.router.navigate(['/reservation/free']);
   }
 
 nextSlide() {

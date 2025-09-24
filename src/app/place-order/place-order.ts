@@ -65,63 +65,108 @@ export class PlaceOrder implements OnInit {
     private productService: ProductService,
   ) { }
 
-  ngOnInit(): void {
-    // 1️⃣ Token & login
-    this.token = localStorage.getItem('token') || '';
-    this.isLoggedIn = !!this.token;
+  // In your payment-success component
+ngOnInit(): void {
+  // 1️⃣ Token & login
+  this.token = localStorage.getItem('token') || '';
+  this.isLoggedIn = !!this.token;
 
-    // 2️⃣ Load client/profile/addresses if logged in
-    if (this.isLoggedIn) {
-      this.loadClientProfile();
-      this.fetchAddresses();
+  // 2️⃣ Load client/profile/addresses if logged in
+  if (this.isLoggedIn) {
+    this.loadClientProfile();
+    this.fetchAddresses();
 
-      // fetch free product balance
-      this.productService.getFreeProductBalance(this.token).subscribe({
-        next: (res: any) => {
-          this.freeProductBalance = this.toNumber(res?.data?.free_product_remaining ?? 0);
-          this.maxFreeBalance = this.freeProductBalance;
-          console.log('Remaining Free Product Balance:', this.freeProductBalance);
+    // fetch free product balance
+    this.productService.getFreeProductBalance(this.token).subscribe({
+      next: (res: any) => {
+        this.freeProductBalance = this.toNumber(res?.data?.free_product_remaining ?? 0);
+        this.maxFreeBalance = this.freeProductBalance;
+        console.log('Remaining Free Product Balance:', this.freeProductBalance);
 
-          // set default free balance (will use current totals)
-          this.setDefaultFreeBalanceAmount();
-        },
-        error: (err) => console.error('❌ Error fetching free product balance:', err)
-      });
-    }
-
-    // 3️⃣ Load cart (use central method)
-    this.loadCart();
-
-    // 4️⃣ check query params (confirm order after payment)
-    const addressIdParam = this.route.snapshot.queryParamMap.get('addressId');
-    const promoCodeParam = this.route.snapshot.queryParamMap.get('promoCode');
-
-    if (addressIdParam) {
-      this.cartService.placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '', false, 0).subscribe({
-        next: (orderRes) => {
-          console.log('📦 Server Response from placeOrder:', orderRes);
-          alert('تم تأكيد الطلب بنجاح بعد الدفع!');
-          this.router.navigate(['/order-success', orderRes.order_id]);
-        },
-        error: (err) => {
-          console.error('❌ Error confirming order after payment:', err);
-          alert('حدث خطأ في تأكيد الطلب بعد الدفع.');
-        }
-      });
-    }
-
-    // 5️⃣ language & dir
-    this.currentLang = this.languageService.getCurrentLanguage();
-    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
-    this.translate.use(this.currentLang);
-
-    // subscribe lang changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.currentLang = lang;
-      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
-      this.translate.use(lang);
+        // set default free balance (will use current totals)
+        this.setDefaultFreeBalanceAmount();
+      },
+      error: (err) => console.error('❌ Error fetching free product balance:', err)
     });
   }
+
+  // 3️⃣ Load cart (use central method)
+  this.loadCart();
+
+  // 4️⃣ Check if this is a payment callback (user returning from MyFatoorah)
+  const urlParams = new URLSearchParams(window.location.search);
+  const orderId = urlParams.get('orderId');
+  
+  if (orderId) {
+    // This is a payment callback - check payment status
+    this.cartService.checkPaymentStatus(orderId).subscribe({
+      next: (statusRes: any) => {
+        if (statusRes.status === 'preparing' || statusRes.status === 'confirmed') {
+          // ✅ Payment successful
+          this.clearCartAndPendingPayment();
+          this.router.navigate(['/order-success', orderId]);
+        } else if (statusRes.status === 'pending') {
+          // 🔵 Still pending - show retry message
+          alert('لم تكتمل عملية الدفع بعد. يرجى المحاولة مرة أخرى.');
+          // Redirect back to checkout page to retry
+          this.router.navigate(['/checkout']);
+        } else {
+          // ❌ Payment failed
+          this.router.navigate(['/payment-failure'], { 
+            queryParams: { orderId, error: statusRes.message } 
+          });
+        }
+      },
+      error: (err: any) => {
+        console.error('Error checking payment status:', err);
+        this.router.navigate(['/payment-failure'], { 
+          queryParams: { orderId, error: 'تعذر التحقق من حالة الدفع' } 
+        });
+      }
+    });
+    return; // Stop further execution since we're handling payment callback
+  }
+
+  // 5️⃣ Check for normal query params (legacy flow)
+  const addressIdParam = this.route.snapshot.queryParamMap.get('addressId');
+  const promoCodeParam = this.route.snapshot.queryParamMap.get('promoCode');
+
+  if (addressIdParam) {
+    // Legacy flow - confirm order after payment
+    this.cartService.placeOrder(+addressIdParam, 'credit_card', promoCodeParam || '', false, 0).subscribe({
+      next: (orderRes: any) => {
+        console.log('📦 Server Response from placeOrder:', orderRes);
+        
+        // Handle response based on status
+        if (orderRes.status === 'success') {
+          this.handleSuccessfulOrder(orderRes);
+          this.router.navigate(['/order-success', orderRes.data.order_id]);
+        } else if (orderRes.status === 'requires_payment_action') {
+          this.handleCreditCardPayment(orderRes);
+        } else {
+          alert('تم تأكيد الطلب بنجاح بعد الدفع!');
+          this.router.navigate(['/order-success', orderRes.order_id]);
+        }
+      },
+      error: (err) => {
+        console.error('❌ Error confirming order after payment:', err);
+        alert('حدث خطأ في تأكيد الطلب بعد الدفع.');
+      }
+    });
+  }
+
+  // 6️⃣ language & dir
+  this.currentLang = this.languageService.getCurrentLanguage();
+  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  this.translate.use(this.currentLang);
+
+  // subscribe lang changes
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    this.translate.use(lang);
+  });
+}
 
   // ========================= Utilities =========================
   private getHeaders() {
@@ -287,9 +332,9 @@ export class PlaceOrder implements OnInit {
     this.router.navigate(['/profile/addresses']);
   }
 
-  // ========================= Place order =========================
- placeOrder(): void {
-  // validations
+// ========================= Place order =========================
+placeOrder(): void {
+  // ✅ الفاليديشنات الأساسية
   if (!this.client || !this.client.id) {
     console.error('بيانات العميل غير متوفرة');
     alert('خطأ في بيانات العميل، يرجى تسجيل الدخول مرة أخرى');
@@ -320,17 +365,21 @@ export class PlaceOrder implements OnInit {
     return;
   }
 
-  // compute free balance to actually apply
+  // 🔹 حساب free balance
   let freeBalanceToApply = 0;
   if (this.applyFreeBalance && this.freeProductBalance > 0) {
     const base = this.totalSalePrice - this.discountValue;
     const totalCartPrice = Math.max(0, base);
-    freeBalanceToApply = Math.min(this.freeBalanceAmount || totalCartPrice, this.freeProductBalance, totalCartPrice);
+    freeBalanceToApply = Math.min(
+      this.freeBalanceAmount || totalCartPrice,
+      this.freeProductBalance,
+      totalCartPrice
+    );
   }
 
-  // place order (pass the actual freeBalanceToApply)
+  // 🔹 استدعاء placeOrder بشكل صحيح
   this.cartService.placeOrder(
-    this.selectedAddressId!,
+    this.selectedAddressId,
     this.paymentMethod,
     this.promoCode,
     this.applyFreeBalance,
@@ -339,29 +388,18 @@ export class PlaceOrder implements OnInit {
     next: (orderRes: any) => {
       console.log('📦 استجابة السيرفر من placeOrder:', orderRes);
 
-      if (!orderRes || !orderRes.order_id) {
-        console.error('استجابة الطلب غير صالحة:', orderRes);
-        alert('استجابة غير متوقعة من الخادم');
-        return;
-      }
-
-      // 🟢 بعد نجاح الطلب: فضي الكارت واعمل reset للقيم
-      this.cartState.clearCart();
-      localStorage.removeItem('cart');
-      this.freeBalanceAmount = 0;
-      this.promoCode = '';
-      this.applyFreeBalance = false;
-
-      // handle payment according to method
-      if (this.paymentMethod === 'credit_card') {
-        this.handleCreditCardPayment(orderRes);
-      } else if (this.paymentMethod === 'cash') {
-        this.handleCashPayment(orderRes);
-      } else if (this.paymentMethod === 'free_balance') {
-        this.router.navigate(['/order-success', orderRes.order_id]);
-      } else {
-        console.error('طريقة دفع غير معروفة:', this.paymentMethod);
-        alert('طريقة الدفع غير مدعومة');
+      if (orderRes.status === 'success') {
+        this.handleSuccessfulOrder(orderRes);
+        this.router.navigate(['/order-success', orderRes.data.order_id]);
+      } else if (orderRes.status === 'requires_payment_action') {
+        if (orderRes.data.payment_url) {
+          this.handleCreditCardPayment(orderRes);
+        } else {
+          console.error('No payment URL provided');
+          alert('خطأ في رابط الدفع');
+        }
+      } else if (orderRes.status === 'error') {
+        alert(orderRes.message || 'حدث خطأ أثناء إنشاء الطلب');
       }
     },
     error: (err) => {
@@ -372,63 +410,52 @@ export class PlaceOrder implements OnInit {
 }
 
 
-  // ========================= Payment handlers =========================
+
+// Add these methods to your PlaceOrder class
+
+private handleSuccessfulOrder(orderRes: any): void {
+  // Clear cart and reset values
+  this.cartState.clearCart();
+  localStorage.removeItem('cart');
+  this.freeBalanceAmount = 0;
+  this.promoCode = '';
+  this.applyFreeBalance = false;
+  
+  console.log('✅ Order completed successfully:', orderRes);
+}
+
+private clearCartAndPendingPayment(): void {
+  // Clear cart
+  this.cartState.clearCart();
+  localStorage.removeItem('cart');
+  
+  // Clear pending payment data
+  localStorage.removeItem('pendingPayment');
+  
+  // Reset form values
+  this.freeBalanceAmount = 0;
+  this.promoCode = '';
+  this.applyFreeBalance = false;
+}
+
+// ========================= Payment handlers =========================
 private handleCreditCardPayment(orderRes: any): void {
   try {
-    const orderTotal = this.toNumber(orderRes.total_price);
-    const totalAmount = this.round2(orderTotal );
+    // Store pending payment info
+    localStorage.setItem(
+      'pendingPayment',
+      JSON.stringify({ 
+        orderId: orderRes.data.order_id, 
+        invoiceId: orderRes.data.invoice_id 
+      })
+    );
 
-    if (isNaN(totalAmount) || totalAmount <= 0) {
-      console.error('المبلغ الإجمالي غير صالح');
-      alert('خطأ في حساب المبلغ الإجمالي');
-      return;
-    }
-
-    const paymentData = {
-      CustomerName: this.client?.name || 'عميل جديد',
-      NotificationOption: 'Lnk',
-      InvoiceValue: totalAmount,
-      CustomerEmail: this.userEmail,
-      CustomerMobile: this.userPhone,
-      CallBackUrl: `${window.location.origin}/payment-success?orderId=${orderRes.order_id}`,
-      ErrorUrl: `${window.location.origin}/payment-failure?orderId=${orderRes.order_id}`,
-      Language: 'AR',
-      DisplayCurrencyIso: 'SAR',
-      CustomerReference: orderRes.order_id
-    };
-
-    console.log('بيانات الدفع المرسلة:', paymentData);
-
-    this.paymentService.initiatePayment(paymentData).subscribe({
-      next: (res: any) => {
-        console.log('استجابة ماي فاتورة:', res);
-
-        if (res.IsSuccess && res.Data?.InvoiceURL) {
-          // 🟡 ما تفضيش الكارت هنا
-          // خزن بيانات الدفع المعلق
-          localStorage.setItem(
-            'pendingPayment',
-            JSON.stringify({ orderId: orderRes.order_id, paymentId: res.Data.InvoiceId })
-          );
-
-          // تحويل المستخدم لصفحة الدفع
-          window.location.href = res.Data.InvoiceURL;
-        } else {
-          const errorMsg = res.Message || 'تعذر إنشاء رابط الدفع';
-          console.error('فشل في إنشاء الفاتورة:', errorMsg);
-          alert(errorMsg);
-        }
-      },
-      error: (err) => {
-        console.error('خطأ في خدمة الدفع:', err);
-        this.handlePaymentError(err);
-        // ❌ ما تفضيش الكارت
-      }
-    });
+    // Redirect to MyFatoorah payment page
+    window.location.href = orderRes.data.payment_url;
+    
   } catch (e) {
     console.error('خطأ غير متوقع في معالجة الدفع:', e);
     alert('حدث خطأ غير متوقع أثناء معالجة الدفع');
-    // ❌ ما تفضيش الكارت
   }
 }
 
