@@ -38,22 +38,24 @@
         </div>
 
         <!-- CTA Button desktop -->
-       <button class="btn btn-success cta-button d-none d-md-inline-block"
-        (click)="navigateToReservation()"
-        [ngClass]="currentLang === 'ar' ? 'ms-auto' : 'me-auto'">
-  <span class="arrow-icon">
-    <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
-  </span>
-  {{ 'cta.reserveNow' | translate }}
-</button>
+        <button class="btn btn-success cta-button d-none d-md-inline-block" (click)="navigateToReservation()"
+          [ngClass]="currentLang === 'ar' ? 'ms-auto' : 'me-auto'">
+          <span class="arrow-icon">
+            <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
+          </span>
+          {{ 'cta.reserveNow' | translate }}
+        </button>
 
       </div>
 
       <!-- Left Slider Column -->
       <div class="col-lg-7 text-center">
         <div class="slider-container mx-auto">
-          <div class="slider-wrapper overflow-hidden" (pointerdown)="onPointerDown($event)"
+          <div class="slider-wrapper overflow-hidden" (touchstart)="onTouchStart($event)"
+            (touchend)="onTouchEnd($event)" (touchmove)="$event.preventDefault()" (pointerdown)="onPointerDown($event)"
             (pointerup)="onPointerUp($event)" (pointermove)="onPointerMove($event)" (pointerleave)="isDragging = false">
+
+
 
 
             <div class="slides d-flex" [ngStyle]="{
