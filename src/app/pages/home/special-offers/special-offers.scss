@@ -15,7 +15,7 @@ button.rounded-circle {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  transition: 0.2s;
+  // transition: 0.2s;
   padding: 0;
   cursor: pointer;
 
@@ -113,11 +113,8 @@ button.rounded-circle {
 
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    // transition: transform 0.3s ease;
 
-    &:hover {
-      transform: translateY(-5px);
-    }
   }
 
   .product-image {
@@ -166,7 +163,7 @@ button.rounded-circle {
       }
     }
 .Quantity_Controls{
-  padding-top: 2px; padding-bottom: 2px;
+  padding-top: 2px !important; padding-bottom: 2px !important;
 }
     .view-details {
       display: inline-block;
@@ -349,24 +346,25 @@ button.rounded-circle {
 }
 
 .btn-circle {
-  width: 35px;
-  height: 35px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
+  margin: 6px;
   background-color: #E9F7DE;
   border: 2px solid #00000033;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  font-size: 50px;
-  transition: all 0.2s ease-in-out;
+  font-size: 80px;
+  // transition: all 0.2s ease-in-out;
 
   i {
     background-color: transparent;
     /* Ensure no override */
     color: inherit;
     /* Use parent color */
-    font-size: 16px;
+    font-size: 19px;
   }
 
   &:hover {
@@ -377,9 +375,9 @@ button.rounded-circle {
 
 
 
-.carousel-track {
-  transition: transform 0.6s ease;
-}
+// .carousel-track {
+//   transition: transform 0.6s ease;
+// }
 
 .carousel-item-wrapper {
   flex: 0 0 calc(100% / 3); // 3 كروت في الصفحة
@@ -415,7 +413,7 @@ button.rounded-circle {
   .carousel-track {
     display: flex;
     width: 100%;
-    transition: transform 0.5s ease;
+    // transition: transform 0.5s ease;
   }
 
   .carousel-slide {
@@ -423,11 +421,9 @@ button.rounded-circle {
     max-width: calc(100% / 3);
     // padding: 0 10px;
     box-sizing: border-box;
-    transition: all 0.3s ease;
+    // transition: all 0.3s ease;
 
-    &:hover {
-      transform: translateY(-5px);
-    }
+  
   }
 
 
@@ -507,11 +503,9 @@ button.rounded-circle {
 
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    // transition: transform 0.3s ease;
 
-    &:hover {
-      transform: translateY(-5px);
-    }
+ 
   }
 
   .product-image {
@@ -568,7 +562,7 @@ button.rounded-circle {
       color: white;
       text-decoration: none;
       border-radius: 4px;
-      transition: background 0.3s ease;
+      // transition: background 0.3s ease;
 
       &:hover {
         background: #023e8a;
@@ -675,16 +669,16 @@ button.rounded-circle {
 
 .carousel-item-custom {
   display: none;
-  transition: opacity 0.5s ease-in-out;
+  // transition: opacity 0.5s ease-in-out;
 }
 
 .carousel-item-custom.active {
   display: block;
 }
 
-.custom-hover {
-  transition: all 0.3s ease;
-}
+// .custom-hover {
+//   transition: all 0.3s ease;
+// }
 
 .custom-hover:hover {
   background-color: #28a745 !important; // Bootstrap green
@@ -709,7 +703,7 @@ button.rounded-circle {
 .btn-outline-success {
   color: #7AD03A;
   border-color: #7AD03A;
-  transition: all 0.3s ease;
+  // transition: all 0.3s ease;
 }
 
 .btn-outline-success:hover {
@@ -729,7 +723,7 @@ button.rounded-circle {
   justify-content: center;
   padding: 0;
   font-size: 14px;
-  transition: all 0.2s ease-in-out;
+  // transition: all 0.2s ease-in-out;
 
   i {
     background-color: transparent;
@@ -780,9 +774,9 @@ button.rounded-circle {
   }
 }
 
-.carousel-track {
-  transition: transform 0.6s ease;
-}
+// .carousel-track {
+//   transition: transform 0.6s ease;
+// }
 
 .carousel-item-wrapper {
   flex: 0 0 calc(100% / 3); // 3 كروت في الصفحة
@@ -824,7 +818,7 @@ a.text-decoration-none:hover .card {
   color: #000000;
   border-radius: 5px;
   border: 1px solid #00000059;
-  transition: all 0.3s ease;
+  // transition: all 0.3s ease;
 
   // padding: 2px 6px; // أصغر عرض وارتفاع للزر
   font-size: 20px; // لتكبير الأيقونة أو النص بداخل الزر
@@ -849,7 +843,7 @@ a.text-decoration-none:hover .card {
   color: #D34657;
   border-radius: 5px;
   border: none;
-  transition: all 0.3s ease;
+  // transition: all 0.3s ease;
 }
 
 .custom-remove-btn i {

@@ -9,13 +9,14 @@ import { FavoriteService } from '../services/favorite.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { TruncatePipe } from '../truncate-pipe';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-cart-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, TruncatePipe],
   templateUrl: './cart-sidebar.html',
   styleUrl: './cart-sidebar.scss'
 })

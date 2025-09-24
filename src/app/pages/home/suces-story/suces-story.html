@@ -12,8 +12,12 @@
 
     <div class="client-reviews">
 
-      <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
-        (touchend)="onTouchEnd($event, 'review')">
+     <div class="carousel-custom-wrapper position-relative"
+     (touchstart)="onTouchStart($event)"
+     (touchend)="onTouchEnd($event, 'review')"
+     (touchmove)="$event.preventDefault()"
+     style="touch-action: pan-y;">
+
 
         <!-- الكروت -->
         <div class="review-deck d-flex justify-content-center align-items-center">

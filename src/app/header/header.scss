@@ -10,6 +10,10 @@ header {
   text-decoration: underline !important;
   font-weight: 500;
 }
+.whats_btn {
+  border: 1px solid #C5C5C5; /* لازم solid */
+  border-radius: 8px;
+}
 
  .social-links {
       display: flex;
@@ -17,17 +21,23 @@ header {
       margin-top: 15px;
     }
 // header.component.scss
+.dropdown-menu {
+  border: none !important;
+}
+.dropdown-menu {
+  border-radius: 0 0 20px 20px !important;
+}
 
 // تنسيقات للغة العربية (RTL)
 [dir="rtl"] {
   .navbar-nav {
     margin-left: 0;
-    // margin-right: auto;
+    margin-right: -35px;
   }
   
   .dropdown-menu {
     // text-align: right;
-    left: auto;
+    // left: auto;
     right: 0;
   }
   
@@ -54,7 +64,7 @@ header {
   }
   
   .dropdown-menu {
-    text-align: left;
+    // text-align: left;
     right: auto;
     left: 0;
   }
@@ -73,14 +83,17 @@ header {
     margin-right: 0 !important;
   }
 }
-
+// .fs-6{
+//   font-size:  50px;
+// }
 // تنسيقات عامة
 .language-selector {
   button {
+    margin-left: 10px;
     transition: all 0.3s ease;
     
     &:hover {
-      color: #007bff !important;
+      color: #198754 !important;
     }
   }
 }
@@ -104,6 +117,9 @@ header {
 .search-container .fa-search {
   border-radius: 20px;
 }
+.custom-dropdown {
+  border-radius: 0 0 20px 20px !important; /* بس من تحت */
+}
 
 
 
@@ -112,7 +128,7 @@ header {
   padding: 0.7rem 0;
   background-color: #fff;
   border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 
 }
 

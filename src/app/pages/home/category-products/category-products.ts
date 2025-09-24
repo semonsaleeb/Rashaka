@@ -33,6 +33,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   categories: Category[] = [];
   selectedCategories: number[] = [];
   lang: 'ar' | 'en' = 'ar'; // default Arabic
+topSellers: any[] = [];
 
   progressValue = 80;
   isLoading = true;
@@ -68,6 +69,9 @@ export class CategoryProducts implements OnInit, OnDestroy {
     this.updateVisibleCards();
     this.checkIfMobile();
   };
+trackByProductId(index: number, product: any): number {
+  return product.id;
+}
 
   private GUEST_CART_KEY = 'guest_cart';
   products: any[] = [];
@@ -91,6 +95,7 @@ ngOnInit(): void {
   // ✅ Handle responsive layout
   this.resizeHandler();
   window.addEventListener('resize', this.resizeHandler);
+  this.topSellers = this.filteredProducts.filter(p => p.is_top_seller);
 
   // ✅ Read category_id from URL query parameters
   this.route.queryParams.subscribe(params => {

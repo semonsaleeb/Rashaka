@@ -3,17 +3,17 @@
 <div class="container py-4 mt-5" dir="rtl">
   <div class="row g-4">
  <!-- Product Image + Thumbnails -->
-<div class="col-md-5 rounded" style="border: 1px solid #00000033;">
+<div class="col-md-5 rounded" style="">
   <div class="p-3 bg-white text-center position-relative">
 
     <!-- Favorite button -->
-    <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-2"
+    <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-5"
       style="border-color: #00000033; z-index: 2;" (click)="toggleFavorite(product, $event)">
       <i [ngClass]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-muted'"></i>
     </button>
 
     <!-- Main Image -->
-    <div class="mb-2">
+    <div class="mb-2 p-5 border border-1 rounded-4">
       <img 
         [src]="product.images[selectedImageIndex]" 
         class="img-fluid" 
@@ -46,7 +46,7 @@
         </p>
 
 
-        <h4 class="fw-bold fs-1">{{ product.name_ar }}</h4>
+        <h4 class="fw-bold fs-5">{{ product.name_ar }}</h4>
         <!-- Name + Stock -->
         <div class="mb-3">
           <div class="mb-2 d-flex align-items-center">
@@ -93,11 +93,44 @@
 
         <!-- Add to cart -->
         <div class="d-flex gap-2 mb-3">
-          <button class="btn px-4 d-flex align-items-center justify-content-center"
-            style="background-color:#7ED321; color:black; font-weight:600;" (click)="addToCart(product, $event)">
-            <img src="assets/Images/shopping-cart-add-01.svg" width="20" />
-            <span class="ms-2">إضافة للعربة</span>
-          </button>
+        @if (isInCart(product.id)) {
+  <!-- ✅ حالة المنتج موجود في الكارت -->
+  <div
+    class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-4"
+    style="direction: rtl;"
+  >
+    <!-- Quantity Controls -->
+    <div class="d-flex align-items-center gap-2 Quantity_Controls">
+      <!-- Increase Button -->
+      <button class="btn custom-increase-btn btn-sm"
+        (click)="increaseQuantity(product.id); $event.stopPropagation()">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+
+      <!-- Quantity Display -->
+      <span class="fw-bold custom-qty-display text-center px-4">
+        {{ getCartItem(product.id)?.quantity }}
+      </span>
+
+      <!-- Decrease Button -->
+      <button class="btn custom-increase-btn btn-sm"
+        (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+        <i class="fa-solid fa-minus"></i>
+      </button>
+    </div>
+  </div>
+} @else {
+  <!-- ❌ حالة المنتج مش موجود في الكارت -->
+  <button class="btn btn-outline-secondary btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
+    style="font-size: 1.2rem; padding: 0.25rem 0.5rem;"
+    (click)="addToCart(product, $event)"
+    data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+
+    <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+    {{ 'ADD_TO_CART' | translate }}
+  </button>
+}
+
 
         </div>
 

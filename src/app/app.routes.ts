@@ -68,7 +68,7 @@ export const routes: Routes = [
   },
 
   // Shop & Content Pages
-  { path: 'home/category-products', component: CategoryProducts },
+  { path: 'home/Shop', component: CategoryProducts },
   { path: 'home/packages', component: Pricing },
   { path: 'home/sucesStory', component: SucesStory },
   { path: 'home/ourService', component: OurService },

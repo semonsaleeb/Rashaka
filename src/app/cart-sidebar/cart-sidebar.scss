@@ -1,11 +1,37 @@
-.btn-close{
+.btn-close {
   background-color: #7AD03A;
   opacity: 100;
+  // margin-top: 1px;
+  margin-right: 1px;
 }
 
 
 
-.close_btn{
-    background-color: #7AD03A;
-color: black;
+.close_btn {
+  background-color: #7AD03A;
+  color: black;
+}
+
+.img-fluid {
+  height: 100%;
+  width: 100%;
+}
+
+.btn-success {
+  background-color: #7AD03A;
+  border: none;
+  color: black;
+}
+
+.btn-primary {
+  background-color: #ffffff;
+  border: none;
+  color: black;
+}
+
+.colse_dev {
+  background-color: #E9F7DE;
+  border: 1px;
+border-color: #B1E38C;
+  color: black;
 }

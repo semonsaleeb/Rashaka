@@ -13,6 +13,7 @@ import { map, Observable } from 'rxjs';
 import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
 import { Product } from '../../models/Product';
 import { CartItem } from '../../models/CartItem';
+import { TranslateModule } from '@ngx-translate/core';
 declare var bootstrap: any;
 
 @Component({
@@ -22,7 +23,8 @@ declare var bootstrap: any;
     CommonModule,
     FormsModule,
     RouterModule,
-    Downloadapp
+    Downloadapp,
+    TranslateModule
   ],
   templateUrl: './product-card.html',
   styleUrls: ['./product-card.scss']
@@ -300,6 +302,44 @@ private loadProduct(productId: number): void {
   getEmptyStars(rating: number): number[] {
     return Array(5 - Math.ceil(rating)).fill(0);
   }
+
+
+
+// ✅ هل المنتج موجود في الكارت؟
+isInCart(productId: number): boolean {
+  return this.cartItems.some(item => item.product_id === productId);
+}
+
+// ✅ الحصول على العنصر من الكارت
+getCartItem(productId: number) {
+  return this.cartItems.find(item => item.product_id === productId);
+}
+
+
+// ✅ زيادة الكمية
+increaseQuantity(productId: number) {
+  const item = this.getCartItem(productId);
+  if (item) {
+    item.quantity += 1;
+  }
+}
+
+// ✅ تقليل الكمية (ولو بقت 0 بيتشال من الكارت)
+decreaseQuantity(productId: number) {
+  const item = this.getCartItem(productId);
+  if (item) {
+    item.quantity -= 1;
+    if (item.quantity <= 0) {
+      this.removeItem(productId);
+    }
+  }
+}
+
+// ✅ حذف المنتج بالكامل من الكارت
+removeItem(productId: number) {
+  this.cartItems = this.cartItems.filter(item => item.product_id !== productId);
+}
+
 }
 function safeNumber(value: any): number {
   if (value == null) return 0;

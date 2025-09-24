@@ -1,36 +1,50 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  AfterViewInit,
-  ViewChildren,
-  QueryList
-} from '@angular/core';
+import { Component, ElementRef, AfterViewInit, ViewChildren, QueryList, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
   selector: 'app-post-hero',
   standalone: true,
   imports: [CommonModule, TranslateModule],
   templateUrl: './post-hero.html',
-  styleUrl: './post-hero.scss'
+  styleUrls: ['./post-hero.scss']
 })
-export class PostHero implements AfterViewInit {
+export class PostHero implements OnInit, AfterViewInit {
   stats = [
-    { number: 40, suffix: '+', textKey: 'STATS.BRANCHES', description: 'Branches' },
-    { number: 285, suffix: '+', textKey: 'STATS.PRODUCTS', description: 'Products' },
-    { number: 500, suffix: '+', textKey: 'STATS.EMPLOYEES', description: 'Employees' },
-    { number: 100000, suffix: '+', textKey: 'STATS.CLIENTS', description: 'Clients' }
+    { number: 40, suffix: '+', textKey: 'STATS.BRANCHES' },
+    { number: 285, suffix: '+', textKey: 'STATS.PRODUCTS' },
+    { number: 500, suffix: '+', textKey: 'STATS.EMPLOYEES' },
+    { number: 100000, suffix: '+', textKey: 'STATS.CLIENTS' }
   ];
+
+  currentLang: string = 'ar';
+  dir: 'ltr' | 'rtl' = 'rtl';
 
   @ViewChildren('statNumber') statNumbers!: QueryList<ElementRef>;
 
-  ngAfterViewInit() {
+  constructor(private languageService: LanguageService) {}
+
+  ngOnInit(): void {
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.animateStats(), 100); // لضمان جاهزية الـ DOM
+  }
+
+  animateStats() {
     this.statNumbers.forEach((elRef, index) => {
       const target = this.stats[index].number;
       const suffix = this.stats[index].suffix || '';
       let count = 0;
-      const step = Math.ceil(target / 300);
+      const step = Math.ceil(target / 200); // سرعة العد
 
       const interval = setInterval(() => {
         count += step;

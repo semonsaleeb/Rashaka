@@ -1,20 +1,21 @@
-<body style="background-color: #E9F7DE;" class=" py-lg-5 ">
+<body style="background-color: #E9F7DE;" class="  pt-lg-5">
 
-  <div class="container my-5 mobile-padding">
+  <div class="container  mobile-padding">
     <div class="row g-0 rounded-4">
 
       <!-- Text Column -->
-      <div class="col-12 col-lg-6 my-5 py-5 d-flex flex-column justify-content-end"
+      <div class="col-12 col-lg-6 my-lg-5 py-lg-5 d-flex flex-column justify-content-end"
         [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'"
         [ngClass]="{'text-end': currentLang === 'ar', 'text-start': currentLang !== 'ar'}"
         style="background-color: #E9F7DE;">
 
-        <h1 class="mb-3 fs-3 fw-bold text-black">
-          <span class="greenspan">{{ 'CHECKUP.FREE_NOW' | translate }}</span>
+        <h1 class=" fs-3 fw-bold text-black">
           {{ 'CHECKUP.BOOK_CHECKUP' | translate }}
+                    <span class="greenspan">{{ 'CHECKUP.FREE_NOW' | translate }}</span>
+
         </h1>
 
-        <p class="text-black mb-4 fs-6 fw-semibold"
+        <p class="text-black  fs-6 "
           [ngClass]="{'text-end': currentLang === 'ar', 'text-start': currentLang !== 'ar'}"
           style="text-align: justify;">
           {{ 'CHECKUP.DESCRIPTION' | translate }}
@@ -23,13 +24,13 @@
         <div class="d-flex justify-content-center justify-content-lg-start mx-2"
           [ngClass]="{'flex-row-reverse': currentLang === 'ar'}">
           <button [routerLink]="['/reservation/free']"
-            class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center py-2 my-3 position-relative custom-btn px-3"
+            class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center py-lg-2 my-lg-3 position-relative custom-btn px-3"
             (click)="onGetStarted()" [ngClass]="{ 'ms-auto': currentLang === 'ar', 'me-auto': currentLang !== 'ar' }">
- <img [ngClass]="{ 'ms-2': currentLang === 'ar', 'me-2': currentLang !== 'ar' }"
+            <img [ngClass]="{ 'ms-2': currentLang === 'ar', 'me-2': currentLang !== 'ar' }"
               src="assets/Images/circle-arrow-up-right-02 (2) green.svg" width="25" alt="Arrow Icon">
             {{ 'CHECKUP.BOOK_NOW' | translate }}
 
-           
+
           </button>
 
         </div>
@@ -37,12 +38,14 @@
       </div>
 
       <!-- Image Column -->
-      <div
-        class="col-12 col-lg-6 position-relative d-flex justify-content-center align-items-center bg-cover bg-center left-bg p-2"
-        style="overflow: visible; transform: scale(1);">
-        <img src="assets/Images/Group 9052.svg" style="overflow: visible;" alt="جهاز قياس الجسم"
-          class="img-fluid custom-device-img" />
-      </div>
+    
+      <div  class="col-12 col-lg-6 py-2 ">
+<img src="assets/Images/125.svg" class="center_img " alt="Responsive Image">
+
+<!-- <img src="assets/Images/12app.svg" class="d-block d-lg-none img-fluid" alt="Mobile Image"> -->
+
+
+       </div>
 
     </div>
 

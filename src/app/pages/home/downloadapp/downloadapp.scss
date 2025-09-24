@@ -11,6 +11,10 @@
 //   border-top-right-radius: 12px;
 //   z-index: 1;
 // }
+.desktop-design {
+  transform: scale(0.9); /* صغر لـ 90% */
+  transform-origin: top center; /* يحدد نقطة البداية للتصغير */
+}
 
 /* ✅ جراديانت تحت */
 .gradient-bottom-border::after {

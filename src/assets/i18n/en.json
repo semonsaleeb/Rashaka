@@ -73,18 +73,20 @@
   },
   "SERVICES": {
     "TITLE": "Our Services",
-    "BOOK_NOW": "Book Now",
+    "BOOK_NOW1": "Book Now",
+    "BOOK_NOW2": "Subscribe now",
+    "BOOK_NOW3": "Shop now",
     "CARD1": {
       "TITLE": "Free Checkup",
-      "DESCRIPTION": "Know your body’s true needs in terms of calories and fat percentage..."
+      "DESCRIPTION": "We introduce you to your body’s real needs in terms of calories and fat percentage. The test is quick and easy, and it helps us determine the perfect plan for you."
     },
     "CARD2": {
       "TITLE": "Regular Follow-up",
-      "DESCRIPTION": "Track your health regularly and adjust your nutrition and exercises..."
+      "DESCRIPTION": "We introduce you to your body’s real needs in terms of calories and fat percentage. The test is quick and easy, and it helps us determine the perfect plan for you."
     },
     "CARD3": {
       "TITLE": "Slimming Products",
-      "DESCRIPTION": "Products designed to help you lose weight while staying healthy..."
+      "DESCRIPTION": "We introduce you to your body’s real needs in terms of calories and fat percentage. The test is quick and easy, and it helps us determine the perfect plan for you."
     }
   },
   "CHECKUP": {
@@ -192,8 +194,8 @@
   "VIEW_DIRECTIONS": "View Directions",
   "SUBSCRIPTIONS": {
     "ALT": "Offers",
-    "TITLE": "Subscriptions",
-    "DESCRIPTION": "Choose the package that suits your needs and get started easily.",
+    "TITLE": "Choose the plan that suits you",
+    "DESCRIPTION": "Enjoy flexible plans and prices that suit all your needs.",
     "SESSIONS": "Devices & Sessions",
     "NUTRITION": "Nutrition Plan",
     "ALERT": "Note: After subscribing online, please visit the nearest branch to confirm and activate your subscription.",
@@ -411,7 +413,12 @@
     "ADD_TO_CART": "Add to Cart"
   },
   "CART": {
-    "PAYMENTMETHOD":"Payment Method",
+    
+    "FREE_SHIPPING_TEXT": "Free shipping for orders above",
+    "FREE_SHIPPING_AMOUNT": "1000 SAR",
+    "REMOVE": "Remove",   
+    "VIEW_CART": "View Cart", 
+    "PAYMENTMETHOD": "Payment Method",
     "EMPTY_TITLE": "Your cart is empty!",
     "EMPTY_DESC": "Add the products you want and come back later to complete your order.",
     "START_SHOPPING": "Start Shopping",
@@ -446,8 +453,7 @@
     "CANCEL_ORDER_CONFIRMATION": "Are you sure you want to cancel your order?",
     "NO": "No",
     "YES_CANCEL": "Yes, Cancel",
-      "CANCEL_ORDER_TITLE": "Cancel Order"
-
+    "CANCEL_ORDER_TITLE": "Cancel Order"
   },
   "PROFILE": {
     "IMAGE_ALT": "User profile picture",
@@ -495,7 +501,7 @@
   },
   "ORDERS": {
     "TITLE": "Orders",
-       "CASH_SUCCESS": "Order Confirmed Successfully",
+    "CASH_SUCCESS": "Order Confirmed Successfully",
     "CASH_SHIPPED_MSG": "You will be contacted by the shipping company to deliver your order as soon as possible.",
     "LOADING": "Loading...",
     "ORDER_NUMBER": "Order No.",
@@ -505,8 +511,7 @@
       "CANCELLED": "Cancelled",
       "IN_PROGRESS": "In Progress",
       "PENDING": "Pending",
-            "PRICE":"السعر"
-
+      "PRICE": "السعر"
     },
     "QUANTITY": "Quantity",
     "NO_PRODUCTS": "No products",
@@ -602,8 +607,6 @@
     "EXPIRY_DATE": "MM/YY",
     "CVC": "CVC"
   },
-    "MAX_AVAILABLE":"Max available",
-    "CLIENT_REVIEWS": " Client Reviews " 
-
-
+  "MAX_AVAILABLE": "Max available",
+  "CLIENT_REVIEWS": " Client Reviews "
 }

@@ -1,7 +1,8 @@
 <img src="assets/Images/pattern.svg"
      style="position: absolute; left: 0; top: 0; height: 150px; width: 100px; z-index: 1; opacity: 0.5;">
 
-<div class="stats-container container bg-white rounded-3 py-5 px-md-5 px-3 text-center">
+<div class="stats-container container bg-white rounded-3 py-5 px-md-5 px-3 text-center"
+     [attr.dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
   <div class="row g-4">
     <div class="col-6 col-md-3 position-relative stat-item" *ngFor="let stat of stats; let i = index">
       <div class="fs-2 fw-bold text-dark" #statNumber>0</div>
@@ -11,3 +12,4 @@
     </div>
   </div>
 </div>
+

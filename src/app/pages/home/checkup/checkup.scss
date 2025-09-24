@@ -87,6 +87,19 @@ button:hover img {
   line-height: 1.2;
 }
 
+.center_img {
+  object-fit: contain;
+  height: 350px; /* الديسكتوب الافتراضي */
+}
+
+/* على الموبايل (شاشات أصغر من 768px) */
+@media (max-width: 767.98px) {
+  .center_img {
+    height: 200px; /* الموبايل */
+  }
+}
+
+
 .img-fluid {
   max-width: 400px;
   height: 350px;

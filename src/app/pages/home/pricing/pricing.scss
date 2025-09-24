@@ -91,6 +91,8 @@
 
   &.active-dot {
     background-color: #7AD03A !important;
+        color: black;
+
     width: 40px;
     height: 12px;
     border-radius: 30px; // أفضل من 10% عشان تكون بيضاوية مظبوطة
@@ -106,6 +108,8 @@
 
 .dot-active {
   background-color: #7AD03A !important;
+      color: black;
+
 }
 .dot-inactive {
   background-color: #ccc !important; /* رمادي خفيف */
@@ -251,14 +255,21 @@
 }
 
 
+.subscribed-text {
+  font-size: 16px; /* أصغر من 15px */
+}
+.subscribe-btn{
+    font-size: 16px; /* أصغر من 15px */
+
+}
 
 .ribbon-top-left {
   position: absolute;
   top: 18px;
-  left: -38px;
+  left: -40px;
   transform: rotate(320deg);
   background-color: #B4EB52; // deep orange
-  color: white;
+  // color: white;
   padding: 4px 60px;
   font-size: 14px;
   font-weight: bold;
@@ -290,6 +301,8 @@
 /* Hover effects */
 .basic-btn:hover {
     background-color: #7AD03A; /* Darker shade */
+        color: black;
+
 }
 
 .other-btn:hover {

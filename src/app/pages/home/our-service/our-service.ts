@@ -141,18 +141,23 @@ export class OurService implements AfterViewInit {
       titleKey: 'SERVICES.CARD1.TITLE',
       descriptionKey: 'SERVICES.CARD1.DESCRIPTION',
       link: '/reservation/free',
+      button: 'SERVICES.BOOK_NOW1'
     },
     {
       icon: 'assets/Images/Doctor.svg',
       titleKey: 'SERVICES.CARD2.TITLE',
       descriptionKey: 'SERVICES.CARD2.DESCRIPTION',
       link: '/reservation/all',
+            button: 'SERVICES.BOOK_NOW2'
+
     },
     {
       icon: 'assets/Images/Rice Bowl.svg',
       titleKey: 'SERVICES.CARD3.TITLE',
       descriptionKey: 'SERVICES.CARD3.DESCRIPTION',
-      link: '/reservation/all',
+      link: '/home/Shop',
+            button: 'SERVICES.BOOK_NOW3'
+
     },
   ];
 

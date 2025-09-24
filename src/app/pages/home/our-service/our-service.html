@@ -1,6 +1,6 @@
 <div class="container w-100" [dir]="direction">
   <header>
-    <h1 class="section_title mx-3 py-3">{{ 'SERVICES.TITLE' | translate }}</h1>
+    <h1 class="section_title mx-3 fs-3 fw-bold py-3">{{ 'SERVICES.TITLE' | translate }}</h1>
   </header>
 
   <!-- Desktop Grid -->
@@ -22,7 +22,7 @@
           [alt]="card.titleKey | translate"
         />
         <div class="card-body">
-          <h5 class="card-title fw-bold">{{ card.titleKey | translate }}</h5>
+          <h5 class="card-title fs-5 fw-bold">{{ card.titleKey | translate }}</h5>
           <p class="card-text">{{ card.descriptionKey | translate }}</p>
           <button
             class="btn border border-dark border-1 rounded-5 d-inline-flex align-items-center px-3"
@@ -34,7 +34,8 @@
               width="25"
               alt="Arrow Icon"
             />
-            {{ 'SERVICES.BOOK_NOW' | translate }}
+            {{ card.button | translate }}
+            <!-- {{ 'SERVICES.BOOK_NOW' | translate }} -->
           </button>
         </div>
       </div>

@@ -17,15 +17,29 @@ border-radius: 0 0 50px 50px;
   display: none !important;
 }
 /* Divider between two items in the same row */
+/* Mobile (max-width: 767px) */
+/* Mobile (max-width: 767px) */
 @media (max-width: 767px) {
-  .stat-item:nth-child(odd) {
-    border-right: 1px solid #000; /* dark vertical line */
+  .stats-container[dir="ltr"] .stat-item:nth-child(odd) {
+    border-right: 1px solid #000;
+    border-left: none;
+  }
+
+  .stats-container[dir="rtl"] .stat-item:nth-child(odd) {
+    border-left: 1px solid #000;
+    border-right: none;
   }
 }
 
-/* On desktop, keep your original vertical dividers */
+/* Desktop (min-width: 768px) */
 @media (min-width: 768px) {
-  .stat-item:not(:last-child) {
+  .stats-container[dir="ltr"] .stat-item:not(:last-child) {
     border-right: 1px solid #000;
+    border-left: none;
+  }
+
+  .stats-container[dir="rtl"] .stat-item:not(:last-child) {
+    border-left: 1px solid #000;
+    border-right: none;
   }
 }
