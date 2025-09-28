@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 // Components
@@ -19,6 +19,7 @@ import { Footer } from './footer/footer';
 import { Home } from './pages/home';
 import { WelcomePopup } from './welcome-popup/welcome-popup';
 import { CartSidebar } from './cart-sidebar/cart-sidebar';
+import { ChangeDetectorRef } from '@angular/core';
 
 // Services
 import { CartStateService } from './services/cart-state-service';
@@ -48,7 +49,8 @@ export class App implements OnInit {
     private cartState: CartStateService,
     private languageService: LanguageService,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+      private cdr: ChangeDetectorRef
   ) {
      this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -63,12 +65,10 @@ export class App implements OnInit {
     translate.use(savedLang);
   }
   
-  ngOnInit() {
-    // 👇 تحديث الكارت عند أي تغيير
-    this.cartState.cartItems$.subscribe(items => {
-      this.cartItems = items;
-      console.log("cart items : " ,items);
-      
-    });
-  }
+ ngOnInit() {
+  this.cartState.cartItems$.subscribe(items => {
+    this.cartItems = items;
+    this.cdr.detectChanges(); // ✅ يجبر Angular يعيد الفحص بعد التغيير
+  });
+}
 }

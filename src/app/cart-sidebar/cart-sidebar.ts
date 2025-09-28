@@ -26,7 +26,6 @@ export class CartSidebar implements OnInit, OnDestroy {
   progressValue = 80;
   isLoading = true;
 
-  // 🟢 نخزن الـ callback علشان removeEventListener يشتغل صح
   private outsideClickHandler = this.handleOutsideClick.bind(this);
 
   constructor(
@@ -46,36 +45,24 @@ export class CartSidebar implements OnInit, OnDestroy {
   }
 
   // ✅ تحميل الكارت للـ guest
- private loadGuestCart(): any[] {
-  const cart = localStorage.getItem(this.GUEST_CART_KEY);
-  const parsedCart = cart ? JSON.parse(cart) : [];
+  private loadGuestCart(): any[] {
+    const cart = localStorage.getItem(this.GUEST_CART_KEY);
+    const parsedCart = cart ? JSON.parse(cart) : [];
 
-  // 🟢 log للـ cart بعد التحميل
-  console.log("🛒 Guest Cart Loaded:", parsedCart);
+    console.log("🛒 Guest Cart Loaded:", parsedCart);
 
-  // 🟢 log لكل منتج
-  parsedCart.forEach((item: any, i: number) => {
-    console.log(`Guest Product ${i + 1}:`, {
-      id: item.product_id,
-      name: item.product_name ?? item.product_name_ar ?? 'No name',
-      quantity: item.quantity,
-      price:Number( item.unit_price ?? item.price)
-    });
-  });
+    return parsedCart.map((item: any) => this.normalizeProduct(item));
+  }
 
-  return parsedCart;
-}
-
+  // ✅ تطبيع المنتج قبل التخزين (تحويل كل القيم لرقم)
 private normalizeProduct(item: any): CartItem {
-  // 🟢 حدد الأسعار
-  const rawUnitPrice = item.unit_price ?? item.price ?? item.original_price;
-  const rawSalePrice = item.unit_price_after_offers ?? item.sale_unit_price ?? item.sale_price;
+  const unitPrice = safeNumber(item.unit_price ?? item.price ?? item.original_price);
+  const saleUnitPrice = safeNumber(item.unit_price_after_offers ?? item.sale_unit_price ?? item.sale_price);
+  const quantity = safeNumber(item.quantity ?? item.cart_quantity ?? 1);
 
-  const unitPrice: number = rawUnitPrice !== undefined ? Number(rawUnitPrice) : 0;
-  const salePrice: number | null =
-    rawSalePrice !== undefined ? Number(rawSalePrice) : null;
-
-  const quantity = Number(item.quantity ?? item.cart_quantity ?? 1);
+  // 🟢 log علشان تتابع القيم
+  console.log(`🧾 Product: ${item.product_name || item.name}`);
+  console.log(`   ➡️ unit_price: ${unitPrice}, sale_unit_price: ${saleUnitPrice}, quantity: ${quantity}`);
 
   return {
     product_id: item.product_id ?? item.id,
@@ -83,90 +70,68 @@ private normalizeProduct(item: any): CartItem {
     product_name_ar: item.product_name_ar ?? item.name_ar,
     images: item.images ?? (item.image ? [item.image] : []),
 
+    // 🟢 الأرقام كلها جاهزة كـ number
     unit_price: unitPrice,
-    unit_price_after_offers: salePrice?.toString(), // number | null
+    sale_unit_price: saleUnitPrice,
+    unitPrice,
+    saleUnitPrice,
 
     quantity,
-
     total_price: unitPrice * quantity,
-    total_price_after_offers: (salePrice ?? unitPrice) * quantity,
+    total_price_after_offers: (saleUnitPrice || unitPrice) * quantity,
   };
 }
 
 
-
-
-toNumber(value: string | number | undefined): number {
-  return Number(value ?? 0);
-}
-
-
   // ✅ حفظ الكارت للـ guest
-private saveGuestCart(cart: any[]): void {
-  const normalizedCart = cart.map(item => this.normalizeProduct(item));
+  private saveGuestCart(cart: any[]): void {
+    const normalizedCart = cart.map(item => this.normalizeProduct(item));
 
-  // 1️⃣ حفظ في localStorage
-  localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(normalizedCart));
-
-  // 2️⃣ تحديث الـ cartStateService
-  this.cartState.updateItems(normalizedCart);
-
-  // 3️⃣ تحديث الكارت المحلي
-  this.cartItems = normalizedCart;
-}
-
-
+    localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(normalizedCart));
+    this.cartState.updateItems(normalizedCart);
+    this.cartItems = normalizedCart;
+  }
 
   // ✅ تحديث عدد العناصر
   private refreshCartCount(): void {
     const total = this.isLoggedIn()
-      ? this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
-      : this.loadGuestCart().reduce((sum, item) => sum + (item.quantity || 0), 0);
+      ? this.cartItems.reduce((sum, item) => sum + safeNumber(item.quantity), 0)
+      : this.loadGuestCart().reduce((sum, item) => sum + safeNumber(item.quantity), 0);
 
     this.cartState.updateCount(total);
   }
 
   // ✅ تحميل الكارت من الـ API
-private loadCart(): void {
-  this.cartService.getCart().subscribe({
-    next: (response) => {
-      this.cartItems = response.data?.items || [];
+  private loadCart(): void {
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        const items = response.data?.items || [];
+        this.cartItems = items.map((i: any) => this.normalizeProduct(i));
 
-      // 🟢 اعمل log لكل المنتجات
-      console.log("🛒 Cart Items Loaded:", this.cartItems);
+        console.log("🛒 Cart Items Loaded:", this.cartItems);
 
-      this.refreshCartCount();
-      this.cdr.detectChanges(); // 🟢 يخبر Angular عن التغيير
-    },
-    error: (err) => this.handleCartError(err)
-  });
-}
-
-
+        this.refreshCartCount();
+        this.cdr.detectChanges();
+      },
+      error: (err) => this.handleCartError(err)
+    });
+  }
 
   // ====================== LIFECYCLE ======================
 
   ngOnInit(): void {
-     if (!this.isLoggedIn()) {
-    this.cartItems = this.loadGuestCart();
-    this.refreshCartCount();
-    this.cdr.detectChanges(); // 🟢 مهم هنا
-  }
-    const sidebarEl = document.getElementById('cartSidebar');
-
-    if (sidebarEl) {
-      // 🟢 log لما يتفتح
-      sidebarEl.addEventListener('shown.bs.offcanvas', () => {
-        // console.log('🟢 cartSidebar opened!');
-      });
-
-      // 🔴 log لما يتقفل
-      sidebarEl.addEventListener('hidden.bs.offcanvas', () => {
-        // console.log('🔴 cartSidebar closed!');
-      });
+    if (!this.isLoggedIn()) {
+      this.cartItems = this.loadGuestCart();
+      this.refreshCartCount();
+      this.cdr.detectChanges();
     }
 
-    // ⬅️ كليك على أي مكان برة الـ sidebar
+    const sidebarEl = document.getElementById('cartSidebar');
+    if (sidebarEl) {
+      sidebarEl.addEventListener('shown.bs.offcanvas', () => {});
+      sidebarEl.addEventListener('hidden.bs.offcanvas', () => {});
+    }
+
     document.addEventListener('click', this.outsideClickHandler);
   }
 
@@ -176,15 +141,35 @@ private loadCart(): void {
 
   // ====================== HELPERS ======================
 
-  private handleOutsideClick(event: MouseEvent) {
-    const sidebarEl = document.getElementById('cartSidebar');
-    if (sidebarEl && sidebarEl.classList.contains('show')) {
-      if (!sidebarEl.contains(event.target as Node)) {
-        console.log('🔹 Closing sidebar because of outside click');
-        this.closeSidebar();
-      }
+private handleOutsideClick(event: MouseEvent) {
+  const sidebarEl = document.getElementById('cartSidebar');
+  if (sidebarEl && sidebarEl.classList.contains('show')) {
+    const target = event.target as HTMLElement;
+
+    // 🛑 لو ضغطت على زرار جوا الكارت (زي remove-btn) → تجاهل
+    if (sidebarEl.contains(target) && target.closest('.remove-btn')) {
+      return;
+    }
+
+    if (!sidebarEl.contains(target)) {
+      console.log('🔹 Closing sidebar because of outside click');
+      this.closeSidebar();
+
+      // 🔄 تحديث القائمة + الواجهة بعد الغلق
+      this.refreshCartCount();
+      this.cdr.detectChanges();
     }
   }
+}
+
+onSidebarClosed(): void {
+  console.log("🔹 Sidebar closed by button");
+
+  this.refreshCartCount();
+  this.cdr.detectChanges();
+}
+
+
 
   private handleCartError(err: HttpErrorResponse): void {
     console.error('❌ Error loading cart:', err);
@@ -209,59 +194,81 @@ private loadCart(): void {
 
   // ====================== CART ACTIONS ======================
 
-  increaseQuantity(productId: number): void {
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart();
-      const item = cart.find(i => i.product_id === productId);
-      if (item) item.quantity++;
-      this.saveGuestCart(cart);
-      return;
+increaseQuantity(productId: number) {
+  this.cartService.updateQuantity(productId, this.getCurrentQuantity(productId) + 1).subscribe({
+    next: () => {
+      const current = this.cartState.getCartSummary().items;
+      const item = current.find(i => i.product_id === productId);
+      if (item) {
+        item.quantity++;
+        this.cartState.updateItems([...current]); // تحديث BehaviorSubject
+      }
     }
-    this.cartService.addToCart(productId, 1).subscribe({ next: () => this.loadCart() });
+  });
+}
+
+decreaseQuantity(productId: number) {
+  const currentQty = this.getCurrentQuantity(productId);
+  if (currentQty <= 1) {
+    this.removeItem(productId); // لو العدد 1 → احذف المنتج
+    return;
   }
 
-  decreaseQuantity(productId: number): void {
-    if (!this.isLoggedIn()) {
-      let cart = this.loadGuestCart();
-      const item = cart.find(i => i.product_id === productId);
+  this.cartService.updateQuantity(productId, currentQty - 1).subscribe({
+    next: () => {
+      const current = this.cartState.getCartSummary().items;
+      const item = current.find(i => i.product_id === productId);
       if (item) {
         item.quantity--;
-        if (item.quantity <= 0) {
-          cart = cart.filter(i => i.product_id !== productId);
-        }
+        this.cartState.updateItems([...current]);
       }
-      this.saveGuestCart(cart);
-      return;
     }
-    this.cartService.reduceCartItem(productId).subscribe({ next: () => this.loadCart() });
-  }
-
-  removeItem(productId: number): void {
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
-      this.saveGuestCart(cart);
-      return;
-    }
-    this.cartService.removeCartItem(productId).subscribe({ next: () => this.loadCart() });
-  }
-trackByProductId(index: number, item: CartItem): number {
-  return item.product_id;
+  });
 }
 
-closeSidebar(): void {
-  const sidebarEl = document.getElementById('cartSidebar');
-  if (sidebarEl) {
-    const offcanvas = bootstrap.Offcanvas.getInstance(sidebarEl)
-      || new bootstrap.Offcanvas(sidebarEl);
-    offcanvas.hide();
+removeItem(productId: number) {
+  this.cartService.removeCartItem(productId).subscribe({
+    next: () => {
+      let current = this.cartState.getCartSummary().items;
+      current = current.filter(i => i.product_id !== productId);
+      this.cartState.updateItems([...current]);
+    }
+  });
+}
 
-    // 🟢 شيل الـ backdrop على طول
-    setTimeout(() => {
-      const backdrops = document.querySelectorAll('.offcanvas-backdrop');
-      backdrops.forEach(b => b.remove());
-      document.body.classList.remove('offcanvas-backdrop'); 
-    }, 200); // مهلة صغيرة علشان Bootstrap يلحق يقفل الأول
+/** 🔹 Helper function */
+private getCurrentQuantity(productId: number): number {
+  const current = this.cartState.getCartSummary().items;
+  const item = current.find(i => i.product_id === productId);
+  return item ? item.quantity : 0;
+}
+
+
+  trackByProductId(index: number, item: CartItem): number {
+    return item.product_id;
+  }
+
+  closeSidebar(): void {
+    const sidebarEl = document.getElementById('cartSidebar');
+    if (sidebarEl) {
+      const offcanvas = bootstrap.Offcanvas.getInstance(sidebarEl)
+        || new bootstrap.Offcanvas(sidebarEl);
+      offcanvas.hide();
+
+      setTimeout(() => {
+        const backdrops = document.querySelectorAll('.offcanvas-backdrop');
+        backdrops.forEach(b => b.remove());
+        document.body.classList.remove('offcanvas-backdrop');
+      }, 200);
+    }
   }
 }
 
+// ✅ helper خارج الكلاس (يستخدم داخل normalizeProduct فقط)
+function safeNumber(value: any): number {
+  if (value == null) return 0;
+  if (typeof value === 'string') {
+    return Number(value.replace(/,/g, ''));
+  }
+  return Number(value);
 }

@@ -500,106 +500,104 @@ applyCombinedFilters(): void {
 
 
   // ---------------------- cart actions ----------------------
-  addToCart(product: Product, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+addToCart(product: Product, event?: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const unitPrice = safeNumber(product.price_before ?? product.price ?? product.original_price ?? 0);
+  const saleUnitPrice = safeNumber(product.price_after ?? product.sale_price ?? 0);
+  const finalPrice = saleUnitPrice > 0 ? saleUnitPrice : unitPrice;
+
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart();
+    const existing = cart.find(i => i.product_id === product.id);
+
+    if (existing) {
+      existing.quantity += 1;
+      console.log("🔄 Updated Guest Cart Item:", existing);
+    } else {
+      const newItem = {
+        product_id: product.id,
+        product_name: product.name ?? 'منتج بدون اسم',
+        product_name_ar: product.name_ar ?? 'منتج بدون اسم',
+        quantity: 1,
+        unit_price: unitPrice,
+        sale_unit_price: saleUnitPrice || unitPrice,
+        final_price: String(finalPrice),
+        images: product.images ?? []
+      };
+
+      console.log("🆕 Adding New Guest Cart Item:", newItem);
+      cart.push(newItem);
     }
 
-    const unitPrice = safeNumber(product.price_before ?? product.price ?? product.original_price ?? 0);
-    const saleUnitPrice = safeNumber(product.price_after ?? product.sale_price ?? 0);
-    const finalPrice = saleUnitPrice > 0 ? saleUnitPrice : unitPrice;
+    console.log("🛒 Guest Cart Before Save:", cart);
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // ✅ Sync UI
+    return;
+  }
 
+  this.cartService.addToCart(product.id, 1).subscribe({
+    next: () => {
+      console.log("✅ Added to Logged-in Cart:", product);
+      this.loadCart();
+    },
+    error: (err) => this.handleCartActionError(err)
+  });
+}
 
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart();
-      const existing = cart.find(i => i.product_id === product.id);
+increaseQuantity(productId: number): void {
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart();
+    const item = cart.find(i => i.product_id === productId);
+    if (item) {
+      item.quantity++;
+    }
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // ✅ Sync UI
+    return;
+  }
 
-      if (existing) {
-        existing.quantity += 1;
-        console.log("🔄 Updated Guest Cart Item:", existing);
-      } else {
-        const newItem = {
-          product_id: product.id,
-          product_name: product.name ?? 'منتج بدون اسم',
-          product_name_ar: product.name_ar ?? 'منتج بدون اسم',
-          quantity: 1,
-          unit_price: unitPrice,
-          sale_unit_price: saleUnitPrice || unitPrice,
-          final_price: String(finalPrice),
-          images: product.images ?? []
-        };
+  this.cartService.addToCart(productId, 1).subscribe({
+    next: () => this.loadCart()
+  });
+}
 
-        console.log("🆕 Adding New Guest Cart Item:", newItem);
-        cart.push(newItem);
+decreaseQuantity(productId: number): void {
+  if (!this.isLoggedIn()) {
+    let cart = this.loadGuestCart();
+    const item = cart.find(i => i.product_id === productId);
+    if (item) {
+      item.quantity--;
+      if (item.quantity <= 0) {
+        cart = cart.filter(i => i.product_id !== productId);
       }
-
-      console.log("🛒 Guest Cart Before Save:", cart);
-      this.saveGuestCart(cart);
-      return;
     }
-
-    this.cartService.addToCart(product.id, 1).subscribe({
-      next: () => {
-        console.log("✅ Added to Logged-in Cart:", product);
-        this.loadCart();
-      },
-      error: (err) => this.handleCartActionError(err)
-    });
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // ✅ Sync UI
+    return;
   }
 
+  this.cartService.reduceCartItem(productId).subscribe({
+    next: () => this.loadCart()
+  });
+}
 
-
-
-
-  // removeItem(product_id: number, event?: Event): void {
-  //   if (event) { event.preventDefault(); event.stopPropagation(); }
-
-  //   if (!this.isLoggedIn()) {
-  //     const cart = this.loadGuestCart().filter(i => i.product_id !== product_id);
-  //     this.saveGuestCart(cart);
-  //     this.cartState.removeItem(product_id);
-  //     return;
-  //   }
-
-  //   this.cartService.removeCartItem(product_id).subscribe({ next: () => this.loadCart(), error: err => this.handleCartActionError(err) });
-  // }
-
-  increaseQuantity(productId: number): void {
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart();
-      const item = cart.find(i => i.product_id === productId);
-      if (item) item.quantity++;
-      this.saveGuestCart(cart);
-      return;
-    }
-    this.cartService.addToCart(productId, 1).subscribe({ next: () => this.loadCart() });
+removeItem(productId: number): void {
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // ✅ Sync UI
+    return;
   }
 
-  decreaseQuantity(productId: number): void {
-    if (!this.isLoggedIn()) {
-      let cart = this.loadGuestCart();
-      const item = cart.find(i => i.product_id === productId);
-      if (item) {
-        item.quantity--;
-        if (item.quantity <= 0) {
-          cart = cart.filter(i => i.product_id !== productId);
-        }
-      }
-      this.saveGuestCart(cart);
-      return;
-    }
-    this.cartService.reduceCartItem(productId).subscribe({ next: () => this.loadCart() });
-  }
+  this.cartService.removeCartItem(productId).subscribe({
+    next: () => this.loadCart()
+  });
+}
 
-  removeItem(productId: number): void {
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
-      this.saveGuestCart(cart);
-      return;
-    }
-    this.cartService.removeCartItem(productId).subscribe({ next: () => this.loadCart() });
-  }
 
   private modifyQuantity(product_id: number, delta: number, event?: Event) {
     event?.stopPropagation();

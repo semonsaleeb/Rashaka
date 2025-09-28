@@ -11,16 +11,17 @@
       </h3>
     </div>
 
-    <div class="colse_dev border px-3 py-1 rounded-1">
-      <span class="fw-bold fs-5">{{ 'CART.CLOSE' | translate }}</span>
-      <button type="button" 
-        class="btn-close" 
-        data-bs-dismiss="offcanvas" 
-        [attr.aria-label]="'CART.CLOSE' | translate"
-        style="transform: scale(0.7);">
-</button>
+  <div class="colse_dev border px-3 py-1 rounded-1">
+  <span class="fw-bold fs-5">{{ 'CART.CLOSE' | translate }}</span>
+  <button type="button" 
+    class="btn-close" 
+    data-bs-dismiss="offcanvas" 
+    (click)="onSidebarClosed()"   
+    [attr.aria-label]="'CART.CLOSE' | translate"
+    style="transform: scale(0.7);">
+  </button>
+</div>
 
-    </div>
   </div>
 
   <!-- ✅ خلي المحتوى يتمدد وياخد مساحة scrolling -->
@@ -62,10 +63,10 @@
                   <span class="fw-bold text-success ms-2">
                     {{ item.total_price_after_offers }} {{ 'CART.CURRENCY' | translate }}
                   </span>
-                  <span class="text-muted text-decoration-line-through"
-                    *ngIf="item.totalPrice !== item.totalPriceAfterOffers">
-                    {{ item.totalPrice }} {{ 'CART.CURRENCY' | translate }}
-                  </span>
+                     <span class="text-muted text-decoration-line-through"
+                  *ngIf="item.total_price_after_offers !== item.unit_price">
+                  {{ item.price }} {{ 'CART.CURRENCY' | translate }}
+                </span>
                 </ng-container>
 
                 <!-- لو ضيف -->
@@ -73,18 +74,31 @@
                   <span class="fw-bold text-success ms-2">
                     {{ item.total_price_after_offers }} {{ 'CART.CURRENCY' | translate }}
                   </span>
-                  <span class="text-muted text-decoration-line-through"
+                  <!-- <span class="text-muted text-decoration-line-through"
                     *ngIf="item.sale_unit_price !== undefined && toNumber(item.saleUnitPrice) < toNumber(item.unitPrice)">
                     {{ toNumber(item.unit_price) }} {{ 'CART.CURRENCY' | translate }}
-                  </span>
+                  </span> -->
+<span class="text-muted text-decoration-line-through"
+      *ngIf="item.total_price_after_offers !== item.unit_price">
+  {{ item.unit_price }} {{ 'CART.CURRENCY' | translate }}
+</span>
+
+
+
+
+
+
+
                 </ng-template>
               </div>
 
               <div class="d-flex align-items-center justify-content-between mt-2">
-                <button class="btn btn-outline-secondary btn-sm" (click)="removeItem(item.product_id)">
-                  <i class="fa-regular fa-trash-can" style="font-size:15px"></i>
- {{ 'CART.REMOVE' | translate }}
-                </button>
+             <button class="btn btn-outline-secondary btn-sm"
+        (click)="removeItem(item.product_id); $event.stopPropagation()">
+  <i class="fa-regular fa-trash-can" style="font-size:15px"></i>
+  {{ 'CART.REMOVE' | translate }}
+</button>
+
                 <div class="d-flex align-items-center gap-2 ">
                   <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)">
                     <i class="fa-solid fa-minus"></i>

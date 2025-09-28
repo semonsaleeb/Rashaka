@@ -266,74 +266,90 @@ loadProductsAndFavorites(): void {
      this.cartState.updateItems(cart);
   }
 
-  addToCart(product: Product, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+ addToCart(product: Product, event?: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart();
+    const existing = cart.find(i => i.product_id === product.id);
+
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        product_id: product.id,
+        quantity: 1,
+        product_name_ar: product.name_ar,
+        unit_price: safeNumber(product.price_before || product.price || product.original_price),
+        sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
+        images: product.images || []
+      });
     }
 
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart();
-      const existing = cart.find(i => i.product_id === product.id);
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
+  }
 
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          product_id: product.id,
-          quantity: 1,
-          product_name_ar: product.name_ar,
-          unit_price: product.price_before || product.price || product.original_price,
-          sale_unit_price: product.price_after || product.price || product.sale_price,
-          images: product.images
-        });
+  this.cartService.addToCart(product.id, 1).subscribe({
+    next: () => this.loadCart(),
+    error: (err) => this.handleCartActionError(err)
+  });
+}
+
+increaseQuantity(productId: number): void {
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart();
+    const item = cart.find(i => i.product_id === productId);
+    if (item) {
+      item.quantity++;
+    }
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
+  }
+
+  this.cartService.addToCart(productId, 1).subscribe({
+    next: () => this.loadCart()
+  });
+}
+
+decreaseQuantity(productId: number): void {
+  if (!this.isLoggedIn()) {
+    let cart = this.loadGuestCart();
+    const item = cart.find(i => i.product_id === productId);
+    if (item) {
+      item.quantity--;
+      if (item.quantity <= 0) {
+        cart = cart.filter(i => i.product_id !== productId);
       }
-
-      this.saveGuestCart(cart);
-      return;
     }
-
-    this.cartService.addToCart(product.id, 1).subscribe({
-      next: () => this.loadCart(),
-      error: (err) => this.handleCartActionError(err)
-    });
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
   }
 
-  increaseQuantity(productId: number): void {
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart();
-      const item = cart.find(i => i.product_id === productId);
-      if (item) item.quantity++;
-      this.saveGuestCart(cart);
-      return;
-    }
-    this.cartService.addToCart(productId, 1).subscribe({ next: () => this.loadCart() });
+  this.cartService.reduceCartItem(productId).subscribe({
+    next: () => this.loadCart()
+  });
+}
+
+removeItem(productId: number): void {
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
   }
 
-  decreaseQuantity(productId: number): void {
-    if (!this.isLoggedIn()) {
-      let cart = this.loadGuestCart();
-      const item = cart.find(i => i.product_id === productId);
-      if (item) {
-        item.quantity--;
-        if (item.quantity <= 0) {
-          cart = cart.filter(i => i.product_id !== productId);
-        }
-      }
-      this.saveGuestCart(cart);
-      return;
-    }
-    this.cartService.reduceCartItem(productId).subscribe({ next: () => this.loadCart() });
-  }
+  this.cartService.removeCartItem(productId).subscribe({
+    next: () => this.loadCart()
+  });
+}
 
-  removeItem(productId: number): void {
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
-      this.saveGuestCart(cart);
-      return;
-    }
-    this.cartService.removeCartItem(productId).subscribe({ next: () => this.loadCart() });
-  }
 
   private loadCart(): void {
     this.cartService.getCart().subscribe({
@@ -386,9 +402,10 @@ loadProductsAndFavorites(): void {
     return this.cartItems.some(item => item.product_id === productId);
   }
 
-  getCartItem(productId: number) {
-    return this.cartItems.find(item => item.product_id === productId);
-  }
+getCartItem(productId: number) {
+  return this.cartState.getCartSummary().items.find(i => i.product_id === productId);
+}
+
 
   private handleHttpError(msg: string, err: HttpErrorResponse): void {
     console.error(msg, err);
@@ -465,4 +482,13 @@ handleSwipe(): void {
     this.updateVisibleCards();
     this.checkIfMobile();
   };
+}
+
+
+function safeNumber(value: any): number {
+  if (value == null) return 0;
+  if (typeof value === 'string') {
+    return Number(value.replace(/,/g, '')); // 🟢 يشيل الكوما
+  }
+  return Number(value);
 }
