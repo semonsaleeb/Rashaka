@@ -413,7 +413,8 @@
     "ADD_TO_CART": "Add to Cart"
   },
   "CART": {
-    
+    "DISCOUNT":"Discount",
+
     "FREE_SHIPPING_TEXT": "Free shipping for orders above",
     "FREE_SHIPPING_AMOUNT": "1000 SAR",
     "REMOVE": "Remove",   
@@ -608,5 +609,6 @@
     "CVC": "CVC"
   },
   "MAX_AVAILABLE": "Max available",
-  "CLIENT_REVIEWS": " Client Reviews "
+  "CLIENT_REVIEWS": " Client Reviews ",
+   "FREE_BALANCE_APPLIED": "The applied free balance"
 }
