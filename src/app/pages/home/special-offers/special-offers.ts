@@ -17,6 +17,7 @@ import { Category } from '../../../../models/Category';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 import { TruncatePipe } from '../../../truncate-pipe';
+import { ClientService } from '../../../services/client.service';
 
 @Component({
   selector: 'app-special-offers',
@@ -63,6 +64,8 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     private favoriteService: FavoriteService,
     private translate: TranslateService,
     private languageService: LanguageService,
+        private clientService: ClientService,
+
 
   ) { }
 
@@ -114,6 +117,14 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     this.currentSlideIndex = 0;
   }
 
+
+   this.cartState.cartItems$.subscribe(items => {
+    this.cartItems = items;
+  });
+
+  this.cartState.cartCount$.subscribe(count => {
+    // if you show a badge / counter
+  });
   }
 
 
@@ -126,23 +137,28 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   }
 
   /** ------------------- CART + PRODUCTS ------------------- */
-  private loadCartAndProducts(): void {
-    if (!this.isLoggedIn()) {
-      this.cartItems = this.loadGuestCart();
-      this.refreshCartCount();
-      this.loadProducts();
-      return;
-    }
-
+private loadCartAndProducts(): void {
+  if (this.clientService.isLoggedIn()) {   // ✅ use ClientService
     this.cartService.getCart().subscribe({
       next: (response) => {
-        this.cartItems = response.data?.items || [];
-        this.refreshCartCount();
+        const items = response.data?.items || [];
+        this.cartState.updateItems(items);
         this.loadProducts();
+        this.refreshCartCount();
       },
-      error: (err) => this.handleCartError(err)
+      error: (err) => {
+        console.error('Error fetching cart', err);
+        this.loadProducts();
+      }
     });
+  } else {
+    const guestCart = this.loadGuestCart();
+    this.cartState.updateItems(guestCart);
+    this.loadProducts();
   }
+}
+
+
 
   private loadProducts(): void {
     this.productService.getOffer().subscribe({
@@ -254,17 +270,23 @@ loadProductsAndFavorites(): void {
   }
 
   /** ------------------- CART ACTIONS ------------------- */
-  private loadGuestCart(): any[] {
-    const cart = localStorage.getItem(this.GUEST_CART_KEY);
-    return cart ? JSON.parse(cart) : [];
-  }
+private loadGuestCart(): any[] {
+  const storedCart = localStorage.getItem(this.GUEST_CART_KEY);
+  const cart = storedCart ? JSON.parse(storedCart) : [];
+  this.cartState.updateItems(cart); // ✅ sync
+  return cart;
+}
 
-  private saveGuestCart(cart: any[]): void {
-    localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
-    this.cartItems = cart; // ⬅️ تحديث مباشر
-    this.refreshCartCount();
-     this.cartState.updateItems(cart);
-  }
+
+
+
+private saveGuestCart(cart: any[]): void {
+  localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+  this.cartState.updateItems(cart); // ✅ sync with global state
+  this.refreshCartCount();
+}
+
+
 
  addToCart(product: Product, event?: Event): void {
   if (event) {
@@ -350,16 +372,17 @@ removeItem(productId: number): void {
   });
 }
 
+private loadCart(): void {
+  this.cartService.getCart().subscribe({
+    next: (response) => {
+      const items = response.data?.items || [];
+      this.cartState.updateItems(items); // ✅
+      this.refreshCartCount();
+    },
+    error: (err) => this.handleCartError(err)
+  });
+}
 
-  private loadCart(): void {
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        this.cartItems = response.data?.items || [];
-        this.refreshCartCount();
-      },
-      error: (err) => this.handleCartError(err)
-    });
-  }
 
   private refreshCartCount(): void {
     const total = this.isLoggedIn()
@@ -412,12 +435,12 @@ getCartItem(productId: number) {
     this.isLoading = false;
   }
 
-  private handleCartError(err: HttpErrorResponse): void {
-    console.error('❌ Error loading cart:', err);
-    if (err.status === 401) this.auth.logout();
-    this.resetCartState();
-    this.isLoading = false;
-  }
+private handleCartError(err: any): void {
+  console.error('Error fetching cart', err);
+  const guestCart = this.loadGuestCart();
+  this.cartState.updateItems(guestCart); // ✅
+}
+
 
   private handleCartActionError(err: HttpErrorResponse): void {
     console.error('❌ Cart action failed:', err);

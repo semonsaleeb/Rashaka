@@ -59,5 +59,9 @@ updateProfile(data: { name: string; email: string; phone: string }): Observable<
   const headers = this.getHeaders();
   return this.http.put<any>(this.baseUrl, data, { headers });
 }
+isLoggedIn(): boolean {
+  const token = localStorage.getItem('token');
+  return !!token; // true if token exists, false otherwise
+}
 
 }
