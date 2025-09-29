@@ -20,16 +20,16 @@
 
       <!-- Logo + Social -->
       <div class="col-md-4 mb-4">
-        <div [ngClass]="{'text-end': translate.currentLang === 'ar', 'text-start': translate.currentLang !== 'ar'}" class="mb-3">
+        <div [ngClass]="{'text-center': translate.currentLang === 'ar', 'text-start': translate.currentLang !== 'ar'}" class="mb-3">
           <img src="assets/Images/logo.svg" alt="{{ 'FOOTER.LOGO_ALT' | translate }}" class="img-fluid">
         </div>
-        <p [ngClass]="{'text-end': translate.currentLang === 'ar', 'text-start': translate.currentLang !== 'ar'}" class="mb-3">
+        <p [ngClass]="{'text-center': translate.currentLang === 'ar', 'text-start': translate.currentLang !== 'ar'}" class="mb-3">
           {{ 'FOOTER.TAGLINE' | translate }}
         </p>
-        <h5 [ngClass]="{'text-end': translate.currentLang === 'ar', 'text-start': translate.currentLang !== 'ar'}" class="mb-2 mt-5">
+        <h5 [ngClass]="{'text-center': translate.currentLang === 'ar', 'text-start': translate.currentLang !== 'ar'}" class="mb-2 mt-5">
           {{ 'FOOTER.FOLLOW_US' | translate }}
         </h5>
-        <div class="d-flex mt-4 gap-2" 
+        <div class="d-flex mt-4 gap-2" style="justify-content: center;"
              [ngClass]="{'flex-row-reverse justify-content-md-start justify-content-center': translate.currentLang === 'ar',
                          'flex-row justify-content-md-start justify-content-center': translate.currentLang !== 'ar'}">
           <a href="#"><img src="assets/Images/facebook-01.svg" alt="Facebook" class="img-fluid" style="width:40px;"></a>

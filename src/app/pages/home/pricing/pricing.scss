@@ -256,21 +256,23 @@
 
 
 .subscribed-text {
-  font-size: 16px; /* أصغر من 15px */
+  font-size: 16px;
+  font-weight: 700 !important; /* أصغر من 15px */
 }
 .subscribe-btn{
-    font-size: 16px; /* أصغر من 15px */
+    font-size: 16px; 
+    font-weight: 700 !important;
 
 }
 
 .ribbon-top-left {
   position: absolute;
-  top: 18px;
+  top: 12px;
   left: -40px;
-  transform: rotate(320deg);
+  transform: rotate(335deg);
   background-color: #B4EB52; // deep orange
   // color: white;
-  padding: 4px 60px;
+  padding: 4px 90px;
   font-size: 14px;
   font-weight: bold;
   z-index: 1;
@@ -510,4 +512,9 @@
 }
 .close-btn:hover {
   color: red;
+}
+
+.subscribed-text[_ngcontent-ng-c2867519803] {
+  align-content: center !important;
+  height: 40px !important;
 }
