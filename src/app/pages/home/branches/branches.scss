@@ -202,6 +202,7 @@ body {
     padding: 18px;
     border-radius: 18px;
     text-align: right;
+    width: 100%;
   }
 
   .branch-title {
@@ -220,9 +221,11 @@ body {
     margin-top: 10px;
     justify-content: center;
     font-size: 0.9rem;
-    padding: 8px;
+    padding: 13px;
     border-radius: 20px;
     display: flex;
+    width: 80%;
+
   }
 
   .decorative-image {
@@ -277,4 +280,9 @@ body {
   .tablet-text {
     font-size: 0.5rem !important; // أو أي قيمة مناسبة
   }
+}
+
+.rounded-pill {
+  width: 70% !important;
+  justify-content: center !important;
 }

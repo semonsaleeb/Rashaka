@@ -75,6 +75,7 @@
     position: relative;
     width: 100%;
     overflow: hidden;
+    gap: 50px;
   }
 
   .carousel-container {
@@ -92,6 +93,7 @@
     max-width: calc(100% / 3);
     padding: 0 10px;
     box-sizing: border-box;
+      scroll-snap-align: start;
   }
 
   .product-card {
@@ -207,7 +209,7 @@
 
 @media (max-width: 576px) {
   .carousel-slide {
-    flex: 0 0 95% !important;
+    flex: 0 0 100% !important;
     max-width: 100% !important;
   }
 
@@ -352,6 +354,9 @@
   .offcanvas-end {
     width: 100%; /* full screen on mobile */
   }
+  .category-products-container[_ngcontent-ng-c1564269433] .carousel-track[dir=rtl][_ngcontent-ng-c1564269433] {
+  width: 95% !important;
+}
 }
 .caotegoryDesign {
   // width: 12px;
@@ -410,3 +415,8 @@ color: black;
 .modal.show .modal-dialog-bottom {
   transform: translateY(0);  /* يطلع لفوق */
 }
+
+.category-products-container[_ngcontent-ng-c1564269433] .product-card[_ngcontent-ng-c1564269433]:hover {
+  transform: translateY(0) !important;
+}
+
