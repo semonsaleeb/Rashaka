@@ -276,7 +276,7 @@ position: relative;
   transition: 0.2s;
   padding: 0;
   cursor: pointer;
-z-index: 10;
+z-index: 2;
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;

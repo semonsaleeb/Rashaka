@@ -12,24 +12,24 @@
     <div class="col-lg-7">
       <form (ngSubmit)="placeOrder()">
         <!-- Contact Information -->
-        <h5 class="text-primary">{{ 'CART.CONTACT_INFO' | translate }}</h5>
+        <!-- <h5 class="text-dark">{{ 'CART.CONTACT_INFO' | translate }}</h5>
         <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-6 text-secondary">
             <label>{{ 'CART.EMAIL' | translate }}</label>
-            <input type="email" class="form-control" [(ngModel)]="userEmail" name="email" [readonly]="isLoggedIn"
+            <input type="email" class="form-control text-secondary" [(ngModel)]="userEmail" name="email" [readonly]="isLoggedIn"
               required>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 text-secondary">
             <label>{{ 'CART.PHONE' | translate }}</label>
-            <input type="tel" class="form-control" [(ngModel)]="userPhone" name="phone" [readonly]="isLoggedIn"
+            <input type="tel" class="form-control text-secondary" [(ngModel)]="userPhone" name="phone" [readonly]="isLoggedIn"
               required>
           </div>
-        </div>
+        </div> -->
 
         <!-- Shipping address -->
-        <h5 class="text-primary">{{ 'CART.SHIPPING_ADDRESS' | translate }}</h5>
+        <h5 class="text-dark">{{ 'CART.SHIPPING_ADDRESS' | translate }}</h5>
         <div class="d-flex mb-3 align-items-center" style="gap: 10px;">
-          <select class="form-select flex-grow-1 w-50" [(ngModel)]="selectedAddressId" name="address"
+          <select class="form-select text-secondary flex-grow-1 w-50" [(ngModel)]="selectedAddressId" name="address"
             (change)="onAddressChange()" required>
             <option value="" disabled selected>{{ 'CART.SELECT_ADDRESS' | translate }}</option>
             @for (addr of addresses; track addr.id) {
@@ -38,17 +38,17 @@
             </option>
             }
           </select>
-          <button type="button" class="btn btn-outline-primary" (click)="navigateToAddAddress()">
+          <button type="button" class="btn btn-outline-dark" (click)="navigateToAddAddress()">
             {{ 'CART.ADD_NEW_ADDRESS' | translate }}
           </button>
         </div>
 
         <!-- Payment Method -->
         <div class="mb-3">
-          <h5 class="text-primary">{{ 'CART.PAYMENTMETHOD' | translate }}</h5>
+          <h5 class="text-dark">{{ 'CART.PAYMENTMETHOD' | translate }}</h5>
 
           <!-- Credit Card -->
-          <div class="border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
+          <div class="border-1 text-secondary rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
             <input type="radio" id="payment_credit_card" name="paymentMethod" value="credit_card"
               [(ngModel)]="paymentMethod" class="me-2" />
             <label for="payment_credit_card" class="mb-0">
@@ -84,7 +84,7 @@
           </div>
 
           <!-- Cash -->
-          <div class="border-1 rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
+          <div class="border-1 text-secondary rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
             <input type="radio" id="payment_cash" name="paymentMethod" value="cash" [(ngModel)]="paymentMethod"
               class="me-2" />
             <label for="payment_cash" class="mb-0">
@@ -154,7 +154,7 @@
 
         <!-- Totals -->
         <ul class="list-unstyled mb-4">
-          <li class="d-flex justify-content-between text-dark pt-2 py-2" *ngIf="discountValue > 0">
+          <li class="d-flex justify-content-between text-secondary pt-2 py-2" *ngIf="discountValue > 0">
             <span>{{ 'CART.DISCOUNT' | translate }}</span>
             <span>
               -{{ discountValue | number:'1.2-2' }}
@@ -236,11 +236,11 @@
         </p>
         <p class="fw-bold">
           {{ 'ORDERS.ORDER_NUMBER' | translate }}:
-          <span class="badge bg-light text-dark border ms-1">#1234</span>
+          <span class="badge bg-light text-secondary border ms-1">#1234</span>
         </p>
       </div>
       <div class="modal-footer border-0 justify-content-center gap-3">
-        <button type="button" class="btn btn-outline-dark rounded-3 px-4" (click)="goHome()">
+        <button type="button" class="btn btn-outline-secondary rounded-3 px-4" (click)="goHome()">
           {{ 'BUTTON.HOME' | translate }}
         </button>
         <button type="button" class="btn btn-success rounded-3 px-4" (click)="goOrders()">
