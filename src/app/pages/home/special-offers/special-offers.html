@@ -91,7 +91,7 @@
                   @if (product.sale_price && product.sale_price !== product.original_price) {
                   <div class="mb-2">
                     <p class="fw-bold text-secondary mb-1" style="font-size: 14px;">
-                       <span class="fw-bold text-success">
+                      <span class="fw-bold text-success">
                         {{ product.sale_price }}{{ 'CURRENCY' | translate }}
                       </span>
                       &nbsp;
@@ -99,7 +99,7 @@
                         {{ product.original_price }}{{ 'CURRENCY' | translate }}
                       </span>
                       &nbsp;
-                     
+
 
                       &nbsp;
                       <!-- الشرط على المخزون -->
@@ -285,26 +285,23 @@
               <!-- Quantity Controls -->
               <div class="d-flex align-items-center gap-2 Quantity_Controls">
                 <button class="btn custom-increase-btn btn-sm"
-                  (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                  (click)="decreaseQuantity(product.id); $event.stopPropagation(); $event.preventDefault()">
                   <i class="fa-solid fa-minus"></i>
-
-                  <!-- <img src="assets/Images/delete-02.svg"> -->
                 </button>
                 <span class="fw-bold custom-qty-display text-center px-4">
                   {{ getCartItem(product.id)?.quantity }}
                 </span>
                 <button class="btn custom-increase-btn btn-sm"
-                  (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                  (click)="increaseQuantity(product.id); $event.stopPropagation(); $event.preventDefault()">
                   <i class="fa-solid fa-plus"></i>
                 </button>
               </div>
             </div>
             } @else {
             <button class="btn btn-outline-secondary btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
-              style="font-size: 0.9rem; padding: 0.25rem 0.5rem;" (click)="addToCart(product, $event)"
+              (click)="addToCart(product, $event); $event.stopPropagation(); $event.preventDefault()"
               data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
               <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
-
               {{ 'ADD_TO_CART' | translate }}
             </button>
 

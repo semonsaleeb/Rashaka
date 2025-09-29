@@ -1,7 +1,7 @@
 // cart.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CartItem } from '../../models/CartItem';
 import { CartResponse } from '../../models/CartResponse';
@@ -244,19 +244,47 @@ checkPaymentStatus(orderId: string): Observable<any> {
       { promocode, total_price }, { headers: this.getHeaders() });
   }
 
-  updateQuantity(productId: number, quantity: number): Observable<any> {
-    const token = localStorage.getItem('token');
+updateQuantity(productId: number, quantity: number): Observable<any> {
+  const token = localStorage.getItem('token');
 
-    if (token) {
-      // مستخدم مسجل دخول
-      return this.http.post(`${this.apiUrl}/cart/update-quantity`,
-        { product_id: productId, quantity },
-        { headers: this.getHeaders() }
-      );
-    } else {
-      // ضيف → تحديث localStorage
-      this.updateGuestQuantity(productId, quantity);
-      return of(true); // ✅ علشان الكومبوننت يكمل
-    }
+  if (!token) {
+    // Guest → localStorage
+    this.updateGuestQuantity(productId, quantity);
+    return of(true);
   }
+
+  // Logged-in user
+  const currentCart$ = this.getCart(); // تجيب الكارت من السيرفر الأول
+  return new Observable(observer => {
+    currentCart$.subscribe({
+      next: (cartResponse) => {
+        const item = cartResponse.data.items.find(i => i.product_id === productId);
+        const currentQty = item?.quantity ?? 0;
+
+        if (quantity > currentQty) {
+          // ✅ لو عايز تزود
+          const diff = quantity - currentQty;
+          this.addToCart(productId, diff).subscribe(observer);
+        } else if (quantity < currentQty) {
+          // ✅ لو عايز تقلل
+          const diff = currentQty - quantity;
+          let chain$ = of(null);
+
+          for (let i = 0; i < diff; i++) {
+            chain$ = chain$.pipe(
+              switchMap(() => this.reduceCartItem(productId))
+            );
+          }
+
+          chain$.subscribe(observer);
+        } else {
+          observer.next(true); // no change
+          observer.complete();
+        }
+      },
+      error: (err) => observer.error(err)
+    });
+  });
+}
+
 }
