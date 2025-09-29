@@ -8,6 +8,7 @@ button.rounded-circle {
 
 /* Arrow buttons styling for RTL */
 .arrow-btn {
+  margin-top: -100px;
   width: 36px;
   height: 36px;
   border: none;
@@ -247,10 +248,10 @@ button.rounded-circle {
   color: white;
   // padding: 0 12px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 200;
-  height: 45px;
-  width: 45px;
+  height: 55px;
+  width: 55px;
 }
 
 
@@ -638,6 +639,7 @@ button.rounded-circle {
 
 .section-title {
   line-height: 1.5;
+  font-size: 28px;
 }
 
 
@@ -1000,4 +1002,13 @@ a.text-decoration-none:hover .card {
     justify-content: center;
     margin-top: 1rem;
   }
+}
+
+
+.justify-content-between {
+  align-items: center;
+}
+
+.mb-5 {
+  margin-bottom: 40px;
 }
