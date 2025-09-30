@@ -13,7 +13,7 @@
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  color: #000;
+  color: #4E4E4E;
   font-weight: 600;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -22,7 +22,7 @@
 
 .tab-btn.active {
   border-bottom-color: #7AD03A;
-  color: #7AD03A;
+  color: #000;
 }
 
 .tab-btn:hover {
