@@ -131,52 +131,90 @@ private loadProduct(productId: number): void {
     );
   }
 
-  addToCart(product: Product, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
 
-    const unitPrice = safeNumber(product.price_before ?? product.price ?? product.original_price ?? 0);
-    const saleUnitPrice = safeNumber(product.price_after ?? product.sale_price ?? 0);
-    const finalPrice = saleUnitPrice > 0 ? saleUnitPrice : unitPrice;
-
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart();
-      const existing = cart.find(i => i.product_id === product.id);
-
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          product_id: product.id,
-          product_name: product.name ?? 'منتج بدون اسم',
-          product_name_ar: product.name_ar ?? 'منتج بدون اسم',
-          quantity: 1,
-          unit_price: unitPrice,
-          sale_unit_price: saleUnitPrice || unitPrice,
-          final_price: finalPrice,
-          images: product.images ?? []
-        });
-      }
-
-      this.saveGuestCart(cart);
-
-      // 🟢 افتح الـ sidebar بعد إضافة المنتج
-      this.openCartSidebar();
-      return;
-    }
-
-    // Logged-in user → API
-    this.cartService.addToCart(product.id, 1).subscribe({
-      next: () => {
-        this.loadCart();
-        this.openCartSidebar(); // 🟢 فتح الـ sidebar
-      },
-      error: (err) => this.handleCartActionError(err)
-    });
+ addToCart(product: Product, event?: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart();
+    const existing = cart.find(i => i.product_id === product.id);
+
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        product_id: product.id,
+        quantity: 1,
+        product_name_ar: product.name_ar,
+        unit_price: safeNumber(product.price_before || product.price || product.original_price),
+        sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
+        images: product.images || []
+      });
+    }
+
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
+  }
+
+  this.cartService.addToCart(product.id, 1).subscribe({
+    next: () => this.loadCart(),
+    error: (err) => this.handleCartActionError(err)
+  });
+}
+
+increaseQuantity(productId: number): void {
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart();
+    const item = cart.find(i => i.product_id === productId);
+    if (item) {
+      item.quantity++;
+    }
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
+  }
+
+  this.cartService.addToCart(productId, 1).subscribe({
+    next: () => this.loadCart()
+  });
+}
+
+decreaseQuantity(productId: number): void {
+  if (!this.isLoggedIn()) {
+    let cart = this.loadGuestCart();
+    const item = cart.find(i => i.product_id === productId);
+    if (item) {
+      item.quantity--;
+      if (item.quantity <= 0) {
+        cart = cart.filter(i => i.product_id !== productId);
+      }
+    }
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
+  }
+
+  this.cartService.reduceCartItem(productId).subscribe({
+    next: () => this.loadCart()
+  });
+}
+
+removeItem(productId: number): void {
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
+    this.saveGuestCart(cart);
+    this.cartState.updateItems(cart); // 🟢 Sync UI
+    return;
+  }
+
+  this.cartService.removeCartItem(productId).subscribe({
+    next: () => this.loadCart()
+  });
+}
 
 
 
@@ -316,29 +354,29 @@ getCartItem(productId: number) {
 }
 
 
-// ✅ زيادة الكمية
-increaseQuantity(productId: number) {
-  const item = this.getCartItem(productId);
-  if (item) {
-    item.quantity += 1;
-  }
-}
+// // ✅ زيادة الكمية
+// increaseQuantity(productId: number) {
+//   const item = this.getCartItem(productId);
+//   if (item) {
+//     item.quantity += 1;
+//   }
+// }
 
-// ✅ تقليل الكمية (ولو بقت 0 بيتشال من الكارت)
-decreaseQuantity(productId: number) {
-  const item = this.getCartItem(productId);
-  if (item) {
-    item.quantity -= 1;
-    if (item.quantity <= 0) {
-      this.removeItem(productId);
-    }
-  }
-}
+// // ✅ تقليل الكمية (ولو بقت 0 بيتشال من الكارت)
+// decreaseQuantity(productId: number) {
+//   const item = this.getCartItem(productId);
+//   if (item) {
+//     item.quantity -= 1;
+//     if (item.quantity <= 0) {
+//       this.removeItem(productId);
+//     }
+//   }
+// }
 
-// ✅ حذف المنتج بالكامل من الكارت
-removeItem(productId: number) {
-  this.cartItems = this.cartItems.filter(item => item.product_id !== productId);
-}
+// // ✅ حذف المنتج بالكامل من الكارت
+// removeItem(productId: number) {
+//   this.cartItems = this.cartItems.filter(item => item.product_id !== productId);
+// }
 
 }
 function safeNumber(value: any): number {

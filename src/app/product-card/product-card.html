@@ -96,16 +96,18 @@
         @if (isInCart(product.id)) {
   <!-- ✅ حالة المنتج موجود في الكارت -->
   <div
-    class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-4"
-    style="direction: rtl;"
+    class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-2"
+    style="direction: rtl; font-size: 0.9rem; background-color: #7AD03A;"
   >
     <!-- Quantity Controls -->
     <div class="d-flex align-items-center gap-2 Quantity_Controls">
       <!-- Increase Button -->
       <button class="btn custom-increase-btn btn-sm"
-        (click)="increaseQuantity(product.id); $event.stopPropagation()">
-        <i class="fa-solid fa-plus"></i>
-      </button>
+                        (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                        <i class="fa-solid fa-minus"></i>
+
+                        <!-- <img src="assets/Images/delete-02.svg"> -->
+                      </button>
 
       <!-- Quantity Display -->
       <span class="fw-bold custom-qty-display text-center px-4">
@@ -113,16 +115,16 @@
       </span>
 
       <!-- Decrease Button -->
-      <button class="btn custom-increase-btn btn-sm"
-        (click)="decreaseQuantity(product.id); $event.stopPropagation()">
-        <i class="fa-solid fa-minus"></i>
-      </button>
+       <button class="btn custom-increase-btn btn-sm "
+                        (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                        <i class="fa-solid fa-plus"></i>
+                      </button>
     </div>
   </div>
 } @else {
   <!-- ❌ حالة المنتج مش موجود في الكارت -->
-  <button class="btn btn-outline-secondary btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
-    style="font-size: 1.2rem; padding: 0.25rem 0.5rem;"
+  <button class="btn  btn-xs  mt-3 text-black rounded-2 custom-hover px-3 py-2"
+    style="font-size: 0.9rem; background-color: #7AD03A;"
     (click)="addToCart(product, $event)"
     data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
 
