@@ -56,7 +56,7 @@ export class Header implements OnInit {
     { label: 'المتجر', labelEn: 'Shop', path: null, hasDropdown: true, showDropdown: true, active: false },
     { label: 'الاشتراكات', labelEn: 'Subscriptions', path: '/home/packages', hasDropdown: false, active: false },
     { label: 'قصص نجاح عملائنا', labelEn: 'success-stories', path: '/home/sucesStory', hasDropdown: false, active: false },
-    { label: 'الفحوصات ', labelEn: 'Checkup', path: '/reservation/all', hasDropdown: false, active: false },
+    { label: 'حجز جلسات', labelEn: 'Checkup', path: '/reservation/all', hasDropdown: false, active: false },
     { label: 'الفحوصات المجانيه', labelEn: 'Free Checkup', path: '/reservation/free', hasDropdown: false, active: false },
     { label: 'العروض', labelEn: 'Offers', path: '/home/special-offers', hasDropdown: false, active: false },
     { label: 'المدونة ', labelEn: 'Blogs', path: '/home/blogs', hasDropdown: false, active: false },

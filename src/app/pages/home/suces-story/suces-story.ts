@@ -15,10 +15,11 @@ import { ClientReview } from '../../../../models/ClientReview';
 // Service
 import { SuccessStoryService } from '../../../services/success-story';
 import { SafeUrlPipe } from '../../../pipes/SafeUrlPipe';
+import { TruncatePipe } from '../../../truncate-pipe';
 
 @Component({
   selector: 'app-suces-story',
-  imports: [CommonModule, Downloadapp, Checkup, Branches, RouterModule, TranslateModule, SafeUrlPipe ],
+  imports: [CommonModule, Downloadapp, Checkup, Branches, RouterModule, TranslateModule,TruncatePipe, SafeUrlPipe ],
   templateUrl: './suces-story.html',
   styleUrl: './suces-story.scss'
 })
@@ -190,3 +191,4 @@ goToReview(index: number): void {
 // }
 
 }
+

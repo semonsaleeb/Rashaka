@@ -98,27 +98,28 @@
         @for (story of stories; track story; let i = $index) {
         <div class="story-card-custom" [ngClass]="getStoryCardClass(i)">
           <!-- الصور -->
-          <div class="story-image-wrapper d-flex position-relative">
-            <!-- Before -->
-            <div class="position-relative flex-fill text-center">
-              <img [src]="story.before_image" alt="Before Image" class="story-image" />
-              <strong class="weight-label">weight before: {{story.before_weight}}</strong>
-            </div>
-
-            <!-- After -->
-            <div class="position-relative flex-fill text-center">
-              <img [src]="story.after_image" alt="After Image" class="story-image" />
-              <strong class="weight-label">after: {{story.after_weight}}</strong>
-            </div>
-          </div>
-
-          <!-- النصوص تحت الصورتين -->
-          <div class="story-info text-center my-5">
-            <strong class="client-name text-dark">{{story.client_name}}</strong>
-            <br>
-            <p class="weight-change text-dark">{{story.weight_change}} -</p>
-          </div>
+         <div class="story-image-wrapper d-flex position-relative">
+          <!-- Before -->
+        <div class="position-relative flex-fill text-center before">
+          <img [src]="story.before_image" alt="Before Image" class="story-image" />
+            <strong class="weight-label">الوزن السابق: {{story.before_weight}}</strong>
         </div>
+
+          <!-- After -->
+        <div class="position-relative flex-fill text-center after">
+          <img [src]="story.after_image" alt="After Image" class="story-image" />
+            <strong class="weight-label text-white">الوزن الحالي: {{story.after_weight}}</strong>
+        </div>
+      </div>
+
+
+           <!-- النصوص تحت الصور -->
+        <div class="story-info">
+          <strong class="client-name">{{story.client_name}}</strong>
+            <!-- <p class="weight-change">{{story.weight_change}}</p> -->
+            <p>{{story.story | truncate: 300}}</p>
+        </div>
+      </div>
         }
       </div>
 
