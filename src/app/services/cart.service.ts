@@ -202,36 +202,31 @@ addGuestItem(product: CartItem) {
 
 
 
-  placeOrder(
-    addressId: number,
-    paymentMethod: string,
-    promocode?: string,
-    applyFreeBalance: boolean = false,
-    freeBalanceAmount: number = 0
-  ): Observable<any> {
-    // إعداد الـ params
-    let params = new HttpParams()
-      .set('address_id', addressId)
-      .set('payment_method', paymentMethod);
+placeOrder(
+  addressId: number,
+  paymentMethod: string,
+  promocode?: string,
+  applyFreeBalance: boolean = false,
+  freeBalanceAmount: number = 0
+): Observable<any> {
+  let params = new HttpParams()
+    .set('address_id', addressId)
+    .set('payment_method', paymentMethod);
 
-    if (promocode && promocode.trim() !== '') {
-      params = params.set('promocode', promocode);
-    }
-
-    if (applyFreeBalance) {
-      params = params
-        .set('apply_free_balance', 'true')
-        .set('free_balance_amount', freeBalanceAmount.toString());
-    }
-
-    // إعداد الـ headers (لو مطلوب authorization)
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    // إرسال الريكوست
-    return this.http.post(`${this.apiUrl}/submit`, {}, { params, headers });
+  if (promocode && promocode.trim() !== '') {
+    params = params.set('promocode', promocode);
   }
+
+  if (applyFreeBalance) {
+    params = params
+      .set('apply_free_balance', 'true')
+      .set('free_balance_amount', freeBalanceAmount.toString());
+  }
+
+  const headers = this.getHeaders(); // 👈 هنا بيتبعت Authorization لو فيه token
+
+  return this.http.post(`${this.apiUrl}/checkout/submit`, {}, { params, headers });
+}
 
 
 // Add this method to check payment status when user returns from MyFatoorah

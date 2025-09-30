@@ -102,4 +102,13 @@ export class ProductService {
   private getFullUrl(endpoint: string): string {
     return `${this.baseUrl}${endpoint}`;
   }
+
+
+  getTopSellers(): Observable<Product[]> {
+  const url = `${this.baseUrl}/products/top-sellers`;
+  return this.http
+    .get<{ status: string; data: Product[] }>(url)
+    .pipe(map(res => res.data));
+}
+
 }

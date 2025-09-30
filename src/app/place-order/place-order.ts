@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -492,23 +492,35 @@ export class PlaceOrder implements OnInit {
   }
 
   // ========================= Payment handlers =========================
-  private handleCreditCardPayment(orderRes: any): void {
-    try {
-      localStorage.setItem(
-        'pendingPayment',
-        JSON.stringify({ 
-          orderId: orderRes.data.order_id, 
-          invoiceId: orderRes.data.invoice_id 
-        })
-      );
 
-      window.location.href = orderRes.data.payment_url;
-      
-    } catch (e) {
-      console.error('خطأ غير متوقع في معالجة الدفع:', e);
-      alert('حدث خطأ غير متوقع أثناء معالجة الدفع');
+
+
+private handleCreditCardPayment(addressId: number): void {
+  this.cartService.placeOrder(addressId, 'credit_card').subscribe({
+    next: (res) => {
+      if (res?.data?.payment_url) {
+        localStorage.setItem(
+          'pendingPayment',
+          JSON.stringify({
+            orderId: res.data.order_id,
+            invoiceId: res.data.invoice_id
+          })
+        );
+        window.location.href = res.data.payment_url;
+      } else {
+        console.error('⚠️ لم يتم استرجاع رابط الدفع:', res);
+        alert('حصل خطأ أثناء تجهيز الدفع، حاول تاني.');
+      }
+    },
+    error: (err) => {
+      console.error('❌ خطأ أثناء استدعاء checkout/submit:', err);
+      alert('فشل في إنشاء الطلب أو بدء الدفع');
     }
-  }
+  });
+}
+
+
+
 
   private handleCashPayment(orderRes: any): void {
     if (!orderRes.order_id) {

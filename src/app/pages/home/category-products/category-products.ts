@@ -95,7 +95,6 @@ ngOnInit(): void {
   // ✅ Handle responsive layout
   this.resizeHandler();
   window.addEventListener('resize', this.resizeHandler);
-  this.topSellers = this.filteredProducts.filter(p => p.is_top_seller);
 
   // ✅ Read category_id from URL query parameters
   this.route.queryParams.subscribe(params => {
@@ -128,6 +127,16 @@ ngOnInit(): void {
     }
   });
 
+  // ✅ Fetch Top Sellers from API directly
+  this.productService.getTopSellers().subscribe({
+    next: (products) => {
+      this.topSellers = products;
+    },
+    error: (err) => {
+      console.error('Error fetching top sellers:', err);
+    }
+  });
+
   // ✅ Load cart and subscribe to updates
   this.loadCart();
   this.cartState.cartItems$.subscribe(items => {
@@ -138,8 +147,14 @@ ngOnInit(): void {
   // ✅ Subscribe to favorite changes
   this.favoriteService.favorites$.subscribe(favs => {
     const favoriteIds = new Set(favs.map(f => f.id));
-    this.allProducts = this.allProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
-    this.filteredProducts = this.filteredProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
+    this.allProducts = this.allProducts.map(p => ({
+      ...p,
+      isFavorite: favoriteIds.has(p.id)
+    }));
+    this.filteredProducts = this.filteredProducts.map(p => ({
+      ...p,
+      isFavorite: favoriteIds.has(p.id)
+    }));
     this.cdr.detectChanges();
   });
 
@@ -148,9 +163,9 @@ ngOnInit(): void {
   this.currentLang = this.languageService.getCurrentLanguage();
 
   this.languageService.currentLang$.subscribe(lang => {
-  this.currentLang = lang;
-  this.textDir = lang === 'ar' ? 'rtl' : 'ltr';
-});
+    this.currentLang = lang;
+    this.textDir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
 
   this.languageService.currentLang$.subscribe(lang => {
     this.currentLang = lang;
@@ -166,6 +181,7 @@ ngOnInit(): void {
     offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
   }
 }
+
 
 // 🔥 Helper function
 private setInitialSlide(): void {
