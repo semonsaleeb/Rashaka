@@ -6,7 +6,7 @@
     <!-- العنصر الثاني -->
     <a [routerLink]="['/home/branches']"
       class="btn btn-link view-all-btn text-dark align-items-center gap-2 p-0 order-1 order-md-2 d-none d-md-flex"
-      style="white-space: nowrap;">
+      style="white-space: nowrap; margin-left: -25px; text-decoration: none; font-weight: 700;">
       <img src="assets/Images/circle-arrow-up-right-02 (2).svg" alt="{{ 'VIEW_ALL' | translate }}" width="25px">
       {{ 'VIEW_ALL' | translate }}
     </a>
@@ -21,7 +21,7 @@
 
 
   <!-- Branch Filters -->
-  <div class="branch-filters d-flex mb-4 px-2 py-3" dir="rtl">
+  <div class="branch-filters d-flex mb-4 px-1 py-3" dir="rtl">
     @for (branch of branches; track branch) {
     <button class="btn btn-outline-secondary rounded-3 px-5  fw-bold" [class.active]="selectedBranch === branch"
       (click)="selectBranch(branch)">
@@ -87,7 +87,7 @@
 
     <!-- Navigation -->
     <div
-      class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center px-5 mt-4 py-3">
+      class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center px-6 mt-4 py-3">
 
       <!-- Dots -->
       <div class="d-flex gap-2 px-lg-4 justify-content-center align-items-center mt-3 px">

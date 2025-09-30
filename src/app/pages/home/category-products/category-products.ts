@@ -121,6 +121,16 @@ ngOnInit(): void {
     error: (err) => console.error("❌ Failed to load categories", err)
   });
 
+  // ✅ Fetch Top Sellers from API directly
+  this.productService.getTopSellers().subscribe({
+    next: (products) => {
+      this.topSellers = products;
+    },
+    error: (err) => {
+      console.error('Error fetching top sellers:', err);
+    }
+  });
+
   // ✅ باقي الـ subscriptions زي الكارت والفايفوريت واللانجويج
   this.loadCart();
   this.cartState.cartItems$.subscribe(items => {
@@ -147,6 +157,13 @@ ngOnInit(): void {
   this.languageService.currentLang$.subscribe(lang => {
     this.currentLang = lang;
     this.textDir = lang === 'ar' ? 'rtl' : 'ltr';
+  });
+
+  this.languageService.currentLang$.subscribe(lang => {
+    this.currentLang = lang;
+    this.translate.use(lang);
+
+    // ✅ لما اللغة تتغير اضبط مكان البداية
     this.setInitialSlide();
   });
 }

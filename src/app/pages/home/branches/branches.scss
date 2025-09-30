@@ -49,7 +49,7 @@ body {
     }
 
     &.active {
-      background-image: url('/assets/Images/location-01.svg');
+      background-image: url('/assets/Images/location-6.svg');
       background-repeat: no-repeat;
       background-position: right center;
       background-size: 28px;
@@ -285,4 +285,9 @@ body {
 .rounded-pill {
   width: 70% !important;
   justify-content: center !important;
+}
+
+.btn {
+  width: 15%;
+  justify-content: center;
 }

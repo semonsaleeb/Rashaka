@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -72,6 +72,8 @@ export class PlaceOrder implements OnInit {
   ) { }
 
   ngOnInit(): void {
+      this.checkPendingPayment();
+
     // 1️⃣ Token & login
     this.token = localStorage.getItem('token') || '';
     this.isLoggedIn = !!this.token;
@@ -383,84 +385,92 @@ export class PlaceOrder implements OnInit {
   }
 
   // ========================= Place order =========================
-  placeOrder(): void {
-    // ✅ Basic validations
-    if (!this.client || !this.client.id) {
-      console.error('بيانات العميل غير متوفرة');
-      alert('خطأ في بيانات العميل، يرجى تسجيل الدخول مرة أخرى');
-      return;
-    }
+placeOrder() {
+  // Validate required fields
+  if (!this.selectedAddressId) {
+    alert('من فضلك اختر عنوان الشحن');
+    return;
+  }
 
-    if (!this.selectedAddressId) {
-      console.error('لم يتم اختيار عنوان الشحن');
-      alert('من فضلك اختر عنوان شحن صالح');
-      return;
-    }
+  const headers = this.getHeaders();
+  let params = new HttpParams()
+    .set('address_id', this.selectedAddressId)
+    .set('payment_method', this.paymentMethod);
 
-    if (!this.paymentMethod) {
-      console.error('لم يتم اختيار طريقة الدفع');
-      alert('من فضلك اختر طريقة دفع صالحة');
-      return;
-    }
+  // Add promo code if provided
+  if (this.promoCode && this.promoCode.trim() !== '') {
+    params = params.set('promocode', this.promoCode);
+  }
 
-    if (!this.cartItems || this.cartItems.length === 0) {
-      console.error('السلة فارغة');
-      alert('لا يوجد منتجات في سلة التسوق');
-      return;
-    }
+  // Add free balance if applied
+  if (this.applyFreeBalance) {
+    params = params
+      .set('apply_free_balance', 'true')
+      .set('free_balance_amount', this.freeBalanceAmount.toString());
+  }
 
-    if (!navigator.onLine) {
-      console.error('لا يوجد اتصال بالإنترنت');
-      alert('تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت');
-      return;
-    }
+  console.log('🔄 Placing order with params:', {
+    address_id: this.selectedAddressId,
+    payment_method: this.paymentMethod,
+    apply_free_balance: this.applyFreeBalance,
+    free_balance_amount: this.freeBalanceAmount
+  });
 
-    // 🔹 Calculate free balance to apply
-    let freeBalanceToApply = 0;
-    if (this.applyFreeBalance) {
-      freeBalanceToApply = this.freeBalanceAmount;
-    }
-
-    console.log('🔄 Placing order with:', {
-      applyFreeBalance: this.applyFreeBalance,
-      freeBalanceToApply: freeBalanceToApply,
-      currentGrandTotal: this.grandTotal,
-      paymentMethod: this.paymentMethod
-    });
-
-    // 🔹 Call placeOrder with the correct parameters
-    this.cartService.placeOrder(
-      this.selectedAddressId,
-      this.paymentMethod,
-      this.promoCode,
-      this.applyFreeBalance,
-      freeBalanceToApply
-    ).subscribe({
+  this.http.post(`${environment.apiBaseUrl}/checkout/submit`, {}, { params, headers })
+    .subscribe({
       next: (orderRes: any) => {
-        console.log('📦 Server response from placeOrder:', orderRes);
+        console.log('✅ Order API Response:', orderRes);
         this.handleOrderResponse(orderRes);
       },
       error: (err) => {
-        console.error('❌ Error placing order:', err);
-        this.handleOrderError(err);
+        console.error('❌ Order API Error:', err);
+        
+        // ✅ FIX: Handle 409 conflict with payment URL
+        if (err.status === 409 && err.error?.status === 'requires_payment_action') {
+          console.log('🔄 Handling 409 conflict with payment action');
+          this.handleOrderResponse(err.error);
+        } else {
+          this.handleOrderError(err);
+        }
       }
     });
+}
+
+
+private handleOrderResponse(orderRes: any): void {
+  if (!orderRes) {
+    console.error("⚠️ Order response is empty!");
+    alert('استجابة غير متوقعة من الخادم');
+    return;
   }
 
-  private handleOrderResponse(orderRes: any) {
-    if (orderRes.status === 'success') {
-      this.handleSuccessfulOrder(orderRes);
-      if (this.paymentMethod === 'cash') {
-        this.showCashSuccessModal(orderRes);
-      } else {
-        this.router.navigate(['/order-success', orderRes.data.order_id]);
-      }
-    } else if (orderRes.status === 'requires_payment_action') {
-      this.handleCreditCardPayment(orderRes);
-    } else if (orderRes.status === 'error') {
-      alert(orderRes.message || 'حدث خطأ أثناء إنشاء الطلب');
+  console.log('🔄 Processing order response:', orderRes);
+
+  // ✅ حالة نجاح الأوردر (cash payment)
+  if (orderRes.status === "success") {
+    console.log("✅ Order placed successfully", orderRes);
+    this.handleSuccessfulOrder(orderRes);
+    
+    if (this.paymentMethod === 'cash') {
+      this.showCashSuccessModal(orderRes);
+    } else {
+      this.router.navigate(['/order-success', orderRes.data.order_id]);
     }
+    return;
   }
+
+  // ✅ حالة محتاج يكمل دفع (credit card)
+  if (orderRes.status === "requires_payment_action") {
+    console.log("⚠️ Requires payment action:", orderRes);
+    this.handleCreditCardPayment(orderRes);
+    return;
+  }
+
+  // ❌ أي حالة تانية (خطأ مثلاً)
+  console.error("❌ Unexpected order response:", orderRes);
+  alert(orderRes.message || "حصل خطأ أثناء إنشاء الأوردر.");
+}
+
 
   private showCashSuccessModal(orderRes: any) {
     const modalEl = document.getElementById('cashOrderModal');
@@ -492,23 +502,28 @@ export class PlaceOrder implements OnInit {
   }
 
   // ========================= Payment handlers =========================
-  private handleCreditCardPayment(orderRes: any): void {
-    try {
-      localStorage.setItem(
-        'pendingPayment',
-        JSON.stringify({ 
-          orderId: orderRes.data.order_id, 
-          invoiceId: orderRes.data.invoice_id 
-        })
-      );
 
-      window.location.href = orderRes.data.payment_url;
-      
-    } catch (e) {
-      console.error('خطأ غير متوقع في معالجة الدفع:', e);
-      alert('حدث خطأ غير متوقع أثناء معالجة الدفع');
-    }
+
+
+private handleCreditCardPayment(orderRes: any): void {
+  if (orderRes?.data?.payment_url) {
+    localStorage.setItem(
+      'pendingPayment',
+      JSON.stringify({
+        orderId: orderRes.data.order_id,
+        invoiceId: orderRes.data.invoice_id
+      })
+    );
+    window.location.href = orderRes.data.payment_url;
+  } else {
+    console.error('⚠️ لم يتم استرجاع رابط الدفع:', orderRes);
+    alert('حصل خطأ أثناء تجهيز الدفع، حاول تاني.');
   }
+}
+
+
+
+
 
   private handleCashPayment(orderRes: any): void {
     if (!orderRes.order_id) {
@@ -599,35 +614,55 @@ export class PlaceOrder implements OnInit {
   }
 
   // ========================= Error handlers =========================
-  private handleOrderError(err: any): void {
-    let errorMessage = 'حدث خطأ أثناء إتمام الطلب';
+private handleOrderError(err: any): void {
+  let errorMessage = 'حدث خطأ أثناء إتمام الطلب';
 
-    if (err.status === 0) {
-      errorMessage = 'تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت';
-    } else if (err.status === 400) {
-      errorMessage = 'بيانات الطلب غير صالحة';
-    } else if (err.status === 401) {
-      errorMessage = 'غير مصرح بالوصول، يرجى تسجيل الدخول مرة أخرى';
-    } else if (err.status === 404) {
-      errorMessage = 'الخدمة غير متوفرة حالياً';
-    } else if (err.status === 500) {
-      errorMessage = 'خطأ في الخادم الداخلي';
-    } else if (err.error?.message) {
-      errorMessage = err.error.message;
-    } else if (err.message) {
-      errorMessage = err.message;
-    }
-
-    console.error('تفاصيل الخطأ:', {
-      status: err.status,
-      message: err.message,
-      error: err.error,
-      url: err.url
-    });
-
-    alert(errorMessage);
+  if (err.status === 0) {
+    errorMessage = 'تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت';
+  } else if (err.status === 400) {
+    errorMessage = 'بيانات الطلب غير صالحة';
+  } else if (err.status === 401) {
+    errorMessage = 'غير مصرح بالوصول، يرجى تسجيل الدخول مرة أخرى';
+    this.router.navigate(['/login']);
+  } else if (err.status === 409) {
+    // This should already be handled above, but just in case
+    errorMessage = 'يوجد طلب معلق بالفعل. يرجى إكمال الدفع أو إلغاء الطلب السابق.';
+  } else if (err.status === 500) {
+    errorMessage = 'خطأ في الخادم الداخلي';
+  } else if (err.error?.message) {
+    errorMessage = err.error.message;
   }
 
+  console.error('تفاصيل الخطأ:', err);
+  alert(errorMessage);
+}
+
+
+checkPendingPayment() {
+  const pendingPayment = localStorage.getItem('pendingPayment');
+  if (pendingPayment) {
+    const paymentData = JSON.parse(pendingPayment);
+    console.log('📋 Found pending payment:', paymentData);
+    
+    // You can show a message to user about pending payment
+    const confirmResume = confirm('يوجد طلب معلق بالدفع. هل تريد متابعة الدفع؟');
+    if (confirmResume) {
+      this.cartService.checkPaymentStatus(paymentData.orderId).subscribe({
+        next: (statusRes: any) => {
+          if (statusRes.status === 'pending') {
+            // Redirect to payment again
+            window.location.href = statusRes.payment_url || '/checkout';
+          } else {
+            localStorage.removeItem('pendingPayment');
+          }
+        },
+        error: () => {
+          localStorage.removeItem('pendingPayment');
+        }
+      });
+    }
+  }
+}
   private handlePaymentError(err: any): void {
     let errorMessage = 'حدث خطأ أثناء معالجة الدفع';
 

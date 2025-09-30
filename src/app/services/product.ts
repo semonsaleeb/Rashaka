@@ -111,4 +111,11 @@ getCategories(): Observable<Category[]> {
     .get<{ status: string; data: Category[] }>(`${this.baseUrl}/categories`)
     .pipe(map(response => response.data));
 }
+  getTopSellers(): Observable<Product[]> {
+  const url = `${this.baseUrl}/products/top-sellers`;
+  return this.http
+    .get<{ status: string; data: Product[] }>(url)
+    .pipe(map(res => res.data));
+}
+
 }
