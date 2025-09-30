@@ -25,6 +25,139 @@
   color: #000;
 }
 
+  .arrow-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: 0.2s;
+    padding: 0;
+    cursor: pointer;
+
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .arrow-btn.prev {
+    background-image: url("/assets/Images/left-arrow.svg");
+    
+    &:not([disabled]) {
+      background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+    }
+  }
+
+  .arrow-btn.next {
+    background-image: url("/assets/Images/right-arrow.svg");
+    
+    &:not([disabled]) {
+      background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+    }
+  }
+
+
+  .product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: contain;
+      padding: 1rem;
+      background: white;
+    }
+
+    .card-body {
+      // padding: 1.25rem;
+      
+      .card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #333;
+      }
+
+      .card-text {
+        font-size: 0.85rem;
+        color: #666;
+        // max-height: 40px;
+        overflow: hidden;
+      }
+    }
+  }
+.carousel-track {
+  unicode-bidi: normal !important;
+}
+
+.btn-circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+    margin: 6px;
+  background-color: #E9F7DE;
+  border: 2px solid #00000033;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 60px;
+  transition: all 0.2s ease-in-out;
+
+  i {
+    background-color: transparent;
+    /* Ensure no override */
+    color: inherit;
+    /* Use parent color */
+    font-size: 19px;
+  }
+  &:hover {
+    background-color: #d1edc2;
+  }
+
+
+}
+  .btn-circle.active {
+  background-color: #d1edc2; /* نفس لون الـ hover */
+  border-color: #00000066;   /* تقدر تزود تباين لو حابب */
+}
+
+.carousel-slide {
+  flex: 0 0 calc(100% / 3); /* لو عايز 3 كروت تظهر في الشاشة */
+  max-width: calc(100% / 3);
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+}
+@media (max-width: 768px) {
+  .carousel-slide {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-slide {
+    flex: 0 0 95%; /* يخلي جزء من الكارت اللي بعده يظهر */
+    max-width: 95%;
+    margin-right: 5%;
+  }
+}
+
+  .loading-spinner {
+    text-align: center;
+    padding: 2rem;
+    color: white;
+  }
+
 .tab-btn:hover {
   color: #7AD03A;
 }

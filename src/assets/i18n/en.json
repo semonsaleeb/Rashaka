@@ -618,5 +618,7 @@
     "DEFAULT": "An error occurred while confirming your booking.",
       "ADDRESS_IN_USE": "This address cannot be deleted because it is linked to an order or appointment.",
     "DELETE_FAILED": "Failed to delete the address."
-  }
+  },
+    "RELATED_PRODUCTS": "Related Products"
+
 }

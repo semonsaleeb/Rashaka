@@ -1,40 +1,39 @@
+
+@if (showComparePopup) {
+<app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()">
+</app-compare-popup>
+}
+
+
 <!-- product-page.component.html -->
 @if (!isLoading && product) {
 <div class="container py-4 mt-5" dir="rtl">
   <div class="row g-4" style="height: 100vh;">
- <!-- Product Image + Thumbnails -->
-<div class="col-md-5 rounded" style="">
-  <div class="p-3 bg-white text-center position-relative">
+    <!-- Product Image + Thumbnails -->
+    <div class="col-md-5 rounded" style="">
+      <div class="p-3 bg-white text-center position-relative">
 
-    <!-- Favorite button -->
-    <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-5"
-      style="border-color: #00000033; z-index: 2;" (click)="toggleFavorite(product, $event)">
-      <i [ngClass]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-muted'"></i>
-    </button>
+        <!-- Favorite button -->
+        <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-5"
+          style="border-color: #00000033; z-index: 2;" (click)="toggleFavorite(product, $event)">
+          <i [ngClass]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-muted'"></i>
+        </button>
 
-    <!-- Main Image -->
-    <div class="mb-2 p-5 border border-1 rounded-4">
-      <img 
-        [src]="product.images[selectedImageIndex]" 
-        class="img-fluid" 
-        style="height: 300px; object-fit: contain;"
-      />
+        <!-- Main Image -->
+        <div class="mb-2 p-5 border border-1 rounded-4">
+          <img [src]="product.images[selectedImageIndex]" class="img-fluid"
+            style="height: 300px; object-fit: contain;" />
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="d-flex justify-content-center gap-2 mt-2">
+          <img *ngFor="let image of product.images; let i = index" [src]="image" class="img-thumbnail"
+            [class.border-primary]="i === selectedImageIndex"
+            style="width: 60px; height: 60px; object-fit: contain; cursor: pointer;" (click)="selectedImageIndex = i" />
+        </div>
+
+      </div>
     </div>
-
-    <!-- Thumbnails -->
-    <div class="d-flex justify-content-center gap-2 mt-2">
-      <img 
-        *ngFor="let image of product.images; let i = index"
-        [src]="image" 
-        class="img-thumbnail"
-        [class.border-primary]="i === selectedImageIndex"
-        style="width: 60px; height: 60px; object-fit: contain; cursor: pointer;"
-        (click)="selectedImageIndex = i"
-      />
-    </div>
-
-  </div>
-</div>
 
 
     <!-- Product Info -->
@@ -93,46 +92,55 @@
 
         <!-- Add to cart -->
         <div class="d-flex gap-2 mb-3">
-        @if (isInCart(product.id)) {
-  <!-- ✅ حالة المنتج موجود في الكارت -->
-  <div
-    class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-2"
-    style="direction: rtl; font-size: 0.9rem; background-color: #7AD03A;"
-  >
-    <!-- Quantity Controls -->
-    <div class="d-flex align-items-center gap-2 Quantity_Controls">
-      <!-- Increase Button -->
-      <button class="btn custom-increase-btn btn-sm"
-                        (click)="decreaseQuantity(product.id); $event.stopPropagation()">
-                        <i class="fa-solid fa-minus"></i>
+          @if (isInCart(product.id)) {
+          <!-- ✅ حالة المنتج موجود في الكارت -->
+          <div
+            class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-2"
+            style="direction: rtl; font-size: 0.9rem; background-color: #7AD03A;">
+            <!-- Quantity Controls -->
+            <div class="d-flex align-items-center gap-2 Quantity_Controls">
+              <!-- Increase Button -->
+              <button class="btn custom-increase-btn btn-sm"
+                (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                <i class="fa-solid fa-minus"></i>
 
-                        <!-- <img src="assets/Images/delete-02.svg"> -->
-                      </button>
+                <!-- <img src="assets/Images/delete-02.svg"> -->
+              </button>
 
-      <!-- Quantity Display -->
-  <span class="fw-bold custom-qty-display text-center px-4">
-                          {{ getCartItem(product.id)?.quantity }}
-                        </span>
+              <!-- Quantity Display -->
+              <span class="fw-bold custom-qty-display text-center px-4">
+                {{ getCartItem(product.id)?.quantity }}
+              </span>
 
 
-      <!-- Decrease Button -->
-       <button class="btn custom-increase-btn btn-sm "
-                        (click)="increaseQuantity(product.id); $event.stopPropagation()">
-                        <i class="fa-solid fa-plus"></i>
-                      </button>
-    </div>
-  </div>
-} @else {
-  <!-- ❌ حالة المنتج مش موجود في الكارت -->
-  <button class="btn  btn-xs  mt-3 text-black rounded-2 custom-hover px-3 py-2"
-    style="font-size: 0.9rem; background-color: #7AD03A;"
-    (click)="addToCart(product, $event)"
-    data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+              <!-- Decrease Button -->
+              <button class="btn custom-increase-btn btn-sm "
+                (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          } @else {
+          <!-- ❌ حالة المنتج مش موجود في الكارت -->
+          <button class="btn  btn-xs  mt-3 text-black rounded-2 custom-hover px-3 py-3"
+            style="font-size: 0.9rem; background-color: #7AD03A;" (click)="addToCart(product, $event)"
+            data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
 
-    <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
-    {{ 'ADD_TO_CART' | translate }}
-  </button>
-}
+            <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+            {{ 'ADD_TO_CART' | translate }}
+          </button>
+          }
+
+
+
+
+<button 
+  (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+  class="px-4 mt-3 rounded-2 border border-secondary"
+  [ngClass]="{'active': isInCompare(product)}">
+  <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="" class="px-2"> 
+  قارن 
+</button>
 
 
         </div>
@@ -195,6 +203,162 @@
     </div>
   </div>
 </div>
-<app-category-products mode="carousel"></app-category-products>
+<!-- <app-category-products mode="carousel"></app-category-products> -->
+<div style="background-color: #081E25 ;" class="py-5 px-lg-5">
+   <div class="d-flex text-light justify-content-between align-items-center flex-wrap mb-3 px-4">
+            <h2 class="section-title mb-0 fw-bold">
+              {{ 'RELATED_PRODUCTS' | translate }}
+            </h2>
+            <!-- <a [routerLink]="['/home/Shop']"
+              class="btn btn-link view-all-btn text-light d-flex align-items-center gap-2 p-0">
+              <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="{{ 'VIEW_ALL' | translate }}" width="25px">
+              {{ 'VIEW_ALL' | translate }}
+            </a> -->
+          </div>
+  <div class="position-relative carousel-wrapper my-3">
+    <div class="carousel-container">
+      <div class="d-flex transition-transform carousel-track" [ngStyle]="{
+       transform: currentLang === 'ar'
+         ? 'translateX(+' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+         : 'translateX(-' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+     }" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'" (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event)">
+
+
+        @for (product of filteredProducts; track product.id) {
+        <div class="carousel-slide p-3">
+          <div class="card product-card rounded-4">
+            <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
+
+              <!-- Product Image -->
+              <div class="carousel slide">
+                <div class="carousel-inner">
+                  @for (image of product.images; track $index; let j = $index) {
+                  <div class="carousel-item" [class.active]="j === 0">
+                    <img [src]="image" class="card-img-top p-3" [alt]="product.name">
+                  </div>
+                  }
+
+                </div>
+              </div>
+
+              <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+                <button (click)="toggleFavorite(product, $event)" class="btn-circle"
+                  [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                  <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+                </button>
+
+                <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+                  class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+                  <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
+                </button>
+              </div>
+
+
+
+              <!-- Product Details -->
+              <div class="card-body  mx-3">
+                <!-- show first 30 chars and add "..." only if longer -->
+
+
+                <h6 class="card-title fw-bold mb-2">
+                  {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}
+                </h6>
+
+                <p class="card-text text-muted">
+                  {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:40 }}
+                </p>
+
+
+                <div>
+                  <p class="fw-bold " style="font-size: 14px;">
+                    @if (product.sale_price && product.sale_price !== product.price) {
+                    <span class="fw-bold text-success">{{ product.sale_price }} {{ 'CURRENCY' | translate}}</span>
+                    <span class="text-secondary px-2" style="text-decoration: line-through;">{{ product.price }}{{
+                      'CURRENCY' | translate }}</span>
+
+                    } @else {
+                    <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY' | translate }}</span>
+                    }
+                  </p>
+
+
+                </div>
+
+              </div>
+            </a>
+            <!-- Cart Controls -->
+            <div class="mb-3 px-4">
+              @if (isInCart(product.id)) {
+              <div
+                class="d-flex align-items-center  justify-content-center px-3  gap-2 border  border-secondary  rounded-4">
+
+                <!-- Quantity Controls -->
+                <div class="d-flex align-items-center gap-2 Quantity_Controls">
+                  <!-- Increase Button -->
+                  <button class="btn custom-increase-btn btn-sm"
+                    (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                  <!-- Quantity Display -->
+                  <span class="fw-bold custom-qty-display text-center px-4">
+                    {{ getCartItem(product.id)?.quantity }}
+                  </span>
+                  <!-- Remove Button -->
+                  <button class="btn custom-increase-btn btn-sm"
+                    (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                    <i class="fa-solid fa-minus"></i>
+
+                    <!-- <img src="assets/Images/delete-02.svg"> -->
+                  </button>
+                </div>
+              </div>
+              } @else {
+              <button class="btn border-secondary w-100 btn-xs bg-white  text-black rounded-5 custom-hover"
+                style="font-size: 1rem;" (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
+                data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+                <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+                {{ 'ADD_TO_CART' | translate }}
+              </button>
+
+
+
+
+
+
+              }
+            </div>
+
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
+
+      <!-- Dots -->
+      <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+        @for (i of getDotsArray(); track i) {
+        <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex === i"
+          [class.bg-secondary]="currentSlideIndex !== i" style="width: 10px; height: 10px; border: none;">
+        </button>
+        }
+      </div>
+
+      <!-- Arrows (desktop only) -->
+      <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
+        <button class="arrow-btn next" (click)="nextSlide()"
+          [disabled]="currentSlideIndex >= getTotalSlides() - 1"></button>
+        <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0"></button>
+
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
 <app-downloadapp></app-downloadapp>
 }
