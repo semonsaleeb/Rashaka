@@ -14,6 +14,7 @@ import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
 import { Product } from '../../models/Product';
 import { CartItem } from '../../models/CartItem';
 import { TranslateModule } from '@ngx-translate/core';
+import { CategoryProducts } from '../pages/home/category-products/category-products';
 declare var bootstrap: any;
 
 @Component({
@@ -24,7 +25,8 @@ declare var bootstrap: any;
     FormsModule,
     RouterModule,
     Downloadapp,
-    TranslateModule
+    TranslateModule,
+    CategoryProducts
   ],
   templateUrl: './product-card.html',
   styleUrls: ['./product-card.scss']
