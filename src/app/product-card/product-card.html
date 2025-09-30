@@ -7,7 +7,7 @@
   <div class="p-3 bg-white text-center position-relative">
 
     <!-- Favorite button -->
-    <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-5"
+    <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-4"
       style="border-color: #00000033; z-index: 2;" (click)="toggleFavorite(product, $event)">
       <i [ngClass]="product.isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-muted'"></i>
     </button>
@@ -52,7 +52,7 @@
           <div class="mb-2 d-flex align-items-center">
             @for (star of [1,2,3,4,5]; track star) {
             <i class="fa-star" [class.fa-solid]="star <= (product.average_rating ?? 0)"
-              [class.fa-regular]="star > (product.average_rating ?? 0)" style="color: gold;">
+              [class.fa-regular]="star > (product.average_rating ?? 0)" style="color: #cacaca;">
             </i>
             }
             <small class="text-muted ms-2">
@@ -69,7 +69,7 @@
           <small class="text-muted">({{ product.stock }} متوفر)</small>
         </div>
         <!-- Price + Category -->
-        <div class="d-flex align-items-center gap-2 mb-2">
+        <div class="d-flex align-items-center gap-2 mb-2" style="flex-direction:column;  align-self:flex-start; ">
           @if (product.sale_price) {
           <span class="text-success fw-bold fs-5">
             {{ product.sale_price }} ر.س
