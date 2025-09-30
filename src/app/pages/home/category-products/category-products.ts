@@ -779,6 +779,17 @@ export class CategoryProducts implements OnInit, OnDestroy {
     const modal = new (window as any).bootstrap.Modal(document.getElementById('filtersModal'));
     modal.show();
   }
+
+  // تقسيم المنتجات إلى صفحات لكل 9 منتجات
+getProductPages(): Product[][] {
+  const perPage = 9;
+  const pages: Product[][] = [];
+  for (let i = 0; i < this.filteredProducts.length; i += perPage) {
+    pages.push(this.filteredProducts.slice(i, i + perPage));
+  }
+  return pages;
+}
+
 }
 
 function safeNumber(value: any): number {
