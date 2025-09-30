@@ -15,6 +15,8 @@ import { Product } from '../../models/Product';
 import { CartItem } from '../../models/CartItem';
 import { TranslateModule } from '@ngx-translate/core';
 import { CategoryProducts } from '../pages/home/category-products/category-products';
+import { TruncatePipe } from '../truncate-pipe';
+import { ComparePopup } from '../compare-popup/compare-popup';
 declare var bootstrap: any;
 
 @Component({
@@ -26,7 +28,9 @@ declare var bootstrap: any;
     RouterModule,
     Downloadapp,
     TranslateModule,
-    CategoryProducts
+    TruncatePipe,
+    ComparePopup
+
   ],
   templateUrl: './product-card.html',
   styleUrls: ['./product-card.scss']
@@ -53,37 +57,93 @@ export class ProductCard implements OnInit {
     public cartState: CartStateService,
     private favoriteService: FavoriteService,
     private cdr: ChangeDetectorRef,
+    
 
   ) { }
 
- ngOnInit(): void {
-  // 1️⃣ استمع لأي تغيير في الـ route params
+ngOnInit(): void {
+  // ضبط عدد الكروت المرئية حسب الشاشة
+  this.updateVisibleCards();
+  window.addEventListener('resize', () => this.updateVisibleCards());
+
+  // الحصول على productId من الرابط
   this.route.paramMap.subscribe(params => {
     const productId = Number(params.get('id'));
-
     if (!productId || isNaN(productId)) {
       this.errorMessage = 'Invalid product ID';
       this.isLoading = false;
       return;
     }
 
-    // 2️⃣ حمل المنتج باستخدام function منفصلة
+    // تحميل المنتج
     this.loadProduct(productId);
-
-    // 3️⃣ لو المستخدم guest، حمل cart من localStorage
+    
+    // تحميل الكارت حسب حالة تسجيل الدخول
     if (!this.isLoggedIn()) {
       this.cartItems = this.loadGuestCart();
       this.refreshCartCount();
       this.cdr.detectChanges();
     } else {
-      // logged-in → حمل الكارت من API
       this.loadCart();
     }
   });
-      this.cartState.cartItems$.subscribe(items => {
-      this.cartItems = items;
-      this.cdr.detectChanges();
+
+  // استماع لتغييرات الكارت
+  this.cartState.cartItems$.subscribe(items => {
+    this.cartItems = items;
+    this.cdr.detectChanges();
+  });
+
+  // متابعة تغييرات المفضلة بطريقة آمنة
+  this.favoriteService.favorites$.subscribe(favs => {
+    const favoriteIds = new Set(favs.map(f => f.id));
+
+    // تحديث allProducts فقط لو موجودة
+    // if (this.allProducts?.length) {
+    //   this.allProducts = this.allProducts.map(p => ({
+    //     ...p,
+    //     isFavorite: favoriteIds.has(p.id)
+    //   }));
+    // }
+
+    // تحديث filteredProducts فقط لو موجودة
+    if (this.filteredProducts?.length) {
+      this.filteredProducts = this.filteredProducts.map(p => ({
+        ...p,
+        isFavorite: favoriteIds.has(p.id)
+      }));
+    }
+
+    this.cdr.detectChanges();
+  });
+}
+
+
+  toggleFavorite(product: Product, event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
+
+    const token = localStorage.getItem('token');
+
+    this.favoriteService.toggleFavorite(product, token).subscribe({
+      next: (res) => {
+        // ✅ لو عندك favorites$ في الـ service هيحدث تلقائي
+        if (!this.favoriteService.favorites$) {
+          // 🔄 Manual flip fallback
+          product.isFavorite = !product.isFavorite;
+        }
+      },
+      error: (err) => console.error('Error toggling favorite:', err)
     });
+  }
+
+
+
+updateVisibleCards() {
+  const width = window.innerWidth;
+  if (width < 576) this.visibleCards = 1;
+  else if (width < 768) this.visibleCards = 2;
+  else this.visibleCards = 3;
 }
 
 private loadProduct(productId: number): void {
@@ -91,22 +151,29 @@ private loadProduct(productId: number): void {
 
   this.productService.getProductById(productId, token).subscribe({
     next: (product) => {
+      // ✅ احفظ المنتج مع defaults
       this.product = {
         ...product,
         average_rating: product.average_rating ?? 0,
         isFavorite: false
       };
 
-      // 🟢 تحديث حالة المفضلة
+      // ✅ حدث حالة المفضلة
       this.favoriteService.favorites$.subscribe(favs => {
         this.product.isFavorite = favs.some(fav => fav.id === this.product.id);
       });
 
-      console.log('Loaded product:', this.product);
       this.isLoading = false;
-
-      // 🔹 أخيراً، detect changes
       this.cdr.detectChanges();
+
+      // ✅ حمّل منتجات نفس الكاتيجوري إذا موجود
+      const firstCategoryId = this.product.categories?.[0]?.id;
+      if (firstCategoryId) {
+        console.log("📌 Loaded product, now loading category products for categoryId:", firstCategoryId);
+        this.loadCategoryProducts(firstCategoryId, token);
+      } else {
+        console.warn("⚠️ Product has no categories", this.product);
+      }
     },
     error: (err) => {
       console.error('Error fetching product details', err);
@@ -116,6 +183,52 @@ private loadProduct(productId: number): void {
     }
   });
 }
+
+
+
+private loadCategoryProducts(categoryId: number, token: string = ''): void {
+  console.log("📌 Loading category products for categoryId:", categoryId);
+
+  this.productService.getProductsByCategory(categoryId, token).subscribe({
+    next: (response: any) => {
+      console.log("📦 Raw API Response:", response);
+
+      let products: Product[] = [];
+      
+      // معالجة مختلف هياكل الاستجابة
+      if (Array.isArray(response)) {
+        products = response;
+      } else if (response?.data && Array.isArray(response.data)) {
+        products = response.data;
+      } else if (response?.data?.products && Array.isArray(response.data.products)) {
+        products = response.data.products;
+      } else if (response?.data?.data && Array.isArray(response.data.data)) {
+        products = response.data.data;
+      } else {
+        console.warn("⚠️ Unexpected API structure:", response);
+        products = [];
+      }
+
+      console.log("📦 Parsed Products:", products);
+
+      // استبعاد المنتج الحالي وعرض الباقي
+      if (this.product?.id) {
+        this.filteredProducts = products.filter(p => p.id !== this.product.id);
+      } else {
+        this.filteredProducts = products;
+      }
+
+      console.log("✅ Filtered Category Products:", this.filteredProducts.length);
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error("❌ Error loading category products:", err);
+      this.filteredProducts = [];
+      this.cdr.detectChanges();
+    }
+  });
+}
+
 
 
 
@@ -317,20 +430,20 @@ removeItem(productId: number): void {
     return this.auth.isLoggedIn();
   }
 
-  toggleFavorite(product: Product, event?: Event): void {
-    event?.stopPropagation();
-    event?.preventDefault();
+  // toggleFavorite(product: Product, event?: Event): void {
+  //   event?.stopPropagation();
+  //   event?.preventDefault();
 
-    const token = localStorage.getItem('token');
+  //   const token = localStorage.getItem('token');
 
-    this.favoriteService.toggleFavorite(product, token).subscribe({
-      next: () => {
-        // مفيش داعي لأي حاجة هنا
-        // الـ favorites$ هيتحدث تلقائي
-      },
-      error: (err) => console.error('Error toggling favorite:', err)
-    });
-  }
+  //   this.favoriteService.toggleFavorite(product, token).subscribe({
+  //     next: () => {
+  //       // مفيش داعي لأي حاجة هنا
+  //       // الـ favorites$ هيتحدث تلقائي
+  //     },
+  //     error: (err) => console.error('Error toggling favorite:', err)
+  //   });
+  // }
 
 
 
@@ -386,6 +499,92 @@ isInCart(productId: number): boolean {
 // removeItem(productId: number) {
 //   this.cartItems = this.cartItems.filter(item => item.product_id !== productId);
 // }
+  currentLang: string = 'ar';
+  currentSlideIndex = 0;
+  visibleCards = 3;
+  filteredProducts: Product[] = [];
+  compareProducts: any[] = [];
+  showComparePopup = false;
+
+
+addToCompare(product: Product, event?: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const productId = Number(product.id); // تحويل للرقم
+
+  // تحقق من وجود المنتج مسبقاً
+  if (this.compareProducts.find(p => Number(p.id) === productId)) {
+    alert('هذا المنتج مضاف بالفعل للمقارنة');
+    return;
+  }
+
+  if (this.compareProducts.length >= 2) {
+    alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
+    return;
+  }
+
+  this.compareProducts.push(product);
+
+  if (this.compareProducts.length === 1) {
+    alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
+  }
+
+  if (this.compareProducts.length === 2) {
+    this.showComparePopup = true;
+  }
+}
+
+
+
+  onCloseComparePopup(): void {
+    this.showComparePopup = false;
+    this.compareProducts = [];
+  }
+
+  openSidebar() { const modal = new (window as any).bootstrap.Modal(document.getElementById('filtersModal')); modal.show(); }
+
+  touchStartX = 0; touchEndX = 0;
+  onTouchStart(event: TouchEvent) { this.touchStartX = event.changedTouches[0].screenX; }
+  onTouchEnd(event: TouchEvent) { this.touchEndX = event.changedTouches[0].screenX; this.handleSwipe(); }
+  nextSlide(): void { const maxIndex = Math.max(0, this.getTotalSlides() - 1); if (this.currentSlideIndex < maxIndex) this.currentSlideIndex++; }
+  prevSlide(): void { if (this.currentSlideIndex > 0) this.currentSlideIndex--; }
+  getTotalSlides(): number {
+    if (!this.filteredProducts) return 0;
+    return Math.ceil(this.filteredProducts.length / this.visibleCards);
+  }
+  getDotsArray(): number[] { return Array.from({ length: this.getTotalSlides() }, (_, i) => i); }
+  goToSlide(index: number) { this.currentSlideIndex = Math.min(Math.max(index, 0), this.getTotalSlides() - 1); }
+textDir: 'rtl' | 'ltr' = 'ltr';
+
+  // handleSwipe(): void { const swipeDistance = this.touchEndX - this.touchStartX; if (Math.abs(swipeDistance) > 50) { swipeDistance > 0 ? this.nextSlide() : this.prevSlide(); } }
+  private readonly SWIPE_THRESHOLD = 50;
+
+handleSwipe(): void {
+  const swipeDistance = this.touchEndX - this.touchStartX;
+
+  if (Math.abs(swipeDistance) > 50) {
+    const isRTL = this.currentLang === 'ar';
+
+    if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
+      // سوايب يمين في LTR → prev
+      // سوايب شمال في RTL → prev
+      this.prevSlide();
+    } else {
+      // سوايب شمال في LTR → next
+      // سوايب يمين في RTL → next
+      this.nextSlide();
+    }
+  }
+}
+
+
+isInCompare(product: any): boolean {
+  return this.compareProducts?.some(p => p.id === product.id);
+}
+
 
 }
 function safeNumber(value: any): number {
