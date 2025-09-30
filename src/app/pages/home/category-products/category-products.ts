@@ -91,81 +91,100 @@ trackByProductId(index: number, product: any): number {
   ) { }
 
   // ---------------------- lifecycle ----------------------
+allCategories: any[] = [];
+
 ngOnInit(): void {
   // ✅ Handle responsive layout
   this.resizeHandler();
   window.addEventListener('resize', this.resizeHandler);
-  this.topSellers = this.filteredProducts.filter(p => p.is_top_seller);
 
-  // ✅ Read category_id from URL query parameters
-  this.route.queryParams.subscribe(params => {
-    const categoryId = params['category_id'] ? Number(params['category_id']) : null;
+  // ✅ Load all categories once
+  this.productService.getCategories().subscribe({
+    next: (cats) => {
+      this.allCategories = cats.map(c => ({ ...c, id: Number(c.id) }));
+      this.setCategories(); // 👈 هنا بنثبت الكاتيجوريز كلها
 
-    if (categoryId && !isNaN(categoryId)) {
-      // Pre-select the category
-      if (!this.selectedCategories.includes(categoryId)) {
-        this.selectedCategories.push(categoryId);
-      }
+      // بعد ما الكاتيجوريز تجيب، شوف الـ URL
+      this.route.queryParams.subscribe(params => {
+        const categoryId = params['category_id'] ? Number(params['category_id']) : null;
 
-      // Fetch products for this category
-      this.productService.getProductsByCategory(categoryId).subscribe({
-        next: (products) => {
-          this.allProducts = [...products];
-          this.filteredProducts = [...products];
-          this.categories = this.extractUniqueCategories(this.allProducts);
-
-          // ✅ اضبط البداية حسب اللغة
-          this.setInitialSlide();
-
-          // Apply filters including the pre-selected category
-          this.applyCombinedFilters();
-        },
-        error: (err) => console.error('Error fetching products by category:', err)
+        if (categoryId && !isNaN(categoryId)) {
+          if (!this.selectedCategories.includes(categoryId)) {
+            this.selectedCategories.push(categoryId);
+          }
+          this.loadProductsByCategory(categoryId);
+        } else {
+          this.fetchProductsAndFavorites();
+        }
       });
-    } else {
-      // Fetch all products if no category_id in URL
-      this.fetchProductsAndFavorites();
-    }
+    },
+    error: (err) => console.error("❌ Failed to load categories", err)
   });
 
-  // ✅ Load cart and subscribe to updates
+  // ✅ باقي الـ subscriptions زي الكارت والفايفوريت واللانجويج
   this.loadCart();
   this.cartState.cartItems$.subscribe(items => {
     this.cartItems = items;
     this.updateCartTotals();
   });
 
-  // ✅ Subscribe to favorite changes
   this.favoriteService.favorites$.subscribe(favs => {
     const favoriteIds = new Set(favs.map(f => f.id));
-    this.allProducts = this.allProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
-    this.filteredProducts = this.filteredProducts.map(p => ({ ...p, isFavorite: favoriteIds.has(p.id) }));
+    this.allProducts = this.allProducts.map(p => ({
+      ...p,
+      isFavorite: favoriteIds.has(p.id)
+    }));
+    this.filteredProducts = this.filteredProducts.map(p => ({
+      ...p,
+      isFavorite: favoriteIds.has(p.id)
+    }));
     this.cdr.detectChanges();
   });
 
-  // ✅ Handle language changes
   this.translate.use(this.languageService.getCurrentLanguage());
   this.currentLang = this.languageService.getCurrentLanguage();
 
   this.languageService.currentLang$.subscribe(lang => {
-  this.currentLang = lang;
-  this.textDir = lang === 'ar' ? 'rtl' : 'ltr';
-});
-
-  this.languageService.currentLang$.subscribe(lang => {
     this.currentLang = lang;
-    this.translate.use(lang);
-
-    // ✅ لما اللغة تتغير اضبط مكان البداية
+    this.textDir = lang === 'ar' ? 'rtl' : 'ltr';
     this.setInitialSlide();
   });
+}
 
-  // ✅ Optional: reload cart when sidebar opens
-  const offcanvasEl = document.getElementById('cartSidebar');
-  if (offcanvasEl) {
-    offcanvasEl.addEventListener('shown.bs.offcanvas', () => this.loadCart());
+// ✅ فانكشن مستقلة لإعادة ضبط الكاتيجوريز
+private setCategories(products?: Product[]): void {
+  if (products && products.length) {
+    const fromProducts = this.extractUniqueCategories(products);
+    // نعمل merge ونشيل التكرار
+    const merged = [...this.allCategories, ...fromProducts];
+    const unique = new Map(merged.map(c => [c.id, c]));
+    this.categories = Array.from(unique.values());
+  } else {
+    this.categories = [...this.allCategories];
   }
 }
+
+
+// ✅ دالة تشوف هل كله متحدد
+areAllSelected(): boolean {
+  return this.categories.length > 0 &&
+         this.selectedCategories.length === this.categories.length;
+}
+
+// ✅ دالة تعمل Select / Deselect للكل
+toggleAllCategories(event: any): void {
+  if (event.target.checked) {
+    // حدد الكل
+    this.selectedCategories = this.categories.map(c => c.id);
+    // هات المنتجات كلها
+    this.fetchProductsAndFavorites();
+  } else {
+    // شيل الكل
+    this.selectedCategories = [];
+    this.filteredProducts = [];
+  }
+}
+
 
 // 🔥 Helper function
 private setInitialSlide(): void {
@@ -215,7 +234,8 @@ private setInitialSlide(): void {
       next: (products) => {
         this.allProducts = [...products];
         this.filteredProducts = [...products];
-        this.categories = this.extractUniqueCategories(this.allProducts);
+        // this.categories = this.extractUniqueCategories(this.allProducts);
+this.setCategories(this.allProducts);
 
         // 🟢 بعد ما المنتجات تتجاب نجيب الفيفوريت
         this.favoriteService.loadFavorites(token).subscribe({
@@ -267,6 +287,34 @@ private setInitialSlide(): void {
     else this.selectedCategories.push(categoryId);
     this.applyCombinedFilters();
   }
+// toggleCategory(categoryId: number): void {
+//   if (this.selectedCategories.includes(categoryId)) {
+//     // ✅ لو الكاتيجوري متعلم → اعمله uncheck
+//     this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
+//   } else {
+//     // ✅ لو مش متعلم → اعمله check
+//     this.selectedCategories = [...this.selectedCategories, categoryId];
+//   }
+
+//   // ✅ فلترة المنتجات حسب الكاتيجوريز المختارة
+//   this.applyFilters();
+// }
+
+// private applyFilters(): void {
+//   if (this.selectedCategories.length > 0) {
+//     this.filteredProducts = this.allProducts.filter(p =>
+//       this.selectedCategories.includes(p.category_id)
+//     );
+//   } else {
+//     // ✅ هنا انتِ تختاري: فضي أو رجّع كل المنتجات
+//     this.filteredProducts = [...this.allProducts];
+//   }
+
+//   this.cdr.detectChanges();
+// }
+
+
+
 
   // ---------------------- filters ----------------------
   filterByCategorycarousel(categoryId: number | 'all') {
@@ -318,6 +366,7 @@ private setInitialSlide(): void {
         this.allProducts = [...products];
         this.filteredProducts = [...products];
         this.categories = this.extractUniqueCategories(this.allProducts);
+this.setCategories(this.allProducts);
 
         // 🟢 Open in middle on mobile
         if (this.isMobile) {
@@ -336,7 +385,8 @@ private setInitialSlide(): void {
       next: (products) => {
         this.allProducts = [...products];
         this.filteredProducts = [...products];
-        this.categories = this.extractUniqueCategories(this.allProducts);
+        // this.categories = this.extractUniqueCategories(this.allProducts);
+this.setCategories(this.allProducts);
 
         // 🟢 Open in middle on mobile
         if (this.isMobile) {
@@ -620,6 +670,10 @@ removeItem(productId: number): void {
   getCartItem(product_id: number | string) {
     return this.cartItems.find(i => Number(i.product_id) === Number(product_id));
   }
+isInCompare(product: any): boolean {
+  return this.compareProducts?.some(p => p.id === product.id);
+}
+
 
   // category-products.ts
   // get displayName(): string {

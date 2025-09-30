@@ -95,9 +95,11 @@
                       </button>
 
                       <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
-                        class="btn-circle text-muted">
-                        <i class="fas fa-random"></i>
+                        class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+                        <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
                       </button>
+
+
                     </div>
 
                     <!-- Product Details -->
@@ -237,19 +239,39 @@
 
       <!-- Category Filter -->
       <div class="my-5">
-        <h5 class="fw-bold mb-3">{{ 'CATEGORIES' | translate }}</h5>
-        <ul class="list-unstyled">
-          @for (cat of categories; track cat.id) {
-          <li>
-            <label class="form-check d-flex align-items-center gap-2">
-              <input class="form-check-input mx-2" type="checkbox" [checked]="selectedCategories.includes(cat.id)"
-                (change)="toggleCategory(cat.id)" />
-              <span>{{ currentLang === 'ar' ? cat.name_ar : cat.name }}</span>
-            </label>
-          </li>
-          }
-        </ul>
-      </div>
+  <h5 class="fw-bold mb-3">{{ 'CATEGORIES' | translate }}</h5>
+  <ul class="list-unstyled">
+
+    <!-- ✅ زرار اختيار الكل -->
+    <li>
+      <label class="form-check d-flex align-items-center gap-2">
+        <input
+          class="form-check-input mx-2"
+          type="checkbox"
+          [checked]="areAllSelected()"
+          (change)="toggleAllCategories($event)"
+        />
+        <span>{{ currentLang === 'ar' ? 'الكل' : 'All' }}</span>
+      </label>
+    </li>
+
+    <!-- ✅ الكاتيجوريز -->
+    @for (cat of categories; track cat.id) {
+      <li>
+        <label class="form-check d-flex align-items-center gap-2">
+          <input
+            class="form-check-input mx-2"
+            type="checkbox"
+            [checked]="selectedCategories.includes(cat.id)"
+            (change)="toggleCategory(cat.id)"
+          />
+          <span>{{ currentLang === 'ar' ? cat.name_ar : cat.name }}</span>
+        </label>
+      </li>
+    }
+  </ul>
+</div>
+
 
       <!-- Price Filter -->
       <div class="my-5">
@@ -424,9 +446,9 @@
                       <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
                     </button>
 
-                    <button (click)="addToCompare(product); $event.stopPropagation(); $event.preventDefault()"
-                      class="btn-circle text-muted">
-                      <i class="fas fa-random"></i>
+                    <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+                      class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+                      <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
                     </button>
                   </div>
 
@@ -514,9 +536,9 @@
                 <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
               </button>
 
-              <button (click)="addToCompare(product); $event.stopPropagation(); $event.preventDefault()"
-                class="btn-circle text-muted">
-                <i class="fas fa-random"></i>
+              <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+                class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+                <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
               </button>
             </div>
 

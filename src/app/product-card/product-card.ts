@@ -78,6 +78,10 @@ export class ProductCard implements OnInit {
       this.loadCart();
     }
   });
+      this.cartState.cartItems$.subscribe(items => {
+      this.cartItems = items;
+      this.cdr.detectChanges();
+    });
 }
 
 private loadProduct(productId: number): void {
@@ -349,10 +353,13 @@ isInCart(productId: number): boolean {
 }
 
 // ✅ الحصول على العنصر من الكارت
-getCartItem(productId: number) {
-  return this.cartItems.find(item => item.product_id === productId);
-}
+// getCartItem(productId: number) {
+//   return this.cartItems.find(i => i.product_id == productId);
+// }
 
+  getCartItem(product_id: number | string) {
+    return this.cartItems.find(i => Number(i.product_id) === Number(product_id));
+  }
 
 // // ✅ زيادة الكمية
 // increaseQuantity(productId: number) {

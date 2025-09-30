@@ -71,10 +71,12 @@
                       <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
                     </button>
 
-                    <button (click)="addToCompare(product); $event.stopPropagation()" class="btn-circle text-muted"
-                      style="z-index: 3;">
-                      <i class="fas fa-random"></i>
-                    </button>
+                       <button 
+  (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+  class="btn-circle"
+  [ngClass]="{'active': isInCompare(product)}">
+  <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
+</button>
                   </div>
                 </div>
 
@@ -245,9 +247,12 @@
 
 
             <!-- Compare -->
-            <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
-              <i class="fas fa-random"></i>
-            </button>
+               <button 
+  (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+  class="btn-circle"
+  [ngClass]="{'active': isInCompare(product)}">
+  <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
+</button>
 
           </div>
 
@@ -367,9 +372,12 @@
 
 
             <!-- Compare -->
-            <button (click)="addToCompare(product, $event)" class="btn-circle text-muted">
-              <i class="fas fa-random"></i>
-            </button>
+               <button 
+  (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+  class="btn-circle"
+  [ngClass]="{'active': isInCompare(product)}">
+  <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
+</button>
 
           </div>
 

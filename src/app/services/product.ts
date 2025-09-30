@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { API_ENDPOINTS } from '../core/api-endpoints';
 import { Product } from '../../models/Product';
+import { Category } from '../../models/Category';
 
 
 @Injectable({
@@ -102,4 +103,12 @@ export class ProductService {
   private getFullUrl(endpoint: string): string {
     return `${this.baseUrl}${endpoint}`;
   }
+
+
+
+getCategories(): Observable<Category[]> {
+  return this.http
+    .get<{ status: string; data: Category[] }>(`${this.baseUrl}/categories`)
+    .pipe(map(response => response.data));
+}
 }

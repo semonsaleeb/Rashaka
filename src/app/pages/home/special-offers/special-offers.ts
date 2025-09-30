@@ -429,7 +429,9 @@ getCartItem(productId: number) {
   return this.cartState.getCartSummary().items.find(i => i.product_id === productId);
 }
 
-
+isInCompare(product: any): boolean {
+  return this.compareProducts?.some(p => p.id === product.id);
+}
   private handleHttpError(msg: string, err: HttpErrorResponse): void {
     console.error(msg, err);
     this.isLoading = false;

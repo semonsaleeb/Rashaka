@@ -371,6 +371,10 @@ button.rounded-circle {
   }
 }
 
+  .btn-circle.active {
+  background-color: #d1edc2; /* نفس لون الـ hover */
+  border-color: #00000066;   /* تقدر تزود تباين لو حابب */
+}
 
 
 

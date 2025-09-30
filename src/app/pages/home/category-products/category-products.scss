@@ -255,8 +255,13 @@
   &:hover {
     background-color: #d1edc2;
   }
-}
 
+
+}
+  .btn-circle.active {
+  background-color: #d1edc2; /* نفس لون الـ hover */
+  border-color: #00000066;   /* تقدر تزود تباين لو حابب */
+}
 
 
 .custom-increase-btn {
