@@ -3,11 +3,12 @@ import { Blog, BlogService } from '../services/blogs.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../services/language.service';
+import {DatePipe, CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-single-blog',
-  imports: [RouterModule, TranslateModule],
+  imports: [RouterModule, TranslateModule, CommonModule ,DatePipe  ],
   templateUrl: './single-blog.html',
   styleUrl: './single-blog.scss'
 })

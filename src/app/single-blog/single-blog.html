@@ -10,9 +10,17 @@
 
 @if (blog) {
 <div class="container py-5 mt-5 pt-5" [attr.dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
-  <p class="text-muted">
-    {{ blog.created_at }} - {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }}
-  </p>
+      <p class="text-muted card-date d-flex align-items-center gap-3 flex-wrap">
+                    <span class="d-flex align-items-center gap-1">
+                      <img src="assets/Images/pencil-edit-01.svg" alt="" style="width: 18px; height: 18px;">
+                      {{ 'BLOG.BY' | translate }}: {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }}
+                    </span>
+
+                    <span class="d-flex align-items-center gap-1">
+                      <img src="assets/Images/calendar-03.svg" alt="" style="width: 18px; height: 18px;">
+                      {{ blog.created_at | date: 'dd/MM/yyyy' }}
+                    </span>
+                  </p>
 
   <img [src]="blog.image" class="img-fluid mb-4 rounded" width="100%" alt="Blog Image">
 
@@ -20,8 +28,14 @@
     {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
   </h1>
 
-  <div [innerHTML]="currentLang === 'ar' ? parseContent(blog.content_ar) : parseContent(blog.content)"
-    class="blog-content">
-  </div>
+<div 
+  [innerHTML]="currentLang === 'ar' ? parseContent(blog.content_ar) : parseContent(blog.content)"
+  class="blog-content"
+  [ngClass]="{
+    'text-justify text-end': currentLang === 'ar',
+    'text-justify text-start': currentLang !== 'ar'
+  }">
+</div>
+
 </div>
 }

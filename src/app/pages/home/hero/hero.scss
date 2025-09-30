@@ -6,7 +6,7 @@
   background: #081E25;
   overflow: hidden;
   color: white;
-  height: 100vh;
+  height: 135vh;
   align-content: center;
 }
 // .slider-wrapper {
@@ -67,7 +67,7 @@
 
 /* ---------- TITLE & HIGHLIGHT ---------- */
 .hero-title {
-  font-size: 40px !important;
+  font-size: 32px !important;
   font-weight: 700;
   margin-bottom: 1rem;
 }
@@ -298,9 +298,7 @@
    RESPONSIVE
 ======================== */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 1.8rem;
-  }
+ 
 
   .col-lg-6.text-center {
     padding-top: 2rem;
@@ -313,7 +311,7 @@
 
 @media (max-width: 576px) {
   .hero-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem !important;
   }
 
   .gradient-border,

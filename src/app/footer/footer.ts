@@ -16,5 +16,12 @@ export class Footer {
 scrollToTop() {
   this.viewportScroller.scrollToPosition([0, 0]);
 }
+formatText(text: string): string {
+  if (!text) return '';
+  const words = text.split(' ');
+  return words.map((word, i) =>
+    (i + 1) % 5 === 0 ? word + '<br>' : word
+  ).join(' ');
+}
 
 }

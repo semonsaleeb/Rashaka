@@ -98,7 +98,7 @@
   },
   "PLANS": {
     "VIEW_ALL": "عرض الكل",
-    "PACKAGES": "الباقات",
+    "PACKAGES": "الأشتراكات",
     "SUBSCRIPTION": "اشتراك",
     "SESSIONS": "جلسة",
     "PRICE": "السعر",
@@ -413,7 +413,7 @@
     "ADD_TO_CART": "إضافة للعربة"
   },
   "CART": {
-
+"DISCOUNT":"الخصم",
     "FREE_SHIPPING_TEXT": "شحن مجاني للطلبات أكثر من",
     "FREE_SHIPPING_AMOUNT": "1000 ريال",
     "REMOVE": "حذف",
@@ -608,5 +608,6 @@
     "CVC": "الرمز السري"
   },
   "MAX_AVAILABLE": "الحد الأقصى المتاح",
-  "CLIENT_REVIEWS": "اراء عملائنا"
+  "CLIENT_REVIEWS": "اراء عملائنا",
+   "FREE_BALANCE_APPLIED": "رصيد مجالي مطبق"
 }

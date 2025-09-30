@@ -1,7 +1,7 @@
-<div class="container w-100 py-5 px-3">
+<div class="container w-100 py-5 ">
 
   <!-- Section Title -->
-  <div class="d-flex justify-content-between align-items-center mx-3 mb-4">
+  <div class="d-flex justify-content-between align-items-center mx-2 mb-4">
 
     <!-- العنصر الثاني -->
     <a [routerLink]="['/home/branches']"
@@ -23,7 +23,7 @@
   <!-- Branch Filters -->
   <div class="branch-filters d-flex mb-4 px-2 py-3" dir="rtl">
     @for (branch of branches; track branch) {
-    <button class="btn btn-outline-secondary rounded-3 px-5 mx-1 fw-bold" [class.active]="selectedBranch === branch"
+    <button class="btn btn-outline-secondary rounded-3 px-5  fw-bold" [class.active]="selectedBranch === branch"
       (click)="selectBranch(branch)">
       {{ branch.name }}
     </button>
@@ -44,7 +44,7 @@
 
         <!-- Carousel Items -->
         @for (l of locations; track l) {
-        <div class="carousel-slide px-3" [ngStyle]="{
+        <div class="carousel-slide " [ngStyle]="{
          'flex': '0 0 calc(100% / ' + visibleBranchCards + ')',
          'max-width': 'calc(100% / ' + visibleBranchCards + ')'
        }">

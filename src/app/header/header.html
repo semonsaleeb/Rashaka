@@ -24,7 +24,7 @@
 
           <!-- Search Results -->
           @if (searchQuery) {
-<div class="position-absolute w-100 bg-white border rounded shadow mt-1 w-75" style="z-index: 10;">
+          <div class="position-absolute w-100 bg-white border rounded shadow mt-1 w-75" style="z-index: 10;">
             @if (products.length > 0) {
             <div class="p-2">
               @for (product of products; track product.id) {
@@ -44,7 +44,7 @@
       </div>
 
       <!-- Top Bar -->
-      <div class="top-bar d-flex align-items-center gap-3">
+      <div class="top-bar d-flex align-items-center gap-0">
 
         <!-- If NOT logged in -->
         @if (!isLoggedIn) {
@@ -78,8 +78,8 @@
 
         <!-- Language Switch -->
         <div class="language-selector dropdown ">
-          <button class="btn btn-sm dropdown-toggle text-dark  fs-6 border-0 bg-transparent" type="button" id="languageDropdown"
-            data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="btn btn-sm dropdown-toggle text-dark  fs-6 border-0 bg-transparent" type="button"
+            id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="assets/Images/language.svg" alt="Language" width="25" class="me-1" />
             {{ currentLang === 'ar' ? 'العربية' : 'English' }}
           </button>
@@ -126,7 +126,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg d-none d-lg-block bg-white mt-2 " [dir]="currentDirection">
+    <nav class="navbar navbar-expand-lg  d-none d-lg-block bg-white mt-2 " [dir]="currentDirection">
       <div class="">
         <div class="collapse navbar-collapse d-flex">
           <ul class="navbar-nav d-flex flex-row text-dark fs-6  gap-1">
@@ -142,56 +142,67 @@
 
               <!-- Dropdown Menu -->
               @if (item.hasDropdown && item.showDropdown) {
-              <div class="dropdown-menu show p-4"
-                [ngStyle]="{ right: currentLang === 'ar' ? '-70px' : 'auto', left: currentLang === 'en' ? '-70px' : 'auto', top: '140%', zIndex: '20', minWidth: '1140px' }"
-                style="position: absolute; ">
+              <div class="dropdown-menu show p-4" [ngStyle]="{
+        background: currentLang === 'ar'
+          ? 'linear-gradient(to left, #F0F0F0 43%, #ffffff 40%)'
+          : 'linear-gradient(to right, #F0F0F0 43%, #ffffff 40%)',
+        right: currentLang === 'ar' ? '-70px' : 'auto',
+        left: currentLang === 'en' ? '-70px' : 'auto',
+        top: '140%',
+        zIndex: '20',
+        minWidth: '1140px',
+        position: 'absolute'
+     }">
                 <div class="row">
                   <!-- Categories -->
-                  <div class="col-md-6">
-                    <div class="row">
+                  <div class="col-md-5 d-flex flex-column " style="min-height: 100%;">
+                    <div class="row flex-grow-1">
                       @for (category of categories; track category.id) {
                       <div class="col-6 mb-2" [dir]="currentDirection">
-                        <a class="fs-5 d-block py-1 text-decoration-none text-dark" [routerLink]="['/home/Shop']"
+                        <a class="fs-6 d-block py-1  text-decoration-none text-dark" [routerLink]="['/home/Shop']"
                           [queryParams]="{ category_id: category.id }" (click)="closeMobileMenu(); closeAllDropdowns()"
                           [class.text-end]="currentLang === 'ar'" [class.text-start]="currentLang === 'en'">
                           {{ currentLang === 'ar' ? category.name_ar : category.name }}
                         </a>
                       </div>
                       }
-                      <div class="col-12 mt-3 mx-3" [class.text-end]="currentLang === 'ar'"
-                        [class.text-start]="currentLang === 'en'">
-                        <a class="d-inline-flex align-items-center text-dark fw-bold mt-2 text-decoration-none px-3 py-1 rounded-5"
-                          [routerLink]="['/home/Shop']" (click)="closeMobileMenu(); closeAllDropdowns()"
-                          style="border: 2px solid #61AD29;">
-                          <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg"
-                            [class.ms-2]="currentLang === 'ar'" [class.me-2]="currentLang === 'en'" width="25" />
-                          <span>{{ 'header.viewAllText' | translate }}</span>
-                        </a>
-                      </div>
+                    </div>
+
+                    <!-- زرار "عرض الكل" ثابت تحت -->
+                    <div class="col-12 mt-auto mx-3" [class.text-end]="currentLang === 'ar'"
+                      [class.text-start]="currentLang === 'en'">
+                      <a class="d-inline-flex align-items-center text-dark fw-bold mt-2 text-decoration-none px-5 py-2 rounded-5"
+                        [routerLink]="['/home/Shop']" (click)="closeMobileMenu(); closeAllDropdowns()"
+                        style="border: 1px solid #61AD29;">
+                        <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg"
+                          [class.ms-2]="currentLang === 'ar'" [class.me-2]="currentLang === 'en'" width="25" />
+                        <span>{{ 'header.viewAllText' | translate }}</span>
+                      </a>
                     </div>
                   </div>
 
                   <!-- Banner -->
-                  <div class="col-md-6 d-flex align-items-center">
-                    <div [dir]="currentDirection" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
+                  <div class="col-md-7 d-flex align-items-center ">
+                    <div [dir]="currentDirection" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'"
+                      class="flex-grow-1 mx-5" >
 
                       <h5 class="fw-bold">{{ 'header.bookFreeCheckup' | translate }}</h5>
-                      <p class="small text-muted">{{ 'header.checkupDescription' | translate }}</p>
+                      <p class="small  text-dark" style="font-size: 12px;">{{ 'header.checkupDescription' | translate }}</p>
 
-                      <button class="btn border rounded-5 mt-2 d-inline-flex align-items-center"
+                      <button class="btn border-dark px-3 fw-bold  border rounded-5 mt-2 d-inline-flex align-items-center"
                         [ngClass]="currentLang === 'ar' ? 'justify-content-end' : 'justify-content-start'"
-                        (click)="onGetStarted(); closeMobileMenu(); closeAllDropdowns()">
+                        (click)="onGetStarted(); closeMobileMenu(); closeAllDropdowns()" style=" font-size: 15px;">
                         <img src="assets/Images/circle-arrow-up-right-02 (2) green.svg"
                           [class.ms-2]="currentLang === 'ar'" [class.me-2]="currentLang === 'en'" width="25" />
                         <span>{{ 'header.reserveNow' | translate }}</span>
                       </button>
-
                     </div>
 
-                    <img src="assets/Images/Doctors-pana 1.svg" alt="{{ 'header.doctorsAlt' | translate }}"
+                    <img src="assets/Images/Group 1000002781.svg" alt="{{ 'header.doctorsAlt' | translate }}"
                       class="img-fluid me-3" style="max-height: 200px;" />
                   </div>
                 </div>
+
               </div>
               }
             </li>
@@ -203,7 +214,7 @@
             [style.right]="currentLang === 'en' ? '0' : 'auto'">
             <a href="https://wa.me/966593936089" target="_blank" class="btn d-flex align-items-center  px-5 py-1 fs-5"
               style="color: #25D366;">
-                              <i class="fab fa-whatsapp mx-2" style="font-size: 22px;"></i>
+              <i class="fab fa-whatsapp mx-2" style="font-size: 22px;"></i>
 
               <span class="ms-1 fs-5 text-dark">
                 {{ 'header.whatsappText' | translate }}</span>

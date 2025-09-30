@@ -63,28 +63,40 @@
 
 
             @for (blog of blogs; track blog) {
-            <div class="carousel-slide p-3 px-lg-2">
-              <div class="card h-100 product-card rounded-4 border bg-white">
+            <div class="carousel-slide p-3  px-lg-2">
+              <div class="card h-100 product-card rounded-5 mb-1 border bg-white">
                 <!-- Blog Image -->
                 <a [routerLink]="['home/blog/', blog.id]" class="btn btn-link">
                   <div class="position-relative">
-                    <img [src]="getSafeImage(blog.image)" class="card-img-top p-2" [alt]="blog.title_ar"
-                      style="height: 200px; object-fit: cover; border-radius: 25px;">
+                    <div class="gradient-border">
+                      <img [src]="getSafeImage(blog.image)" class="card-img-top" [alt]="blog.title_ar">
+                    </div>
+
+
                   </div>
                 </a>
                 <!-- Blog Body -->
-                <div class="card-body" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+                <div class="card-body py-0" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
                   <h6 class="card-title fw-bold">
-                    {{ currentLang === 'ar' ? blog.title_ar : blog.title }}
+                    {{ (currentLang === 'ar' ? blog.title_ar : blog.title) | truncate:35 }}
                   </h6>
 
-                  <p class="card-text text-muted two-lines-only"
+                  <p class="card-text text-muted  two-lines-only"
                     [innerHTML]="parseContent(currentLang === 'ar' ? blog.content_ar : blog.content) | truncate:150">
+
                   </p>
-                  <small class="text-muted">
-                    {{ 'BLOG.BY' | translate }}: {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }} |
-                    {{ blog.created_at | date: 'dd/MM/yyyy' }}
-                  </small>
+                  <p class="text-muted card-date d-flex align-items-center gap-3 flex-wrap">
+                    <span class="d-flex align-items-center gap-1">
+                      <img src="assets/Images/pencil-edit-01.svg" alt="" style="width: 18px; height: 18px;">
+                      {{ 'BLOG.BY' | translate }}: {{ blog.author || ('BLOG.UNKNOWN_AUTHOR' | translate) }}
+                    </span>
+
+                    <span class="d-flex align-items-center gap-1">
+                      <img src="assets/Images/calendar-03.svg" alt="" style="width: 18px; height: 18px;">
+                      {{ blog.created_at | date: 'dd/MM/yyyy' }}
+                    </span>
+                  </p>
+
                 </div>
               </div>
             </div>
