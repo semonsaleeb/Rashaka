@@ -29,7 +29,6 @@ export class PlaceOrder implements OnInit {
   currentLang: string = 'ar';
   token: string = '';
   addresses: any[] = [];
-  selectedAddressId: number | null = null;
   paymentMethod: string = 'cash';
   promoCode: string = '';
   userEmail: string = '';
@@ -44,7 +43,9 @@ export class PlaceOrder implements OnInit {
   freeProductBalance: number = 0;
   discountValue: number = 0;
   dir: 'ltr' | 'rtl' = 'ltr';
-  
+
+  selectedPaymentMethod: string = 'credit_card'; // add this in your class
+selectedAddressId: number | null = null;
   // Free balance totals from API
   cart_total_without_free: number = 0;
   cart_total_after_free: number = 0;
@@ -69,6 +70,7 @@ export class PlaceOrder implements OnInit {
     private translate: TranslateService,
     private languageService: LanguageService,
     private productService: ProductService,
+    
   ) { }
 
   ngOnInit(): void {
@@ -386,55 +388,50 @@ export class PlaceOrder implements OnInit {
 
   // ========================= Place order =========================
 placeOrder() {
-  // Validate required fields
-  if (!this.selectedAddressId) {
-    alert('من فضلك اختر عنوان الشحن');
-    return;
-  }
+  const params = new HttpParams()
+    .set('address_id', String(this.selectedAddressId ?? ''))
+    .set('payment_method', this.selectedPaymentMethod);
 
-  const headers = this.getHeaders();
-  let params = new HttpParams()
-    .set('address_id', this.selectedAddressId)
-    .set('payment_method', this.paymentMethod);
-
-  // Add promo code if provided
-  if (this.promoCode && this.promoCode.trim() !== '') {
-    params = params.set('promocode', this.promoCode);
-  }
-
-  // Add free balance if applied
-  if (this.applyFreeBalance) {
-    params = params
-      .set('apply_free_balance', 'true')
-      .set('free_balance_amount', this.freeBalanceAmount.toString());
-  }
-
-  console.log('🔄 Placing order with params:', {
-    address_id: this.selectedAddressId,
-    payment_method: this.paymentMethod,
-    apply_free_balance: this.applyFreeBalance,
-    free_balance_amount: this.freeBalanceAmount
-  });
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
 
   this.http.post(`${environment.apiBaseUrl}/checkout/submit`, {}, { params, headers })
     .subscribe({
       next: (orderRes: any) => {
         console.log('✅ Order API Response:', orderRes);
-        this.handleOrderResponse(orderRes);
+
+        if (orderRes?.status) {
+          this.handlePaymentResponse(orderRes);
+        } else {
+          this.handleOrderResponse(orderRes);
+        }
       },
       error: (err) => {
         console.error('❌ Order API Error:', err);
-        
-        // ✅ FIX: Handle 409 conflict with payment URL
-        if (err.status === 409 && err.error?.status === 'requires_payment_action') {
-          console.log('🔄 Handling 409 conflict with payment action');
-          this.handleOrderResponse(err.error);
+
+        if (err.error?.status) {
+          this.handlePaymentResponse(err.error);
         } else {
           this.handleOrderError(err);
         }
       }
     });
 }
+
+checkPaymentStatus(orderId: number) {
+  this.cartService.checkPaymentStatus(orderId.toString()).subscribe({
+    next: (statusRes: any) => {
+      console.log('📦 Payment Status Response:', statusRes);
+      this.handlePaymentResponse(statusRes);
+    },
+    error: (err: any) => {
+      console.error('❌ Error checking payment status:', err);
+      this.router.navigate(['/payment-failed'], { 
+        queryParams: { orderId, error: 'تعذر التحقق من حالة الدفع' } 
+      });
+    }
+  });
+}
+
 
 
 private handleOrderResponse(orderRes: any): void {
@@ -663,6 +660,64 @@ checkPendingPayment() {
     }
   }
 }
+
+handlePaymentResponse(response: any) {
+  console.log('🔄 Handling payment response:', response);
+
+  if (response.status === 'success' && response.data?.invoice_status === 'Paid') {
+    // ✅ الدفع ناجح → روح لصفحة success
+    this.clearCartAndPendingPayment();
+    this.router.navigate(['/payment-success'], { 
+      state: { data: response.data },
+      queryParams: { 
+        orderId: response.data.order_id,
+        invoiceId: response.data.invoice_id
+      }
+    });
+
+  } else if (response.status === 'requires_payment_action' && response.data?.payment_url) {
+    // ⚠️ محتاج يكمل دفع → redirect على بوابة الدفع
+    localStorage.setItem(
+      'pendingPayment',
+      JSON.stringify({
+        orderId: response.data.order_id,
+        invoiceId: response.data.invoice_id,
+        timestamp: new Date().toISOString()
+      })
+    );
+
+    window.location.href = response.data.payment_url;
+
+  } else {
+    // ❌ الدفع فشل → روح لصفحة failed
+    this.router.navigate(['/payment-failed'], { 
+      queryParams: { 
+        orderId: response.data?.order_id,
+        error: response.message || 'فشل عملية الدفع'
+      }
+    });
+  }
+}
+
+private handleMyFatoorahCallback(paymentId: string) {
+  // استدعاء API للتحقق من حالة الدفع
+  this.http.get(`${environment.apiBaseUrl}/checkout/myfatoorah/status/${paymentId}`, {
+    headers: this.getHeaders()
+  }).subscribe({
+    next: (statusRes: any) => {
+      console.log('📦 MyFatoorah Status Response:', statusRes);
+      this.handlePaymentResponse(statusRes);
+    },
+    error: (err) => {
+      console.error('❌ Error checking MyFatoorah status:', err);
+      this.router.navigate(['/payment-failed'], {
+        queryParams: { error: 'تعذر التحقق من حالة الدفع' }
+      });
+    }
+  });
+}
+
+
   private handlePaymentError(err: any): void {
     let errorMessage = 'حدث خطأ أثناء معالجة الدفع';
 

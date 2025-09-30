@@ -227,7 +227,11 @@ placeOrder(
 
   return this.http.post(`${this.apiUrl}/checkout/submit`, {}, { params, headers });
 }
-
+checkMyFatoorahStatus(paymentId: string): Observable<any> {
+  return this.http.get(`${this.apiUrl}/checkout/myfatoorah/status/${paymentId}`, {
+    headers: this.getHeaders()
+  });
+}
 
 // Add this method to check payment status when user returns from MyFatoorah
 checkPaymentStatus(orderId: string): Observable<any> {

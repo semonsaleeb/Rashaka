@@ -24,6 +24,9 @@ import { Branches } from './pages/home/branches/branches';
 import { Appointments } from './pages/appointments/appointments';
 import { Packages } from './auth/profile/packages/packages';
 import { Free } from './pages/appointments/free/free';
+import { PaymentSuccess } from './place-order/payment-success/payment-success';
+import { PaymentFailed } from './place-order/payment-failed/payment-failed';
+import { PaymentCallback } from './place-order/payment-callback/payment-callback';
 
 export const routes: Routes = [
   // Home page
@@ -90,6 +93,11 @@ export const routes: Routes = [
   { path: 'reservation/free', component: Free },
   { path: 'reservation/all', component: Appointments },
   { path: 'reservation/:id', component: Appointments },
+
+    // Payment result routes
+      { path: 'payment-callback', component: PaymentCallback },
+  { path: 'payment-success', component: PaymentSuccess },
+  { path: 'payment-failed', component: PaymentFailed },
 
   // Fallback
   { path: '**', redirectTo: '' }

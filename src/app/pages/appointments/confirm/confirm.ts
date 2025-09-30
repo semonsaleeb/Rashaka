@@ -49,39 +49,53 @@ export class Confirm {
     this.dir = lang === 'ar' ? 'rtl' : 'ltr';
   });
   }
-  confirmBooking() {
-    // التحقق من وجود كل القيم المطلوبة
-    if (!this.bookingData.specialist?.id || !this.bookingData.center?.id || !this.bookingData.date || !this.bookingData.start || !this.bookingData.session_type_key) {
-      alert('الرجاء التأكد من اختيار الفرع، الأخصائي، نوع الجلسة والتاريخ/الوقت.');
-      return;
-    }
-
-    const payload = {
-      specialist_id: this.bookingData.specialist.id,
-      center_id: this.bookingData.center.id,
-      date: this.bookingData.date,
-      start: this.bookingData.start,
-      appointment_type: this.bookingData.session_type_key, // إرسال type متوافق مع session
-      session_type: this.bookingData.session_type_key,
-      payment_method: 'cash',
-      is_paid: true
-    };
-
-    this.appointmentService.createAppointment(payload).subscribe({
-      next: () => {
-        this.stateService.reset();
-        this.showSuccessPopup();
-      },
-      error: (err) => {
-        console.error('API Error:', err);
-        if (err.error?.errors?.message) {
-          alert('خطأ في الحجز: ' + err.error.errors.message);
-        } else {
-          alert('حدث خطأ أثناء تأكيد الحجز');
-        }
-      }
-    });
+ confirmBooking() {
+  if (
+    !this.bookingData.specialist?.id ||
+    !this.bookingData.center?.id ||
+    !this.bookingData.date ||
+    !this.bookingData.start ||
+    !this.bookingData.session_type_key
+  ) {
+    alert(
+      this.translate.instant('الرجاء التأكد من اختيار الفرع، الأخصائي، نوع الجلسة والتاريخ/الوقت.')
+    );
+    return;
   }
+
+  const payload = {
+    specialist_id: this.bookingData.specialist.id,
+    center_id: this.bookingData.center.id,
+    date: this.bookingData.date,
+    start: this.bookingData.start,
+    appointment_type: this.bookingData.session_type_key,
+    session_type: this.bookingData.session_type_key,
+    payment_method: 'cash',
+    is_paid: true
+  };
+
+  this.appointmentService.createAppointment(payload).subscribe({
+    next: () => {
+      this.stateService.reset();
+      this.showSuccessPopup();
+    },
+   error: (err) => {
+  console.error('API Error:', err);
+
+  // لو السيرفر رجع code
+  const errorCode = err.error?.code;
+
+  if (errorCode && this.translate.instant(`errors.${errorCode}`) !== `errors.${errorCode}`) {
+    alert(this.translate.instant(`errors.${errorCode}`));
+  } else {
+    // fallback للرسالة العامة
+    alert(this.translate.instant('errors.DEFAULT'));
+  }
+}
+
+  });
+}
+
 
   showSuccessPopup() {
     const modalEl = document.getElementById('successModal');

@@ -610,5 +610,13 @@
   },
   "MAX_AVAILABLE": "Max available",
   "CLIENT_REVIEWS": " Client Reviews ",
-   "FREE_BALANCE_APPLIED": "The applied free balance"
+   "FREE_BALANCE_APPLIED": "The applied free balance",
+    "errors": {
+ 
+    "FREE_SESSION_ALREADY_USED": "Free checkup session already used.",
+    "OVERLAP": "The requested time overlaps with another appointment.",
+    "DEFAULT": "An error occurred while confirming your booking.",
+      "ADDRESS_IN_USE": "This address cannot be deleted because it is linked to an order or appointment.",
+    "DELETE_FAILED": "Failed to delete the address."
+  }
 }

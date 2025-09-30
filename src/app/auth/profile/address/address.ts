@@ -20,6 +20,8 @@ declare var bootstrap: any;
 export class Address implements OnInit {
   showSteps = false;
   step = 1;
+  errorDeleteMessage: string = '';
+
   addressData!: AddressData;
   addressList: AddressData[] = [];
   client: any = {
@@ -195,28 +197,45 @@ export class Address implements OnInit {
   }
 
   // عند الضغط على حذف داخل Confirm Delete Modal
-  confirmDelete() {
-    if (!this.pendingDeleteId) return;
+confirmDelete() {
+  if (!this.pendingDeleteId) return;
 
-    // امسك مودال Confirm Delete
-    const modalEl = document.getElementById('deleteConfirmModal');
-    const modal = modalEl ? bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl) : null;
+  const modalEl = document.getElementById('deleteConfirmModal');
+  const modal = modalEl ? bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl) : null;
 
-    this.addressService.deleteAddress(this.pendingDeleteId).subscribe({
-      next: () => {
-        this.fetchAddresses();
-        this.openDeleteSuccessModal();
-        this.pendingDeleteId = null;
+  this.addressService.deleteAddress(this.pendingDeleteId).subscribe({
+    next: () => {
+      this.fetchAddresses();
+      this.openDeleteSuccessModal();
+      this.pendingDeleteId = null;
 
-        // إغلاق المودال بعد الحذف
-        if (modal) {
-          modal.hide();
-        }
-      },
-      error: () => {
-        alert('فشل حذف العنوان');
+      if (modal) modal.hide();
+    },
+    error: (err) => {
+      console.error('Delete address error:', err);
+
+      // 👇 استخرج الرسالة من السيرفر
+      const serverMessage: string = err.error?.message || '';
+
+      // 🟢 مابينج الرسالة من السيرفر لمفتاح الترجمة
+      let translateKey = 'errors.DELETE_FAILED';
+      if (serverMessage.includes('used by orders')) {
+        translateKey = 'errors.ADDRESS_IN_USE';
       }
-    });
-  }
+
+      this.errorDeleteMessage = this.translate.instant(translateKey);
+
+      // اقفل confirm modal وافتح error modal
+      if (modal) modal.hide();
+
+      const errorModalEl = document.getElementById('errorDeleteModal');
+      if (errorModalEl) {
+        const errorModal = new bootstrap.Modal(errorModalEl);
+        errorModal.show();
+      }
+    }
+  });
+}
+
 
 }

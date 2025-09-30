@@ -609,5 +609,12 @@
   },
   "MAX_AVAILABLE": "الحد الأقصى المتاح",
   "CLIENT_REVIEWS": "اراء عملائنا",
-   "FREE_BALANCE_APPLIED": "رصيد مجالي مطبق"
+   "FREE_BALANCE_APPLIED": "رصيد مجالي مطبق",
+    "errors": {
+    "FREE_SESSION_ALREADY_USED": "لقد استخدمت الجلسة المجانية من قبل.",
+    "DEFAULT": "حدث خطأ أثناء تأكيد الحجز.",
+    "OVERLAP": "الوقت المختار يتعارض مع موعد آخر.",
+      "ADDRESS_IN_USE": "لا يمكن حذف هذا العنوان لأنه مرتبط بطلب أو موعد.",
+    "DELETE_FAILED": "فشل حذف العنوان."
+  }
 }
