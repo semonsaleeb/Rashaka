@@ -148,27 +148,31 @@ private setInitialIndex(): void {
     this.clampIndex();
   }
 getActiveIndex(i: number): boolean {
-  if (this.currentLang === 'ar') {
-    // اعكس الاتجاه: لو آخر واحد هو أول واحد
-    return this.currentSlideIndex === (this.plans.length - 1 - i);
-  } else {
-    return this.currentSlideIndex === i;
-  }
+  return i >= this.currentSlideIndex && i < this.currentSlideIndex + this.visibleCards;
 }
+
+
+
 
 private clampIndex() {
   const maxIndex = this.getMaxIndex();
-  if (this.currentSlideIndex > maxIndex) {
+  
+  // تأكد من أن الفهرس لا يقل عن 0 ولا يزيد عن الحد الأقصى
+  if (this.currentSlideIndex < 0) {
+    this.currentSlideIndex = 0;
+  } else if (this.currentSlideIndex > maxIndex) {
     this.currentSlideIndex = maxIndex;
   }
-
-  // شيل الجزء اللي بيرجع أي قيمة سالبة لـ 0
-  // لو عايز -1 يفضل مسموح
 }
 
 public getMaxIndex(): number {
-  if (this.visibleCards === 1) return this.plans.length - 1;
-  return Math.max(0, this.plans.length - this.visibleCards);
+  if (!this.plans || this.plans.length === 0) return 0;
+  
+  if (this.visibleCards === 1) {
+    return this.plans.length - 1;
+  } else {
+    return Math.max(0, this.plans.length - this.visibleCards);
+  }
 }
 
 
@@ -189,11 +193,13 @@ getDotsArray(): number[] {
 
 
 goToSlide(i: number): void {
-  if (this.visibleCards === 1) {
-    this.currentSlideIndex = Math.min(Math.max(i, 0), this.getMaxIndex());
+  const maxIndex = this.getMaxIndex();
+  if (this.currentLang === 'ar') {
+    // بالعربي: نحسب من النهاية
+    const targetIndex = maxIndex - i * this.visibleCards;
+    this.currentSlideIndex = Math.max(0, targetIndex);
   } else {
-    // Desktop: كل dot يمثل slide
-    const maxIndex = this.getMaxIndex();
+    // بالإنجليزي: كما هو
     const targetIndex = i * this.visibleCards;
     this.currentSlideIndex = Math.min(targetIndex, maxIndex);
   }
@@ -201,32 +207,25 @@ goToSlide(i: number): void {
 
 
 
+
   // الأسهم (متوافقة مع الأزرار في القالب)
- scrollLeft(): void {
+scrollLeft(): void {
   if (this.visibleCards === 1) {
-    // Mobile: كارت واحد
     if (this.currentLang === 'ar') this.currentSlideIndex--;
     else this.currentSlideIndex--;
-  } else {
-    // Desktop/Tablet: تتحرك مجموعة كروت (slide)
-    if (this.currentLang === 'ar') this.currentSlideIndex -= this.visibleCards;
-    else this.currentSlideIndex -= this.visibleCards;
   }
   this.clampIndex();
 }
 
 scrollRight(): void {
   if (this.visibleCards === 1) {
-    // Mobile: كارت واحد
     if (this.currentLang === 'ar') this.currentSlideIndex++;
     else this.currentSlideIndex++;
-  } else {
-    // Desktop/Tablet: تتحرك مجموعة كروت (slide)
-    if (this.currentLang === 'ar') this.currentSlideIndex += this.visibleCards;
-    else this.currentSlideIndex += this.visibleCards;
   }
   this.clampIndex();
 }
+
+
 
 
   // === Data ===
@@ -432,38 +431,46 @@ getCitiesText(cities: City[]): string {
     this.handleSwipe();
   }
 
-
-  scrollNext() {
+scrollNext() {
   if (this.currentLang === 'ar') {
-    this.currentSlideIndex--; // عربي: اليمين هو "التالي"
+    // في العربية، التحريك للأمام = طرح الكاردز
+    this.currentSlideIndex -= this.visibleCards;
   } else {
-    this.currentSlideIndex++; // إنجليزي: الشمال هو "التالي"
+    this.currentSlideIndex += this.visibleCards;
   }
   this.clampIndex();
 }
 
 scrollPrev() {
   if (this.currentLang === 'ar') {
-    this.currentSlideIndex++; 
+    // في العربية، التحريك للخلف = زيادة الكاردز
+    this.currentSlideIndex += this.visibleCards;
   } else {
-    this.currentSlideIndex--;
+    this.currentSlideIndex -= this.visibleCards;
   }
   this.clampIndex();
 }
+
+get displayPlans(): Plan[] {
+  // لو عربي → نعرض الباقات بالعكس
+  return this.currentLang === 'en' ? [...this.plans].reverse() : this.plans;
+}
+
+
+
 
 private handleSwipe(): void {
   let swipeDistance = this.touchEndX - this.touchStartX;
 
   if (Math.abs(swipeDistance) > this.SWIPE_THRESHOLD) {
     if (swipeDistance > 0) {
-      // سوايب يمين → الكارت اللي بعده
-      this.scrollLeft();
+      this.scrollPrev(); // سوايب يمين → يرجع لورا
     } else {
-      // سوايب شمال → الكارت اللي قبله
-      this.scrollRight();
+      this.scrollNext(); // سوايب شمال → يكمل لقدام
     }
   }
 }
+
 
 
 private loadUserSubscription(): void {
@@ -502,6 +509,58 @@ private loadUserSubscription(): void {
   }
 
 
-textDir: 'rtl' | 'ltr' = 'ltr';
+textDir: 'rtl' | 'ltr' = 'rtl';
+ nextSlide(): void {
+  console.log('Next clicked - Current:', this.currentSlideIndex, 'Max:', this.getMaxIndex());
+  const maxIndex = this.getMaxIndex();
+  
+  if (this.currentLang === 'ar') {
+    if (this.currentSlideIndex > 0) {
+      this.currentSlideIndex--;
+    }
+  } else {
+    if (this.currentSlideIndex < maxIndex) {
+      this.currentSlideIndex++;
+    }
+  }
+  console.log('After - Current:', this.currentSlideIndex);
+  this.clampIndex();
+}
 
+prevSlide(): void {
+  console.log('Prev clicked - Current:', this.currentSlideIndex, 'Max:', this.getMaxIndex());
+  const maxIndex = this.getMaxIndex();
+  
+  if (this.currentLang === 'ar') {
+    if (this.currentSlideIndex < maxIndex) {
+      this.currentSlideIndex++;
+    }
+  } else {
+    if (this.currentSlideIndex > 0) {
+      this.currentSlideIndex--;
+    }
+  }
+  console.log('After - Current:', this.currentSlideIndex);
+  this.clampIndex();
+}
+
+isNextDisabled(): boolean {
+  const maxIndex = this.getMaxIndex();
+  
+  if (this.currentLang === 'ar') {
+    return this.currentSlideIndex <= 0;
+  } else {
+    return this.currentSlideIndex >= maxIndex;
+  }
+}
+
+isPrevDisabled(): boolean {
+  const maxIndex = this.getMaxIndex();
+  
+  if (this.currentLang === 'ar') {
+    return this.currentSlideIndex >= maxIndex;
+  } else {
+    return this.currentSlideIndex <= 0;
+  }
+}
 }
