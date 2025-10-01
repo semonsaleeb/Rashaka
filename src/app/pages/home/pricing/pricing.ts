@@ -25,7 +25,7 @@ export class Pricing implements OnInit, AfterViewInit {
 
 
 
-  selectedPlan: string = 'nutrition';
+  selectedPlan: string = 'sessions';
   plans: Plan[] = [];
   isLoading = false;
 
@@ -166,37 +166,68 @@ private clampIndex() {
   // لو عايز -1 يفضل مسموح
 }
 
-  public getMaxIndex(): number {
-    return this.plans.length - 1;
-  }
-
-
-  getDotsArray(): number[] {
-  // عدد النقاط = عدد المواضع الممكنة
-  const total = this.getMaxIndex() + 1;
-  return Array.from({ length: total }, (_, i) => i);
+public getMaxIndex(): number {
+  if (this.visibleCards === 1) return this.plans.length - 1;
+  return Math.max(0, this.plans.length - this.visibleCards);
 }
+
+
+
+getDotsArray(): number[] {
+  if (!this.plans || this.plans.length === 0) return [];
+
+  if (this.visibleCards === 1) {
+    // Mobile: كل كارت نقطة
+    return Array.from({ length: this.plans.length }, (_, i) => i);
+  } else {
+    // Desktop/Tablet: كل slide نقطة
+    // عدد الـ slides = ceil(totalCards / visibleCards)
+    const totalSlides = Math.ceil(this.plans.length / this.visibleCards);
+    return Array.from({ length: totalSlides }, (_, i) => i);
+  }
+}
+
 
 goToSlide(i: number): void {
-  this.currentSlideIndex = Math.min(Math.max(i, 0), this.getMaxIndex());
+  if (this.visibleCards === 1) {
+    this.currentSlideIndex = Math.min(Math.max(i, 0), this.getMaxIndex());
+  } else {
+    // Desktop: كل dot يمثل slide
+    const maxIndex = this.getMaxIndex();
+    const targetIndex = i * this.visibleCards;
+    this.currentSlideIndex = Math.min(targetIndex, maxIndex);
+  }
 }
+
 
 
   // الأسهم (متوافقة مع الأزرار في القالب)
-  scrollRight(): void {
-    // يمشي لقدّام (لليمين بصريًا) = index + 1
-    const maxIndex = this.getMaxIndex();
-    if (this.currentSlideIndex < maxIndex) {
-      this.currentSlideIndex++;
-    }
+ scrollLeft(): void {
+  if (this.visibleCards === 1) {
+    // Mobile: كارت واحد
+    if (this.currentLang === 'ar') this.currentSlideIndex--;
+    else this.currentSlideIndex--;
+  } else {
+    // Desktop/Tablet: تتحرك مجموعة كروت (slide)
+    if (this.currentLang === 'ar') this.currentSlideIndex -= this.visibleCards;
+    else this.currentSlideIndex -= this.visibleCards;
   }
+  this.clampIndex();
+}
 
-  scrollLeft(): void {
-    // يرجع لورا (لليسار بصريًا) = index - 1
-    if (this.currentSlideIndex > 0) {
-      this.currentSlideIndex--;
-    }
+scrollRight(): void {
+  if (this.visibleCards === 1) {
+    // Mobile: كارت واحد
+    if (this.currentLang === 'ar') this.currentSlideIndex++;
+    else this.currentSlideIndex++;
+  } else {
+    // Desktop/Tablet: تتحرك مجموعة كروت (slide)
+    if (this.currentLang === 'ar') this.currentSlideIndex += this.visibleCards;
+    else this.currentSlideIndex += this.visibleCards;
   }
+  this.clampIndex();
+}
+
 
   // === Data ===
 

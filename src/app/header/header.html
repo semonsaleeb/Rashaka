@@ -215,8 +215,17 @@
         </li>
         }
       </ul>
-      <!-- ... باقي الكود ... -->
-    </div>
+ <!-- WhatsApp -->
+          <div [style.position]="'absolute'" class="whats_btn" [style.left]="currentLang === 'ar' ? '0' : 'auto'"
+            [style.right]="currentLang === 'en' ? '0' : 'auto'">
+            <a href="https://wa.me/966593936089" target="_blank" class="btn d-flex align-items-center  px-5 py-1 fs-5"
+              style="color: #25D366;">
+              <i class="fab fa-whatsapp mx-2" style="font-size: 22px;"></i>
+
+              <span class="ms-1 fs-5 text-dark">
+                {{ 'header.whatsappText' | translate }}</span>
+            </a>
+          </div>    </div>
   </div>
 </nav>
 
