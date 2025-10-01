@@ -790,6 +790,83 @@ getProductPages(): Product[][] {
   return pages;
 }
 
+
+// إضافة هذه الخصائص في الكلاس
+currentPage: number = 0;
+pageSize: number = 9; // 3×3 = 9 products per page
+
+// دوال الـ Pagination
+getCurrentPageProducts(): Product[] {
+  const startIndex = this.currentPage * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+  return this.filteredProducts.slice(startIndex, endIndex);
+}
+
+getTotalPages(): number {
+  return Math.ceil(this.filteredProducts.length / this.pageSize);
+}
+
+getPagesArray(): number[] {
+  return Array.from({ length: this.getTotalPages() }, (_, i) => i);
+}
+
+goToPage(page: number): void {
+  if (page >= 0 && page < this.getTotalPages()) {
+    this.currentPage = page;
+    this.cdr.detectChanges();
+  }
+}
+
+nextPage(): void {
+  if (this.currentPage < this.getTotalPages() - 1) {
+    this.currentPage++;
+    this.cdr.detectChanges();
+  }
+}
+
+prevPage(): void {
+  if (this.currentPage > 0) {
+    this.currentPage--;
+    this.cdr.detectChanges();
+  }
+}
+
+// تأكد من إعادة تعيين الصفحة عند تغيير الفلتر
+// applyCombinedFilters(): void {
+//   const q = this.searchQuery.toLowerCase().trim();
+
+//   this.filteredProducts = this.allProducts.filter(p => {
+//     const matchesCategory =
+//       this.selectedCategories.length === 0 ||
+//       p.categories?.some(c => this.selectedCategories.includes(c.id));
+
+//     const name = (p.name_ar ?? '').toLowerCase();
+//     const desc = (p.description_ar ?? '').toLowerCase();
+//     const matchesSearch = q === '' || name.includes(q) || desc.includes(q);
+
+//     let priceNum = 0;
+//     if (p.price !== null && p.price !== undefined) {
+//       priceNum =
+//         typeof p.price === 'string'
+//           ? parseFloat(p.price.replace(/,/g, '')) || 0
+//           : Number(p.price) || 0;
+//     }
+
+//     const selectedRanges = this.predefinedRanges.filter(r => r.selected);
+//     const matchesRange =
+//       selectedRanges.length === 0 ||
+//       selectedRanges.some(r => priceNum >= r.min && priceNum <= r.max);
+
+//     const meetsMin = this.priceMin == null || priceNum >= this.priceMin;
+//     const meetsMax = this.priceMax == null || priceNum <= this.priceMax;
+
+//     return matchesCategory && matchesSearch && matchesRange && meetsMin && meetsMax;
+//   });
+
+//   // إعادة تعيين إلى الصفحة الأولى عند تغيير الفلتر
+//   this.currentPage = 0;
+//   this.cdr.detectChanges();
+// }
 }
 
 function safeNumber(value: any): number {
