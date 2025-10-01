@@ -1,10 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payment-failed',
   templateUrl: './payment-failed.html',
-  styleUrls: ['./payment-failed.scss']
+  styleUrls: ['./payment-failed.scss'],
+    standalone: true,
+  imports: [ TranslateModule, CommonModule]
 })
 export class PaymentFailed implements OnInit {
   errorMessage: string = 'فشل عملية الدفع';

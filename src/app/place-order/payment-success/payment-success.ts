@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartStateService } from '../../services/cart-state-service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { TruncatePipe } from '../../truncate-pipe';
 
 @Component({
   selector: 'app-payment-success',
   templateUrl: './payment-success.html',
-  styleUrls: ['./payment-success.scss']
+  styleUrls: ['./payment-success.scss'],
+    standalone: true,
+  imports: [ TranslateModule, CommonModule]
 })
 export class PaymentSuccess implements OnInit {
   orderId: number | null = null;

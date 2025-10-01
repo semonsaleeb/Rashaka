@@ -99,10 +99,10 @@ login() {
 
 
 
-    showPassword = false;
 
-togglePasswordVisibility() {
+showPassword: boolean = false;
+
+togglePasswordVisibility(): void {
   this.showPassword = !this.showPassword;
 }
-
 }
