@@ -388,10 +388,12 @@ selectedAddressId: number | null = null;
 
   // ========================= Place order =========================
 placeOrder() {
-const params = new HttpParams()
-  .set('address_id', String(this.selectedAddressId ?? ''))
-  .set('payment_method', this.paymentMethod);
-
+  const params = new HttpParams()
+    .set('address_id', String(this.selectedAddressId ?? ''))
+    .set('payment_method', this.paymentMethod)
+    .set('promo_code', this.promoCode || '') // ✅ ابعت كود الخصم لو موجود
+    .set('apply_free_balance', this.applyFreeBalance ? '1' : '0') // ✅ فعل أو عطل رصيد المجاني
+    .set('free_balance_amount', String(this.freeBalanceAmount || 0)); // ✅ ابعت القيمة اللي اختارها المستخدم
 
   const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
 
@@ -417,6 +419,7 @@ const params = new HttpParams()
       }
     });
 }
+
 
 checkPaymentStatus(orderId: number) {
   this.cartService.checkPaymentStatus(orderId.toString()).subscribe({
