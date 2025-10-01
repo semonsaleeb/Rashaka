@@ -7,18 +7,18 @@
   <div class="d-flex gap-2 overflow-auto">
     @for (sp of specialists; track sp.id) {
     <div class="card p-2 flex-shrink-0" [class.border-success]="selectedSpecialistId === sp.id"
-      [class.bg-light]="selectedSpecialistId === sp.id" style="min-width: 180px; cursor:pointer"
+      [class.bg-light]="selectedSpecialistId === sp.id" style="min-width: 180px; cursor:pointer; background-color: #fff; border: solid 1px #2EA2CC;"
       (click)="selectedSpecialistId = sp.id; onSpecialistChange()">
 
       <div class="d-flex align-items-center">
         <img [src]="sp.image || 'assets/Images/User.svg'" class="rounded-circle mx-2" width="50" height="50">
-        <div class="ms-2 flex-fill">
+        <div class="ms-2 flex-fill" style="display: flex !important; flex-direction: column-reverse !important;">
           <h6 class="mb-0">{{ sp.name }}</h6>
           <small class="text-muted" *ngIf="sp.speciality">{{ sp.speciality }}</small>
-          <div class="text-warning small">★★★★★</div>
+          <div class="text-warning small" style="color: #2EA2CC !important;">★★★★★</div>
         </div>
         @if (selectedSpecialistId === sp.id) {
-        <span class="text-success fw-bold">✔</span>
+        <span class="text-success fw-bold" style="color: #2EA2CC !important;">✔</span>
         }
       </div>
     </div>
@@ -30,7 +30,7 @@
 
   <!-- اختيار التاريخ -->
   @if (selectedSpecialist && availableMonthsRange.length > 0) {
-  <div class="bg-light p-3 rounded shadow-sm my-4">
+  <div class="bg-light p-3 rounded shadow-sm my-4" style="background-color: #fff !important; border: solid 1px #ffffff00 !important;">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
       <button class="btn btn-outline-secondary btn-sm" (click)="nextMonth()"
@@ -149,7 +149,7 @@
 
   <!-- أزرار التحكم -->
   <div class="d-flex justify-content-between mt-4">
-    <button class="btn btn-success w-25" [disabled]="!selectedSpecialistId || !selectedDate || !selectedTime"
+    <button class="btn btn-success w-25" style="background-color: #7AD03A !important; color: #000 !important;" [disabled]="!selectedSpecialistId || !selectedDate || !selectedTime"
       (click)="goNext()">{{ 'BUTTONS.NEXT' | translate }}</button>
     <button class="btn btn-outline-secondary w-25" (click)="prev.emit()">{{ 'BUTTONS.PREVIOUS' | translate }}</button>
   </div>

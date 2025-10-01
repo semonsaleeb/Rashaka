@@ -613,7 +613,7 @@
   "CLIENT_REVIEWS": " Client Reviews ",
    "FREE_BALANCE_APPLIED": "The applied free balance",
     "errors": {
- 
+   "OUTSIDE_WINDOW": "The selected time is outside working hours. Please choose another time.",
     "FREE_SESSION_ALREADY_USED": "Free checkup session already used.",
     "OVERLAP": "The requested time overlaps with another appointment.",
     "DEFAULT": "An error occurred while confirming your booking.",

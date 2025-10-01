@@ -74,28 +74,45 @@ export class Confirm {
     is_paid: true
   };
 
-  this.appointmentService.createAppointment(payload).subscribe({
-    next: () => {
-      this.stateService.reset();
-      this.showSuccessPopup();
-    },
-   error: (err) => {
+ this.appointmentService.createAppointment(payload).subscribe({
+  next: () => {
+    this.stateService.reset();
+    this.showSuccessPopup();
+  },
+  error: (err) => this.handleError(err)
+});
+
+}
+
+errorMessage: string = '';
+
+
+
+handleError(err: any) {
   console.error('API Error:', err);
 
-  // لو السيرفر رجع code
   const errorCode = err.error?.code;
+  let message = '';
 
-  if (errorCode && this.translate.instant(`errors.${errorCode}`) !== `errors.${errorCode}`) {
-    alert(this.translate.instant(`errors.${errorCode}`));
+  if (
+    errorCode &&
+    this.translate.instant(`errors.${errorCode}`) !== `errors.${errorCode}`
+  ) {
+    message = this.translate.instant(`errors.${errorCode}`);
   } else {
-    // fallback للرسالة العامة
-    alert(this.translate.instant('errors.DEFAULT'));
+    message = this.translate.instant('errors.DEFAULT');
+  }
+
+  // خزّن الرسالة في المتغير (عشان تبان في المودال)
+  this.errorMessage = message;
+
+  // افتح الـ error modal
+  const modalEl = document.getElementById('errorModal');
+  if (modalEl) {
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
   }
 }
-
-  });
-}
-
 
   showSuccessPopup() {
     const modalEl = document.getElementById('successModal');
