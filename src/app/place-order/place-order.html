@@ -45,7 +45,7 @@
 
         <!-- Payment Method -->
         <div class="mb-3">
-          <h5 class="text-dark">{{ 'CART.PAYMENTMETHOD' | translate }}</h5>
+          <h5 class="text-dark"  style="font-weight: 700 !important;">{{ 'CART.PAYMENTMETHOD' | translate }}</h5>
 
           <!-- Credit Card -->
           <div class="border-1 text-secondary rounded-1 border-secondary p-2 mb-2 d-flex align-items-center">
@@ -93,7 +93,7 @@
           </div>
 
           <!-- Free Product Balance as a separate option (not payment method) -->
-          <div class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex flex-column alert alert-info">
+          <div class="border border-1 rounded-1 border-secondary p-2 mb-2 d-flex flex-column alert alert-info" style="background-color: #FFFFFF; border: solid 1px #CCCCCC !important; border-radius: 16px !important;">
             <div class="form-check d-flex align-items-center">
               <!-- FIXED: Use applyFreeBalance instead of paymentMethod -->
               <input type="checkbox" id="payment_free_balance" [(ngModel)]="applyFreeBalance"
@@ -183,7 +183,7 @@
             {{ 'CART.PLACE_ORDER' | translate }}
           </button>
 
-          <button class="btn btn-danger w-100 fw-bold" (click)="cancelOrder()">
+          <button class="btn btn-danger w-100 fw-bold" (click)="cancelOrder()" style="display: none;">
             {{ 'CART.CANCEL_ORDER' | translate }}
           </button>
         </div>

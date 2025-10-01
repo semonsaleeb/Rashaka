@@ -660,20 +660,19 @@ z-index: 2;
 
 
 
-.carousel-custom-wrapper {
+.success-carousel-wrapper {
   overflow: hidden;
   padding: 50px 0;
   max-width: 90%;
-
 }
 
-.story-deck-grid {
+.success-stories-grid {
   display: flex;
   gap: 40px;
   transition: transform 0.6s ease-in-out;
 }
 
-.story-card-custom {
+.success-story-card {
   background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -682,23 +681,47 @@ z-index: 2;
   opacity: 0.6;
   transform: scale(0.9);
   border: solid 1px #61AD29;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.story-card-custom.active {
+.success-story-card.active {
   transform: scale(1.1);
   opacity: 1;
   border: 3px solid #8bc34a;
   z-index: 5;
 }
 
-.story-image-wrapper {
+.success-images {
   display: flex;
   gap: 10px;
+  flex: 1; /* الصور تاخد الجزء العلوي */
+  width: 100%;
 }
 
+.success-images .success-before {
+  background: #081E25;
+  padding: 20px;
+  border-radius: 16px;
+  width: 50%;
+  border: solid 2px #61AD29;
+}
 
+.success-images .success-after {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+}
 
-.weight-label {
+.success-story-image {
+  max-width: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.success-weight-label {
   display: block;
   margin-top: 8px;
   font-weight: bold;
@@ -708,18 +731,30 @@ z-index: 2;
   border-radius: 12px;
 }
 
-.client-name {
+.success-story-info {
+  margin-top: 30px; /* مسافة بين الصور والنصوص */
+  text-align: center;
+  padding: 10px 0;
+  flex-direction: column;
+  display: flex;
+  width: 100%;
+  color: #000;
+}
+
+.success-client-name {
   font-size: 20px;
   font-weight: 700;
   color: #222;
+  margin-bottom: 8px;
 }
 
-.weight-change {
+.success-weight-change {
   font-size: 16px;
   color: #666;
+  margin: 0;
 }
 
-.dot {
+.success-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -728,94 +763,45 @@ z-index: 2;
   cursor: pointer;
   transition: background 0.3s;
 }
-.dot.active {
+
+.success-dot.active {
   background: #8bc34a;
 }
 
-.arrow-btn {
+.success-arrow-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   border: none;
   background: #8bc34a;
   cursor: pointer;
-}
-
-
-.story-image-wrapper {
-  display: flex;
-  gap: 10px;
-}
-
-.story-image-wrapper .before {
-  background: #081E25; /* خلفية فاتحة */
-  padding: 20px;
-  border-radius: 16px;
-  width: 50%;
-  border: solid 2px #61AD29;
-}
-
-.story-image-wrapper .after {
-  background: #ffffff; /* خلفية غامقة */
-  padding: 20px;
-  border-radius: 16px;
-}
-
-.story-image {
-  max-width: 100%;
-  border-radius: 12px;
-    object-fit: contain;
-}
-
-
-.story-info {
-  text-align: center;
-  margin-top: 40px; /* نزّل النصوص لتحت */
-  padding: 10px 0;
-}
-
-.story-card-custom {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.story-image-wrapper {
-  flex: 1; /* الصور تاخد الجزء العلوي */
-  width: 100%;
-}
-
-.story-info {
-  margin-top: 30px; /* مسافة بين الصور والنصوص */
-  text-align: center;
-}
-
-.client-name {
-  font-size: 20px;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 8px;
-}
-
-.weight-change {
-  font-size: 16px;
-  color: #666;
-  margin: 0;
-}
-
-.story-info[_ngcontent-ng-c3271502656] {
-  margin-bottom: -150px;
-  flex-direction: column;
-  display: flex;
-  width: 100%;
-  color: #000;
-}
-
-.arrow-btn.next[_ngcontent-ng-c3271502656] ,.arrow-btn.prev[_ngcontent-ng-c3271502656] {
   background-size: cover !important;
 }
 
-.success-stories[_ngcontent-ng-c3271502656] .section-title[_ngcontent-ng-c3271502656] {
+.success-stories-section .success-section-title {
   display: none;
+}
+
+.client-name[_ngcontent-ng-c3583308593] {
+  color: #fff;
+}
+
+
+
+.success-container {
+  background-color: #081E25;
+  height: 50vh;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.success-header-content {
+  color: white;
+  justify-items: center;
+}
+
+.success-cta-btn {
+  justify-items: center;
 }

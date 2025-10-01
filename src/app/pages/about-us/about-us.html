@@ -1,5 +1,5 @@
 <section class="about-us  ">
-  <div class="header-section">
+  <div class="header-section" style="padding: 0;">
     <div class="container py-5">
       <div class="header-content">
         <h1 class="title mt-5 pt-5">{{ 'ABOUT_US' | translate }}</h1>
@@ -10,7 +10,7 @@
     <div class="header-gradient"></div>
   </div>
 
-  <div class="stats-container container bg-white rounded-3 align-items-center py-5 px-md-5 px-5 text-center">
+  <div class="stats-container container bg-white rounded-3 align-items-center py-5 px-md-5 px-5 text-center" style="border-bottom: solid 1px #00000070;">
    <div class="row">
   <div class="col-6 col-md-3 stat-item" *ngFor="let stat of stats">
     <div class="fs-2 fw-bold">{{ stat.value }}</div>

@@ -71,79 +71,82 @@
 <!-- قسم قصص النجاح (Grid Mode) -->
 @if (mode === 'grid') {
 <div>
-  <div class="header-section">
-    <div class="container py-5">
-      <div class="header-content">
-        <h1 class="title">{{ 'SUCCESS_STORIES_TITLE' | translate }}</h1>
-        <p class="subtitle" [innerHTML]="'SUCCESS_STORIES_SUBTITLE' | translate"></p>
+  <div class="success-header-section">
+    <div class="success-container py-5">
+      <div class="success-header-content">
+        <h1 class="success-title">{{ 'SUCCESS_STORIES_TITLE' | translate }}</h1>
+        <p class="success-subtitle" [innerHTML]="'SUCCESS_STORIES_SUBTITLE' | translate"></p>
 
         <!-- CTA Button -->
-        <button class="btn btn-success cta-button" [routerLink]="['/reservation/all']">
-          <span class="arrow-icon">
+        <button class="success-cta-btn btn btn-success" [routerLink]="['/reservation/all']">
+          <span class="success-arrow-icon">
             <img src="assets/Images/circle-arrow-up-right-02.svg" alt="Arrow Icon">
             {{ 'SUCCESS_STORIES_CTA' | translate }}
           </span>
         </button>
       </div>
     </div>
-    <div class="header-gradient"></div>
+    <div class="success-header-gradient"></div>
   </div>
 
-  <div class="success-stories px-5 p-5">
-    <h2 class="section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
+  <div class="success-stories-section px-5 p-5">
+    <h2 class="success-section-title mb-4 py-4 px-5 mx-4">قصص نجاح حقيقية من عملائنا</h2>
 
-    <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
+    <div class="success-carousel-wrapper position-relative"
+      (touchstart)="onTouchStart($event)"
       (touchend)="onTouchEnd($event, 'story')">
-      <div class="story-deck-grid d-flex justify-content-center align-items-center">
+
+      <div class="success-stories-grid d-flex justify-content-center align-items-center">
         @for (story of stories; track story; let i = $index) {
-        <div class="story-card-custom" [ngClass]="getStoryCardClass(i)">
+        <div class="success-story-card" [ngClass]="getStoryCardClass(i)">
+          
           <!-- الصور -->
-         <div class="story-image-wrapper d-flex position-relative">
-          <!-- Before -->
-        <div class="position-relative flex-fill text-center before">
-          <img [src]="story.before_image" alt="Before Image" class="story-image" />
-            <strong class="weight-label">الوزن السابق: {{story.before_weight}}</strong>
-        </div>
+          <div class="success-images d-flex position-relative">
+            <!-- Before -->
+            <div class="success-before flex-fill text-center position-relative">
+              <img [src]="story.before_image" alt="Before Image" class="success-story-image" />
+              <strong class="success-weight-label">الوزن السابق: {{story.before_weight}}</strong>
+            </div>
 
-          <!-- After -->
-        <div class="position-relative flex-fill text-center after">
-          <img [src]="story.after_image" alt="After Image" class="story-image" />
-            <strong class="weight-label text-white">الوزن الحالي: {{story.after_weight}}</strong>
-        </div>
-      </div>
+            <!-- After -->
+            <div class="success-after flex-fill text-center position-relative">
+              <img [src]="story.after_image" alt="After Image" class="success-story-image" />
+              <strong class="success-weight-label text-white">الوزن الحالي: {{story.after_weight}}</strong>
+            </div>
+          </div>
 
-
-           <!-- النصوص تحت الصور -->
-        <div class="story-info">
-          <strong class="client-name">{{story.client_name}}</strong>
-            <!-- <p class="weight-change">{{story.weight_change}}</p> -->
+          <!-- النصوص -->
+          <div class="success-story-info">
+            <strong class="success-client-name">{{story.client_name}}</strong>
             <p>{{story.story | truncate: 300}}</p>
+          </div>
         </div>
-      </div>
         }
       </div>
 
-      <!-- Custom Arrows and Dots الخاصة بقصص النجاح -->
+      <!-- Dots & Arrows -->
       @if (stories.length > 0) {
-      <div class="d-flex justify-content-between align-items-center mt-5 py-5">
+      <div class="success-controls d-flex justify-content-between align-items-center mt-5 py-5">
         <!-- Dots -->
-        <div class="d-flex gap-2">
+        <div class="success-dots d-flex gap-2">
           @for (story of stories; track story; let i = $index) {
-          <button type="button" class="dot" [class.active]="i === currentStoryIndex" (click)="goToStory(i)"
+          <button type="button" class="success-dot" [class.active]="i === currentStoryIndex"
+            (click)="goToStory(i)"
             [attr.aria-label]="'Story ' + (i + 1)">
           </button>
           }
         </div>
 
         <!-- Arrows -->
-        <div class="d-flex gap-2" dir="ltr">
-          <button class="arrow-btn prev" (click)="prevStory()"></button>
-          <button class="arrow-btn next" (click)="nextStory()"></button>
+        <div class="success-arrows d-flex gap-2" dir="ltr">
+          <button class="success-arrow-btn prev" (click)="prevStory()"></button>
+          <button class="success-arrow-btn next" (click)="nextStory()"></button>
         </div>
       </div>
       }
     </div>
   </div>
+
 
   <app-checkup></app-checkup>
   <app-branches></app-branches>

@@ -91,11 +91,11 @@
                   <i class="fa-solid fa-trash"></i>
                 </button>
                 <div class="d-flex align-items-center gap-4 ">
-                  <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)">
+                  <button class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(item.product_id)" style="background-color: #E9F7DE;">
                     <i class="fa-solid fa-minus"></i>
                   </button>
                   <span>{{ item.quantity }}</span>
-                  <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)">
+                  <button class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(item.product_id)" style="background-color: #E9F7DE;">
                     <i class="fa-solid fa-plus"></i>
                   </button>
                 </div>
@@ -111,13 +111,13 @@
     <!-- Left Side: Order Summary -->
     <div class="col-12 col-lg-5">
       <div class="card shadow-sm border-1 rounded-4 p-4" style="background-color: #FAFAFA;">
-        <h6 class=" mb-3">{{ 'CART.SUMMARY' | translate }}</h6>
+        <h6 class=" mb-3" style="font-size: 22px; font-weight: 700;">{{ 'CART.SUMMARY' | translate }}</h6>
 
         <!-- Promo Code -->
         <div class="input-group mb-3">
           <input type="text" class="form-control  rounded-0" [placeholder]="'CART.ENTER_CODE' | translate"
             [(ngModel)]="promoCode">
-          <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()">
+          <button class="btn custom-green-btn rounded-0" (click)="applyPromoCode()" style="font-weight: 700; font-size: 18px;">
             {{ 'CART.APPLY' | translate }}
           </button>
         </div>
@@ -125,7 +125,7 @@
         <!-- الأسعار -->
         <ul class="mb-3  p-0 small" style="display: flex; flex-direction: column;">
           <li class="d-flex justify-content-between py-2">
-            <span>{{ 'CART.TOTAL' | translate }}</span>
+            <span style="font-size: 22px; color: #757575;">{{ 'CART.TOTAL' | translate }}</span>
             <span>
               @if (hasDiscount()) {
               <span class="text-muted text-decoration-line-through me-2">
@@ -135,7 +135,7 @@
                 {{ totalSalePrice | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}
               </span>
               } @else {
-              <span class="fw-bold">
+              <span class="fw-bold" style="font-size: 22px; font-weight: 300 !important;">
                 {{ totalPrice | number: '1.2-2' }} {{ 'CART.CURRENCY' | translate }}
               </span>
               }
@@ -146,8 +146,8 @@
             <span>{{ shippingFee | number : '1.2-2' }} {{ 'CART.CURRENCY' | translate }}</span>
           </li> -->
           <li class="d-flex justify-content-between fw-bold pt-3 border-top my-3">
-            <span>{{ 'CART.GRAND_TOTAL' | translate }}</span>
-            <span>
+            <span style="font-size: 22px;">{{ 'CART.GRAND_TOTAL' | translate }}</span>
+            <span style="font-size: 22px;">
               {{ (totalSalePrice || totalPrice) | number: '1.2-2' }}
               {{ 'CART.CURRENCY' | translate }}
             </span>
