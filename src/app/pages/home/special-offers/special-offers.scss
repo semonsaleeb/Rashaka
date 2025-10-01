@@ -381,7 +381,14 @@ button.rounded-circle {
 // .carousel-track {
 //   transition: transform 0.6s ease;
 // }
+.carousel-track {
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
 
+.carousel-slide {
+  flex-shrink: 0;
+}
 .carousel-item-wrapper {
   flex: 0 0 calc(100% / 3); // 3 كروت في الصفحة
   padding: 0 12px;

@@ -128,56 +128,70 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   }
 
   /** ------------------- CAROUSEL CONTROLS ------------------- */
-
-  getTransformValue(): string {
-    const percentage = (this.currentSlideIndex * (100 / this.visibleCards));
-    
-    if (this.currentLang === 'ar') {
-      // RTL: positive percentage moves right to left
-      return `translateX(${percentage}%)`;
-    } else {
-      // LTR: negative percentage moves left to right
-      return `translateX(-${percentage}%)`;
-    }
+getTransformValue(): string {
+  const slideWidth = 100 / this.visibleCards;
+  const translateX = this.currentSlideIndex * slideWidth;
+  
+  if (this.currentLang === 'ar') {
+    return `${translateX}%`;
+  } else {
+    return `-${translateX}%`;
   }
+}
+
+private updateVisibleCards(): void {
+  const width = window.innerWidth;
+  
+  if (width <= 768) {
+    this.visibleCards = 1;
+    this.isMobile = true;
+  } else if (width <= 1024) {
+    this.visibleCards = 2;
+    this.isMobile = false;
+  } else {
+    this.visibleCards = 3; // تأكد إن ده 4 مش 3
+    this.isMobile = false;
+  }
+  
+  this.currentSlideIndex = 0;
+}
 
   getDotsArray(): number[] {
-    const totalSlides = this.products.length;
-    const slideCount = Math.max(1, Math.ceil(totalSlides / this.visibleCards));
-    return Array.from({ length: slideCount }, (_, i) => i);
+    const totalSlides = Math.ceil(this.products.length / this.visibleCards);
+    return Array.from({ length: totalSlides }, (_, i) => i);
   }
 
   goToSlide(index: number): void {
-    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
-    this.currentSlideIndex = Math.min(Math.max(0, index), maxSlide);
+    const maxIndex = Math.max(0, this.getDotsArray().length - 1);
+    this.currentSlideIndex = Math.min(Math.max(0, index), maxIndex);
   }
 
   nextSlide(): void {
-    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    const maxIndex = Math.max(0, this.getDotsArray().length - 1);
     
     if (this.currentLang === 'ar') {
-      // RTL: next goes left (decrease index)
+      // RTL: moving to next means going to previous index
       if (this.currentSlideIndex > 0) {
         this.currentSlideIndex--;
       }
     } else {
-      // LTR: next goes right (increase index)
-      if (this.currentSlideIndex < maxSlide) {
+      // LTR: moving to next means going to next index
+      if (this.currentSlideIndex < maxIndex) {
         this.currentSlideIndex++;
       }
     }
   }
 
   prevSlide(): void {
-    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    const maxIndex = Math.max(0, this.getDotsArray().length - 1);
     
     if (this.currentLang === 'ar') {
-      // RTL: prev goes right (increase index)
-      if (this.currentSlideIndex < maxSlide) {
+      // RTL: moving to previous means going to next index
+      if (this.currentSlideIndex < maxIndex) {
         this.currentSlideIndex++;
       }
     } else {
-      // LTR: prev goes left (decrease index)
+      // LTR: moving to previous means going to previous index
       if (this.currentSlideIndex > 0) {
         this.currentSlideIndex--;
       }
@@ -185,33 +199,28 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   }
 
   isNextDisabled(): boolean {
-    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    const maxIndex = Math.max(0, this.getDotsArray().length - 1);
     
     if (this.currentLang === 'ar') {
       return this.currentSlideIndex <= 0;
     } else {
-      return this.currentSlideIndex >= maxSlide;
+      return this.currentSlideIndex >= maxIndex;
     }
   }
 
   isPrevDisabled(): boolean {
-    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    const maxIndex = Math.max(0, this.getDotsArray().length - 1);
     
     if (this.currentLang === 'ar') {
-      return this.currentSlideIndex >= maxSlide;
+      return this.currentSlideIndex >= maxIndex;
     } else {
       return this.currentSlideIndex <= 0;
     }
   }
 
   private setInitialSlidePosition(): void {
-    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
-    
-    if (this.currentLang === 'ar') {
-      this.currentSlideIndex = Math.max(0, maxSlide);
-    } else {
-      this.currentSlideIndex = 0;
-    }
+    const maxIndex = Math.max(0, this.getDotsArray().length - 1);
+    this.currentSlideIndex = this.currentLang === 'ar' ? maxIndex : 0;
   }
 
   /** ------------------- TOUCH/SWIPE HANDLING ------------------- */
@@ -242,21 +251,23 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
 
   /** ------------------- RESPONSIVE HANDLING ------------------- */
 
-  private updateVisibleCards(): void {
-    if (window.innerWidth <= 768) {
-      this.visibleCards = 1;
-      this.isMobile = true;
-    } else if (window.innerWidth <= 1024) {
-      this.visibleCards = 2;
-      this.isMobile = false;
-    } else {
-      this.visibleCards = 4;
-      this.isMobile = false;
-    }
+  // private updateVisibleCards(): void {
+  //   const width = window.innerWidth;
     
-    // Reset slide position after resize
-    this.setInitialSlidePosition();
-  }
+  //   if (width <= 768) {
+  //     this.visibleCards = 1;
+  //     this.isMobile = true;
+  //   } else if (width <= 1024) {
+  //     this.visibleCards = 2;
+  //     this.isMobile = false;
+  //   } else {
+  //     this.visibleCards = 4;
+  //     this.isMobile = false;
+  //   }
+
+  //   // Reset slide position after resize
+  //   this.setInitialSlidePosition();
+  // }
 
   private resizeHandler = (): void => {
     this.updateVisibleCards();
@@ -289,6 +300,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.productService.getOffer().subscribe({
       next: (products) => {
+        console.log('Offer products:', products);
         this.allProducts = products;
         this.products = [...products];
         this.extractCategories(products);
@@ -297,7 +309,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (err) => {
-        this.handleHttpError('❌ Failed to load products:', err);
+        console.error('❌ Failed to load products:', err);
         this.isLoading = false;
       }
     });
@@ -555,6 +567,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     this.cartItems = [];
     this.cartState.updateCount(0);
   }
+  
 }
 
 function safeNumber(value: any): number {
