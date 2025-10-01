@@ -21,32 +21,35 @@ Carousel Mode
 
     </div>
 
-    <div class="d-flex justify-content-between align-items-center my-4 flex-wrap px-lg-5">
-      <div class="toggle-container d-flex gap-2">
-        <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
-          {{ 'PLANS.SESSIONS' | translate }}
-        </button>
-        <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
-          {{ 'PLANS.NUTRITION' | translate }}
-        </button>
-      </div>
-
-    </div>
+ <!-- Right-aligned toggle -->
+<div class="d-flex justify-content-start align-items-center my-4 flex-wrap px-lg-5">
+  <div class="toggle-container d-flex gap-2">
+    <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
+      {{ 'PLANS.SESSIONS' | translate }}
+    </button>
+    <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+      {{ 'PLANS.NUTRITION' | translate }}
+    </button>
+  </div>
+</div>
   </div>
 
   @if (plans.length > 0) {
   <!-- Carousel Wrapper -->
   <div class="carousel-wrapper position-relative overflow-hidden px-lg-5" [dir]="textDir">
-    <div class="d-flex transition-transform carousel-track" [ngStyle]="{ 
-    transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? -1 : 1)) + '%)' 
-  }" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
+    <div class="d-flex transition-transform carousel-track"  [ngStyle]="{ 
+       transform: plans.length > visibleCards ? 
+         'translateX(' + (currentSlideIndex * (100 / visibleCards) * (currentLang === 'ar' ? 1 : -1)) + '%)' 
+         : 'translateX(0%)'
+     }"
+ (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
 
 
 
 
-      @for (plan of plans; track trackPlan($index, plan)) {
-      <div class="carousel-slide" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
-        [style.max-width]="'calc(100% / ' + visibleCards + ')'">
+@for (plan of displayPlans; track trackPlan($index, plan)) {
+  <div class="carousel-slide" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
+       [style.max-width]="'calc(100% / ' + visibleCards + ')'">
 
         <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
           [ngClass]="plan.styleType + '-card'">
@@ -153,26 +156,27 @@ Carousel Mode
 
 
       <!-- Dots -->
-      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0"
-        [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
-        @for (i of getDotsArray(); track i) {
-        <button (click)="goToSlide(i)" class="rounded-circle" [ngClass]="{ 
-        'dot-active': currentSlideIndex === i, 
-        'dot-inactive': currentSlideIndex !== i 
-      }" style="width:10px; height:10px; border:none;">
-        </button>
-        }
-      </div>
+    <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0"
+     [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  @for (i of getDotsArray(); track i) {
+    <button (click)="goToSlide(i)" class="rounded-circle"
+            [ngClass]="{ 
+              'dot-active': currentSlideIndex === i, 
+              'dot-inactive': currentSlideIndex !== i 
+            }"
+            style="width:10px; height:10px; border:none;">
+    </button>
+  }
+</div>
+
 
       <!-- Arrows -->
-      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex" dir="rtl">
-        <!-- next = يمشي لقدّام (index++) -->
-        <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
+      <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
+ <button class="arrow-btn next" (click)="scrollNext()" [disabled]="isNextDisabled()"></button>
+<button class="arrow-btn prev" (click)="scrollPrev()" [disabled]="isPrevDisabled()"></button>
 
-        <!-- prev = يرجع لورا (index--) -->
-        <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= getMaxIndex()"></button>
 
-      </div>
+</div>
     </div>
   </div>
   } @else {
@@ -200,14 +204,20 @@ Grid Mode
 
     <p>{{ 'SUBSCRIPTIONS.DESCRIPTION' | translate }}</p>
 
-    <div class="toggle-container d-flex gap-2">
-      <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
-        {{ 'SUBSCRIPTIONS.SESSIONS' | translate }}
-      </button>
-      <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
-        {{ 'SUBSCRIPTIONS.NUTRITION' | translate }}
-      </button>
-    </div>
+
+
+<!-- Centered toggle -->
+<div class="d-flex justify-content-center my-4 flex-wrap px-lg-5">
+  <div class="toggle-container d-flex gap-2">
+    <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
+      {{ 'SUBSCRIPTIONS.SESSIONS' | translate }}
+    </button>
+    <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+      {{ 'SUBSCRIPTIONS.NUTRITION' | translate }}
+    </button>
+  </div>
+</div>
+
   </div>
 
 

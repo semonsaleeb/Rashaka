@@ -44,7 +44,7 @@ export class PlaceOrder implements OnInit {
   discountValue: number = 0;
   dir: 'ltr' | 'rtl' = 'ltr';
 
-  selectedPaymentMethod: string = 'credit_card'; // add this in your class
+  // selectedPaymentMethod: string = 'credit_card'; // add this in your class
 selectedAddressId: number | null = null;
   // Free balance totals from API
   cart_total_without_free: number = 0;
@@ -388,9 +388,10 @@ selectedAddressId: number | null = null;
 
   // ========================= Place order =========================
 placeOrder() {
-  const params = new HttpParams()
-    .set('address_id', String(this.selectedAddressId ?? ''))
-    .set('payment_method', this.selectedPaymentMethod);
+const params = new HttpParams()
+  .set('address_id', String(this.selectedAddressId ?? ''))
+  .set('payment_method', this.paymentMethod);
+
 
   const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
 

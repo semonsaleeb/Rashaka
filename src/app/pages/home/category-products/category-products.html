@@ -35,9 +35,9 @@
           </div>
 
           <!-- Category Buttons -->
-          <div class="category-buttons d-flex gap-2 py-3" [ngClass]="{'mobile-scroll': isMobile}">
+          <div class="category-buttons d-flex gap-2 py-3"  [ngClass]="{'mobile-scroll': isMobile}">
             <!-- All button -->
-            <button (click)="filterByCategorycarousel('all')" class="fw-bold" [ngClass]="{
+            <button (click)="filterByCategorycarousel('all')" class="fw-bold" style="font-size: 12px !important;" [ngClass]="{
             'btn': true,
             'btn-sm': true,
             'btn-success': selectedCategory === 'all',
@@ -48,7 +48,7 @@
 
             <!-- Category buttons -->
             <button *ngFor="let category of categories; trackBy: trackByCategory"
-              (click)="filterByCategorycarousel(category.id)" class="fw-bold" [ngClass]="{
+              (click)="filterByCategorycarousel(category.id)" class="fw-bold" style="font-size: 12px !important;"  [ngClass]="{
           'btn': true,
           'btn-sm': true,
           'btn-success': selectedCategory === category.id,

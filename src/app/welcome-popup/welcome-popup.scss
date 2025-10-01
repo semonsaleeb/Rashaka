@@ -1,15 +1,19 @@
+
 .popup-backdrop {
   position: fixed;
-  top: 0;
+  top: 50px;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0,0,0,0.6);
-  z-index: 1050;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 100000; /* أعلى من الهيدر */
   display: flex;
   justify-content: center;
   align-items: center;
+  direction: rtl;
 }
+
+
 
 .popup-content {
   background: white;
@@ -17,7 +21,7 @@
   padding: 2rem;
   text-align: center;
   width: 90%;
-  max-width: 500px;
+  max-width: 300px;
   box-shadow: 0 2px 20px rgba(0,0,0,0.3);
 }
 .popup-backdrop {

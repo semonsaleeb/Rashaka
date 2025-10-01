@@ -91,3 +91,20 @@
     </div>
   </div>
 </div>
+
+<!-- Error Popup Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4" style="border-radius: 12px;">
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
+        [attr.aria-label]="'MODAL.CLOSE' | translate"></button>
+      
+      <div style="text-align: center;">
+        <img src="assets/Images/error.png" alt="Error" class="mb-3" style="width:120px;">
+      </div>
+      
+      <h5 class="fw-bold text-danger">{{ 'ERRORS.TITLE' | translate }}</h5>
+      <p class="text-muted small">{{ errorMessage }}</p>
+    </div>
+  </div>
+</div>
