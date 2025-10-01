@@ -5,6 +5,14 @@
   margin-right: 1px;
 }
 
+.offcanvas-backdrop {
+  z-index: 999999998 !important; /* أقل بدرجة من الكانفاس */
+  background-color: rgba(0, 0, 0, 0.7) !important; /* تخليها أغمق لو حابب */
+}
+
+.offcanvas {
+  z-index: 999999999 !important;
+}
 
 
 .close_btn {
