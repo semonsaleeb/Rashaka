@@ -170,3 +170,46 @@
   font-size: 15px !important;
   
 }
+
+
+/* موبايل */
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    padding: 0 10px;
+  }
+
+  .carousel-slide {
+    flex: 0 0 90% !important; /* الكارت ياخد تقريبًا الشاشة كلها */
+    max-width: 90% !important;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .product-card {
+    border-radius: 15px;
+  }
+
+  .product-card .card-body h6 {
+    font-size: 14px;
+  }
+
+  .product-card .card-body p {
+    font-size: 12px;
+  }
+
+  .carousel-track {
+    gap: 10px; /* مسافة أصغر بين الكروت */
+  }
+
+  /* النقاط */
+  .carousel-wrapper .d-flex.gap-2 button {
+    width: 8px;
+    height: 8px;
+  }
+}
+.btn-success{
+  background-color: #7AD03A !important;
+    border: none !important;
+    color: black;
+
+}

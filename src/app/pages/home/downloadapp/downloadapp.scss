@@ -86,6 +86,8 @@
 @media (max-width: 767px) {
   .mobile-design {
     display: block !important;
+
+    margin-bottom: 35vh;
   }
 }
 @media (max-width: 767px) {
@@ -123,7 +125,7 @@
     }
   }
 
-  .download-app-container {
-    height: 55vh;
-  }
+  // .download-app-container {
+  //   height: 85vh;
+  // }
 }

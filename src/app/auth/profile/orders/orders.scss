@@ -18,7 +18,12 @@
     cursor: not-allowed;
   }
 }
+.btn-success{
+  background-color: #7AD03A !important;
+    border: none !important;
+    color: black;
 
+}
 /* Swapped arrow directions for RTL */
 .arrow-btn.next {
   background-image: url("/assets/Images/right-arrow.svg");

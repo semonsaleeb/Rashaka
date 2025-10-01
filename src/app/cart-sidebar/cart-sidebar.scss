@@ -9,7 +9,12 @@
   z-index: 999999998 !important; /* أقل بدرجة من الكانفاس */
   background-color: rgba(0, 0, 0, 0.7) !important; /* تخليها أغمق لو حابب */
 }
+.btn-success{
+  background-color: #7AD03A !important;
+    border: none !important;
+    color: black;
 
+}
 .offcanvas {
   z-index: 999999999 !important;
 }

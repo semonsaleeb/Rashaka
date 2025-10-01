@@ -631,6 +631,9 @@
     "VIEW_ORDERS": "View Orders",
       "ERROR_TITLE": "Payment Failed",
     "RETRY_PAYMENT": "Retry Payment"
+  },
+  "PRODUCT": {
+    "TOP_SELLER": "Best Seller"
   }
 
 

@@ -631,8 +631,10 @@
     "VIEW_ORDERS": "عرض الطلبات",
       "ERROR_TITLE": "فشل عملية الدفع",
     "RETRY_PAYMENT": "إعادة المحاولة"
+  },
+    "PRODUCT": {
+    "TOP_SELLER": "الأكثر مبيعاً"
   }
-
 
 
 }

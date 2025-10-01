@@ -325,7 +325,12 @@
 .custom-hover {
   transition: all 0.3s ease;
 }
+.btn-success{
+  background-color: #7AD03A !important;
+    border: none !important;
+    color: black;
 
+}
 .custom-hover:hover {
     background-color: #7AD03A !important; // Bootstrap green
 }
