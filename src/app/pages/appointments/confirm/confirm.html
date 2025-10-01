@@ -69,7 +69,7 @@
 </div>
 
 <!-- Popup Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" style="z-index: 999999999999;" id="successModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4" style="border-radius: 12px;">
       <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
@@ -84,7 +84,13 @@
         <button class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal" (click)="goHome()">
           {{ 'BUTTONS.GO_HOME' | translate }}
         </button>
-        <button class="btn btn-success flex-fill" (click)="goToReservations()">
+        <button class="btn btn-success flex-fill" style="
+          background-color: #7AD03A !important;
+    border: none !important;
+    color: black;
+
+        
+        " (click)="goToReservations()">
           {{ 'BUTTONS.VIEW_BOOKING' | translate }}
         </button>
       </div>
@@ -100,7 +106,7 @@
         [attr.aria-label]="'MODAL.CLOSE' | translate"></button>
       
       <div style="text-align: center;">
-        <img src="assets/Images/error.png" alt="Error" class="mb-3" style="width:120px;">
+        <!-- <img src="assets/Images/error.png" alt="Error" class="mb-3" style="width:120px;"> -->
       </div>
       
       <h5 class="fw-bold text-danger">{{ 'ERRORS.TITLE' | translate }}</h5>

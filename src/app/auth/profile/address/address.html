@@ -53,13 +53,13 @@
   </div>
 
   <!-- زر إضافة عنوان جديد -->
-  <button class="btn btn-outline-success" (click)="startAddressFlow()">
+  <button class="btn btn-success" (click)="startAddressFlow()">
     {{ 'ADDRESS.ADD_NEW' | translate }}
   </button>
   } @else {
   <img src="assets/Images/Location review-bro 1.svg" alt="Location illustration">
   <br>
-  <button class="btn btn-success px-4 py-2" (click)="startAddressFlow()">
+  <button class="btn btn-success px-4 py-2" style="" (click)="startAddressFlow()">
     {{ 'ADDRESS.ADD' | translate }}
   </button>
   }
