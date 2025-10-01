@@ -10,12 +10,13 @@ import { CartIconComponent } from '../cart-icon.component/cart-icon.component';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ProductService } from '../services/product';
-import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Category } from '../../models/Category';
 import { LanguageService } from '../services/language.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -51,17 +52,17 @@ export class Header implements OnInit {
   private route = inject(ActivatedRoute);
 
 
-  navItems = [
-    { label: 'الرئيسية', labelEn: 'Home', path: '/', hasDropdown: false, active: false },
-    { label: 'المتجر', labelEn: 'Shop', path: null, hasDropdown: true, showDropdown: true, active: false },
-    { label: 'الاشتراكات', labelEn: 'Subscriptions', path: '/home/packages', hasDropdown: false, active: false },
-    { label: 'قصص نجاح عملائنا', labelEn: 'success-stories', path: '/home/sucesStory', hasDropdown: false, active: false },
-    { label: 'حجز جلسات', labelEn: 'Checkup', path: '/reservation/all', hasDropdown: false, active: false },
-    { label: 'الفحوصات المجانيه', labelEn: 'Free Checkup', path: '/reservation/free', hasDropdown: false, active: false },
-    { label: 'العروض', labelEn: 'Offers', path: '/home/special-offers', hasDropdown: false, active: false },
-    { label: 'المدونة ', labelEn: 'Blogs', path: '/home/blogs', hasDropdown: false, active: false },
-    { label: 'عن رشاقة ', labelEn: 'About Us', path: '/about_us', hasDropdown: false, active: false },
-  ];
+navItems = [
+  { label: 'الرئيسية', labelEn: 'Home', path: '/', hasDropdown: false, active: false },
+  { label: 'المتجر', labelEn: 'Shop', path: '/home/Shop', hasDropdown: true, showDropdown: true, active: false }, // ⬅️ غيري من null إلى '/home/Shop'
+  { label: 'الاشتراكات', labelEn: 'Subscriptions', path: '/home/packages', hasDropdown: false, active: false },
+  { label: 'قصص نجاح عملائنا', labelEn: 'success-stories', path: '/home/sucesStory', hasDropdown: false, active: false },
+  { label: 'حجز جلسات', labelEn: 'Checkup', path: '/reservation/all', hasDropdown: false, active: false },
+  { label: 'الفحوصات المجانيه', labelEn: 'Free Checkup', path: '/reservation/free', hasDropdown: false, active: false },
+  { label: 'العروض', labelEn: 'Offers', path: '/home/special-offers', hasDropdown: false, active: false },
+  { label: 'المدونة ', labelEn: 'Blogs', path: '/home/blogs', hasDropdown: false, active: false },
+  { label: 'عن رشاقة ', labelEn: 'About Us', path: '/about_us', hasDropdown: false, active: false },
+];
 
 
 
@@ -187,7 +188,71 @@ export class Header implements OnInit {
       this.currentDirection = lang === 'ar' ? 'rtl' : 'ltr';
       this.translate.use(lang);
     });
+
+this.router.events
+  .pipe(filter(event => event instanceof NavigationEnd))
+  .subscribe((event: any) => {
+    const currentUrl = event.urlAfterRedirects.toLowerCase().replace(/\/$/, '');
+    
+    // Reset all items
+    this.navItems.forEach(item => item.active = false);
+    
+    // Set active based on specific conditions
+    this.navItems.forEach(item => {
+      const itemPath = item.path ? item.path.toLowerCase().replace(/\/$/, '') : '';
+      
+      if (item.path === '/') {
+        // Home should only be active when exactly on "/"
+        item.active = currentUrl === '' || currentUrl === '/';
+      }
+      else if (item.path === '/home/Shop' || item.hasDropdown) {
+        // Shop should be active for any shop-related URLs (including category pages)
+        item.active = currentUrl.includes('/home/shop') || 
+                     currentUrl.includes('category_id') ||
+                     currentUrl.includes('search');
+      }
+      else if (item.path) {
+        // Other items - match by exact path
+        item.active = currentUrl === itemPath;
+      }
+    });
+  });
+}
+
+private normalizeUrl(url: string): string {
+  // Remove trailing slash and convert to lowercase
+  return url.replace(/\/$/, '').toLowerCase();
+}
+
+private findActiveNavItem(currentUrl: string): any {
+  // First, try exact match (for Home)
+  for (const item of this.navItems) {
+    const normalizedPath = this.normalizeUrl(item.path || '');
+    if (normalizedPath === currentUrl) {
+      return item;
+    }
   }
+  
+  // Then, try prefix match for other items (except Home)
+  for (const item of this.navItems) {
+    const normalizedPath = this.normalizeUrl(item.path || '');
+    
+    // For Shop - match any shop-related URLs
+    if (item.path === '/home/Shop' && currentUrl.includes('/home/shop')) {
+      return item;
+    }
+    
+    // For other items (except Home) - match by prefix
+    if (item.path !== '/' && 
+        normalizedPath !== '/' && 
+        currentUrl.startsWith(normalizedPath)) {
+      return item;
+    }
+  }
+  
+  return null;
+}
+  
 
 
   // -------------------------
