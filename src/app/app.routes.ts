@@ -27,6 +27,7 @@ import { Free } from './pages/appointments/free/free';
 import { PaymentSuccess } from './place-order/payment-success/payment-success';
 import { PaymentFailed } from './place-order/payment-failed/payment-failed';
 import { PaymentCallback } from './place-order/payment-callback/payment-callback';
+import { ClientOpinion } from './pages/home/client-opinion/client-opinion';
 
 export const routes: Routes = [
   // Home page
@@ -79,6 +80,9 @@ export const routes: Routes = [
   { path: 'home/blogs', component: Blogs },
   { path: 'home/blog/:id', component: SingleBlog },
   { path: 'home/branches', component: Branches },
+  { path: 'home/clientOpinion', component: ClientOpinion },
+
+  
 
   // Cart & Favorites
   { path: 'cart', component: CartPageComponent },

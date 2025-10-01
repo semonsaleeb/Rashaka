@@ -18,6 +18,7 @@ import { CategoryProducts } from './category-products/category-products';
 import { FavoriteService } from '../../services/favorite.service';
 import { Product } from '../../../models/Product';
 import { LanguageService } from '../../services/language.service';
+import { ClientOpinion } from './client-opinion/client-opinion';
 
 @Component({
   selector: 'app-home',
@@ -30,12 +31,13 @@ import { LanguageService } from '../../services/language.service';
     Hero,
     OurService,
     Branches,
-    SucesStory,
+    // SucesStory,
     PostHero,
     Blogs,
     SpecialOffersComponent,
     CategoryProducts,
-    TranslateModule
+    TranslateModule,
+    ClientOpinion
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss'

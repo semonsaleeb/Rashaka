@@ -1,0 +1,70 @@
+<!-- قسم آراء العملاء (Carousel Mode) -->
+@if (mode === 'carousel') {
+<div>
+  <div class="success-stories  p-5" style="background: linear-gradient(135deg, #081E25 0%, #0a2a33 100%);">
+
+    <!-- العنوان -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap px-lg-5 mx-lg-4">
+      <h2 class="section-title mb-0" [ngClass]="currentLang === 'ar' ? 'text-start' : 'text-end'">
+        {{ 'CLIENT_REVIEWS' | translate }}
+      </h2>
+    </div>
+
+    <div class="client-reviews">
+
+      <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event, 'review')" (touchmove)="$event.preventDefault()" style="touch-action: pan-y;">
+
+
+        <!-- الكروت -->
+        <div class="review-deck d-flex justify-content-center align-items-center">
+          <ng-container *ngFor="let review of reviews; let i = index">
+            <div class="review-card-custom" [ngClass]="getReviewCardClass(i)">
+              <div class="review-video">
+                <ng-container *ngIf="review.video_url.includes('youtube'); else mp4">
+                  <iframe [src]="review.video_url | safeUrl" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+                </ng-container>
+
+                <ng-template #mp4>
+                   <video controls preload="metadata">
+                    <source [src]="review.video_url" type="video/mp4" />
+                  </video>
+
+                </ng-template>
+              </div>
+
+              <div class="review-info text-center mt-3">
+                <h5 class="client-name">{{ review.client_name }}</h5>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+      </div>
+
+      <!-- Dots + Arrows (برا الكروت لكن جوا نفس السيكشن) -->
+      <div *ngIf="reviews.length > 0" class="dotsInMobile px-5 mx-4 arrow-position d-flex   flex-wrap">
+
+        <!-- Dots -->
+        <div class="d-flex gap-2">
+          <button *ngFor="let review of reviews; let i = index" type="button" class="dot"
+            [class.active]="i === currentReviewIndex" (click)="goToReview(i)" [attr.aria-label]="'Review ' + (i + 1)">
+          </button>
+        </div>
+
+        <!-- Arrows -->
+        <div class="d-flex gap-2" dir="ltr" *ngIf="!isMobile">
+          <button class="arrow-btn prev" (click)="nextReview()"></button>
+          <button class="arrow-btn next" (click)="prevReview()"></button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+}
+
