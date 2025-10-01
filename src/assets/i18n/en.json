@@ -188,8 +188,8 @@
   "HOURS": "Hours",
   "DAYS": "Days",
   "LIMITED_TIME": "Limited Time ",
-  "OFFERS": "Offers",
-  "OFFERS_DESC": "Enjoy the best discounts and deals tailored just for you.",
+"OFFERS": "The Best Offers Await You",
+"OFFERS_DESC": "Enjoy the best discounts and packages tailored just for you.",
   "ALL": "All",
   "VIEW_DIRECTIONS": "View Directions",
   "SUBSCRIPTIONS": {
@@ -619,6 +619,8 @@
       "ADDRESS_IN_USE": "This address cannot be deleted because it is linked to an order or appointment.",
     "DELETE_FAILED": "Failed to delete the address."
   },
-    "RELATED_PRODUCTS": "Related Products"
+    "RELATED_PRODUCTS": "Related Products",
+      "BEST_SELLING_PRODUCTS": "Best Selling Products"
+
 
 }

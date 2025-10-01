@@ -178,27 +178,32 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
   // ==================== PRODUCT METHODS ====================
 
-  private fetchProductsAndFavorites(): void {
-    this.isLoading = true;
-    const token = localStorage.getItem('token');
+private fetchProductsAndFavorites(): void {
+  this.isLoading = true;
+  const token = localStorage.getItem('token');
 
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.allProducts = [...products];
-        this.applyCombinedFilters();
-        this.setCategories(this.allProducts);
+  this.productService.getProducts().subscribe({
+    next: (products) => {
+      this.allProducts = [...products];
+      this.filteredProducts = [...products]; // ⬅️ هذا السطر مهم!
+      this.setCategories(this.allProducts);
 
-        this.favoriteService.loadFavorites(token).subscribe({
-          next: () => (this.isLoading = false),
-          error: () => (this.isLoading = false),
-        });
-      },
-      error: (err) => {
-        console.error('Failed to load products:', err);
-        this.isLoading = false;
-      },
-    });
-  }
+      this.favoriteService.loadFavorites(token).subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.currentPage = 0; // إعادة تعيين الباجينيشن
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
+    },
+    error: (err) => {
+      console.error('Failed to load products:', err);
+      this.isLoading = false;
+    },
+  });
+}
 
   private loadProductsByCategory(categoryId: number): void {
     this.isLoading = true;
@@ -294,35 +299,90 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
   // ==================== FILTER METHODS ====================
 
-  toggleCategory(categoryId: number): void {
-    console.log("Toggle category:", categoryId);
+toggleCategory(categoryId: number): void {
+  console.log("Toggle category:", categoryId);
 
-    this.route.queryParams.subscribe(params => {
-      if (params['category_id']) {
-        this.router.navigate([], {
-          relativeTo: this.route,
-          queryParams: { category_id: null },
-          queryParamsHandling: 'merge'
-        });
-      }
-    }).unsubscribe();
+  this.route.queryParams.subscribe(params => {
+    if (params['category_id']) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { category_id: null },
+        queryParamsHandling: 'merge'
+      });
+    }
+  }).unsubscribe();
 
-    if (this.selectedCategories.includes(categoryId)) {
-      this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
-      if (this.selectedCategories.length === 0) {
-        this.fetchProductsAndFavorites();
-      } else {
-        this.applyCombinedFilters();
-      }
+  if (this.selectedCategories.includes(categoryId)) {
+    // إزالة الكاتيجوري
+    this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
+    if (this.selectedCategories.length === 0) {
+      this.fetchProductsAndFavorites(); // تحميل كل المنتجات
     } else {
-      this.selectedCategories.push(categoryId);
-      if (this.selectedCategories.length === 1) {
-        this.loadProductsByCategory(categoryId);
-      } else {
-        this.applyCombinedFilters();
-      }
+      this.loadProductsForMultipleCategories(); // تحميل المنتجات للكاتيجوريز المتبقية
+    }
+  } else {
+    // إضافة كاتيجوري جديدة
+    this.selectedCategories.push(categoryId);
+    if (this.selectedCategories.length === 1) {
+      this.loadProductsByCategory(categoryId); // تحميل منتجات كاتيجوري واحدة
+    } else {
+      this.loadProductsForMultipleCategories(); // تحميل منتجات متعددة
     }
   }
+}
+
+private loadProductsForMultipleCategories(): void {
+  this.isLoading = true;
+
+  // إذا كان هناك كاتيجوري واحد فقط، استخدمي الدالة الحالية
+  if (this.selectedCategories.length === 1) {
+    this.loadProductsByCategory(this.selectedCategories[0]);
+    return;
+  }
+
+  // لعدة كاتيجوريز، اجمعي المنتجات من كل كاتيجوري
+  const requests = this.selectedCategories.map(categoryId => 
+    this.productService.getProductsByCategory(categoryId).toPromise()
+  );
+
+  Promise.all(requests).then(results => {
+    // دمج كل المنتجات وإزالة التكرارات
+    const allProducts: Product[] = [];
+    const productIds = new Set<number>();
+
+    results.forEach(products => {
+      if (products) {
+        products.forEach(product => {
+          if (!productIds.has(product.id)) {
+            productIds.add(product.id);
+            allProducts.push(product);
+          }
+        });
+      }
+    });
+
+    this.allProducts = allProducts;
+    this.filteredProducts = allProducts;
+    this.setCategories(this.allProducts);
+
+    const token = localStorage.getItem('token');
+    this.favoriteService.loadFavorites(token).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.currentPage = 0; // إعادة تعيين الباجينيشن
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }).catch(err => {
+    console.error('Failed to load products for multiple categories:', err);
+    this.isLoading = false;
+    this.cdr.detectChanges();
+  });
+}
 
   toggleAllCategories(event: any): void {
     const isChecked = event.target.checked;
@@ -388,42 +448,43 @@ export class CategoryProducts implements OnInit, OnDestroy {
     this.currentSlideIndex = 0;
   }
 
-  applyCombinedFilters(): void {
-    if (this.allProducts.length === 0) return;
+applyCombinedFilters(): void {
+  if (this.allProducts.length === 0) return;
 
-    const q = this.searchQuery.toLowerCase().trim();
+  const q = this.searchQuery.toLowerCase().trim();
 
-    this.filteredProducts = this.allProducts.filter(p => {
-      const matchesCategory =
-        this.selectedCategories.length === 0 ||
-        p.categories?.some(c => this.selectedCategories.includes(c.id));
+  this.filteredProducts = this.allProducts.filter(p => {
+    const matchesCategory =
+      this.selectedCategories.length === 0 ||
+      p.categories?.some(c => this.selectedCategories.includes(c.id));
 
-      const name = (p.name_ar ?? '').toLowerCase();
-      const desc = (p.description_ar ?? '').toLowerCase();
-      const matchesSearch = q === '' || name.includes(q) || desc.includes(q);
+    const name = (p.name_ar ?? '').toLowerCase();
+    const desc = (p.description_ar ?? '').toLowerCase();
+    const matchesSearch = q === '' || name.includes(q) || desc.includes(q);
 
-      let priceNum = 0;
-      if (p.price !== null && p.price !== undefined) {
-        priceNum =
-          typeof p.price === 'string'
-            ? parseFloat(p.price.replace(/,/g, '')) || 0
-            : Number(p.price) || 0;
-      }
+    let priceNum = 0;
+    if (p.price !== null && p.price !== undefined) {
+      priceNum =
+        typeof p.price === 'string'
+          ? parseFloat(p.price.replace(/,/g, '')) || 0
+          : Number(p.price) || 0;
+    }
 
-      const selectedRanges = this.predefinedRanges.filter(r => r.selected);
-      const matchesRange =
-        selectedRanges.length === 0 ||
-        selectedRanges.some(r => priceNum >= r.min && priceNum <= r.max);
+    const selectedRanges = this.predefinedRanges.filter(r => r.selected);
+    const matchesRange =
+      selectedRanges.length === 0 ||
+      selectedRanges.some(r => priceNum >= r.min && priceNum <= r.max);
 
-      const meetsMin = this.priceMin == null || priceNum >= this.priceMin;
-      const meetsMax = this.priceMax == null || priceNum <= this.priceMax;
+    const meetsMin = this.priceMin == null || priceNum >= this.priceMin;
+    const meetsMax = this.priceMax == null || priceNum <= this.priceMax;
 
-      return matchesCategory && matchesSearch && matchesRange && meetsMin && meetsMax;
-    });
+    return matchesCategory && matchesSearch && matchesRange && meetsMin && meetsMax;
+  });
 
-    this.currentSlideIndex = 0;
-    this.cdr.detectChanges();
-  }
+  // إعادة تعيين إلى الصفحة الأولى عند تغيير الفلتر
+  this.currentPage = 0;
+  this.cdr.detectChanges();
+}
 
   filterBySearch(): void {
     this.applyCombinedFilters();

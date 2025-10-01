@@ -27,10 +27,11 @@
               {{ 'FEATURED_PRODUCTS' | translate }}
             </h2>
             <a [routerLink]="['/home/Shop']"
-              class="btn btn-link view-all-btn text-light d-flex align-items-center gap-2 p-0">
+              class="btn btn-link text-decoration-none view-all-btn text-light fs-5 d-flex align-items-center gap-2 p-0">
               <img src="assets/Images/circle-arrow-up-right-02 (1).svg" alt="{{ 'VIEW_ALL' | translate }}" width="25px">
               {{ 'VIEW_ALL' | translate }}
             </a>
+
           </div>
 
           <!-- Category Buttons -->
@@ -195,19 +196,14 @@
             </div>
 
             <!-- Arrows (desktop only) -->
-         <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
-  <button 
-    class="arrow-btn next" 
-    (click)="nextSlide()" 
-    [disabled]="currentSlideIndex >= getTotalSlides() - 1">
-  </button>
+            <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
+              <button class="arrow-btn next" (click)="nextSlide()"
+                [disabled]="currentSlideIndex >= getTotalSlides() - 1">
+              </button>
 
-  <button 
-    class="arrow-btn prev" 
-    (click)="prevSlide()" 
-    [disabled]="currentSlideIndex === 0">
-  </button>
-</div>
+              <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0">
+              </button>
+            </div>
 
 
           </div>
@@ -421,205 +417,225 @@
         }
       </div>
       }
-     <div *ngIf="topSellers.length > 0">
-  <h5 class="fw-bold  px-3">أفضل المنتجات مبيعًا</h5>
+      <div *ngIf="topSellers.length > 0">
+        <h5 class="fw-bold px-3">
+          {{ 'BEST_SELLING_PRODUCTS' | translate }}
+        </h5>
 
-  <div class="mt-3">
-    <div class="d-flex flex-row overflow-auto gap-3"
-         [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'"
-         style="scroll-snap-type: x mandatory;">
+        <div class="mt-3">
+          <div class="d-flex flex-row overflow-auto gap-3" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'"
+            style="scroll-snap-type: x mandatory;">
 
-    <div class="flex-shrink-0" style="width: 300px; min-height: 100px;"
-     *ngFor="let product of topSellers; trackBy: trackByProductId">
-  <div class="card product-card bg-white rounded-4 my-3 border shadow-sm position-relative d-flex flex-column h-75"
-       style="scroll-snap-align: start;">
-    <div class="row g-0 h-75 align-items-center">
+            <div class="flex-shrink-0" style="width: 300px; min-height: 100px;"
+              *ngFor="let product of topSellers; trackBy: trackByProductId">
+              <div
+                class="card product-card bg-white rounded-4 my-3 border shadow-sm position-relative d-flex flex-column h-75"
+                style="scroll-snap-align: start;">
+                <div class="row g-0 h-75 align-items-center">
 
-      <!-- الصورة يمين -->
-      <div class="col-4 d-flex align-items-center justify-content-center h-75">
-        <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
-          <img [src]="product.images[0]" class="img-fluid" [alt]="product.name"
-               style="max-height: 150px; object-fit: contain;" />
-        </a>
-      </div>
+                  <!-- الصورة يمين -->
+                  <div class="col-4 d-flex align-items-center justify-content-center h-75">
+                    <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
+                      <img [src]="product.images[0]" class="img-fluid" [alt]="product.name"
+                        style="max-height: 150px; object-fit: contain;" />
+                    </a>
+                  </div>
 
-      <!-- التفاصيل شمال -->
-      <div class="col-8">
-        <div class="card-body px-3 py-2 d-flex flex-column h-75">
-          <h6 class="card-title fw-bold mb-1">
-            {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}
-          </h6>
-          <p class="card-text text-muted mb-1">
-            {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:15 }}
-          </p>
+                  <!-- التفاصيل شمال -->
+                  <div class="col-8">
+                    <div class="card-body px-3 py-2 d-flex flex-column h-75">
+                      <h6 class="card-title fw-bold mb-1">
+                        {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}
+                      </h6>
+                      <p class="card-text text-muted mb-1">
+                        {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:15 }}
+                      </p>
 
-          <p class="fw-bold" style="font-size: 14px;">
-            <ng-container *ngIf="product.sale_price && product.sale_price !== product.price; else normalPrice">
-              <span class="fw-bold text-success">{{ product.sale_price }} {{ 'CURRENCY' | translate }}</span>
-              <span class="text-secondary px-2" style="text-decoration: line-through;">
-                {{ product.price }} {{ 'CURRENCY' | translate }}
-              </span>
-            </ng-container>
-            <ng-template #normalPrice>
-              <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY' | translate }}</span>
-            </ng-template>
-          </p>
+                      <p class="fw-bold" style="font-size: 14px;">
+                        <ng-container
+                          *ngIf="product.sale_price && product.sale_price !== product.price; else normalPrice">
+                          <span class="fw-bold text-success">{{ product.sale_price }} {{ 'CURRENCY' | translate
+                            }}</span>
+                          <span class="text-secondary px-2" style="text-decoration: line-through;">
+                            {{ product.price }} {{ 'CURRENCY' | translate }}
+                          </span>
+                        </ng-container>
+                        <ng-template #normalPrice>
+                          <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY' | translate }}</span>
+                        </ng-template>
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
         </div>
       </div>
-
-    </div>
-  </div>
-</div>
-
-
-    </div>
-  </div>
-</div>
 
       <!-- Products Grid -->
       <!-- أول 9 منتجات كـ 3×3 Grid -->
-   <!-- Container للكاروسيل -->
-<div class="container-fluid">
-  <div class="row">
-    @for (product of filteredProducts; track product.id) {
-    <div class="col-6 col-md-4 col-lg-3 mb-3"> <!-- 2 columns on mobile, 3 on tablet, 4 on desktop -->
-      <div class="card product-card rounded-4 h-100">
-        <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
+      <!-- Container للكاروسيل -->
+      <div class="container-fluid mt-5">
+        <div class="row">
+          @for (product of getCurrentPageProducts(); track product.id) {
+          <div class="col-6 col-md-3 col-lg-4 mb-3"> <!-- 2 columns on mobile, 3 on tablet, 4 on desktop -->
+            <div class="card product-card rounded-4 h-100">
+              <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
 
-          <!-- Product Image -->
-          <div class="carousel slide">
-            <div class="carousel-inner">
-              @for (image of product.images; track $index; let j = $index) {
-              <div class="carousel-item" [class.active]="j === 0">
-                <img [src]="image" class="card-img-top p-2 img-fluid" [alt]="product.name" 
-                     style="height: 120px; object-fit: contain;">
-              </div>
-              }
-            </div>
-          </div>
+                <!-- Product Image -->
+                <div class="carousel slide">
+                  <div class="carousel-inner">
+                    @for (image of product.images; track $index; let j = $index) {
+                    <div class="carousel-item" [class.active]="j === 0">
+                      <img [src]="image" class="card-img-top p-2 img-fluid" [alt]="product.name"
+                        style="height: 120px; object-fit: contain;">
+                    </div>
+                    }
+                  </div>
+                </div>
 
-          <!-- Favorite & Compare Buttons -->
-          <div class="position-absolute top-0 start-0 p-1 d-flex flex-column gap-1">
-            <button (click)="toggleFavorite(product, $event)" class="btn btn-light btn-sm rounded-circle border-0"
-              [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
-              <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
-            </button>
+                <!-- Favorite & Compare Buttons -->
+                <div class="position-absolute top-0 start-0 p-1 d-flex flex-column gap-1">
+                  <button (click)="toggleFavorite(product, $event)" class="btn btn-light btn-sm rounded-circle border-0"
+                    [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                    <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+                  </button>
 
-            <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
-              class="btn btn-light btn-sm rounded-circle border-0" [ngClass]="{'bg-primary text-white': isInCompare(product)}">
-              <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="Compare" class="img-fluid" style="width: 16px;">
-            </button>
-          </div>
+                  <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+                    class="btn btn-light btn-sm rounded-circle border-0"
+                    [ngClass]="{'bg-primary text-white': isInCompare(product)}">
+                    <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="Compare" class="img-fluid"
+                      style="width: 16px;">
+                  </button>
+                </div>
 
-          <!-- Product Details -->
-          <div class="card-body mx-2 p-2">
-            <h6 class="card-title fw-bold mb-1 fs-6 text-truncate">
-              {{ (currentLang === 'ar' ? product.name_ar : product.name) }}
-            </h6>
+                <!-- Product Details -->
+                <div class="card-body mx-2 p-2">
+                  <h6 class="card-title fw-bold mb-1 fs-6 text-truncate">
+                    {{ (currentLang === 'ar' ? product.name_ar : product.name) }}
+                  </h6>
 
-            <p class="card-text text-muted small mb-2 text-truncate">
-              {{ (currentLang === 'ar' ? product.description_ar : product.description) }}
-            </p>
+                  <p class="card-text text-muted small mb-2 text-truncate">
+                    {{ (currentLang === 'ar' ? product.description_ar : product.description) }}
+                  </p>
 
-            <div>
-              <p class="fw-bold mb-2">
-                @if (product.sale_price && product.sale_price !== product.price) {
-                <span class="text-success">{{ product.sale_price }} {{ 'CURRENCY' | translate}}</span>
-                <span class="text-secondary text-decoration-line-through ps-1 small">
-                  {{ product.price }}{{ 'CURRENCY' | translate }}
-                </span>
+                  <div>
+                    <p class="fw-bold mb-2">
+                      @if (product.sale_price && product.sale_price !== product.price) {
+                      <span class="text-success">
+                        {{ product.sale_price }} {{ 'CURRENCY' | translate}}
+                      </span>
+                      <span class="text-secondary text-decoration-line-through ps-1 small">
+                        {{ product.price }}{{ 'CURRENCY' | translate }}
+                      </span>
+                      } @else {
+                      <span class="text-success">
+                        {{ product.price }} {{ 'CURRENCY' | translate }}
+                      </span>
+                      }
+                    </p>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Cart Controls -->
+              <div class="mb-2 px-3">
+                @if (isInCart(product.id)) {
+                <div
+                  class="d-flex align-items-center justify-content-center px-2 gap-1 border border-secondary rounded-4">
+                  <div class="d-flex align-items-center gap-1">
+                    <button class="btn btn-outline-secondary btn-sm border-0"
+                      (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                      <i class="fa-solid fa-minus small"></i>
+                    </button>
+                    <span class="fw-bold text-center px-2 small">
+                      {{ getCartItem(product.id)?.quantity }}
+                    </span>
+                    <button class="btn btn-outline-secondary btn-sm border-0"
+                      (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                      <i class="fa-solid fa-plus small"></i>
+                    </button>
+                  </div>
+                </div>
                 } @else {
-                <span class="text-success">{{ product.price }} {{ 'CURRENCY' | translate }}</span>
+                <button class="btn btn-outline-secondary w-100 btn-sm text-dark rounded-5"
+                  (click)="addToCart(product, $event)" data-bs-toggle="offcanvas" data-bs-target="#cartSidebar"
+                  aria-controls="cartSidebar">
+                  <img src="assets/Images/shopping-cart-add-01.svg" alt="Add to cart" class="me-1" style="width: 16px;">
+                  {{ 'ADD_TO_CART' | translate }}
+                </button>
                 }
-              </p>
+              </div>
             </div>
           </div>
-        </a>
-        
-        <!-- Cart Controls -->
-        <div class="mb-2 px-3">
-          @if (isInCart(product.id)) {
-          <div class="d-flex align-items-center justify-content-center px-2 gap-1 border border-secondary rounded-4">
-            <div class="d-flex align-items-center gap-1">
-              <button class="btn btn-outline-secondary btn-sm border-0"
-                (click)="decreaseQuantity(product.id); $event.stopPropagation()">
-                <i class="fa-solid fa-minus small"></i>
-              </button>
-              <span class="fw-bold text-center px-2 small">
-                {{ getCartItem(product.id)?.quantity }}
-              </span>
-              <button class="btn btn-outline-secondary btn-sm border-0"
-                (click)="increaseQuantity(product.id); $event.stopPropagation()">
-                <i class="fa-solid fa-plus small"></i>
-              </button>
-            </div>
-          </div>
-          } @else {
-          <button class="btn btn-outline-secondary w-100 btn-sm text-dark rounded-5"
-            (click)="addToCart(product, $event)" data-bs-toggle="offcanvas"
-            data-bs-target="#cartSidebar" aria-controls="cartSidebar">
-            <img src="assets/Images/shopping-cart-add-01.svg" alt="Add to cart" class="me-1" style="width: 16px;">
-            {{ 'ADD_TO_CART' | translate }}
-          </button>
           }
         </div>
       </div>
-    </div>
-    }
-  </div>
-</div>
 
-<!-- Pagination Navigation -->
-@if (getTotalPages() > 1) {
-<div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
+      <!-- Pagination Navigation -->
+      @if (getTotalPages() > 1) {
+      <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
 
-  <!-- Page Info -->
-  <div class="d-none d-md-flex text-muted">
-    الصفحة {{ currentPage + 1 }} من {{ getTotalPages() }}
-  </div>
+        <!-- Page Info -->
+        <div class="d-none d-md-flex text-muted">
+          الصفحة {{ currentPage + 1 }} من {{ getTotalPages() }}
+        </div>
 
-  <!-- Dots Pagination -->
-  <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0"
-    [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
-    @for (i of getPagesArray(); track i) {
-    <button (click)="goToPage(i)" class="rounded-circle" [class.bg-success]="currentPage === i"
-      [class.bg-secondary]="currentPage !== i" style="width: 12px; height: 12px; border: none;">
-    </button>
-    }
-  </div>
+        <!-- Dots Pagination -->
+        <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+          @for (i of getPagesArray(); track i) {
+          <button (click)="goToPage(i)" class="rounded-circle" [class.bg-success]="currentPage === i"
+            [class.bg-secondary]="currentPage !== i" style="width: 12px; height: 12px; border: none;">
+          </button>
+          }
+        </div>
 
-  <!-- Arrows (desktop only) -->
-  <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
-    <button class="arrow-btn next" (click)="nextPage()"
-      [disabled]="currentPage >= getTotalPages() - 1">
-      
-    </button>
-    <button class="arrow-btn prev" (click)="prevPage()" [disabled]="currentPage === 0">
-      
-    </button>
-  </div>
+        <!-- Arrows (desktop only) -->
+        <div class="pagination-arrows d-none d-md-flex gap-2" dir="rtl">
+          <!-- Next Button -->
+          <button class="arrow-btn next" (click)="nextPage()" [disabled]="currentPage >= getTotalPages() - 1"
+            aria-label="الصفحة التالية" title="الصفحة التالية">
+            <span class="visually-hidden">التالي</span>
+          </button>
 
-</div>
+          <!-- Prev Button -->
+          <button class="arrow-btn prev" (click)="prevPage()" [disabled]="currentPage === 0" aria-label="الصفحة السابقة"
+            title="الصفحة السابقة">
+            <span class="visually-hidden">السابق</span>
+          </button>
+        </div>
 
-<!-- Mobile Pagination -->
-<div class="d-flex d-md-none align-items-center justify-content-center gap-3 mt-4">
-  <button class="btn btn-outline-success btn-sm" (click)="prevPage()" [disabled]="currentPage === 0">
-    <i class="fa-solid fa-chevron-right"></i>
-  </button>
-  
-  <span class="text-muted">
-    {{ currentPage + 1 }} / {{ getTotalPages() }}
-  </span>
-  
-  <button class="btn btn-outline-success btn-sm" (click)="nextPage()" 
-    [disabled]="currentPage >= getTotalPages() - 1">
-    <i class="fa-solid fa-chevron-left"></i>
-  </button>
-</div>
-}
 
-      <!-- المنتجات المتبقية كـ Carousel -->
-    
+
+
+
+      </div>
+
+      <!-- Mobile Pagination -->
+      <div class="d-flex d-md-none align-items-center justify-content-center gap-3 mt-4">
+        <!-- Next Button -->
+        <button class="arrow-btn next" (click)="nextPage()" [disabled]="currentPage >= getTotalPages() - 1"
+          aria-label="الصفحة التالية" title="الصفحة التالية">
+          <span class="visually-hidden">التالي</span>
+        </button>
+
+        <span class="text-muted">
+          {{ currentPage + 1 }} / {{ getTotalPages() }}
+        </span>
+
+        <button class="arrow-btn prev" (click)="prevPage()" [disabled]="currentPage === 0" aria-label="الصفحة السابقة"
+          title="الصفحة السابقة">
+          <span class="visually-hidden">السابق</span>
+        </button>
+      </div>
+      }
+
+
+
 
       <!-- No Products -->
       @if (filteredProducts.length === 0) {
