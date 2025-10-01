@@ -57,6 +57,22 @@ body {
     }
   }
 }
+@media (max-width: 575.98px) {
+  .branch-filters .btn.active {
+    background-image: url('/assets/Images/location-6.svg');
+    background-repeat: no-repeat;
+    background-position: right 1px center; /* 👈 خلتها تبعد 6px من الطرف */
+    background-size: 25px; /* 👈 أصغر شوية عشان تناسب الموبايل */
+    margin: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .branch-filters .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
 
 /* ===== Service Card ===== */
 .service-card {
@@ -287,7 +303,30 @@ body {
   justify-content: center !important;
 }
 
-.btn {
-  width: 15%;
+.branch-filters .btn {
+  width: auto; /* خلي العرض على قد المحتوى */
   justify-content: center;
+}
+.branch-filters {
+  display: flex;
+  flex-wrap: nowrap;      /* كل الأزرار في سطر واحد */
+  gap: 8px;
+  overflow-x: auto;       /* يسمح بالتمرير */
+  -webkit-overflow-scrolling: touch; /* smooth scroll للموبايل */
+  scrollbar-width: thin;  /* Scroll بار رفيع في فايرفوكس */
+  padding-inline: 8px;
+}
+
+.branch-filters::-webkit-scrollbar {
+  height: 6px; /* ارتفاع الـ scrollbar في كروم */
+}
+
+.branch-filters::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.branch-filters .btn {
+  flex: 0 0 auto;   /* زر ثابت العرض مش يتمدد */
+  white-space: nowrap; /* يمنع النص من النزول لسطرين */
 }

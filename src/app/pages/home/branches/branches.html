@@ -21,14 +21,18 @@
 
 
   <!-- Branch Filters -->
-  <div class="branch-filters d-flex mb-4 px-1 py-3" dir="rtl">
-    @for (branch of branches; track branch) {
-    <button class="btn btn-outline-secondary rounded-3 px-5  fw-bold" [class.active]="selectedBranch === branch"
+<div class="branch-filters mb-4 px-1 py-3">
+  @for (branch of branches; track branch) {
+    <button 
+      class="btn btn-outline-secondary rounded-3 fw-bold px-3 px-md-5 mb-2"
+      [class.active]="selectedBranch === branch"
       (click)="selectBranch(branch)">
-      {{ branch.name }}
+      <span class="px-lg-0 px-3">{{ branch.name }}</span>
     </button>
-    }
-  </div>
+  }
+</div>
+
+
 
 
   <!-- Carousel Wrapper -->

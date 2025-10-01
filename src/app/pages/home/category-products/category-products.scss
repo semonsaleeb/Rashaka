@@ -423,4 +423,63 @@ color: black;
 .category-products-container[_ngcontent-ng-c1564269433] .product-card[_ngcontent-ng-c1564269433]:hover {
   transform: translateY(0) !important;
 }
+/* الحاوية */
+.pagination-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* أو flex-end لو عايزها يمين */
+  gap: 10px;
+}
 
+/* الأزرار */
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent; /* مهم عشان الصورة بس اللي تبان */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 0.2s;
+  padding: 0;
+  cursor: pointer;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* زر السابق */
+.arrow-btn.prev {
+  background-image: url("/assets/Images/left-arrow.svg");
+
+  &:not([disabled]) {
+    background-image: url("/assets/Images/circle-arrow-left-03green.svg");
+  }
+}
+
+/* زر التالي */
+.arrow-btn.next {
+  background-image: url("/assets/Images/right-arrow.svg");
+
+  &:not([disabled]) {
+    background-image: url("/assets/Images/circle-arrow-green-04green.svg");
+  }
+}
+
+/* النص المخفي لسهولة الوصول */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.view-all-btn {
+  text-decoration: none !important;
+}

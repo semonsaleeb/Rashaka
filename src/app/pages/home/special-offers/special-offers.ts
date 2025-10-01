@@ -4,7 +4,7 @@ import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import {  ProductService } from '../../../services/product';
+import { ProductService } from '../../../services/product';
 import { AuthService } from '../../../services/auth.service';
 import { CartService } from '../../../services/cart.service';
 import { CartStateService } from '../../../services/cart-state-service';
@@ -49,10 +49,14 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
   compareProducts: Product[] = [];
   showComparePopup = false;
 
-    isMobile = false;
+  isMobile = false;
 
   private resizeListener = this.updateVisibleCards.bind(this);
   private GUEST_CART_KEY = 'guest_cart';
+
+  // Touch events for swipe
+  touchStartX = 0;
+  touchEndX = 0;
 
   constructor(
     private productService: ProductService,
@@ -64,9 +68,7 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     private favoriteService: FavoriteService,
     private translate: TranslateService,
     private languageService: LanguageService,
-        private clientService: ClientService,
-
-
+    private clientService: ClientService,
   ) { }
 
   ngOnInit(): void {
@@ -77,56 +79,44 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     if (modeFromRoute) this.mode = modeFromRoute;
 
     this.loadCartAndProducts();
-    this.loadProductsAndFavorites();
 
-    // 🟢 اسمع أي تغييرات من FavoriteService
+    // Listen to favorite changes
     this.favoriteService.favorites$.subscribe(favs => {
       const favoriteIds = new Set(favs.map(f => f.id));
       this.products = this.products.map(p => ({
         ...p,
         isFavorite: favoriteIds.has(p.id)
       }));
+      this.allProducts = this.allProducts.map(p => ({
+        ...p,
+        isFavorite: favoriteIds.has(p.id)
+      }));
     });
 
-
-     // -------------------------
-    // 1️⃣ Handle window resize
-    // -------------------------
+    // Handle window resize
     this.resizeHandler();
     window.addEventListener('resize', this.resizeHandler);
 
-
-    this.translate.use(this.languageService.getCurrentLanguage());
-
-    // Listen for language changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.translate.use(lang);
-    });
-
+    // Language setup
     this.currentLang = this.languageService.getCurrentLanguage();
+    this.translate.use(this.currentLang);
 
     // Listen for language changes
     this.languageService.currentLang$.subscribe(lang => {
       this.currentLang = lang;
+      this.translate.use(lang);
+      this.setInitialSlidePosition();
     });
-     if (this.currentLang === 'ar') {
-    // يبدأ من آخر سلايد (يمين)
-    this.currentSlideIndex = this.products.length - this.visibleCards;
-  } else {
-    // يبدأ من أول سلايد (شمال)
-    this.currentSlideIndex = 0;
+
+    // Cart state subscriptions
+    this.cartState.cartItems$.subscribe(items => {
+      this.cartItems = items;
+    });
+
+    this.cartState.cartCount$.subscribe(count => {
+      // Handle cart count changes if needed
+    });
   }
-
-
-   this.cartState.cartItems$.subscribe(items => {
-    this.cartItems = items;
-  });
-
-  this.cartState.cartCount$.subscribe(count => {
-    // if you show a badge / counter
-  });
-  }
-
 
   ngAfterViewInit() {
     this.myElement?.nativeElement?.scrollIntoView({ behavior: 'smooth' });
@@ -134,42 +124,203 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     window.removeEventListener('resize', this.resizeListener);
+    window.removeEventListener('resize', this.resizeHandler);
   }
 
-  /** ------------------- CART + PRODUCTS ------------------- */
-private loadCartAndProducts(): void {
-  if (this.clientService.isLoggedIn()) {   // ✅ use ClientService
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        const items = response.data?.items || [];
-        this.cartState.updateItems(items);
-        this.loadProducts();
-        this.refreshCartCount();
-      },
-      error: (err) => {
-        console.error('Error fetching cart', err);
-        this.loadProducts();
+  /** ------------------- CAROUSEL CONTROLS ------------------- */
+
+  getTransformValue(): string {
+    const percentage = (this.currentSlideIndex * (100 / this.visibleCards));
+    
+    if (this.currentLang === 'ar') {
+      // RTL: positive percentage moves right to left
+      return `translateX(${percentage}%)`;
+    } else {
+      // LTR: negative percentage moves left to right
+      return `translateX(-${percentage}%)`;
+    }
+  }
+
+  getDotsArray(): number[] {
+    const totalSlides = this.products.length;
+    const slideCount = Math.max(1, Math.ceil(totalSlides / this.visibleCards));
+    return Array.from({ length: slideCount }, (_, i) => i);
+  }
+
+  goToSlide(index: number): void {
+    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    this.currentSlideIndex = Math.min(Math.max(0, index), maxSlide);
+  }
+
+  nextSlide(): void {
+    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    
+    if (this.currentLang === 'ar') {
+      // RTL: next goes left (decrease index)
+      if (this.currentSlideIndex > 0) {
+        this.currentSlideIndex--;
       }
-    });
-  } else {
-    const guestCart = this.loadGuestCart();
-    this.cartState.updateItems(guestCart);
-    this.loadProducts();
+    } else {
+      // LTR: next goes right (increase index)
+      if (this.currentSlideIndex < maxSlide) {
+        this.currentSlideIndex++;
+      }
+    }
   }
-}
 
+  prevSlide(): void {
+    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    
+    if (this.currentLang === 'ar') {
+      // RTL: prev goes right (increase index)
+      if (this.currentSlideIndex < maxSlide) {
+        this.currentSlideIndex++;
+      }
+    } else {
+      // LTR: prev goes left (decrease index)
+      if (this.currentSlideIndex > 0) {
+        this.currentSlideIndex--;
+      }
+    }
+  }
 
+  isNextDisabled(): boolean {
+    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    
+    if (this.currentLang === 'ar') {
+      return this.currentSlideIndex <= 0;
+    } else {
+      return this.currentSlideIndex >= maxSlide;
+    }
+  }
+
+  isPrevDisabled(): boolean {
+    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    
+    if (this.currentLang === 'ar') {
+      return this.currentSlideIndex >= maxSlide;
+    } else {
+      return this.currentSlideIndex <= 0;
+    }
+  }
+
+  private setInitialSlidePosition(): void {
+    const maxSlide = Math.max(0, this.products.length - this.visibleCards);
+    
+    if (this.currentLang === 'ar') {
+      this.currentSlideIndex = Math.max(0, maxSlide);
+    } else {
+      this.currentSlideIndex = 0;
+    }
+  }
+
+  /** ------------------- TOUCH/SWIPE HANDLING ------------------- */
+
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.handleSwipe();
+  }
+
+  handleSwipe(): void {
+    const swipeDistance = this.touchEndX - this.touchStartX;
+    const minSwipeDistance = 50;
+
+    if (Math.abs(swipeDistance) > minSwipeDistance) {
+      if (swipeDistance > 0) {
+        // Swipe right → previous slide
+        this.prevSlide();
+      } else {
+        // Swipe left → next slide
+        this.nextSlide();
+      }
+    }
+  }
+
+  /** ------------------- RESPONSIVE HANDLING ------------------- */
+
+  private updateVisibleCards(): void {
+    if (window.innerWidth <= 768) {
+      this.visibleCards = 1;
+      this.isMobile = true;
+    } else if (window.innerWidth <= 1024) {
+      this.visibleCards = 2;
+      this.isMobile = false;
+    } else {
+      this.visibleCards = 4;
+      this.isMobile = false;
+    }
+    
+    // Reset slide position after resize
+    this.setInitialSlidePosition();
+  }
+
+  private resizeHandler = (): void => {
+    this.updateVisibleCards();
+  };
+
+  /** ------------------- PRODUCTS & CART ------------------- */
+
+  private loadCartAndProducts(): void {
+    if (this.clientService.isLoggedIn()) {
+      this.cartService.getCart().subscribe({
+        next: (response) => {
+          const items = response.data?.items || [];
+          this.cartState.updateItems(items);
+          this.loadProducts();
+          this.refreshCartCount();
+        },
+        error: (err) => {
+          console.error('Error fetching cart', err);
+          this.loadProducts();
+        }
+      });
+    } else {
+      const guestCart = this.loadGuestCart();
+      this.cartState.updateItems(guestCart);
+      this.loadProducts();
+    }
+  }
 
   private loadProducts(): void {
+    this.isLoading = true;
     this.productService.getOffer().subscribe({
       next: (products) => {
         this.allProducts = products;
         this.products = [...products];
         this.extractCategories(products);
+        this.setInitialSlidePosition();
+        this.loadFavorites();
         this.isLoading = false;
       },
-      error: (err) => this.handleHttpError('❌ Failed to load products:', err)
+      error: (err) => {
+        this.handleHttpError('❌ Failed to load products:', err);
+        this.isLoading = false;
+      }
     });
+  }
+
+  private loadFavorites(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.favoriteService.loadFavorites(token).subscribe({
+        next: (favorites) => {
+          const favoriteIds = new Set(favorites.map(f => f.id));
+          this.products = this.products.map(p => ({
+            ...p,
+            isFavorite: favoriteIds.has(p.id)
+          }));
+          this.allProducts = this.allProducts.map(p => ({
+            ...p,
+            isFavorite: favoriteIds.has(p.id)
+          }));
+        },
+        error: (err) => console.error('Error loading favorites:', err)
+      });
+    }
   }
 
   private extractCategories(products: Product[]): void {
@@ -188,10 +339,11 @@ private loadCartAndProducts(): void {
       : this.allProducts.filter(p => p.categories.some(c => c.id === categoryId));
 
     this.selectedCategory = categoryId;
-    this.currentSlideIndex = 0;
+    this.setInitialSlidePosition();
   }
 
-  /** ------------------- AUTH + FAVORITES ------------------- */
+  /** ------------------- FAVORITES ------------------- */
+
   isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
@@ -204,38 +356,14 @@ private loadCartAndProducts(): void {
 
     this.favoriteService.toggleFavorite(product, token).subscribe({
       next: (res) => {
-        // ✅ لو عندك favorites$ في الـ service هيحدث تلقائي
-        if (!this.favoriteService.favorites$) {
-          // 🔄 Manual flip fallback
-          product.isFavorite = !product.isFavorite;
-        }
+        // Favorites will update via the favorites$ subscription
       },
       error: (err) => console.error('Error toggling favorite:', err)
     });
   }
 
-
-
-loadProductsAndFavorites(): void {
-  this.productService.getOffer().subscribe(offerProducts => {
-    this.allProducts = offerProducts;
-    this.products = [...offerProducts];
-
-    // ⭐ لو موبايل → يبدأ من النص
-    if (this.isMobile && this.products.length > 0) {
-      this.currentSlideIndex = Math.floor((this.products.length - 1) / 2);
-    } else {
-      this.currentSlideIndex = 0;
-    }
-
-    const token = localStorage.getItem('token');
-    this.favoriteService.loadFavorites(token).subscribe(); // بس init
-  });
-}
-
-
-
   /** ------------------- COMPARE ------------------- */
+
   addToCompare(product: Product, event?: Event): void {
     if (event) {
       event.preventDefault();
@@ -243,19 +371,19 @@ loadProductsAndFavorites(): void {
     }
 
     if (this.compareProducts.find(p => p.id === product.id)) {
-      alert('هذا المنتج مضاف بالفعل للمقارنة');
+      alert(this.translate.instant('PRODUCT_ALREADY_IN_COMPARE'));
       return;
     }
 
     if (this.compareProducts.length >= 2) {
-      alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
+      alert(this.translate.instant('MAX_COMPARE_PRODUCTS'));
       return;
     }
 
     this.compareProducts.push(product);
 
     if (this.compareProducts.length === 1) {
-      alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
+      alert(this.translate.instant('FIRST_PRODUCT_ADDED'));
     }
 
     if (this.compareProducts.length === 2) {
@@ -263,6 +391,9 @@ loadProductsAndFavorites(): void {
     }
   }
 
+  isInCompare(product: Product): boolean {
+    return this.compareProducts.some(p => p.id === product.id);
+  }
 
   onCloseComparePopup(): void {
     this.showComparePopup = false;
@@ -270,119 +401,117 @@ loadProductsAndFavorites(): void {
   }
 
   /** ------------------- CART ACTIONS ------------------- */
-private loadGuestCart(): any[] {
-  const storedCart = localStorage.getItem(this.GUEST_CART_KEY);
-  const cart = storedCart ? JSON.parse(storedCart) : [];
-  this.cartState.updateItems(cart); // ✅ sync
-  return cart;
-}
 
-
-
-
-private saveGuestCart(cart: any[]): void {
-  localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
-  this.cartState.updateItems(cart); // ✅ sync with global state
-  this.refreshCartCount();
-}
-
-
-
- addToCart(product: Product, event?: Event): void {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
+  private loadGuestCart(): any[] {
+    const storedCart = localStorage.getItem(this.GUEST_CART_KEY);
+    const cart = storedCart ? JSON.parse(storedCart) : [];
+    this.cartState.updateItems(cart);
+    return cart;
   }
 
-  if (!this.isLoggedIn()) {
-    const cart = this.loadGuestCart();
-    const existing = cart.find(i => i.product_id === product.id);
+  private saveGuestCart(cart: any[]): void {
+    localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+    this.cartState.updateItems(cart);
+    this.refreshCartCount();
+  }
 
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({
-        product_id: product.id,
-        quantity: 1,
-        product_name_ar: product.name_ar,
-        unit_price: safeNumber(product.price_before || product.price || product.original_price),
-        sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
-        images: product.images || []
-      });
+  addToCart(product: Product, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
 
-    this.saveGuestCart(cart);
-    this.cartState.updateItems(cart); // 🟢 Sync UI
-    return;
-  }
+    if (!this.isLoggedIn()) {
+      const cart = this.loadGuestCart();
+      const existing = cart.find(i => i.product_id === product.id);
 
-  this.cartService.addToCart(product.id, 1).subscribe({
-    next: () => this.loadCart(),
-    error: (err) => this.handleCartActionError(err)
-  });
-}
-
-increaseQuantity(productId: number): void {
-  if (!this.isLoggedIn()) {
-    const cart = this.loadGuestCart();
-    const item = cart.find(i => i.product_id === productId);
-    if (item) {
-      item.quantity++;
-    }
-    this.saveGuestCart(cart);
-    this.cartState.updateItems(cart); // 🟢 Sync UI
-    return;
-  }
-
-  this.cartService.addToCart(productId, 1).subscribe({
-    next: () => this.loadCart()
-  });
-}
-
-decreaseQuantity(productId: number): void {
-  if (!this.isLoggedIn()) {
-    let cart = this.loadGuestCart();
-    const item = cart.find(i => i.product_id === productId);
-    if (item) {
-      item.quantity--;
-      if (item.quantity <= 0) {
-        cart = cart.filter(i => i.product_id !== productId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          product_id: product.id,
+          quantity: 1,
+          product_name_ar: product.name_ar,
+          product_name: product.name,
+          unit_price: safeNumber(product.price_before || product.price || product.original_price),
+          sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
+          images: product.images || []
+        });
       }
+
+      this.saveGuestCart(cart);
+      return;
     }
-    this.saveGuestCart(cart);
-    this.cartState.updateItems(cart); // 🟢 Sync UI
-    return;
+
+    this.cartService.addToCart(product.id, 1).subscribe({
+      next: () => this.loadCart(),
+      error: (err) => this.handleCartActionError(err)
+    });
   }
 
-  this.cartService.reduceCartItem(productId).subscribe({
-    next: () => this.loadCart()
-  });
-}
+  increaseQuantity(productId: number, event?: Event): void {
+    event?.stopPropagation();
 
-removeItem(productId: number): void {
-  if (!this.isLoggedIn()) {
-    const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
-    this.saveGuestCart(cart);
-    this.cartState.updateItems(cart); // 🟢 Sync UI
-    return;
+    if (!this.isLoggedIn()) {
+      const cart = this.loadGuestCart();
+      const item = cart.find(i => i.product_id === productId);
+      if (item) {
+        item.quantity++;
+      }
+      this.saveGuestCart(cart);
+      return;
+    }
+
+    this.cartService.addToCart(productId, 1).subscribe({
+      next: () => this.loadCart()
+    });
   }
 
-  this.cartService.removeCartItem(productId).subscribe({
-    next: () => this.loadCart()
-  });
-}
+  decreaseQuantity(productId: number, event?: Event): void {
+    event?.stopPropagation();
 
-private loadCart(): void {
-  this.cartService.getCart().subscribe({
-    next: (response) => {
-      const items = response.data?.items || [];
-      this.cartState.updateItems(items); // ✅
-      this.refreshCartCount();
-    },
-    error: (err) => this.handleCartError(err)
-  });
-}
+    if (!this.isLoggedIn()) {
+      let cart = this.loadGuestCart();
+      const item = cart.find(i => i.product_id === productId);
+      if (item) {
+        item.quantity--;
+        if (item.quantity <= 0) {
+          cart = cart.filter(i => i.product_id !== productId);
+        }
+      }
+      this.saveGuestCart(cart);
+      return;
+    }
 
+    this.cartService.reduceCartItem(productId).subscribe({
+      next: () => this.loadCart()
+    });
+  }
+
+  removeItem(productId: number, event?: Event): void {
+    event?.stopPropagation();
+
+    if (!this.isLoggedIn()) {
+      const cart = this.loadGuestCart().filter(i => i.product_id !== productId);
+      this.saveGuestCart(cart);
+      return;
+    }
+
+    this.cartService.removeCartItem(productId).subscribe({
+      next: () => this.loadCart()
+    });
+  }
+
+  private loadCart(): void {
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        const items = response.data?.items || [];
+        this.cartState.updateItems(items);
+        this.refreshCartCount();
+      },
+      error: (err) => this.handleCartError(err)
+    });
+  }
 
   private refreshCartCount(): void {
     const total = this.isLoggedIn()
@@ -392,57 +521,26 @@ private loadCart(): void {
     this.cartState.updateCount(total);
   }
 
-  /** ------------------- CAROUSEL ------------------- */
-  updateVisibleCards(): void {
-    if (window.innerWidth <= 768) this.visibleCards = 1;
-    else if (window.innerWidth <= 1024) this.visibleCards = 2;
-    else this.visibleCards = 4;
-  }
-
-  getDotsArray(): number[] {
-    const slideCount = Math.ceil(this.products.length / this.visibleCards);
-    return Array.from({ length: slideCount }, (_, i) => i);
-  }
-
-  goToSlide(index: number): void {
-    this.currentSlideIndex = index;
-  }
-
-  nextSlide(): void {
-    if (this.currentSlideIndex < this.products.length - this.visibleCards) {
-      this.currentSlideIndex++;
-    }
-  }
-
-  prevSlide(): void {
-    if (this.currentSlideIndex > 0) {
-      this.currentSlideIndex--;
-    }
-  }
-
-  /** ------------------- HELPERS ------------------- */
   isInCart(productId: number): boolean {
     return this.cartItems.some(item => item.product_id === productId);
   }
 
-getCartItem(productId: number) {
-  return this.cartState.getCartSummary().items.find(i => i.product_id === productId);
-}
+  getCartItem(productId: number) {
+    return this.cartState.getCartSummary().items.find(i => i.product_id === productId);
+  }
 
-isInCompare(product: any): boolean {
-  return this.compareProducts?.some(p => p.id === product.id);
-}
+  /** ------------------- ERROR HANDLING ------------------- */
+
   private handleHttpError(msg: string, err: HttpErrorResponse): void {
     console.error(msg, err);
     this.isLoading = false;
   }
 
-private handleCartError(err: any): void {
-  console.error('Error fetching cart', err);
-  const guestCart = this.loadGuestCart();
-  this.cartState.updateItems(guestCart); // ✅
-}
-
+  private handleCartError(err: any): void {
+    console.error('Error fetching cart', err);
+    const guestCart = this.loadGuestCart();
+    this.cartState.updateItems(guestCart);
+  }
 
   private handleCartActionError(err: HttpErrorResponse): void {
     console.error('❌ Cart action failed:', err);
@@ -457,63 +555,12 @@ private handleCartError(err: any): void {
     this.cartItems = [];
     this.cartState.updateCount(0);
   }
-
-  /** ------------------- SWIPE ------------------- */
-
-
-  touchStartX = 0;
-touchEndX = 0;
-
-onTouchStart(event: TouchEvent): void {
-  this.touchStartX = event.changedTouches[0].screenX;
-  
 }
-
-onTouchEnd(event: TouchEvent): void {
-  this.touchEndX = event.changedTouches[0].screenX;
-  this.handleSwipe();
-}
-
-handleSwipe(): void {
-  const swipeDistance = this.touchEndX - this.touchStartX;
-
-  if (Math.abs(swipeDistance) > 50) {
-    const isRTL = this.currentLang === 'ar';
-
-    if ((swipeDistance > 0 && !isRTL) || (swipeDistance < 0 && isRTL)) {
-      // سوايب يمين في LTR أو شمال في RTL → prev
-      this.nextSlide();
-    } else {
-      // سوايب شمال في LTR أو يمين في RTL → next
-      this.prevSlide();
-    }
-  }
-}
-
-
-
-// ---------------------- responsive ----------------------
-  // updateVisibleCards() {
-  //   if (window.innerWidth <= 768) this.visibleCards = 1;
-  //   else if (window.innerWidth <= 1024) this.visibleCards = 2;
-  //   else this.visibleCards = 3;
-  // }
-
-
-  checkIfMobile() {
-    this.isMobile = window.innerWidth <= 768;
-  }
-    private resizeHandler = () => {
-    this.updateVisibleCards();
-    this.checkIfMobile();
-  };
-}
-
 
 function safeNumber(value: any): number {
   if (value == null) return 0;
   if (typeof value === 'string') {
-    return Number(value.replace(/,/g, '')); // 🟢 يشيل الكوما
+    return Number(value.replace(/,/g, ''));
   }
   return Number(value);
 }
