@@ -5,11 +5,12 @@ import { Branches } from '../home/branches/branches';
 import { SucesStory } from '../home/suces-story/suces-story';
 import { Downloadapp } from '../home/downloadapp/downloadapp';
 import { LanguageService } from '../../services/language.service';
+import { ClientOpinion } from "../home/client-opinion/client-opinion";
 
 @Component({
   selector: 'app-about-us',
   standalone: true,
-  imports: [CommonModule, Branches, SucesStory, TranslateModule],
+  imports: [CommonModule, Branches, ClientOpinion, TranslateModule, ClientOpinion],
   templateUrl: './about-us.html',
   styleUrls: ['./about-us.scss']
 })

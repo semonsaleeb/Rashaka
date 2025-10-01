@@ -8,13 +8,14 @@ import { Downloadapp } from '../downloadapp/downloadapp';
 import { SucesStory } from '../suces-story/suces-story';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
+import { ClientOpinion } from "../client-opinion/client-opinion";
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule, RouterModule, Downloadapp, SucesStory, TranslateModule],
+  imports: [CommonModule, RouterModule, Downloadapp, ClientOpinion, TranslateModule, ClientOpinion],
   templateUrl: './pricing.html',
   styleUrls: ['./pricing.scss']
 })
