@@ -6,8 +6,8 @@ header {
 }
 .nav-link:hover,
 .nav-link:focus {
-  color: #198754 !important; /* اللون الأخضر */
-  text-decoration: underline !important;
+  // color: #198754 !important; /* اللون الأخضر */
+  // text-decoration: underline !important;
   font-weight: 500;
 }
 .whats_btn {
@@ -220,6 +220,10 @@ body.menu-open {
   width: 103% !important;
 }}
 
-
+.nav-link.active {
+  color: #198754 !important; /* أو أي لون تفضلينه */
+  font-weight: bold;
+  border-bottom: 2px solid #198754;
+}
 
 

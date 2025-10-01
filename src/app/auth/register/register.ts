@@ -42,8 +42,6 @@ export class Register {
   successMessage: string | null = null;
   apiErrors: any = {}; // كائن لتخزين أخطاء API
 
-  showPassword = false;
-  showConfirmPassword = false;
 
   currentLang: string = 'ar';
   dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
@@ -65,7 +63,7 @@ export class Register {
    
    
     this.registerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(255)]],
+      name: ['', [Validators.required, Validators.minLength(8),Validators.maxLength(255)]],
       email: ['',
         [
           Validators.required,
@@ -96,6 +94,8 @@ export class Register {
     return password === confirm ? null : { mismatch: true };
   }
 
+  showPassword = false;
+  showConfirmPassword = false;
   togglePasswordVisibility() { this.showPassword = !this.showPassword; }
   toggleConfirmPasswordVisibility() { this.showConfirmPassword = !this.showConfirmPassword; }
 
@@ -211,4 +211,6 @@ export class Register {
         );
     };
   }
+
+  
 }

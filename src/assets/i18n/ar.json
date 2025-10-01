@@ -267,6 +267,7 @@
     "LOADING": "جاري الدخول..."
   },
   "REGISTER": {
+    
     "NAME": "الأسم",
     "EMAIL": "البريد الإلكتروني",
     "PHONE": "رقم الهاتف",
@@ -276,6 +277,7 @@
     "PASSWORD_CONFIRM_PLACEHOLDER": "تأكيد كلمة المرور",
     "SUBMIT": "تسجيل",
     "ERRORS": {
+      "NAME_MINLENGTH": "يجب أن يكون الاسم 8 أحرف على الأقل",
       "NAME_REQUIRED": "يرجى إدخال الاسم الكامل",
       "NAME_MAXLENGTH": "الاسم طويل جدًا، الحد الأقصى 255 حرف",
       "EMAIL_REQUIRED": "يرجى إدخال البريد الإلكتروني",
@@ -618,6 +620,18 @@
     "DELETE_FAILED": "فشل حذف العنوان."
   },
   "RELATED_PRODUCTS": "منتجات ذات صلة",
-    "BEST_SELLING_PRODUCTS": "أفضل المنتجات مبيعًا"
+    "BEST_SELLING_PRODUCTS": "أفضل المنتجات مبيعًا",
+    "PAYMENT": {
+    "SUCCESS_TITLE": "تم الدفع بنجاح!",
+    "SUCCESS_MESSAGE": "شكراً لك على شرائك. تم تأكيد طلبك بنجاح.",
+    "ORDER_ID": "رقم الطلب",
+    "INVOICE_ID": "رقم الفاتورة",
+    "GO_HOME": "العودة للرئيسية",
+    "VIEW_ORDERS": "عرض الطلبات",
+      "ERROR_TITLE": "فشل عملية الدفع",
+    "RETRY_PAYMENT": "إعادة المحاولة"
+  }
+
+
 
 }

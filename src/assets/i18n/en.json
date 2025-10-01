@@ -276,7 +276,8 @@
     "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
     "SUBMIT": "Register",
     "ERRORS": {
-      "NAME_REQUIRED": "Please enter your full name",
+      "NAME_REQUIRED": "Name is required",
+      "NAME_MINLENGTH": "Name must be at least 8 characters",
       "NAME_MAXLENGTH": "Name is too long, maximum 255 characters",
       "EMAIL_REQUIRED": "Please enter your email",
       "EMAIL_INVALID": "Please enter a valid email",
@@ -620,7 +621,17 @@
     "DELETE_FAILED": "Failed to delete the address."
   },
     "RELATED_PRODUCTS": "Related Products",
-      "BEST_SELLING_PRODUCTS": "Best Selling Products"
+      "BEST_SELLING_PRODUCTS": "Best Selling Products",
+       "PAYMENT": {
+    "SUCCESS_TITLE": "Payment Successful!",
+    "SUCCESS_MESSAGE": "Thank you for your purchase. Your order has been confirmed successfully.",
+    "ORDER_ID": "Order ID",
+    "INVOICE_ID": "Invoice ID",
+    "GO_HOME": "Go to Home",
+    "VIEW_ORDERS": "View Orders",
+      "ERROR_TITLE": "Payment Failed",
+    "RETRY_PAYMENT": "Retry Payment"
+  }
 
 
 }

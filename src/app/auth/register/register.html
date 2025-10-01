@@ -1,13 +1,18 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-4" >
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-4">
 
   <!-- الاسم -->
   <div class="mb-3">
     <label class="form-label">{{ 'REGISTER.NAME' | translate }}</label>
     <input type="text" formControlName="name" class="form-control"
       [class.is-invalid]="(registerForm.get('name')?.invalid && registerForm.get('name')?.touched) || apiErrors?.name">
+
     <div *ngIf="registerForm.get('name')?.hasError('required') && registerForm.get('name')?.touched"
       class="invalid-feedback">
       {{ 'REGISTER.ERRORS.NAME_REQUIRED' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('name')?.hasError('minlength') && registerForm.get('name')?.touched"
+      class="invalid-feedback">
+      {{ 'REGISTER.ERRORS.NAME_MINLENGTH' | translate }}
     </div>
     <div *ngIf="registerForm.get('name')?.hasError('maxlength') && registerForm.get('name')?.touched"
       class="invalid-feedback">
@@ -17,6 +22,7 @@
       {{ apiErrors.name }}
     </div>
   </div>
+
 
   <!-- البريد الإلكتروني -->
   <div class="mb-3">
@@ -67,49 +73,36 @@
   <!-- كلمة المرور -->
   <div class="mb-3">
     <label class="form-label">{{ 'REGISTER.PASSWORD' | translate }}</label>
-    <div class="position-relative" >
-      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5"
-        [class.is-invalid]="(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) || apiErrors?.password"
+    <div class="position-relative">
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5 pe-4"
         [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate">
-      <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="cursor: pointer;"
+
+      <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"
+        style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 5;"
         (click)="togglePasswordVisibility()">
         <i class="fas" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
       </span>
-    </div>
-    <div *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched"
-      class="invalid-feedback d-block text-end">
-      {{ 'REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
-    </div>
-    <div *ngIf="registerForm.get('password')?.hasError('weakPassword') && registerForm.get('password')?.touched"
-      class="invalid-feedback d-block text-end">
-      {{ 'REGISTER.ERRORS.PASSWORD_WEAK' | translate }}
-    </div>
-    <div *ngIf="apiErrors?.password" class="invalid-feedback d-block text-end">
-      {{ apiErrors.password }}
+
     </div>
   </div>
 
   <!-- تأكيد كلمة المرور -->
   <div class="mb-4">
     <label class="form-label">{{ 'REGISTER.PASSWORD_CONFIRM' | translate }}</label>
-    <div class="position-relative" >
+    <div class="position-relative">
       <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="password_confirmation"
-        class="form-control ps-5"
-        [class.is-invalid]="(registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched) || apiErrors?.password_confirmation"
-        [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate">
-      <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="cursor: pointer;"
+        class="form-control ps-5 pe-4" [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate">
+
+      <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"
+        style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 5;"
         (click)="toggleConfirmPasswordVisibility()">
         <i class="fas" [class.fa-eye]="showConfirmPassword" [class.fa-eye-slash]="!showConfirmPassword"></i>
       </span>
-    </div>
-    <div *ngIf="registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched"
-      class="invalid-feedback text-end d-block">
-      {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
-    </div>
-    <div *ngIf="apiErrors?.password_confirmation" class="invalid-feedback text-end d-block">
-      {{ apiErrors.password_confirmation }}
+
     </div>
   </div>
+
+
 
   <!-- زر التسجيل -->
   <button type="submit" class="btn custom-green-btn w-100 py-2"
