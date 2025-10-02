@@ -145,4 +145,5 @@ updateItems(items: any[]): void {
 
     return { items, cart_total, sale_cart_total, totalQuantity };
   }
+  
 }
