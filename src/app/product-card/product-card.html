@@ -1,3 +1,9 @@
+@if (showComparePopup) {
+<app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()">
+</app-compare-popup>
+}
+
+
 @if (!isLoading && product) {
 <div class="container py-4 mt-5" dir="rtl">
   <div class="row g-4">
@@ -213,6 +219,32 @@
                 <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY'|translate }}</span>
               </div>
             </a>
+            <div class="px-3 my-2">
+               @if (isInCart(product.id)) {
+                  <div
+                    class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-4"
+                    style="direction: rtl;">
+                    <div class="d-flex align-items-center gap-2 Quantity_Controls">
+                      <button class="btn custom-increase-btn btn-sm" (click)="increaseQuantity(product.id, $event)">
+                        <i class="fa-solid fa-plus"></i>
+                      </button>
+                      <span class="fw-bold custom-qty-display text-center px-4">
+                        {{ getCartItem(product.id)?.quantity }}
+                      </span>
+                      <button class="btn custom-increase-btn btn-sm" (click)="decreaseQuantity(product.id, $event)">
+                        <i class="fa-solid fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  } @else {
+                  <button class="btn btn-outline-secondary btn-xs bg-white mt-3 text-black rounded-4 custom-hover"
+                    style="font-size: 16px; padding: 0.25rem 0.5rem;" (click)="addToCart(product, $event)"
+                    data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+                    <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+                    {{ 'ADD_TO_CART' | translate }}
+                  </button>
+                  }
+            </div>
           </div>
         </div>
         }

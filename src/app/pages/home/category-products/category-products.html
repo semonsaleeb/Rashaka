@@ -113,7 +113,7 @@
                       </h6>
 
                       <p class="card-text text-muted">
-                        {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:40 }}
+                        {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:35 }}
                       </p>
 
 
@@ -548,19 +548,24 @@
                 @if (isInCart(product.id)) {
                 <div
                   class="d-flex align-items-center justify-content-center px-2 gap-1 border border-secondary rounded-4">
-                  <div class="d-flex align-items-center gap-1">
-                    <button class="btn btn-outline-secondary btn-sm border-0"
-                      (click)="decreaseQuantity(product.id); $event.stopPropagation()">
-                      <i class="fa-solid fa-minus small"></i>
-                    </button>
-                    <span class="fw-bold text-center px-2 small">
-                      {{ getCartItem(product.id)?.quantity }}
-                    </span>
-                    <button class="btn btn-outline-secondary btn-sm border-0"
-                      (click)="increaseQuantity(product.id); $event.stopPropagation()">
-                      <i class="fa-solid fa-plus small"></i>
-                    </button>
-                  </div>
+                   <div class="d-flex align-items-center gap-2 Quantity_Controls">
+                        <!-- Increase Button -->
+                        <button class="btn custom-increase-btn btn-sm"
+                          (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                          <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <!-- Quantity Display -->
+                        <span class="fw-bold custom-qty-display text-center px-4">
+                          {{ getCartItem(product.id)?.quantity }}
+                        </span>
+                        <!-- Remove Button -->
+                        <button class="btn custom-increase-btn btn-sm"
+                          (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                          <i class="fa-solid fa-minus"></i>
+
+                          <!-- <img src="assets/Images/delete-02.svg"> -->
+                        </button>
+                      </div>
                 </div>
                 } @else {
                 <button class="btn btn-outline-secondary w-100 btn-sm text-dark rounded-5"
