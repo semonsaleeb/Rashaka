@@ -1042,3 +1042,13 @@ a.text-decoration-none:hover .card {
   .custom-qty-display[_ngcontent-ng-c3667721385] {
     padding: 8px;
   }
+
+  .category-products-container[_ngcontent-ng-c1357490907] .carousel-track[dir=rtl][_ngcontent-ng-c1357490907] {
+    width: 95%;
+  }
+
+  @media (max-width: 768px){
+  .category-products-container[_ngcontent-ng-c1357490907] .header-section[_ngcontent-ng-c1357490907] .category-buttons[_ngcontent-ng-c1357490907] button[_ngcontent-ng-c1357490907]{
+    width: 40% !important;
+  }
+  }

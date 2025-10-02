@@ -523,3 +523,13 @@ color: black;
   width: 2vh;
   height: 2vh;
 }
+
+ @media (max-width: 768px){
+  .category-products-container[_ngcontent-ng-c1357490907] .header-section[_ngcontent-ng-c1357490907] .category-buttons[_ngcontent-ng-c1357490907] button[_ngcontent-ng-c1357490907]{
+    width: 40% !important;
+  }
+  }
+
+   .category-products-container[_ngcontent-ng-c1357490907] .carousel-track[dir=rtl][_ngcontent-ng-c1357490907] {
+    width: 95%;
+  }
