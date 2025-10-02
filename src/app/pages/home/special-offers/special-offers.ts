@@ -218,10 +218,13 @@ private updateVisibleCards(): void {
     }
   }
 
-  private setInitialSlidePosition(): void {
-    const maxIndex = Math.max(0, this.getDotsArray().length - 1);
-    this.currentSlideIndex = this.currentLang === 'ar' ? maxIndex : 0;
-  }
+private setInitialSlidePosition(): void {
+  const maxIndex = Math.max(0, this.getDotsArray().length - 1);
+
+  // يبدأ دايمًا من النص
+  this.currentSlideIndex = Math.floor(maxIndex / 2);
+}
+
 
   /** ------------------- TOUCH/SWIPE HANDLING ------------------- */
 
