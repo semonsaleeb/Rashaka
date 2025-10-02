@@ -18,7 +18,23 @@
   transition: all 0.3s ease;
   font-size: 14px;
 }
+// في cart-sidebar.scss أو في الـ style العام
+.quantity-btn {
 
+  &:hover {
+    background-color: #555252 !important;
+    border-color: #726e6e !important;
+    color: #ffffff !important;
+    
+    i {
+      color: #ffffff !important;
+    }
+  }
+  
+  i {
+    transition: color 0.3s ease;
+  }
+}
 .custom-green-btn:hover {
   background-color: white;
   color: #000000;
