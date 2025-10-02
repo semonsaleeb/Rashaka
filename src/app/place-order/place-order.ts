@@ -25,6 +25,7 @@ declare var bootstrap: any;
   standalone: true,
   imports: [FormsModule, DecimalPipe, TranslateModule, CommonModule, TruncatePipe]
 })
+
 export class PlaceOrder implements OnInit {
   currentLang: string = 'ar';
   token: string = '';
@@ -388,39 +389,44 @@ selectedAddressId: number | null = null;
   }
 
   // ========================= Place order =========================
+
 placeOrder() {
-  // التحقق من وجود عنوان شحن
   if (!this.selectedAddressId) {
     alert('من فضلك اختر عنوان الشحن أولاً');
     return;
   }
 
-  const params = new HttpParams()
-    .set('address_id', String(this.selectedAddressId ?? ''))
-    .set('payment_method', this.paymentMethod)
-    .set('promo_code', this.promoCode || '')
-    .set('apply_free_balance', this.applyFreeBalance ? '1' : '0')
-    .set('free_balance_amount', String(this.freeBalanceAmount || 0));
+  const body: any = {
+    address_id: this.selectedAddressId,
+    payment_method: this.paymentMethod,
+    applied_free_balance: this.applyFreeBalance ? 1 : 0,
+  };
 
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+  if (this.applyFreeBalance && this.freeBalanceAmount) {
+    body.free_balance_amount = this.freeBalanceAmount;
+  }
 
-  console.log('🔄 إرسال الطلب بطريقة الدفع:', this.paymentMethod);
+  if (this.promoCode) {
+    body.promo_code = this.promoCode;
+  }
 
-  this.http.post(`${environment.apiBaseUrl}/checkout/submit`, {}, { params, headers })
+  // ✅ هنا نشوف جسم الريكويست قبل الإرسال
+  console.log('📦 Order Request Body:', body);
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${this.token}`,
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  });
+
+  this.http.post(`${environment.apiBaseUrl}/checkout/submit`, body, { headers })
     .subscribe({
-      next: (orderRes: any) => {
-        console.log('✅ Order API Response:', orderRes);
+      next: (res: any) => {
+        console.log('✅ Order API Response:', res);
+        this.currentOrderId = res.data?.order_id;
 
-        // حفظ رقم الطلب للاستخدام لاحقاً
-        if (orderRes.data?.order_id) {
-          this.currentOrderId = orderRes.data.order_id;
-        }
-
-        if (this.paymentMethod === 'cash') {
-          this.handleCashOrderResponse(orderRes);
-        } else {
-          this.handleCreditCardOrderResponse(orderRes);
-        }
+        if (this.paymentMethod === 'cash') this.handleCashOrderResponse(res);
+        else this.handleCreditCardOrderResponse(res);
       },
       error: (err) => {
         console.error('❌ Order API Error:', err);
@@ -428,6 +434,9 @@ placeOrder() {
       }
     });
 }
+
+
+
 private handleCashOrderResponse(orderRes: any): void {
   console.log('💵 معالجة طلب الدفع النقدي:', orderRes);
 
@@ -868,4 +877,4 @@ closeCashModal() {
       return null;
     }
   }
-}
+}let retryWithoutBalance = false; // خارج الدالة كمتحول في الكمبوننت

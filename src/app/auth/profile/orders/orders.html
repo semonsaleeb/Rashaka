@@ -2,138 +2,140 @@
 
 <!-- Loading -->
 @if (isLoading) {
-  <div class="text-center">{{ 'ORDERS.LOADING' | translate }}</div>
+<div class="text-center">{{ 'ORDERS.LOADING' | translate }}</div>
 }
 
 <!-- Error -->
 @if (errorMessage) {
-  <div class="alert alert-danger text-center">{{ errorMessage }}</div>
+<div class="alert alert-danger text-center">{{ errorMessage }}</div>
 }
 
 <!-- Orders -->
 @if (allOrders.length > 0) {
-  <!-- Tabs -->
-  <ul class="nav nav-tabs mb-4 justify-content-center">
-    @for (status of orderStatuses; track status; let i = $index) {
-      <li class="nav-item">
-        <button class="nav-link" 
-                [class.active]="activeTab === status"
-                (click)="activeTab = status">
-          {{ status }}
-        </button>
-      </li>
-    }
-  </ul>
+<!-- Tabs -->
+<ul class="nav nav-tabs mb-4 justify-content-center">
+  @for (status of orderStatuses; track status; let i = $index) {
+  <li class="nav-item">
+    <button class="nav-link" [class.active]="activeTab === status" (click)="activeTab = status">
+      {{ status }}
+    </button>
+  </li>
+  }
+</ul>
 
-  <!-- Tab content -->
-  @for (status of orderStatuses; track status) {
-    @if (activeTab === status) {
-      <div class="px-3 px-md-5" 
-           (touchstart)="onTouchStart($event)" 
-           (touchend)="onTouchEnd($event)">
+<!-- Tab content -->
+@for (status of orderStatuses; track status) {
+@if (activeTab === status) {
+<div class="px-3 px-md-5" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
 
-        <ngb-carousel #carousel [interval]="0" [keyboard]="isMobile" [wrap]="false" 
-                      [showNavigationIndicators]="false" [showNavigationArrows]="false" 
-                      [pauseOnHover]="false" (slide)="onSlide($event)">
+  <ngb-carousel #carousel [interval]="0" [keyboard]="isMobile" [wrap]="false" [showNavigationIndicators]="false"
+    [showNavigationArrows]="false" [pauseOnHover]="false" (slide)="onSlide($event)">
 
-          @for (group of groupedOrdersByStatus[status]; track group; let j = $index) {
-            <ng-template ngbSlide [id]="j.toString()">
-              <div class="row">
-                @for (order of group; track order) {
-                  <div class="col-12 col-md-4 mb-4">
-                    <div class="order-card p-4 rounded border rounded-4 d-flex flex-column h-100">
-                      <!-- Top section -->
-                      <div>
-                        <!-- Header -->
-                        <div class="d-flex justify-content-between mb-3"
-                            [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
-                          <span class="order-id-badge">
-                            {{ 'ORDERS.ORDER_NUMBER' | translate }} {{ order.order_id }}
-                          </span>
-                          <div class="status-badge" [ngClass]="{
-                            'text-success': order.status === ('ORDERS.STATUS.DELIVERED' | translate),
-                            'text-danger': order.status === ('ORDERS.STATUS.CANCELLED' | translate),
-                            'text-warning': order.status === ('ORDERS.STATUS.IN_PROGRESS' | translate),
-                            'text-secondary': order.status === ('ORDERS.STATUS.PENDING' | translate)
-                          }">
-                            {{ order.status }}
-                          </div>
-                        </div>
+    @for (group of groupedOrdersByStatus[status]; track group; let j = $index) {
+    <ng-template ngbSlide [id]="j.toString()">
+      <div class="row">
+        @for (order of group; track order) {
+        <div class="col-12 col-md-4 mb-4">
+          <div class="order-card p-4 rounded border rounded-4 d-flex flex-column h-100">
 
-                        <!-- Products -->
-                        <div class="order-items mt-3">
-                          @for (item of order.items; track item) {
-                            <div class="d-flex align-items-center mb-3">
-                              <div class="product-image-wrapper me-3">
-                                <img [src]="item.product_images?.length ? encodeUrl(item.product_images[0]) : 'assets/no-image.png'"
-                                    alt="{{ item.product_name }}" class="product-image" />
-                              </div>
-                              <div class="flex-grow-1">
-                                <p class="fw-bold mb-1">
-                                  {{ currentLang === 'ar' ? item.product_name_ar : item.product_name }}
-                                </p>
-                                <div>
-                                  <strong class="text-secondary">{{ 'ORDERS.QUANTITY' | translate }}:</strong>
-                                  <span>{{ item.quantity }}</span>
-                                </div>
-                              </div>
-                            </div>
-                          } @empty {
-                            <p class="text-muted">{{ 'ORDERS.NO_PRODUCTS' | translate }}</p>
-                          }
-                        </div>
-                      </div>
+            <!-- Top section -->
+            <div>
+              <!-- Header -->
+              <div class="d-flex justify-content-between mb-3" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+                <span class="order-id-badge">
+                  {{ 'ORDERS.ORDER_NUMBER' | translate }} {{ order.order_id }}
+                </span>
+                <div class="status-badge" [ngClass]="{
+                  'text-success': order.status === ('ORDERS.STATUS.DELIVERED' | translate),
+                  'text-danger': order.status === ('ORDERS.STATUS.CANCELLED' | translate),
+                  'text-warning': order.status === ('ORDERS.STATUS.IN_PROGRESS' | translate),
+                  'text-secondary': order.status === ('ORDERS.STATUS.PENDING' | translate)
+                }">
+                  {{ order.status }}
+                </div>
+              </div>
 
-                      <!-- Bottom details -->
-                      <div class="mt-auto mt-3">
-                        <div class="d-flex justify-content-between mb-2">
-                          <strong class="text-secondary">{{ 'ORDERS.CREATED_AT' | translate }}:</strong>
-                          <span>{{ order.created_at | date:'yyyy-MM-dd' }}</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between mb-2">
-                          <strong class="text-secondary">{{ 'ORDERS.ORDERS_TOTAL' | translate }}:</strong>
-                          <span>{{ order.total_price }} {{ 'ORDERS.CURRENCY' | translate }}</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between mb-0">
-                          <strong class="text-secondary">{{ 'ORDERS.PAYMENT_METHOD' | translate }}:</strong>
-                          <span class="payment-method">{{ order.payment_method }}</span>
-                        </div>
-                      </div>
+              <!-- Products -->
+              <div class="order-items mt-3">
+                @for (item of order.items; track item) {
+                <div class="d-flex align-items-center mb-3">
+                  <div class="product-image-wrapper me-3">
+                    <img [src]="item.product_images?.length ? encodeUrl(item.product_images[0]) : 'assets/no-image.png'"
+                      alt="{{ item.product_name }}" class="product-image" />
+                  </div>
+                  <div class="flex-grow-1">
+                    <p class="fw-bold mb-1">
+                      {{ currentLang === 'ar' ? item.product_name_ar : item.product_name }}
+                    </p>
+                    <div>
+                      <strong class="text-secondary">{{ 'ORDERS.QUANTITY' | translate }}:</strong>
+                      <span>{{ item.quantity }}</span>
                     </div>
                   </div>
+                </div>
+                } @empty {
+                <p class="text-muted">{{ 'ORDERS.NO_PRODUCTS' | translate }}</p>
                 }
               </div>
-            </ng-template>
-          }
-        </ngb-carousel>
+            </div>
 
-        <!-- Carousel navigation -->
-        <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
-          <!-- Dots -->
-          <div class="d-flex gap-2 justify-content-center justify-content-md-start" dir="ltr">
-            @for (group of groupedOrdersByStatus[status]; track group; let j = $index) {
-              <button type="button" class="dot btn btn-sm" 
-                      [class.active]="j === currentIndex"
-                      (click)="goToSlide(j)">
+            <!-- Bottom details -->
+            <div class="mt-auto mt-3">
+              <div class="d-flex justify-content-between mb-2">
+                <strong class="text-secondary">{{ 'ORDERS.CREATED_AT' | translate }}:</strong>
+                <span>{{ order.created_at | date:'yyyy-MM-dd' }}</span>
+              </div>
+
+              <div class="d-flex justify-content-between mb-2">
+                <strong class="text-secondary">{{ 'ORDERS.ORDERS_TOTAL' | translate }}:</strong>
+                <span>{{ order.total_price }} {{ 'ORDERS.CURRENCY' | translate }}</span>
+              </div>
+
+              <div class="d-flex justify-content-between mb-0">
+                <strong class="text-secondary">{{ 'ORDERS.PAYMENT_METHOD' | translate }}:</strong>
+                <span class="payment-method">{{ order.payment_method }}</span>
+              </div>
+            </div>
+
+            <!-- Cancel button -->
+            <!-- <div class="d-flex justify-content-between mt-3">
+              <button class="btn btn-danger btn-sm rounded-3" (click)="cancelOrder(order.order_id)">
+                {{ 'ORDERS.CANCEL_ORDER' | translate }}
               </button>
-            }
-          </div>
+            </div> -->
 
-          <!-- Arrows -->
-          <div class="d-flex gap-2 d-none d-md-flex">
-            <button class="arrow-btn next" (click)="nextSlide()" 
-                    [disabled]="currentIndex === groupedOrdersByStatus[status].length - 1"></button>
-            <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentIndex === 0"></button>
           </div>
         </div>
+        }
       </div>
+    </ng-template>
     }
-  }
+
+  </ngb-carousel>
+
+  <!-- Carousel navigation -->
+  <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+    <!-- Dots -->
+    <div class="d-flex gap-2 justify-content-center justify-content-md-start" dir="ltr">
+      @for (group of groupedOrdersByStatus[status]; track group; let j = $index) {
+      <button type="button" class="dot btn btn-sm" [class.active]="j === currentIndex" (click)="goToSlide(j)">
+      </button>
+      }
+    </div>
+
+    <!-- Arrows -->
+    <div class="d-flex gap-2 d-none d-md-flex">
+      <button class="arrow-btn next" (click)="nextSlide()"
+        [disabled]="currentIndex === groupedOrdersByStatus[status].length - 1"></button>
+      <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentIndex === 0"></button>
+    </div>
+  </div>
+</div>
+}
+}
 }
 
 <!-- No orders -->
 @if (!isLoading && !allOrders.length) {
-  <p class="text-center">{{ 'ORDERS.NO_ORDERS' | translate }}</p>
+<p class="text-center">{{ 'ORDERS.NO_ORDERS' | translate }}</p>
 }

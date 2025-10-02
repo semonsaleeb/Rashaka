@@ -4,7 +4,7 @@
   <div class="mb-3">
     <label class="form-label">{{ 'REGISTER.NAME' | translate }}</label>
     <input type="text" formControlName="name" class="form-control" style="height: 5vh;"
-      [class.is-invalid]="(registerForm.get('name')?.invalid && registerForm.get('name')?.touched) || apiErrors?.name">
+      [class.is-invalid]="isFieldInvalid('name') || apiErrors?.name">
 
     <div *ngIf="registerForm.get('name')?.hasError('required') && registerForm.get('name')?.touched"
       class="invalid-feedback">
@@ -18,17 +18,24 @@
       class="invalid-feedback">
       {{ 'REGISTER.ERRORS.NAME_MAXLENGTH' | translate }}
     </div>
+    <div *ngIf="registerForm.get('name')?.hasError('pattern') && registerForm.get('name')?.touched"
+      class="invalid-feedback">
+      {{ 'REGISTER.ERRORS.NAME_PATTERN' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('name')?.hasError('nameWhitespace')" class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.NAME_WHITESPACE' | translate }}
+    </div>
     <div *ngIf="apiErrors?.name" class="invalid-feedback d-block">
       {{ apiErrors.name }}
     </div>
   </div>
 
-
   <!-- البريد الإلكتروني -->
   <div class="mb-3">
     <label class="form-label">{{ 'REGISTER.EMAIL' | translate }}</label>
     <input type="email" formControlName="email" class="form-control" style="height: 5vh;"
-      [class.is-invalid]="(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) || apiErrors?.email">
+      [class.is-invalid]="isFieldInvalid('email') || apiErrors?.email">
+    
     <div *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched"
       class="invalid-feedback">
       {{ 'REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}
@@ -37,6 +44,10 @@
       class="invalid-feedback">
       {{ 'REGISTER.ERRORS.EMAIL_INVALID' | translate }}
     </div>
+    <div *ngIf="registerForm.get('email')?.hasError('pattern') && registerForm.get('email')?.touched"
+      class="invalid-feedback">
+      {{ 'REGISTER.ERRORS.EMAIL_PATTERN' | translate }}
+    </div>
     <div *ngIf="registerForm.get('email')?.hasError('maxlength') && registerForm.get('email')?.touched"
       class="invalid-feedback">
       {{ 'REGISTER.ERRORS.EMAIL_MAXLENGTH' | translate }}
@@ -44,9 +55,8 @@
     <div *ngIf="registerForm.get('email')?.hasError('emailNotVerified')" class="invalid-feedback d-block">
       {{ 'REGISTER.ERRORS.EMAIL_NOT_VERIFIED' | translate }}
     </div>
-    <div *ngIf="registerForm.get('email')?.hasError('pattern') && registerForm.get('email')?.touched"
-      class="invalid-feedback">
-      {{ 'REGISTER.ERRORS.EMAIL_PATTERN' | translate }}
+    <div *ngIf="registerForm.get('email')?.hasError('emailWhitespace')" class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.EMAIL_WHITESPACE' | translate }}
     </div>
     <div *ngIf="apiErrors?.email" class="invalid-feedback d-block">
       {{ apiErrors.email }}
@@ -57,13 +67,26 @@
   <div class="mb-3">
     <label class="form-label">{{ 'REGISTER.PHONE' | translate }}</label>
     <input type="tel" formControlName="phone" class="form-control" style="height: 5vh;"
-      [class.is-invalid]="(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) || apiErrors?.phone">
+      [class.is-invalid]="isFieldInvalid('phone') || apiErrors?.phone">
+    
     <div *ngIf="registerForm.get('phone')?.hasError('required') && registerForm.get('phone')?.touched"
       class="invalid-feedback">
       {{ 'REGISTER.ERRORS.PHONE_REQUIRED' | translate }}
     </div>
     <div *ngIf="registerForm.get('phone')?.hasError('pattern')" class="invalid-feedback d-block">
       {{ 'REGISTER.ERRORS.PHONE_INVALID' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('phone')?.hasError('minlength')" class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PHONE_MINLENGTH' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('phone')?.hasError('maxlength')" class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PHONE_MAXLENGTH' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('phone')?.hasError('phoneTaken')" class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PHONE_TAKEN' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('phone')?.hasError('phoneWhitespace')" class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PHONE_WHITESPACE' | translate }}
     </div>
     <div *ngIf="apiErrors?.phone" class="invalid-feedback d-block">
       {{ apiErrors.phone }}
@@ -75,14 +98,31 @@
     <label class="form-label">{{ 'REGISTER.PASSWORD' | translate }}</label>
     <div class="position-relative">
       <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5 pe-4" style="height: 5vh;"
-        [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate">
+        [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate"
+        [class.is-invalid]="isFieldInvalid('password')">
 
       <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"
         style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 5;"
         (click)="togglePasswordVisibility()">
         <i class="fas" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
       </span>
+    </div>
 
+    <div *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('password')?.hasError('minlength') && registerForm.get('password')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_MINLENGTH' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('password')?.hasError('maxlength') && registerForm.get('password')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_MAXLENGTH' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('password')?.hasError('weakPassword') && registerForm.get('password')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_WEAK' | translate }}
     </div>
   </div>
 
@@ -91,23 +131,39 @@
     <label class="form-label">{{ 'REGISTER.PASSWORD_CONFIRM' | translate }}</label>
     <div class="position-relative">
       <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="password_confirmation" style="height: 5vh;"
-        class="form-control ps-5 pe-4" [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate">
+        class="form-control ps-5 pe-4" [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate"
+        [class.is-invalid]="isFieldInvalid('password_confirmation') || registerForm.hasError('mismatch')">
 
       <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"
         style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 5;"
         (click)="toggleConfirmPasswordVisibility()">
         <i class="fas" [class.fa-eye]="showConfirmPassword" [class.fa-eye-slash]="!showConfirmPassword"></i>
       </span>
+    </div>
 
+    <div *ngIf="registerForm.get('password_confirmation')?.hasError('required') && registerForm.get('password_confirmation')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_CONFIRM_REQUIRED' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('password_confirmation')?.hasError('minlength') && registerForm.get('password_confirmation')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_CONFIRM_MINLENGTH' | translate }}
+    </div>
+    <div *ngIf="registerForm.get('password_confirmation')?.hasError('maxlength') && registerForm.get('password_confirmation')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_CONFIRM_MAXLENGTH' | translate }}
+    </div>
+    <div *ngIf="registerForm.hasError('mismatch') && registerForm.get('password_confirmation')?.touched"
+      class="invalid-feedback d-block">
+      {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
     </div>
   </div>
 
-
-
   <!-- زر التسجيل -->
   <button type="submit" class="btn custom-green-btn w-100 py-2" style="padding: 15px 10px 15px 10px !important;"
-    [disabled]="registerForm.invalid || registerForm.pending">
-    {{ 'REGISTER.SUBMIT' | translate }}
+    [disabled]="registerForm.invalid || registerForm.pending || loading">
+    <span *ngIf="!loading">{{ 'REGISTER.SUBMIT' | translate }}</span>
+    <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   </button>
 
   <!-- رسائل النجاح والخطأ العامة -->
@@ -123,7 +179,10 @@
       <img src="assets/Images/Account-amico 1.svg" alt="success" class="mb-3 d-block mx-auto" style="width: 240px;">
       <h5 class="fw-bold">{{ 'REGISTER.SUCCESS_TITLE' | translate }}</h5>
       <p class="text-muted">{{ 'REGISTER.SUCCESS_MESSAGE' | translate }}</p>
-      <button class="btn btn-success w-100" [routerLink]="['/']" data-bs-dismiss="modal">
+      <button class="btn btn-success w-100" [routerLink]="['/']" data-bs-dismiss="modal" style="  background-color: #7AD03A !important;
+    border: none !important;
+    color: black;
+">
         {{ 'REGISTER.SUCCESS_BUTTON' | translate }}
       </button>
     </div>
