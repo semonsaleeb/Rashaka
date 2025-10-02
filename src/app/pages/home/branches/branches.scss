@@ -78,7 +78,7 @@ body {
 .service-card {
   background: #123F4F;
   border-radius: 20px;
-  width: 110%;
+  width: 95%;
   padding: 25px;
   color: white;
   overflow: hidden;
@@ -336,4 +336,17 @@ body {
     border: none !important;
     color: black;
 
+}
+
+.carousel-track {
+  width: 100%;
+  justify-content: start;
+}
+
+
+@media (max-width: 768px) {
+  .carousel-track {
+    gap: 10px !important;
+    width: 90%;
+  }
 }

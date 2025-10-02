@@ -249,7 +249,7 @@
           <!-- ✅ زرار اختيار الكل -->
           <li>
             <label class="form-check d-flex align-items-center gap-2">
-              <input class="form-check-input mx-2" type="checkbox" [checked]="areAllSelected()"
+              <input class="form-check-input mx-2"  type="checkbox" [checked]="areAllSelected()"
                 (change)="toggleAllCategories($event)" />
               <span>{{ currentLang === 'ar' ? 'الكل' : 'All' }}</span>
             </label>
@@ -276,7 +276,7 @@
           <input type="number" class="form-control text-end " [placeholder]="'PRICE_FROM' | translate"
             [(ngModel)]="priceMin" style="font-size:15px ;" />
           <input type="number" class="form-control text-end" [placeholder]="'PRICE_TO' | translate"
-            [(ngModel)]="priceMax" style="font-size:15px ;" />
+            [(ngModel)]="priceMax" style="font-size:15px;" />
           <button class="btn btn-success" (click)="applyPriceFilter()">
             {{ 'SHOW' | translate }}
           </button>
@@ -393,7 +393,7 @@
 
           <!-- Modal Footer -->
           <div class="modal-footer">
-            <button type="button" class="btn close_btn" data-bs-dismiss="modal">
+            <button type="button" class="btn close_btn" data-bs-dismiss="modal" style="width: 100%;">
               {{ 'DONE' | translate }}
             </button>
           </div>

@@ -245,23 +245,23 @@ Grid Mode
             <img src="assets/Images/Group 9010.svg" alt="Frame"
               style="position:absolute; top:0; right:0; width:80px; z-index:2;">
             <div class="plan-info mt-5 ">
-              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+              <span class="d-block" style="font-size: 20px;" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
                 {{ 'PRICING.SUBSCRIPTION' | translate }}
               </span>
-              <div class="sessions fw-bold my-2"
+              <div class="sessions fw-bold my-2" style="width: 30%; font-size: 20px;"
                 [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
                 [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
                 {{ plan.sessions }}
               </div>
-              <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
+              <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center" 
                 [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'"
                 [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
 
                 <!-- النص "السعر" أو "Price" -->
-                <span>{{ 'PRICING.PRICE' | translate }}</span>
+                <span style="font-size: 25px !important;">{{ 'PRICING.PRICE' | translate }}</span>
 
                 <!-- السعر قبل الخصم -->
-                <span *ngIf="plan.price_before !== null && plan.price_before !== undefined"
+                <span *ngIf="plan.price_before !== null && plan.price_before !== undefined" style="font-size: 25px !important;"
                   [ngStyle]="{'text-decoration': plan.price_after ? 'line-through' : 'none'}">
                   {{ plan.price_before }}
                 </span>

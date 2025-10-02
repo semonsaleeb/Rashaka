@@ -506,3 +506,19 @@ color: black;
   margin-right: -35px !important;
 }
 }
+
+.form-check span ,.form-check-label  {
+  font-size: 20px;
+  font-weight: 700;
+}
+.form-check-input:checked  {
+  background-color: #7AD03A;
+  border-color: #7AD03A;
+  width: 2vh;
+  height: 2vh;
+}
+
+.form-check-input {
+  width: 2vh;
+  height: 2vh;
+}

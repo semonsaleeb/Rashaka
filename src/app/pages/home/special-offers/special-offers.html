@@ -75,7 +75,7 @@
                     {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}
                   </h6>
                   <p class="card-text text-muted mb-3">
-                    {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:40 }}
+                    {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:35 }}
                   </p>
 
                   @if (product.sale_price && product.sale_price !== product.original_price) {

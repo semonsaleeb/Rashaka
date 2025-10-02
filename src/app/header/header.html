@@ -66,11 +66,11 @@
           </button>
           <div ngbDropdownMenu class="dropdown-menu-end">
             <a class="dropdown-item" routerLink="/profile" style="width: 10%;">
-              <img src="assets/Images/Frame 9050.svg" alt="{{ 'header.profileAlt' | translate }}">
+              <img src="assets/Images/Frame 9050.svg" style="margin-left: 10px;" alt="{{ 'header.profileAlt' | translate }}">
               <span>{{ 'header.profile' | translate }}</span>
             </a>
             <button class="dropdown-item text-danger" (click)="logout()" style="width: 10%;">
-              <img src="assets/Images/Frame 9049.svg" alt="{{ 'header.logoutAlt' | translate }}">
+              <img src="assets/Images/Frame 9049.svg" style="margin-left: 10px;" alt="{{ 'header.logoutAlt' | translate }}">
               <span>{{ 'header.logout' | translate }}</span>
             </button>
           </div>
@@ -79,7 +79,7 @@
 
         <!-- Language Switch -->
         <div class="language-selector dropdown ">
-          <button class="btn btn-sm dropdown-toggle text-dark  fs-6 border-0 bg-transparent" type="button"
+          <button class="btn btn-sm dropdown-toggle text-dark  fs-6 border-0 bg-transparent"  type="button"
             id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="assets/Images/language.svg" alt="Language" width="25" class="me-1" />
             {{ currentLang === 'ar' ? 'العربية' : 'English' }}
@@ -332,11 +332,11 @@
         <span>{{ 'MOBILE_MENU.LOGIN' | translate }}</span>
       </a>
       } @else {
-      <div ngbDropdown class="d-inline-block w-100 mt-2" [class.text-end]="currentLang === 'ar'"
+      <div ngbDropdown class="d-inline-block w-100 mt-2"  [class.text-end]="currentLang === 'ar'"
         [class.text-start]="currentLang !== 'ar'" placement="bottom-start">
         <button ngbDropdownToggle
-          class="btn fs-3 bg-white w-100 text-dark d-flex justify-content-between align-items-center gap-2 px-3 rounded-5 border border-dark">
-          <img src="assets/Images/user-circle.svg" alt="User" width="20" />
+          class="btn fs-3 bg-white w-100 text-dark d-flex justify-content-between align-items-center gap-2 px-3 rounded-5 border border-dark" style="background-color: #D1EBF5 !important;">
+          <img src="assets/Images/uu.svg" alt="User" width="40" />
           <span>{{ 'MOBILE_MENU.WELCOME' | translate }}, {{ client?.name || ('MOBILE_MENU.USER' | translate) }}</span>
         </button>
 
@@ -379,7 +379,7 @@
             [routerLink]="['/home/Shop']" [queryParams]="{ category_id: category.id }"
             (click)="closeMobileMenu(); closeAllDropdowns()">
             {{ translate.currentLang === 'ar' ? category.name_ar : category.name }}
-          </a>
+         </a>
         </div>
         }
 
