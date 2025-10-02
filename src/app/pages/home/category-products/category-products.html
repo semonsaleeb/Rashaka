@@ -197,12 +197,13 @@
 
             <!-- Arrows (desktop only) -->
             <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
-              <button class="arrow-btn next" (click)="nextSlide()"
+                 <button class="arrow-btn next " (click)="prevSlide()" [disabled]="currentSlideIndex === 0">
+              </button>
+              <button class="arrow-btn prev" (click)="nextSlide()"
                 [disabled]="currentSlideIndex >= getTotalSlides() - 1">
               </button>
 
-              <button class="arrow-btn prev" (click)="prevSlide()" [disabled]="currentSlideIndex === 0">
-              </button>
+           
             </div>
 
 
