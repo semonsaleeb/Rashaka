@@ -93,30 +93,46 @@ export class Branch implements OnInit {
   }
 
 
- loadCenters() {
+//  loadCenters() {
+//   if (!this.selectedSessionKey) return;
+
+//   const sessionKey = this.selectedSessionKey.trim();
+
+//   this.availabilityService.getCentersAvailability(sessionKey).subscribe({
+//     next: (res: any) => {
+//       let centers: (Center & { specialists?: (Specialist & { working_days?: string[] })[] })[] = res?.centers || [];
+
+//       // فلترة: هات بس المراكز اللي عندها specialists بمواعيد متاحة
+//       centers = centers.filter(center => {
+//         const specialists = center.specialists || [];
+//         return specialists.some(sp => (sp.working_days || []).length > 0);
+//       });
+
+//       this.centers = centers;
+//       this.selectedBranchId = null;
+
+//       console.log('✅ Filtered Centers:', this.centers);
+//     },
+//     error: (err) => console.error('❌ Error fetching centers:', err)
+//   });
+// }
+
+loadCenters() {
   if (!this.selectedSessionKey) return;
 
   const sessionKey = this.selectedSessionKey.trim();
 
   this.availabilityService.getCentersAvailability(sessionKey).subscribe({
     next: (res: any) => {
-      let centers: (Center & { specialists?: (Specialist & { working_days?: string[] })[] })[] = res?.centers || [];
-
-      // فلترة: هات بس المراكز اللي عندها specialists بمواعيد متاحة
-      centers = centers.filter(center => {
-        const specialists = center.specialists || [];
-        return specialists.some(sp => (sp.working_days || []).length > 0);
-      });
-
-      this.centers = centers;
+      // خذ كل المراكز مباشرة بدون فلترة
+      this.centers = res?.centers || [];
       this.selectedBranchId = null;
 
-      console.log('✅ Filtered Centers:', this.centers);
+      console.log('✅ All Centers:', this.centers);
     },
     error: (err) => console.error('❌ Error fetching centers:', err)
   });
 }
-
 
 
 
