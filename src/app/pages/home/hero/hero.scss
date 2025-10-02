@@ -117,7 +117,14 @@
   max-width: 100%;
   height: 690px;
   margin: auto;
+   overflow-x: auto;
+  overflow-y: visible;
 }
+
+.slider-container {
+  touch-action: pan-y !important; /* يسمح بالسحب لتحت */
+}
+
 
 /* تابلت */
 // @media (max-width: 768px) {
