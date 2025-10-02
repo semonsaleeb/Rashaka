@@ -1,5 +1,5 @@
 <form (ngSubmit)="login()" >
-  <div class="mb-3">
+  <div class="mb-3" style="width: 100%; justify-self: center;">
     <label for="email">{{ 'LOGIN.EMAIL' | translate }}</label>
     <input
       type="email"
@@ -10,7 +10,7 @@
       required
     />
   </div>
-<div class="my-3 position-relative" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
+<div class="my-3 position-relative" style="width: 100%; justify-self: center;" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
   <label for="password">{{ 'REGISTER.PASSWORD' | translate }}</label>
   
   <input 
@@ -42,7 +42,7 @@
   <!-- Forgot Password Link -->
   <a [routerLink]="['/forgot-password']"
      class="d-block text-end text-primary mb-3"
-     style="text-decoration: none;">
+     style="text-decoration: none; width: 100%; justify-self: center;">
     {{ 'LOGIN.FORGOT_PASSWORD' | translate }} <i class="fas fa-unlock"></i>
   </a>
 

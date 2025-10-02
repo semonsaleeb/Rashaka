@@ -277,6 +277,7 @@
     "PASSWORD_CONFIRM_PLACEHOLDER": "تأكيد كلمة المرور",
     "SUBMIT": "تسجيل",
     "ERRORS": {
+      "TITLE": "حدث خطأ",
       "NAME_MINLENGTH": "يجب أن يكون الاسم 8 أحرف على الأقل",
       "NAME_REQUIRED": "يرجى إدخال الاسم الكامل",
       "NAME_MAXLENGTH": "الاسم طويل جدًا، الحد الأقصى 255 حرف",
