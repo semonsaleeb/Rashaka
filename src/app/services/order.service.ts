@@ -88,12 +88,13 @@ export class OrderService {
   }
 
   // Place a new order
+// src/app/services/order.service.ts
 placeOrder(
   addressId: number,
   paymentMethod: string,
-  promoCode?: string,
+  promoCode: string = '',
   applyFreeBalance: boolean = false,
-  freeBalanceAmount?: number
+  freeBalanceAmount: number = 0
 ): Observable<any> {
   const token = localStorage.getItem('token') || '';
   const headers = new HttpHeaders({
@@ -104,13 +105,14 @@ placeOrder(
   const body = {
     address_id: addressId,
     payment_method: paymentMethod,
-    promocode: promoCode || '',
-    apply_free_balance: applyFreeBalance,          // ✅ include this
-    free_balance_amount: freeBalanceAmount || 0    // ✅ include the exact amount
+    promo_code: promoCode,                // ✅ خليها promo_code مش promocode
+    apply_free_balance: applyFreeBalance ? 1 : 0, // ✅ 0 أو 1
+    free_balance_amount: freeBalanceAmount
   };
 
-  return this.http.post(`${this.baseUrl}/order`, body, { headers });
+  return this.http.post(`${this.baseUrl}/checkout/submit`, body, { headers });
 }
+
 
 
 

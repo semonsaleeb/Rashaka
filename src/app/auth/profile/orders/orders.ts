@@ -125,6 +125,47 @@ export class Orders implements OnInit, OnDestroy {
   encodeUrl(url: string): string {
     return encodeURI(url);
   }
+// في orders.component.ts
+cancelOrder(orderId: number) {
+  if (!confirm('هل أنت متأكد أنك تريد إلغاء هذا الطلب؟')) {
+    return;
+  }
+
+  
+
+  this.orderService.updateOrderStatus(orderId, 'cancelled').subscribe({
+    next: (res) => {
+      console.log('✅ Order cancelled:', res);
+
+      // تحديث الحالة محليًا في allOrders
+      const orderIndex = this.allOrders.findIndex(o => o.order_id === orderId);
+      if (orderIndex > -1) {
+        this.allOrders[orderIndex].status = 'cancelled';
+        
+        // حفظ التحديث في localStorage
+        this.saveOrdersToStorage(this.allOrders);
+        
+        // إعادة التجميع للكاروسيل
+        this.regroupOrders();
+        
+        console.log('🔄 Order status updated locally and saved to storage');
+      }
+    },
+    error: (err) => {
+      console.error('❌ فشل إلغاء الطلب:', err);
+      
+      // إذا كان الخطأ 401 (غير مصرح)، نظف البيانات المخزنة
+      if (err.status === 401) {
+        this.clearCachedOrders();
+        this.allOrders = [];
+        this.groupedOrders = [];
+        this.errorMessage = 'انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى';
+      } else {
+        alert('فشل إلغاء الطلب: ' + (err.error?.message || 'حدث خطأ غير متوقع'));
+      }
+    }
+  });
+}
 
   updateVisibleCards(): void {
     const width = window.innerWidth;
