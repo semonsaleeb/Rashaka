@@ -63,8 +63,8 @@
         <!-- Add to cart + Compare -->
         <div class="d-flex flex-wrap gap-2 mb-3">
           @if (isInCart(product.id)) {
-          <div class="d-flex align-items-center justify-content-center px-3 gap-2 border border-secondary rounded-2"
-            style="background-color:#7AD03A;direction:rtl;">
+           <div class="d-flex  mt-2 align-items-center justify-content-center py-1 px-3 gap-2 border border-secondary rounded-2"
+            style="background-color:#7AD03A;direction:rtl; ">
             <button class="btn custom-increase-btn btn-sm"
               (click)="decreaseQuantity(product.id);$event.stopPropagation()">
               <i class="fa-solid fa-minus"></i>
@@ -78,12 +78,14 @@
             </button>
           </div>
           } @else {
-          <button class="btn mt-2 text-black rounded-2 custom-hover px-3 py-2"
-            style="background-color:#7AD03A;" (click)="addToCart(product,$event)" data-bs-toggle="offcanvas"
-            data-bs-target="#cartSidebar" aria-controls="cartSidebar">
-            <img src="assets/Images/shopping-cart-add-01.svg" style="width:20px;" class="px-1">
-            {{ 'ADD_TO_CART' | translate }}
-          </button>
+        <button 
+  class="btn mt-2 text-black rounded-2 custom-hover px-3 py-2"
+  style="background-color:#7AD03A;"
+  (click)="addToCart(product,$event)">
+  <img src="assets/Images/shopping-cart-add-01.svg" style="width:20px;" class="px-1">
+  {{ 'ADD_TO_CART' | translate }}
+</button>
+
           }
 
           <button (click)="addToCompare(product);$event.preventDefault();$event.stopPropagation()"
@@ -150,7 +152,20 @@
     <!-- 📱 موبايل: صفوف 2 كروت -->
     @for (product of filteredProducts; track product.id) {
     <div class="col-6">
-      <div class="card product-card rounded-4 h-100">
+      <div class="card product-card rounded-4 h-100 position-relative">
+        <!-- أزرار المفضلة والمقارنة -->
+        <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+          <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
+            [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+            <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+          </button>
+
+          <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+            class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+            <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
+          </button>
+        </div>
+
         <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
           <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
             style="height:140px;object-fit:contain;" />
@@ -175,7 +190,20 @@
       }" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
         @for (product of filteredProducts; track product.id) {
         <div class="carousel-slide p-3">
-          <div class="card product-card rounded-4 h-100">
+          <div class="card product-card rounded-4 h-100 position-relative">
+            <!-- أزرار المفضلة والمقارنة -->
+            <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-2">
+              <button (click)="toggleFavorite(product); $event.stopPropagation()" class="btn-circle"
+                [ngClass]="product.isFavorite ? 'text-danger' : 'text-muted'">
+                <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
+              </button>
+
+              <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
+                class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+                <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
+              </button>
+            </div>
+
             <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
               <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
                 style="height:180px;object-fit:contain;" />

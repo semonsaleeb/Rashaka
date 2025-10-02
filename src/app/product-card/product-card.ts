@@ -250,8 +250,7 @@ private loadCategoryProducts(categoryId: number, token: string = ''): void {
     );
   }
 
-
- addToCart(product: Product, event?: Event): void {
+addToCart(product: Product, event?: Event): void {
   if (event) {
     event.preventDefault();
     event.stopPropagation();
@@ -268,6 +267,7 @@ private loadCategoryProducts(categoryId: number, token: string = ''): void {
         product_id: product.id,
         quantity: 1,
         product_name_ar: product.name_ar,
+        product_name: product.name,
         unit_price: safeNumber(product.price_before || product.price || product.original_price),
         sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
         images: product.images || []
@@ -275,15 +275,68 @@ private loadCategoryProducts(categoryId: number, token: string = ''): void {
     }
 
     this.saveGuestCart(cart);
-    this.cartState.updateItems(cart); // 🟢 Sync UI
+
+    // 🟢 افتح الـ sidebar بعد تحديث البيانات
+    setTimeout(() => this.openCartSidebar(), 50);
     return;
   }
 
   this.cartService.addToCart(product.id, 1).subscribe({
-    next: () => this.loadCart(),
+    next: () => {
+      this.loadCart();
+      setTimeout(() => this.openCartSidebar(), 50); // 🟢 بعد التحميل افتح
+    },
     error: (err) => this.handleCartActionError(err)
   });
 }
+openCartSidebar(): void {
+  const sidebarEl = document.getElementById('cartSidebar');
+  if (sidebarEl) {
+    const offcanvas = bootstrap.Offcanvas.getInstance(sidebarEl)
+      || new bootstrap.Offcanvas(sidebarEl);
+
+    if (!this.isLoggedIn()) {
+      // 🟢 لو Guest → هات من localStorage
+      const cart = this.loadGuestCart();
+      this.cartState.updateItems(cart);
+      this.cartState.updateCount(
+        cart.reduce((sum, item) => sum + (item.quantity ?? 0), 0)
+      );
+      this.cdr.detectChanges();
+    } else {
+      // 🟢 لو Logged-in → هات من الـ API
+      this.cartService.getCart().subscribe({
+        next: (response) => {
+          const items = response.data?.items || [];
+          this.cartState.updateItems(items);
+          this.cartState.updateCount(
+            items.reduce((sum: number, item: any) => sum + (item.quantity ?? 0), 0)
+          );
+          this.cdr.detectChanges();
+        },
+        error: (err) => this.handleCartActionError(err)
+      });
+    }
+
+    // ✅ افتح الـ Sidebar بعد تحديث البيانات
+    offcanvas.show();
+  }
+}
+
+
+
+private handleCartResponse(response: any): void {
+  this.cartItems = response.data?.items || [];
+
+  // 🟢 حدّث العناصر عشان sidebar يشوفها
+  this.cartState.updateItems(this.cartItems);
+
+  const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+  this.cartState.updateCount(total);
+}
+
+
+
 
 increaseQuantity(productId: number): void {
   if (!this.isLoggedIn()) {
@@ -405,15 +458,6 @@ removeItem(productId: number): void {
       const count = response.data.items.reduce((total: number, item: any) => total + item.quantity, 0);
       this.cartState.updateCount(count);
     });
-  }
-  openCartSidebar(): void {
-    const sidebarEl = document.getElementById('cartSidebar');
-    if (sidebarEl) {
-      const offcanvas = bootstrap.Offcanvas.getInstance(sidebarEl)
-        || new bootstrap.Offcanvas(sidebarEl);
-
-      offcanvas.show();
-    }
   }
 
   get shortDescription(): string {
@@ -544,7 +588,6 @@ addToCompare(product: Product, event?: Event): void {
     this.compareProducts = [];
   }
 
-  openSidebar() { const modal = new (window as any).bootstrap.Modal(document.getElementById('filtersModal')); modal.show(); }
 
   touchStartX = 0; touchEndX = 0;
   onTouchStart(event: TouchEvent) { this.touchStartX = event.changedTouches[0].screenX; }

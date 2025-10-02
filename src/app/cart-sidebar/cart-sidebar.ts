@@ -54,34 +54,28 @@ export class CartSidebar implements OnInit, OnDestroy {
     return parsedCart.map((item: any) => this.normalizeProduct(item));
   }
 
-  // ✅ تطبيع المنتج قبل التخزين (تحويل كل القيم لرقم)
-private normalizeProduct(item: any): CartItem {
-  const unitPrice = safeNumber(item.unit_price ?? item.price ?? item.original_price);
-  const saleUnitPrice = safeNumber(item.unit_price_after_offers ?? item.sale_unit_price ?? item.sale_price);
-  const quantity = safeNumber(item.quantity ?? item.cart_quantity ?? 1);
+  // ✅ تطبيع المنتج قبل التخزين
+  private normalizeProduct(item: any): CartItem {
+    const unitPrice = safeNumber(item.unit_price ?? item.price ?? item.original_price);
+    const saleUnitPrice = safeNumber(item.unit_price_after_offers ?? item.sale_unit_price ?? item.sale_price);
+    const quantity = safeNumber(item.quantity ?? item.cart_quantity ?? 1);
 
-  // 🟢 log علشان تتابع القيم
-  console.log(`🧾 Product: ${item.product_name || item.name}`);
-  console.log(`   ➡️ unit_price: ${unitPrice}, sale_unit_price: ${saleUnitPrice}, quantity: ${quantity}`);
+    return {
+      product_id: item.product_id ?? item.id,
+      product_name: item.product_name ?? item.name,
+      product_name_ar: item.product_name_ar ?? item.name_ar,
+      images: item.images ?? (item.image ? [item.image] : []),
 
-  return {
-    product_id: item.product_id ?? item.id,
-    product_name: item.product_name ?? item.name,
-    product_name_ar: item.product_name_ar ?? item.name_ar,
-    images: item.images ?? (item.image ? [item.image] : []),
+      unit_price: unitPrice,
+      sale_unit_price: saleUnitPrice,
+      unitPrice,
+      saleUnitPrice,
 
-    // 🟢 الأرقام كلها جاهزة كـ number
-    unit_price: unitPrice,
-    sale_unit_price: saleUnitPrice,
-    unitPrice,
-    saleUnitPrice,
-
-    quantity,
-    total_price: unitPrice * quantity,
-    total_price_after_offers: (saleUnitPrice || unitPrice) * quantity,
-  };
-}
-
+      quantity,
+      total_price: unitPrice * quantity,
+      total_price_after_offers: (saleUnitPrice || unitPrice) * quantity,
+    };
+  }
 
   // ✅ حفظ الكارت للـ guest
   private saveGuestCart(cart: any[]): void {
@@ -110,6 +104,7 @@ private normalizeProduct(item: any): CartItem {
 
         console.log("🛒 Cart Items Loaded:", this.cartItems);
 
+        this.cartState.updateItems(this.cartItems);
         this.refreshCartCount();
         this.cdr.detectChanges();
       },
@@ -124,7 +119,16 @@ private normalizeProduct(item: any): CartItem {
       this.cartItems = this.loadGuestCart();
       this.refreshCartCount();
       this.cdr.detectChanges();
+    } else {
+      this.loadCart();
     }
+
+    // 🟢 subscribe لتحديث الكارت من CartStateService
+this.cartState.cartItems$.subscribe(items => {
+  this.cartItems = items;
+  this.cdr.detectChanges();
+});
+
 
     const sidebarEl = document.getElementById('cartSidebar');
     if (sidebarEl) {
@@ -141,35 +145,29 @@ private normalizeProduct(item: any): CartItem {
 
   // ====================== HELPERS ======================
 
-private handleOutsideClick(event: MouseEvent) {
-  const sidebarEl = document.getElementById('cartSidebar');
-  if (sidebarEl && sidebarEl.classList.contains('show')) {
-    const target = event.target as HTMLElement;
+  private handleOutsideClick(event: MouseEvent) {
+    const sidebarEl = document.getElementById('cartSidebar');
+    if (sidebarEl && sidebarEl.classList.contains('show')) {
+      const target = event.target as HTMLElement;
 
-    // 🛑 لو ضغطت على زرار جوا الكارت (زي remove-btn) → تجاهل
-    if (sidebarEl.contains(target) && target.closest('.remove-btn')) {
-      return;
-    }
+      if (sidebarEl.contains(target) && target.closest('.remove-btn')) {
+        return;
+      }
 
-    if (!sidebarEl.contains(target)) {
-      console.log('🔹 Closing sidebar because of outside click');
-      this.closeSidebar();
-
-      // 🔄 تحديث القائمة + الواجهة بعد الغلق
-      this.refreshCartCount();
-      this.cdr.detectChanges();
+      if (!sidebarEl.contains(target)) {
+        console.log('🔹 Closing sidebar because of outside click');
+        this.closeSidebar();
+        this.refreshCartCount();
+        this.cdr.detectChanges();
+      }
     }
   }
-}
 
-onSidebarClosed(): void {
-  console.log("🔹 Sidebar closed by button");
-
-  this.refreshCartCount();
-  this.cdr.detectChanges();
-}
-
-
+  onSidebarClosed(): void {
+    console.log("🔹 Sidebar closed by button");
+    this.refreshCartCount();
+    this.cdr.detectChanges();
+  }
 
   private handleCartError(err: HttpErrorResponse): void {
     console.error('❌ Error loading cart:', err);
@@ -190,59 +188,58 @@ onSidebarClosed(): void {
   private resetCartState(): void {
     this.cartItems = [];
     this.cartState.updateCount(0);
+    this.cartState.updateItems([]);
   }
 
   // ====================== CART ACTIONS ======================
 
-increaseQuantity(productId: number) {
-  this.cartService.updateQuantity(productId, this.getCurrentQuantity(productId) + 1).subscribe({
-    next: () => {
-      const current = this.cartState.getCartSummary().items;
-      const item = current.find(i => i.product_id === productId);
-      if (item) {
-        item.quantity++;
-        this.cartState.updateItems([...current]); // تحديث BehaviorSubject
+  increaseQuantity(productId: number) {
+    this.cartService.updateQuantity(productId, this.getCurrentQuantity(productId) + 1).subscribe({
+      next: () => {
+        const current = this.cartState.getCartSummary().items;
+        const item = current.find(i => i.product_id === productId);
+        if (item) {
+          item.quantity++;
+          this.cartState.updateItems([...current]);
+        }
       }
-    }
-  });
-}
-
-decreaseQuantity(productId: number) {
-  const currentQty = this.getCurrentQuantity(productId);
-  if (currentQty <= 1) {
-    this.removeItem(productId); // لو العدد 1 → احذف المنتج
-    return;
+    });
   }
 
-  this.cartService.updateQuantity(productId, currentQty - 1).subscribe({
-    next: () => {
-      const current = this.cartState.getCartSummary().items;
-      const item = current.find(i => i.product_id === productId);
-      if (item) {
-        item.quantity--;
+  decreaseQuantity(productId: number) {
+    const currentQty = this.getCurrentQuantity(productId);
+    if (currentQty <= 1) {
+      this.removeItem(productId);
+      return;
+    }
+
+    this.cartService.updateQuantity(productId, currentQty - 1).subscribe({
+      next: () => {
+        const current = this.cartState.getCartSummary().items;
+        const item = current.find(i => i.product_id === productId);
+        if (item) {
+          item.quantity--;
+          this.cartState.updateItems([...current]);
+        }
+      }
+    });
+  }
+
+  removeItem(productId: number) {
+    this.cartService.removeCartItem(productId).subscribe({
+      next: () => {
+        let current = this.cartState.getCartSummary().items;
+        current = current.filter(i => i.product_id !== productId);
         this.cartState.updateItems([...current]);
       }
-    }
-  });
-}
+    });
+  }
 
-removeItem(productId: number) {
-  this.cartService.removeCartItem(productId).subscribe({
-    next: () => {
-      let current = this.cartState.getCartSummary().items;
-      current = current.filter(i => i.product_id !== productId);
-      this.cartState.updateItems([...current]);
-    }
-  });
-}
-
-/** 🔹 Helper function */
-private getCurrentQuantity(productId: number): number {
-  const current = this.cartState.getCartSummary().items;
-  const item = current.find(i => i.product_id === productId);
-  return item ? item.quantity : 0;
-}
-
+  private getCurrentQuantity(productId: number): number {
+    const current = this.cartState.getCartSummary().items;
+    const item = current.find(i => i.product_id === productId);
+    return item ? item.quantity : 0;
+  }
 
   trackByProductId(index: number, item: CartItem): number {
     return item.product_id;
@@ -264,7 +261,7 @@ private getCurrentQuantity(productId: number): number {
   }
 }
 
-// ✅ helper خارج الكلاس (يستخدم داخل normalizeProduct فقط)
+// ✅ helper خارج الكلاس
 function safeNumber(value: any): number {
   if (value == null) return 0;
   if (typeof value === 'string') {

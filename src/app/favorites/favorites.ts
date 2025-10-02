@@ -11,11 +11,12 @@ import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
 import { Product } from '../../models/Product';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../services/language.service';
+import { CartSidebar } from '../cart-sidebar/cart-sidebar';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [HttpClientModule, RouterModule, FormsModule, Downloadapp, TranslateModule],
+  imports: [HttpClientModule, RouterModule, FormsModule, Downloadapp, TranslateModule, CartSidebar],
   templateUrl: './favorites.html',
   styleUrl: './favorites.scss'
 })
@@ -23,6 +24,7 @@ export class Favorites implements OnInit {
   cartItems: any[] = [];
   favorites: Product[] = [];
   isLoading = true;
+  private GUEST_CART_KEY = 'guest_cart';
 
 
 
@@ -136,31 +138,92 @@ goToProduct(productId: number): void {
       error: (err: HttpErrorResponse) => this.handleCartError(err)
     });
   }
+  private loadGuestCart(): any[] {
+    const storedCart = localStorage.getItem(this.GUEST_CART_KEY);
+    const cart = storedCart ? JSON.parse(storedCart) : [];
+    this.cartState.updateItems(cart);
+    return cart;
+  }
+  private refreshCartCount(): void {
+    const total = this.isLoggedIn()
+      ? this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
+      : this.loadGuestCart().reduce((sum, item) => sum + (item.quantity || 0), 0);
 
-  addToCart(productId: number): void {
+    this.cartState.updateCount(total);
+  }
+  private saveGuestCart(cart: any[]): void {
+    localStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+    this.cartState.updateItems(cart);
+    this.refreshCartCount();
+  }
+  addToCart(product: Product, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     if (!this.isLoggedIn()) {
-      this.router.navigate(['/auth/login']);
+      const cart = this.loadGuestCart();
+      const existing = cart.find(i => i.product_id === product.id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          product_id: product.id,
+          quantity: 1,
+          product_name_ar: product.name_ar,
+          product_name: product.name,
+          unit_price: safeNumber(product.price_before || product.price || product.original_price),
+          sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
+          images: product.images || []
+        });
+      }
+
+      this.saveGuestCart(cart);
       return;
     }
-    this.cartService.addToCart(productId, 1).subscribe({
-      next: () => this.loadCart(),
-      error: (err: HttpErrorResponse) => this.handleCartActionError(err)
-    });
+
+   this.cartService.addToCart(product.id, 1).subscribe({
+  next: (response) => {
+    this.loadCart();
+    this.cartState.updateItems(response.data?.items || []); // 🟢 تحديث الـ Sidebar
+  },
+  error: (err) => this.handleCartActionError(err)
+});
+
   }
 
-  increaseQuantity(productId: number): void {
-    this.cartService.addToCart(productId, 1).subscribe({
-      next: () => this.loadCart(),
-      error: (err) => console.error('Error increasing quantity:', err)
-    });
+increaseQuantity(productId: number, event?: Event): void {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
   }
 
-  decreaseQuantity(productId: number): void {
-    this.cartService.reduceCartItem(productId).subscribe({
-      next: () => this.loadCart(),
-      error: (err) => console.error('Error decreasing quantity:', err)
-    });
+  this.cartService.addToCart(productId, 1).subscribe({
+    next: (response) => {
+      this.loadCart();
+      this.cartState.updateItems(response.data?.items || []);
+    },
+    error: (err) => console.error('Error increasing quantity:', err)
+  });
+}
+
+decreaseQuantity(productId: number, event?: Event): void {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
   }
+
+  this.cartService.reduceCartItem(productId).subscribe({
+    next: (response) => {
+      this.loadCart();
+      this.cartState.updateItems(response.data?.items || []);
+    },
+    error: (err) => console.error('Error decreasing quantity:', err)
+  });
+}
+
 
   isInCart(productId: number): boolean {
     return this.cartItems.some(item => Number(item.product_id) === Number(productId));
@@ -170,11 +233,16 @@ goToProduct(productId: number): void {
     return this.cartItems.find(item => Number(item.product_id) === Number(productId));
   }
 
-  private handleCartResponse(response: any): void {
-    this.cartItems = response.data?.items || [];
-    const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
-    this.cartState.updateCount(total);
-  }
+private handleCartResponse(response: any): void {
+  this.cartItems = response.data?.items || [];
+
+  // 🟢 حدّث العناصر عشان sidebar يشوفها
+  this.cartState.updateItems(this.cartItems);
+
+  const total = this.cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+  this.cartState.updateCount(total);
+}
+
 
   private handleCartError(err: HttpErrorResponse): void {
     console.error('Error loading cart:', err);
@@ -204,4 +272,12 @@ goToProduct(productId: number): void {
   isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
+}
+
+function safeNumber(value: any): number {
+  if (value == null) return 0;
+  if (typeof value === 'string') {
+    return Number(value.replace(/,/g, ''));
+  }
+  return Number(value);
 }
