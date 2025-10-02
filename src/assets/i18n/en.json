@@ -276,6 +276,7 @@
     "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
     "SUBMIT": "Register",
     "ERRORS": {
+            "TITLE": "Error",
       "NAME_REQUIRED": "Name is required",
       "NAME_MINLENGTH": "Name must be at least 8 characters",
       "NAME_MAXLENGTH": "Name is too long, maximum 255 characters",
