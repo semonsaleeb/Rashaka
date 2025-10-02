@@ -50,22 +50,22 @@
           <!-- Promo code -->
           <div class="input-group mb-4">
             <input type="text" class="form-control rounded-0" placeholder="{{ 'SUBSCRIPTIONS.PROMO_PLACEHOLDER' | translate }}" [(ngModel)]="promoCode">
-            <button class="btn rounded-0" style="background-color: #7AD03A; color: rgb(0, 0, 0);"
+            <button class="btn rounded-0" style="background-color: #7AD03A; color: rgb(0, 0, 0); border-radius: 3px !important;"
               (click)="applyDiscount()">{{ 'SUBSCRIPTIONS.APPLY_PROMO' | translate }}</button>
           </div>
 
           <!-- Price summary -->
           <ul class="list-unstyled text-end mb-4">
             <li class="d-flex justify-content-between py-2">
-              <span>{{ 'SUBSCRIPTIONS.PRICE_BEFORE' | translate }}</span>
+              <span style="margin-right: -35px;">{{ 'SUBSCRIPTIONS.PRICE_BEFORE' | translate }}</span>
               <span>{{ selectedPackage.price_before | number:'1.2-2' }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
             </li>
             <li class="d-flex justify-content-between py-2">
-              <span>{{ 'SUBSCRIPTIONS.DISCOUNT' | translate }}</span>
+              <span style="margin-right: -35px;">{{ 'SUBSCRIPTIONS.DISCOUNT' | translate }}</span>
               <span>-{{ selectedPackage.active_offer?.discount_value ?? 0 | number:'1.2-2' }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
             </li>
             <li class="d-flex justify-content-between fw-bold pt-3 border-top">
-              <span>{{ 'SUBSCRIPTIONS.TOTAL' | translate }}</span>
+              <span style="margin-right: -35px;">{{ 'SUBSCRIPTIONS.TOTAL' | translate }}</span>
               <span>{{ totalPrice }} {{ 'SUBSCRIPTIONS.CURRENCY' | translate }}</span>
             </li>
           </ul>

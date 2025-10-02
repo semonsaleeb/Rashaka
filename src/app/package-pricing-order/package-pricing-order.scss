@@ -228,3 +228,16 @@ h3 {
 .btn-success:hover {
   background-color: #3d8b40;
 }
+
+.rounded-3 {
+  height: 5vh;
+  border-color: #000 !important;
+}
+
+@media (max-width: 768px) {
+
+  .rounded-3 {
+  height: 3vh;
+  border-color: #000 !important;
+}
+}
