@@ -827,7 +827,7 @@
 }
 
 .story-info[_ngcontent-ng-c3271502656] {
-  margin-bottom: -150px;
+  margin-bottom: -250px !important;
   flex-direction: column;
   display: flex;
   width: 100%;
@@ -886,12 +886,16 @@
 
 .review-video iframe,
 .review-video video {
-  pointer-events: none !important; /* يمنع الفيديو ياخد اللمس */
+  pointer-events: none; /* افتراضياً الفيديو ما يمسكش التاتش */
 }
 
 .review-video iframe.enable-touch,
 .review-video video.enable-touch {
-  pointer-events: auto !important; /* يشتغل بس لما نسمح */
+  pointer-events: auto; /* يشتغل وقت ما المستخدم يلمسه */
 }
 
+.story-info[_ngcontent-ng-c3180063772] {
+  margin-bottom: -180px;
+  color: #000 !important;
+}
 
