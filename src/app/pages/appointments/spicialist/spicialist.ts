@@ -280,35 +280,41 @@ export class Spicialist implements OnInit {
 isDateAvailable(date: string): boolean {
   if (!this.selectedSpecialist) return false;
 
+  // تحويل التاريخين لصفر ساعة لمقارنة صحيحة
   const today = new Date();
-  today.setHours(0,0,0,0);
+  today.setHours(0, 0, 0, 0);
 
   const day = new Date(date);
-  day.setHours(0,0,0,0);
+  day.setHours(0, 0, 0, 0);
 
+  // الأيام قبل اليوم الحالي غير متاحة
   if (day < today) return false;
 
-  // جدول تحويل أسماء الأيام العربية لأرقام (0=الأحد ... 6=السبت)
- const dayMap: { [key: string]: number } = {
-  "الأحد": 0,
-  "الاثنين": 1,
-  "الإثنين": 1,
-  "الثلاثاء": 2,
-  "الأربعاء": 3,
-  "الخميس": 4,
-  "الجمعة": 5,
-  "السبت": 6
-};
+  // دالة normalize لتوحيد أسماء الأيام العربية
+  const normalizeDay = (dayName: string) => {
+    const map: { [key: string]: string } = {
+      "الاثنين": "الإثنين",
+      "الإثنين": "الإثنين",
+      "الأحد": "الأحد",
+      "الثلاثاء": "الثلاثاء",
+      "الأربعاء": "الأربعاء",
+      "الخميس": "الخميس",
+      "الجمعة": "الجمعة",
+      "السبت": "السبت"
+    };
+    return map[dayName] ?? dayName;
+  };
 
-// d هنا string و n هنا number
-const workingDayNumbers: number[] = this.selectedSpecialist.working_days
-  .map((d: string) => dayMap[d])
-  .filter((n: number | undefined): n is number => n !== undefined);
+  // الحصول على اسم اليوم من التاريخ
+  const dayName = normalizeDay(day.toLocaleDateString('ar-EG', { weekday: 'long' }));
 
+  // normalize لكل أيام العمل من الـ API
+  const workingDaysNormalized = this.selectedSpecialist.working_days.map((d: string) => normalizeDay(d));
 
-  
-  return workingDayNumbers.includes(day.getDay());
+  // اليوم متاح لو موجود في working_days بعد normalize
+  return workingDaysNormalized.includes(dayName);
 }
+
 
 
 
@@ -388,25 +394,49 @@ const workingDayNumbers: number[] = this.selectedSpecialist.working_days
   // ==============================
   // عند تغيير التاريخ
   // ==============================
-  onDateChange() {
-    if (!this.selectedSpecialist || !this.selectedDate) return;
+onDateChange() {
+  if (!this.selectedSpecialist || !this.selectedDate) return;
 
-    const dayName = new Date(this.selectedDate).toLocaleDateString('ar-EG', { weekday: 'long' });
+  // دالة normalize لتوحيد أسماء الأيام
+  const normalizeDay = (dayName: string) => {
+    const map: { [key: string]: string } = {
+      "الاثنين": "الإثنين",
+      "الإثنين": "الإثنين",
+      "الأحد": "الأحد",
+      "الثلاثاء": "الثلاثاء",
+      "الأربعاء": "الأربعاء",
+      "الخميس": "الخميس",
+      "الجمعة": "الجمعة",
+      "السبت": "السبت"
+    };
+    return map[dayName] ?? dayName;
+  };
 
-    if (!this.selectedSpecialist.working_days.includes(dayName)) {
-      this.availableTimes = [];
-      return;
-    }
+  // اليوم من calendar بعد normalize
+  const dayName = normalizeDay(new Date(this.selectedDate).toLocaleDateString('ar-EG', { weekday: 'long' }));
 
-    const workingHours = this.selectedSpecialist.working_hours.find((wh: any) => wh.day === dayName);
+  // normalize لكل أيام العمل
+  const workingDaysNormalized = this.selectedSpecialist.working_days.map((d: string) => normalizeDay(d));
 
-    if (!workingHours || !workingHours.start || !workingHours.end) {
-      this.availableTimes = [];
-      return;
-    }
-
-    this.availableTimes = this.generateTimeSlots(workingHours.start, workingHours.end);
+  if (!workingDaysNormalized.includes(dayName)) {
+    this.availableTimes = [];
+    return;
   }
+
+  // البحث عن ساعات العمل بعد normalize
+  const workingHours = this.selectedSpecialist.working_hours.find(
+    (wh: any) => normalizeDay(wh.day) === dayName
+  );
+
+  if (!workingHours || !workingHours.start || !workingHours.end) {
+    this.availableTimes = [];
+    return;
+  }
+
+  // توليد المواعيد
+  this.availableTimes = this.generateTimeSlots(workingHours.start, workingHours.end);
+}
+
 
 
 
