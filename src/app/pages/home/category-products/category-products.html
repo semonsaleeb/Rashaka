@@ -283,7 +283,7 @@
         </div>
 
         <!-- Predefined Ranges -->
-        <div class="m-4 my-5 px-2">
+        <div class="m-4 my-5 px-2" style="margin-right: -10px !important;">
           @for (range of predefinedRanges; track range.label; let i = $index) {
           <div class="form-check d-flex align-items-center justify-content-start gap-2 mb-2">
             <input type="checkbox" class="form-check-input mx-2" [checked]="range.selected"
@@ -320,7 +320,7 @@
     <!-- Modal -->
     <div class="modal fade" id="filtersModal" tabindex="1" aria-labelledby="filtersModalLabel" aria-hidden="true"
       data-bs-backdrop="true" data-bs-keyboard="true">
-      <div class="modal-dialog modal-dialog-scrollable custom-modal modal-dialog-bottom">
+      <div class="modal-dialog modal-dialog-scrollable custom-modal modal-dialog-bottom" style>
         <div class="modal-content rounded-4">
 
           <!-- Modal Header -->

@@ -6,7 +6,7 @@
       id="email"
       [(ngModel)]="email"
       name="email"
-      class="form-control"
+      class="form-control"  style="height: 5vh;"
       required
     />
   </div>
@@ -18,7 +18,7 @@
     id="password" 
     [(ngModel)]="password" 
     name="password"
-    class="form-control py-2 mb-2" 
+    class="form-control py-2 mb-2" style="height: 5vh;"
     [class.pe-5]="currentLang === 'ar'"
     [class.ps-5]="currentLang === 'en'"
     required minlength="8" 

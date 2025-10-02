@@ -9,12 +9,12 @@
     <!-- Right Side: Tabs & Form -->
     <div class="col-md-6 d-flex align-items-start justify-content-center py-5">
       <div class="w-100" style="max-width: 400px;">
-        <h3  class="fw-semibold" style="justify-self: center; font-size: 20px; font-weight: 700 !important;">{{ 'AUTH.WELCOME' | translate }}</h3>
-        <p style="justify-self: center; font-size: 16px; font-weight: 400 !important;">{{ 'AUTH.SUBTITLE' | translate }}</p>
+        <h3  class="fw-semibold" style="justify-self: center; font-size: 25px; font-weight: 700 !important;">{{ 'AUTH.WELCOME' | translate }}</h3>
+        <p style="justify-self: center; font-size: 19px; font-weight: 400 !important;">{{ 'AUTH.SUBTITLE' | translate }}</p>
 
         <!-- Tabs -->
         <div class="auth-container text-center mb-4 d-flex justify-content-center" style="width: 125%; justify-self: center;">
-          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important;" 
+          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important; padding: 15px; font-size: 20px; font-weight: 700;" 
                   [ngClass]="{
                     'custom-green-btn': activeTab === 'register',
                     'bg-light text-dark': activeTab !== 'register'
@@ -23,7 +23,7 @@
             {{ 'AUTH.REGISTER' | translate }}
           </button>
 
-          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important;"
+          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important; padding: 15px; font-size: 20px; font-weight: 700;"
                   [ngClass]="{
                     'custom-green-btn': activeTab === 'login',
                     'bg-light text-dark': activeTab !== 'login'

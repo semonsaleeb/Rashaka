@@ -402,7 +402,7 @@ color: black;
   // margin: 0;              /* يشيل أي margin */
   width: 95%;            /* full width */
   max-width: 95%;        /* يمنع حدود ثابتة */
-  height: auto;           /* خلي الطول auto */
+  height: 98vh;           /* خلي الطول auto */
 }
 
 /* لو عايزة تحكمي في المسافة من فوق */
@@ -491,4 +491,18 @@ color: black;
 
 .category-products-container[_ngcontent-ng-c2948382184] .carousel-track[dir=rtl][_ngcontent-ng-c2948382184] {
   width: 95%;
+}
+
+.list-unstyled {
+  margin-right: -50px !important;
+}
+
+.m-4 .form-check {
+  margin-right: -10px !important;
+}
+
+@media (max-width: 768px) {
+  .m-4 .form-check {
+  margin-right: -35px !important;
+}
 }
