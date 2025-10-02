@@ -20,4 +20,9 @@ export class BranchesService {
 
     return this.http.get<{status: string, data: Branch[]}>(this.apiUrl, { params });
   }
+    getBranchesByCity(cityId: number): Observable<any> {
+    const params = new HttpParams().set('city_id', cityId.toString());
+    return this.http.get(this.apiUrl, { params });
+  }
+
 }

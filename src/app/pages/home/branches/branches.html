@@ -21,13 +21,17 @@
 
 
   <!-- Branch Filters -->
+<!-- City Filters -->
 <div class="branch-filters mb-4 px-1 py-3">
-  @for (branch of branches; track branch) {
+  @for (city of cities; track city.id) {
     <button 
       class="btn btn-outline-secondary rounded-3 fw-bold px-3 px-md-5 mb-2"
-      [class.active]="selectedBranch === branch"
-      (click)="selectBranch(branch)">
-      <span class="px-lg-0 px-3">{{ branch.name }}</span>
+      [class.active]="selectedCity?.id === city.id"
+      (click)="selectCity(city)">
+      <span class="px-lg-0 px-3">
+        {{ currentLang === 'ar' ? city.name_ar : city.name_en }}
+        <!-- <small class="ms-1">({{ city.branchCount }})</small> -->
+      </span>
     </button>
   }
 </div>
@@ -68,6 +72,11 @@
                 <img src="assets/Images/location-05.svg" alt="" width="20px">
 
                 {{ l.location }}
+              </div>
+                 <div class="branch-location mb-1 py-3">
+                <img src="assets/Images/location-05.svg" alt="" width="20px">
+
+                {{ l.city }}
               </div>
               <button class="btn btn-outline-light btn-sm rounded-pill mx-5 d-inline-flex align-items-center custom-fs"
                 (click)="openMap(selectedBranch)">

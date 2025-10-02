@@ -43,6 +43,7 @@ export class PlaceOrder implements OnInit {
   freeProductBalance: number = 0;
   discountValue: number = 0;
   dir: 'ltr' | 'rtl' = 'ltr';
+currentOrderId: string = '';
 
   // selectedPaymentMethod: string = 'credit_card'; // add this in your class
 selectedAddressId: number | null = null;
@@ -388,38 +389,133 @@ selectedAddressId: number | null = null;
 
   // ========================= Place order =========================
 placeOrder() {
+  // التحقق من وجود عنوان شحن
+  if (!this.selectedAddressId) {
+    alert('من فضلك اختر عنوان الشحن أولاً');
+    return;
+  }
+
   const params = new HttpParams()
     .set('address_id', String(this.selectedAddressId ?? ''))
     .set('payment_method', this.paymentMethod)
-    .set('promo_code', this.promoCode || '') // ✅ ابعت كود الخصم لو موجود
-    .set('apply_free_balance', this.applyFreeBalance ? '1' : '0') // ✅ فعل أو عطل رصيد المجاني
-    .set('free_balance_amount', String(this.freeBalanceAmount || 0)); // ✅ ابعت القيمة اللي اختارها المستخدم
+    .set('promo_code', this.promoCode || '')
+    .set('apply_free_balance', this.applyFreeBalance ? '1' : '0')
+    .set('free_balance_amount', String(this.freeBalanceAmount || 0));
 
   const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+
+  console.log('🔄 إرسال الطلب بطريقة الدفع:', this.paymentMethod);
 
   this.http.post(`${environment.apiBaseUrl}/checkout/submit`, {}, { params, headers })
     .subscribe({
       next: (orderRes: any) => {
         console.log('✅ Order API Response:', orderRes);
 
-        if (orderRes?.status) {
-          this.handlePaymentResponse(orderRes);
+        // حفظ رقم الطلب للاستخدام لاحقاً
+        if (orderRes.data?.order_id) {
+          this.currentOrderId = orderRes.data.order_id;
+        }
+
+        if (this.paymentMethod === 'cash') {
+          this.handleCashOrderResponse(orderRes);
         } else {
-          this.handleOrderResponse(orderRes);
+          this.handleCreditCardOrderResponse(orderRes);
         }
       },
       error: (err) => {
         console.error('❌ Order API Error:', err);
-
-        if (err.error?.status) {
-          this.handlePaymentResponse(err.error);
-        } else {
-          this.handleOrderError(err);
-        }
+        this.handleOrderError(err);
       }
     });
 }
+private handleCashOrderResponse(orderRes: any): void {
+  console.log('💵 معالجة طلب الدفع النقدي:', orderRes);
 
+  if (orderRes.status === "success") {
+    // حفظ رقم الطلب لعرضه في المودال
+    if (orderRes.data?.order_id) {
+      this.currentOrderId = orderRes.data.order_id;
+    }
+
+    // تنظيف السلة وعرض المودال
+    this.clearCartAndPendingPayment();
+    this.showCashSuccessModal(orderRes);
+    
+  } else if (orderRes.message) {
+    alert(orderRes.message);
+  } else {
+    console.error('❌ استجابة غير متوقعة للدفع النقدي:', orderRes);
+    alert('تم إنشاء الطلب بنجاح!');
+    this.clearCartAndPendingPayment();
+    this.showCashSuccessModal(orderRes);
+  }
+}
+private handleCreditCardOrderResponse(orderRes: any): void {
+  console.log('💳 معالجة طلب الدفع بالبطاقة:', orderRes);
+
+  if (orderRes.status === "requires_payment_action" && orderRes.data?.payment_url) {
+    // حفظ بيانات الدفع المعلقة
+    localStorage.setItem(
+      'pendingPayment',
+      JSON.stringify({
+        orderId: orderRes.data.order_id,
+        invoiceId: orderRes.data.invoice_id,
+        timestamp: new Date().toISOString()
+      })
+    );
+    
+    // التوجيه لبوابة الدفع
+    window.location.href = orderRes.data.payment_url;
+    
+  } else if (orderRes.status === "success") {
+    // إذا كان الدفع مكتملاً مباشرة
+    this.clearCartAndPendingPayment();
+    this.router.navigate(['/order-success', orderRes.data.order_id]);
+    
+  } else {
+    console.error('❌ استجابة غير متوقعة للدفع بالبطاقة:', orderRes);
+    alert(orderRes.message || 'حدث خطأ أثناء تجهيز الدفع');
+  }
+}
+handlePaymentResponse(response: any) {
+  console.log('🔄 Handling payment response:', response);
+
+  if (response.status === 'success') {
+    // ✅ الدفع ناجح
+    this.clearCartAndPendingPayment();
+    
+    if (this.paymentMethod === 'cash') {
+      this.showCashSuccessModal(response);
+    } else {
+      this.router.navigate(['/order-success'], { 
+        queryParams: { 
+          orderId: response.data?.order_id
+        }
+      });
+    }
+
+  } else if (response.status === 'requires_payment_action' && response.data?.payment_url) {
+    // ⚠️ محتاج يكمل دفع
+    localStorage.setItem(
+      'pendingPayment',
+      JSON.stringify({
+        orderId: response.data.order_id,
+        invoiceId: response.data.invoice_id,
+        timestamp: new Date().toISOString()
+      })
+    );
+    window.location.href = response.data.payment_url;
+
+  } else {
+    // ❌ الدفع فشل
+    this.router.navigate(['/payment-failed'], { 
+      queryParams: { 
+        orderId: response.data?.order_id,
+        error: response.message || 'فشل عملية الدفع'
+      }
+    });
+  }
+}
 
 checkPaymentStatus(orderId: number) {
   this.cartService.checkPaymentStatus(orderId.toString()).subscribe({
@@ -493,14 +589,14 @@ private handleOrderResponse(orderRes: any): void {
     console.log('✅ Order completed successfully:', orderRes);
   }
 
-  private clearCartAndPendingPayment(): void {
-    this.cartState.clearCart();
-    localStorage.removeItem('cart');
-    localStorage.removeItem('pendingPayment');
-    this.freeBalanceAmount = 0;
-    this.promoCode = '';
-    this.applyFreeBalance = false;
-  }
+private clearCartAndPendingPayment(): void {
+  this.cartState.clearCart();
+  localStorage.removeItem('cart');
+  localStorage.removeItem('pendingPayment');
+  this.freeBalanceAmount = 0;
+  this.promoCode = '';
+  this.applyFreeBalance = false;
+}
 
   // ========================= Payment handlers =========================
 
@@ -665,43 +761,43 @@ checkPendingPayment() {
   }
 }
 
-handlePaymentResponse(response: any) {
-  console.log('🔄 Handling payment response:', response);
+// handlePaymentResponse(response: any) {
+//   console.log('🔄 Handling payment response:', response);
 
-  if (response.status === 'success' && response.data?.invoice_status === 'Paid') {
-    // ✅ الدفع ناجح → روح لصفحة success
-    this.clearCartAndPendingPayment();
-    this.router.navigate(['/payment-success'], { 
-      state: { data: response.data },
-      queryParams: { 
-        orderId: response.data.order_id,
-        invoiceId: response.data.invoice_id
-      }
-    });
+//   if (response.status === 'success' && response.data?.invoice_status === 'Paid') {
+//     // ✅ الدفع ناجح → روح لصفحة success
+//     this.clearCartAndPendingPayment();
+//     this.router.navigate(['/payment-success'], { 
+//       state: { data: response.data },
+//       queryParams: { 
+//         orderId: response.data.order_id,
+//         invoiceId: response.data.invoice_id
+//       }
+//     });
 
-  } else if (response.status === 'requires_payment_action' && response.data?.payment_url) {
-    // ⚠️ محتاج يكمل دفع → redirect على بوابة الدفع
-    localStorage.setItem(
-      'pendingPayment',
-      JSON.stringify({
-        orderId: response.data.order_id,
-        invoiceId: response.data.invoice_id,
-        timestamp: new Date().toISOString()
-      })
-    );
+//   } else if (response.status === 'requires_payment_action' && response.data?.payment_url) {
+//     // ⚠️ محتاج يكمل دفع → redirect على بوابة الدفع
+//     localStorage.setItem(
+//       'pendingPayment',
+//       JSON.stringify({
+//         orderId: response.data.order_id,
+//         invoiceId: response.data.invoice_id,
+//         timestamp: new Date().toISOString()
+//       })
+//     );
 
-    window.location.href = response.data.payment_url;
+//     window.location.href = response.data.payment_url;
 
-  } else {
-    // ❌ الدفع فشل → روح لصفحة failed
-    this.router.navigate(['/payment-failed'], { 
-      queryParams: { 
-        orderId: response.data?.order_id,
-        error: response.message || 'فشل عملية الدفع'
-      }
-    });
-  }
-}
+//   } else {
+//     // ❌ الدفع فشل → روح لصفحة failed
+//     this.router.navigate(['/payment-failed'], { 
+//       queryParams: { 
+//         orderId: response.data?.order_id,
+//         error: response.message || 'فشل عملية الدفع'
+//       }
+//     });
+//   }
+// }
 
 private handleMyFatoorahCallback(paymentId: string) {
   // استدعاء API للتحقق من حالة الدفع
@@ -746,7 +842,23 @@ private handleMyFatoorahCallback(paymentId: string) {
 
     alert(errorMessage);
   }
+closeCashModal() {
+  const modalEl = document.getElementById('cashOrderModal');
+  const modalInstance = modalEl ? bootstrap.Modal.getInstance(modalEl) : null;
+  if (modalInstance) {
+    modalInstance.hide();
+  }
+}
 
+// goHome() {
+//   this.closeCashModal();
+//   this.router.navigate(['/']);
+// }
+
+// goOrders() {
+//   this.closeCashModal();
+//   this.router.navigate(['/profile/orders']);
+// }
   private decodeToken(token: string): any {
     try {
       const payload = token.split('.')[1];
