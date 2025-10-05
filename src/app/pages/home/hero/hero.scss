@@ -350,3 +350,55 @@
     color: black;
 
 }
+
+
+.english-size {
+  .highlight-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.highlight {
+  position: relative;
+  z-index: 1;
+}
+
+.highlight::before {
+  content: "";
+  position: absolute;
+  top: -25px;
+  left: -50px;
+  right: 0;
+  margin: 0 auto;
+  width: 140%;
+  height: 200%;
+  background-image: url('/assets/Images/Bubble%20Ellipse.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+  h1.hero-title {
+    font-size: 1.1rem !important; /* أصغر من العربي */
+  }
+
+  .hero-description {
+    font-size: 0.7rem !important;
+
+  }
+
+  .hero-subtitle {
+    font-size: 0.8rem !important;
+  }
+
+  .features-container .feature-item span {
+    font-size: 0.60rem !important;
+  }
+
+  .cta-button {
+    font-size: 0.85rem !important;
+    padding: 13px 15px !important;
+  }
+}
+
