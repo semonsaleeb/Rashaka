@@ -12,8 +12,7 @@
 
         <!-- Main Image -->
         <div class="mb-2 p-4 border border-1 rounded-4">
-          <img [src]="product.images[selectedImageIndex]" class="img-fluid"
-            style="height:300px;object-fit:contain;" />
+          <img [src]="product.images[selectedImageIndex]" class="img-fluid" style="height:300px;object-fit:contain;" />
         </div>
 
         <!-- Thumbnails -->
@@ -28,12 +27,10 @@
     <!-- ✅ تفاصيل المنتج -->
     <div class="col-12 col-md-7">
       <div class="p-4 bg-white h-100 d-flex flex-column rounded-4">
-       <p *ngIf="product.is_top_seller" 
-   class="d-inline-flex align-items-center p-2 rounded w-auto mb-3"
-   >
-  <img src="assets/Images/star-circle.svg" alt="" class="me-2">
-  {{ 'PRODUCT.TOP_SELLER' | translate }}
-</p>
+        <p *ngIf="product.is_top_seller" class="d-inline-flex align-items-center p-2 rounded w-auto mb-3">
+          <img src="assets/Images/star-circle.svg" alt="" class="me-2">
+          {{ 'PRODUCT.TOP_SELLER' | translate }}
+        </p>
 
 
         <h4 class="fw-bold fs-4">{{ product.name_ar }}</h4>
@@ -63,7 +60,8 @@
         <!-- Add to cart + Compare -->
         <div class="d-flex flex-wrap gap-2 mb-3">
           @if (isInCart(product.id)) {
-           <div class="d-flex  mt-2 align-items-center justify-content-center py-1 px-3 gap-2 border border-secondary rounded-2"
+          <div
+            class="d-flex  mt-2 align-items-center justify-content-center py-1 px-3 gap-2 border border-secondary rounded-2"
             style="background-color:#7AD03A;direction:rtl; ">
             <button class="btn custom-increase-btn btn-sm"
               (click)="decreaseQuantity(product.id);$event.stopPropagation()">
@@ -78,13 +76,11 @@
             </button>
           </div>
           } @else {
-        <button 
-  class="btn mt-2 text-black rounded-2 custom-hover px-3 py-2"
-  style="background-color:#7AD03A;"
-  (click)="addToCart(product,$event)">
-  <img src="assets/Images/shopping-cart-add-01.svg" style="width:20px;" class="px-1">
-  {{ 'ADD_TO_CART' | translate }}
-</button>
+          <button class="btn mt-2 text-black rounded-2 custom-hover px-3 py-2" style="background-color:#7AD03A;"
+            (click)="addToCart(product,$event)">
+            <img src="assets/Images/shopping-cart-add-01.svg" style="width:20px;" class="px-1">
+            {{ 'ADD_TO_CART' | translate }}
+          </button>
 
           }
 
@@ -125,8 +121,8 @@
               </div>
               <div class="mb-1">
                 <ng-container *ngFor="let star of [1,2,3,4,5]">
-                  <i class="fa-star" [class.fa-solid]="star <= review.rating"
-                    [class.fa-regular]="star > review.rating" style="color:gold;"></i>
+                  <i class="fa-star" [class.fa-solid]="star <= review.rating" [class.fa-regular]="star > review.rating"
+                    style="color:gold;"></i>
                 </ng-container>
               </div>
               <p class="mb-0">{{ review.comment }}</p>
@@ -160,8 +156,8 @@
             <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
           </button>
 
-          <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
-            class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+          <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()" class="btn-circle"
+            [ngClass]="{'active': isInCompare(product)}">
             <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
           </button>
         </div>
@@ -171,7 +167,8 @@
             style="height:140px;object-fit:contain;" />
           <div class="card-body">
             <h6 class="fw-bold mb-2">{{ (currentLang==='ar'?product.name_ar:product.name)|truncate:25 }}</h6>
-            <p class="text-muted small mb-2">{{ (currentLang==='ar'?product.description_ar:product.description)|truncate:40 }}</p>
+            <p class="text-muted small mb-2">{{
+              (currentLang==='ar'?product.description_ar:product.description)|truncate:40 }}</p>
             <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY'|translate }}</span>
           </div>
         </a>
@@ -209,7 +206,8 @@
                 style="height:180px;object-fit:contain;" />
               <div class="card-body">
                 <h6 class="fw-bold mb-2">{{ (currentLang==='ar'?product.name_ar:product.name)|truncate:25 }}</h6>
-                <p class="text-muted small mb-2">{{ (currentLang==='ar'?product.description_ar:product.description)|truncate:40 }}</p>
+                <p class="text-muted small mb-2">{{
+                  (currentLang==='ar'?product.description_ar:product.description)|truncate:40 }}</p>
                 <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY'|translate }}</span>
               </div>
             </a>
@@ -223,9 +221,8 @@
     <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
       <div class="d-flex gap-2 justify-content-center mx-auto">
         @for (i of getDotsArray(); track i) {
-        <button (click)="goToSlide(i)" class="rounded-circle"
-          [class.bg-success]="currentSlideIndex===i" [class.bg-secondary]="currentSlideIndex!==i"
-          style="width:10px;height:10px;border:none;"></button>
+        <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex===i"
+          [class.bg-secondary]="currentSlideIndex!==i" style="width:10px;height:10px;border:none;"></button>
         }
       </div>
       <div class="d-flex gap-2">
