@@ -1021,6 +1021,9 @@ a.text-decoration-none:hover .card {
     justify-content: center;
     margin-top: 1rem;
   }
+    .special-offers-container .carousel-track {
+    width: 95% !important;
+  }
 }
 
 
@@ -1036,9 +1039,7 @@ a.text-decoration-none:hover .card {
   text-decoration: none;
   font-weight: 700;
 }
-  .special-offers-container .carousel-track {
-    width: 95% !important;
-  }
+
 
   .custom-qty-display {
     padding: 8px;

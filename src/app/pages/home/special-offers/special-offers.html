@@ -144,7 +144,7 @@
 </div>
 
 
-        <div class="d-flex gap-2 d-none d-md-flex" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+        <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
           <button class="arrow-btn next" (click)="nextSlide()" [disabled]="isNextDisabled()"></button>
                     <button class=" arrow-btn prev"  (click)="prevSlide()" [disabled]="isPrevDisabled()"></button>
 

@@ -33,18 +33,12 @@
     <!-- ✅ تفاصيل المنتج -->
     <div class="col-12 col-md-7">
       <div class="p-4 bg-white h-100 d-flex flex-column rounded-4">
-<<<<<<< HEAD
        <p *ngIf="product.is_top_seller" 
    class="d-inline-flex align-items-center p-2 rounded w-auto mb-3" style="width: 25% !important; border-radius: 6px !important; border: solid 1px #00000033 !important; padding: 5px !important;">
   <img src="assets/Images/star-circle.svg" alt="" class="me-2">
   {{ 'PRODUCT.TOP_SELLER' | translate }}
 </p>
-=======
-        <p *ngIf="product.is_top_seller" class="d-inline-flex align-items-center p-2 rounded w-auto mb-3">
-          <img src="assets/Images/star-circle.svg" alt="" class="me-2">
-          {{ 'PRODUCT.TOP_SELLER' | translate }}
-        </p>
->>>>>>> 078679720988f814898756e4dffaf943f5d7a4a0
+
 
         <h4 class="fw-bold fs-4">{{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}</h4>
 
