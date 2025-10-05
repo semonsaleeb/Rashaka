@@ -61,11 +61,11 @@
                 <!-- لو مستخدم مسجل دخول -->
                 <ng-container *ngIf="isLoggedIn(); else guestCart">
                   <span class="fw-bold text-success ms-2">
-                    {{ item.total_price_after_offers }} {{ 'CART.CURRENCY' | translate }}
-                  </span>
+                    {{ item.total_price_after_offers }}{{ 'CART.CURRENCY' | translate }}
+                  </span>&nbsp;
                      <span class="text-muted text-decoration-line-through"
                   *ngIf="item.total_price_after_offers !== item.unit_price">
-                  {{ item.price }} {{ 'CART.CURRENCY' | translate }}
+                  {{ item.price }}{{ 'CART.CURRENCY' | translate }}
                 </span>
                 </ng-container>
 
