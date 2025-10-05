@@ -180,6 +180,7 @@ goToReview(index: number): void {
     if (swipeDistance < -50) {
       type === 'story' ? this.prevStory() : this.prevReview();
     }
+    
   }
 //   getReviewCardClass(i: number): string {
 //   if (i === this.currentReviewIndex) return 'active';

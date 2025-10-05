@@ -1035,20 +1035,16 @@ a.text-decoration-none:hover .card {
   text-decoration: none;
   font-weight: 700;
 }
-  .special-offers-container[_ngcontent-ng-c3667721385] .carousel-track[_ngcontent-ng-c3667721385] {
+  .special-offers-container .carousel-track {
     width: 95% !important;
   }
 
-  .custom-qty-display[_ngcontent-ng-c3667721385] {
+  .custom-qty-display {
     padding: 8px;
   }
 
-  .category-products-container[_ngcontent-ng-c1357490907] .carousel-track[dir=rtl][_ngcontent-ng-c1357490907] {
-    width: 95%;
-  }
-
-  @media (max-width: 768px){
-  .category-products-container[_ngcontent-ng-c1357490907] .header-section[_ngcontent-ng-c1357490907] .category-buttons[_ngcontent-ng-c1357490907] button[_ngcontent-ng-c1357490907]{
-    width: 40% !important;
-  }
-  }
+ 
+.category-products-container .product-card:hover {
+  z-index: 99999 !important;
+}
+ 

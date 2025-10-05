@@ -116,8 +116,10 @@ export class ProductCard implements OnInit {
     });
 
     // تحميل منتجات المقارنة الأولية
-    this.loadCompareProducts();
-  }
+this.compareService.compareProducts$.subscribe(products => {
+    this.compareProducts = products;
+    this.cdr.detectChanges(); // تحديث view
+  });  }
 
   toggleFavorite(product: Product, event?: Event): void {
     event?.stopPropagation();
@@ -312,7 +314,9 @@ export class ProductCard implements OnInit {
     this.cartState.updateCount(total);
   }
 
-  increaseQuantity(productId: number): void {
+   increaseQuantity(productId: number, event?: Event): void {
+    event?.stopPropagation();
+
     if (!this.isLoggedIn()) {
       const cart = this.loadGuestCart();
       const item = cart.find(i => i.product_id === productId);
@@ -320,7 +324,6 @@ export class ProductCard implements OnInit {
         item.quantity++;
       }
       this.saveGuestCart(cart);
-      this.cartState.updateItems(cart);
       return;
     }
 
@@ -329,7 +332,9 @@ export class ProductCard implements OnInit {
     });
   }
 
-  decreaseQuantity(productId: number): void {
+  decreaseQuantity(productId: number, event?: Event): void {
+    event?.stopPropagation();
+
     if (!this.isLoggedIn()) {
       let cart = this.loadGuestCart();
       const item = cart.find(i => i.product_id === productId);
@@ -340,7 +345,6 @@ export class ProductCard implements OnInit {
         }
       }
       this.saveGuestCart(cart);
-      this.cartState.updateItems(cart);
       return;
     }
 
@@ -462,28 +466,50 @@ export class ProductCard implements OnInit {
   }
 
   // 🔧 الإصلاح الرئيسي: استخدام CompareService بدلاً من localStorage مباشرة
-  addToCompare(product: Product, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    this.compareService.addToCompare(product);
+// ✅ إضافة منتج للمقارنة
+addToCompare(product: Product, event?: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
+
+  // استدعاء الـ Service لإضافة المنتج
+  this.compareService.addToCompare(product);
+
+  // تحديث الـ popup حسب عدد المنتجات
+  const products = this.compareService.getCompareProducts();
+  if (products.length === 2) {
+    this.showComparePopup = true;
+  }
+}
+
+// ✅ التحقق إذا المنتج موجود في المقارنة
+isInCompare(product: Product): boolean {
+  return this.compareService.getCompareProducts().some(p => p.id === product.id);
+}
+
+// ✅ إغلاق نافذة المقارنة وتفريغ القائمة
+onCloseComparePopup(): void {
+  this.showComparePopup = false;
+  this.compareService.clearCompare();
+}
+
+
 
   // استخدام CompareService للتحميل
-  private loadCompareProducts(): void {
-    this.compareProducts = this.compareService.getCompareProducts();
-  }
+  // private loadCompareProducts(): void {
+  //   this.compareProducts = this.compareService.getCompareProducts();
+  // }
 
-  isInCompare(product: Product): boolean {
-    return this.compareService.isInCompare(product);
-  }
+// isInCompare(product: Product): boolean {
+//   return this.compareProducts.some(p => p.id === product.id);
+// }
 
-  onCloseComparePopup(): void {
-    this.showComparePopup = false;
-    this.compareService.clearCompare(); // تنظيف المقارنة بعد إغلاق البوب أب
-  }
+
+//   onCloseComparePopup(): void {
+//     this.showComparePopup = false;
+//     this.compareService.clearCompare(); // تنظيف المقارنة بعد إغلاق البوب أب
+//   }
 
   // خصائص الكاروسيل
   currentLang: string = 'ar';

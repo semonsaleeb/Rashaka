@@ -94,7 +94,7 @@
   width: 120%;
   height: 390px;
   ;
-  object-fit: cover;
+  object-fit: contain;
   /* أو contain حسب ما تحبي */
 }
 
@@ -590,7 +590,7 @@
     width: 70%;
     height: 100%;
     border-radius: 12px;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 
@@ -658,7 +658,7 @@
       width: 90%;
       height: 100%;
       border-radius: 12px;
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 }
@@ -693,3 +693,4 @@
 .client-name {
   color: #fff;
 }
+

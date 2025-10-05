@@ -1,5 +1,5 @@
 <div class="container-fluid mb-5 mt-5 py-5" style="width: 80%;">
-  <a routerLink="/" class="d-block text-end text-primary mb-3" style="text-decoration: none;">
+  <a routerLink="/" class="d-block text-end text-primary mb-3" style="text-decoration: none; display: none !important;">
     {{ 'AUTH.HOME' | translate }} <i class="fas fa-chevron-left"></i>
   </a>
 
@@ -14,7 +14,7 @@
 
         <!-- Tabs -->
         <div class="auth-container text-center mb-4 d-flex justify-content-center" style="width: 125%; justify-self: center;">
-          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important; padding: 15px; font-size: 20px; font-weight: 700;" 
+          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important;  font-size: 20px; font-weight: 700;" 
                   [ngClass]="{
                     'custom-green-btn': activeTab === 'register',
                     'bg-light text-dark': activeTab !== 'register'
@@ -23,7 +23,7 @@
             {{ 'AUTH.REGISTER' | translate }}
           </button>
 
-          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important; padding: 15px; font-size: 20px; font-weight: 700;"
+          <button class="btn rounded-0" style="width: 50%; border-radius: 10px !important;  font-size: 20px; font-weight: 700;"
                   [ngClass]="{
                     'custom-green-btn': activeTab === 'login',
                     'bg-light text-dark': activeTab !== 'login'
@@ -47,10 +47,10 @@
 
        <!-- Left Side: Image -->
     <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center p-0">
-      <img src="assets/Images/login.png"
+      <img src="assets/Images/Group 1000002782.svg"
            alt="{{ 'AUTH.LOGIN_IMAGE_ALT' | translate }}"
            class="img-fluid"
-           style="width: 100%; height: 100vh; object-fit: cover;">
+           style="width: 100%; height: 100vh; object-fit: contain;">
     </div>
   </div>
 </div>

@@ -93,8 +93,7 @@
   flex: 1;
   width: 120%;
   height: 390px;
-  ;
-  object-fit: cover;
+  object-fit: contain;
   /* أو contain حسب ما تحبي */
 }
 
@@ -828,16 +827,16 @@
 }
 
 .story-info[_ngcontent-ng-c3271502656] {
-  margin-bottom: -150px;
+  margin-bottom: -250px !important;
   flex-direction: column;
   display: flex;
   width: 100%;
   color: #000;
 }
 
-.arrow-btn.next[_ngcontent-ng-c3271502656],
-.arrow-btn.prev[_ngcontent-ng-c3271502656] {
-  background-size: cover !important;
+.arrow-btn.next[_ngcontent-ng-c3180063772],
+.arrow-btn.prev[_ngcontent-ng-c3180063772] {
+  background-size: contain !important;
 }
 
  .success-stories[_ngcontent-ng-c3271502656] .section-title[_ngcontent-ng-c3271502656] {
@@ -848,10 +847,23 @@
 
 
 @media (max-width: 768px) {
-.story-image-wrapper[_ngcontent-ng-c3271502656] .before[_ngcontent-ng-c3271502656] {
-  width: 70%;
+.story-image-wrapper .before {
+  width: 100%;
 }
-.story-card-custom.center[_ngcontent-ng-c3271502656] {
+.story-info {
+  width: 100%;
+}
+.story-deck-grid
+{
+  width: 150%;
+  justify-self: center;
+}
+
+.story-image-wrapper .before
+ {
+  width: 100%;
+ }
+.story-card-custom.center {
   width: 90%;
 }
 .story-card-custom .py-5 {
@@ -865,12 +877,12 @@
 .py-5 {
   margin-top: 200px !important;
 }
-.header-section[_ngcontent-ng-c3271502656] .header-content[_ngcontent-ng-c3271502656] {
+.header-section .header-content {
   margin-top: -200px;
 }
 }
 
-.story-card-custom.left[_ngcontent-ng-c3271502656] .story-info {
+.story-card-custom.left .story-info {
   display: none;
 }
 
@@ -882,5 +894,21 @@
     border: none !important;
     color: black;
 
+}
+
+
+.review-video iframe,
+.review-video video {
+  pointer-events: none; /* افتراضياً الفيديو ما يمسكش التاتش */
+}
+
+.review-video iframe.enable-touch,
+.review-video video.enable-touch {
+  pointer-events: auto; /* يشتغل وقت ما المستخدم يلمسه */
+}
+
+.story-info {
+  margin-bottom: -180px;
+  color: #000 !important;
 }
 
