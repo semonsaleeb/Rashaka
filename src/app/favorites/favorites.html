@@ -57,21 +57,24 @@
             {{ currentLang === 'ar' ? product.description_ar : product.description }}
           </p>
 
-          <!-- السعر -->
-         <p class="fw-bold mb-1" style="font-size: 14px;">
-  @if ((product.sale_price ?? product.price_after) && (product.sale_price ?? product.price_after) !== (product.price ?? product.price_before)) {
+      <!-- السعر -->
+<p class="fw-bold mb-1" style="font-size: 14px;">
+  @let prices = getDisplayedPrices(product);
+  
+  @if (prices.old && prices.current && prices.old !== prices.current) {
     <span class="fw-bold text-success">
-      {{ product.sale_price ?? product.price_after }} {{ 'FAVORITES.CURRENCY' | translate }}
+      {{ prices.current }} {{ 'FAVORITES.CURRENCY' | translate }}
     </span>
     <span class="text-secondary" style="text-decoration: line-through;">
-      {{ product.price ?? product.price_before }} {{ 'FAVORITES.CURRENCY' | translate }}
+      {{ prices.old }} {{ 'FAVORITES.CURRENCY' | translate }}
     </span>
   } @else {
     <span class="fw-bold text-success">
-      {{ (product.price ?? product.price_before) || (product.sale_price ?? product.price_after) }} {{ 'FAVORITES.CURRENCY' | translate }}
+      {{ prices.current ?? prices.old }} {{ 'FAVORITES.CURRENCY' | translate }}
     </span>
   }
 </p>
+
 
 
           <!-- الأزرار -->

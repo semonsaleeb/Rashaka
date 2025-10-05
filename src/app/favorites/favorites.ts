@@ -156,43 +156,76 @@ goToProduct(productId: number): void {
     this.cartState.updateItems(cart);
     this.refreshCartCount();
   }
-  addToCart(product: Product, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
 
-    if (!this.isLoggedIn()) {
-      const cart = this.loadGuestCart();
-      const existing = cart.find(i => i.product_id === product.id);
+  getDisplayedPrices(product: Product) {
+  const isLoggedIn = this.isLoggedIn();
 
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          product_id: product.id,
-          quantity: 1,
-          product_name_ar: product.name_ar,
-          product_name: product.name,
-          unit_price: safeNumber(product.price_before || product.price || product.original_price),
-          sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
-          images: product.images || []
-        });
-      }
-
-      this.saveGuestCart(cart);
-      return;
-    }
-
-   this.cartService.addToCart(product.id, 1).subscribe({
-  next: (response) => {
-    this.loadCart();
-    this.cartState.updateItems(response.data?.items || []); // 🟢 تحديث الـ Sidebar
-  },
-  error: (err) => this.handleCartActionError(err)
-});
-
+  // لو المستخدم مسجل دخول
+  if (isLoggedIn) {
+    return {
+      current: product.price_after ?? product.sale_price ?? product.price,
+      old: product.price_before ?? product.original_price ?? null
+    };
   }
+
+  // لو المستخدم ضيف (guest)
+  return {
+    current: product.sale_price ?? product.price_after ?? product.price,
+    old: product.original_price ?? product.price_before ?? null
+  };
+}
+
+addToCart(product: Product, event?: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  // 👇 هنا نطبع الأسعار في الكونسول عشان نتحقق منها
+  console.log('🟢 Product Price Debug:', {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    price_before: product.price_before,
+    sale_price: product.sale_price,
+    price_after: product.price_after,
+    original_price: product.original_price,
+    finalPrice:
+      (product.sale_price ?? product.price_after) ||
+      (product.price ?? product.price_before),
+  });
+
+  if (!this.isLoggedIn()) {
+    const cart = this.loadGuestCart();
+    const existing = cart.find(i => i.product_id === product.id);
+
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        product_id: product.id,
+        quantity: 1,
+        product_name_ar: product.name_ar,
+        product_name: product.name,
+        unit_price: safeNumber(product.price_before || product.price || product.original_price),
+        sale_unit_price: safeNumber(product.price_after || product.price || product.sale_price),
+        images: product.images || []
+      });
+    }
+
+    this.saveGuestCart(cart);
+    return;
+  }
+
+  this.cartService.addToCart(product.id, 1).subscribe({
+    next: (response) => {
+      this.loadCart();
+      this.cartState.updateItems(response.data?.items || []);
+    },
+    error: (err) => this.handleCartActionError(err)
+  });
+}
+
 
 increaseQuantity(productId: number, event?: Event): void {
   if (event) {
@@ -226,7 +259,7 @@ decreaseQuantity(productId: number, event?: Event): void {
 
 
   isInCart(productId: number): boolean {
-    return this.cartItems.some(item => Number(item.product_id) === Number(productId));
+    return this.cartItems.some(item => item.product_id === productId);
   }
 
   getCartItem(productId: number): any {
