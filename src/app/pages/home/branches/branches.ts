@@ -216,14 +216,29 @@ export class Branches implements OnInit {
     return Math.max(0, this.locations.length - this.visibleBranchCards);
   }
 
-  onTouchStart(event: TouchEvent): void {
-    this.touchStartX = event.changedTouches[0].screenX;
-  }
+ onTouchStart(event: TouchEvent) {
+  this.touchStartX = event.changedTouches[0].clientX;
+}
 
-  onTouchEnd(event: TouchEvent): void {
-    this.touchEndX = event.changedTouches[0].screenX;
-    this.handleSwipe();
-  }
+onTouchEnd(event: TouchEvent) {
+  const touchEndX = event.changedTouches[0].clientX;
+  const diffX = touchEndX - this.touchStartX;
+
+  if (this.currentLang === 'en') {
+    // ✅ في العربي الاتجاهات مقلوبة
+    if (diffX < -50) {
+      this.prevSlide(); // سحب يسار = slide prev
+    } else if (diffX > 50) {
+      this.nextSlide(); // سحب يمين = slide next
+    }
+  } else {
+    // ✅ في الإنجليزي الاتجاه الطبيعي
+    if (diffX > 50) {
+      this.prevSlide();
+    } else if (diffX < -50) {
+      this.nextSlide();
+    }
+  }}
 
   handleSwipe(): void {
     const swipeDistance = this.touchEndX - this.touchStartX;

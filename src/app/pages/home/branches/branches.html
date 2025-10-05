@@ -44,13 +44,16 @@
 
 
 
-    <div class="carousel-track-container overflow-hidden">
-   <div class="carousel-track d-flex transition-transform" [ngStyle]="{
-  'transform': currentLang === 'ar' 
-      ? 'translateX(' + (branchSlideIndex * (100 / visibleBranchCards)) + '%)'
-      : 'translateX(-' + (branchSlideIndex * (100 / visibleBranchCards)) + '%)',
-  'transition': 'transform 0.5s ease'
-}">
+<div class="carousel-track-container overflow-hidden"
+     (touchstart)="onTouchStart($event)"
+     (touchend)="onTouchEnd($event)">
+  <div class="carousel-track d-flex transition-transform"
+       [ngStyle]="{
+         'transform': currentLang === 'ar' 
+            ? 'translateX(' + (branchSlideIndex * (100 / visibleBranchCards)) + '%)'
+            : 'translateX(-' + (branchSlideIndex * (100 / visibleBranchCards)) + '%)',
+         'transition': 'transform 0.5s ease'
+       }">
 
 
         <!-- Carousel Items -->
