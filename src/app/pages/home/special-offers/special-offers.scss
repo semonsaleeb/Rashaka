@@ -954,7 +954,8 @@ a.text-decoration-none:hover .card {
     overflow-x: auto;               /* يضيف سكرول أفقي */
     -webkit-overflow-scrolling: touch; /* سكرول ناعم في الموبايل */
     justify-content: flex-start !important; /* يبدأ من اليمين */
-    padding-bottom: 5px;            /* مسافة صغيرة تحت الأزرار */
+    padding-bottom: 5px;
+    margin: 20px;            /* مسافة صغيرة تحت الأزرار */
   }
 
   .category-scroll button {

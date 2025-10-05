@@ -167,7 +167,7 @@
                 <div class="row flex-grow-1">
                   @for (category of categories; track category.id) {
                   <div class="col-6 mb-2" [dir]="currentDirection">
-                    <a class="fs-6 d-block py-1 text-decoration-none text-dark" [routerLink]="['/home/Shop']"
+                    <a class="fs-6 d-block py-1 text-decoration-none text-dark" style="background-color: #FFFFFF; border-radius: 15px; padding: 10px;" [routerLink]="['/home/Shop']"
                       [queryParams]="{ category_id: category.id }" (click)="closeMobileMenu(); closeAllDropdowns()"
                       [class.text-end]="currentLang === 'ar'" [class.text-start]="currentLang === 'en'">
                       {{ currentLang === 'ar' ? category.name_ar : category.name }}
@@ -278,7 +278,7 @@
     <div class="search-container px-3 pb-3" style="max-width: 500px; margin: 0 auto;">
       <div class="position-relative">
         <div class="input-group">
-          <input type="text" class="form-control ps-4 text-end" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
+          <input type="text" class="form-control ps-5 text-end" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
             i18n-placeholder="@@searchPlaceholder" (input)="onSearch()" />
 
           <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="z-index: 5;">

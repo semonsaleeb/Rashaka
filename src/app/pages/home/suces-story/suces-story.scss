@@ -284,7 +284,7 @@
   background-color: transparent;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: cover !important;
   transition: 0.2s;
   padding: 0;
   cursor: pointer;
@@ -536,46 +536,7 @@
   margin-top: 550px;
 }
 
-.review-card-custom {
-  position: absolute;
-  margin-top: 550px;
-  width: 840px;
-  height: 450px;
-  transition: all 0.5s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transform: scale(0.8);
-  z-index: 0;
 
-  //  pointer-events: none;
-  &.active {
-    opacity: 1;
-    transform: translateX(0) scale(1.2);
-    z-index: 2;
-  }
-
-  &.left {
-    opacity: 0.4;
-    transform: translateX(-30%) scale(1);
-    z-index: 1;
-  }
-
-  &.right {
-    opacity: 0.4;
-    transform: translateX(30%) scale(1);
-    z-index: 1;
-  }
-
-  &.hidden {
-    opacity: 0;
-    z-index: 0;
-    transform: scale(0.6);
-    pointer-events: none;
-  }
-}
 
 .review-video {
   width: 45%;
@@ -802,7 +763,7 @@
 }
 
 .story-image-wrapper {
-  flex: 1;
+
   /* الصور تاخد الجزء العلوي */
   width: 100%;
 }
@@ -826,7 +787,7 @@
   margin: 0;
 }
 
-.story-info[_ngcontent-ng-c3271502656] {
+.story-info {
   margin-bottom: -250px !important;
   flex-direction: column;
   display: flex;
@@ -834,12 +795,12 @@
   color: #000;
 }
 
-.arrow-btn.next[_ngcontent-ng-c3180063772],
-.arrow-btn.prev[_ngcontent-ng-c3180063772] {
+.arrow-btn.next,
+.arrow-btn.prev {
   background-size: contain !important;
 }
 
- .success-stories[_ngcontent-ng-c3271502656] .section-title[_ngcontent-ng-c3271502656] {
+ .success-stories .section-title {
   display: none;
 }
 
@@ -849,7 +810,14 @@
 @media (max-width: 768px) {
 .story-image-wrapper .before {
   width: 100%;
+  height: 103%;
 }
+
+.story-image-wrapper .after {
+  background: transparent;
+}
+
+ 
 .story-info {
   width: 100%;
 }
@@ -864,7 +832,7 @@
   width: 100%;
  }
 .story-card-custom.center {
-  width: 90%;
+  width: 65%;
 }
 .story-card-custom .py-5 {
   margin-top: 200px !important;
@@ -872,7 +840,7 @@
 
 .header-section {
   align-content: center;
-  height: 70vh;
+  height: 50vh;
 }
 .py-5 {
   margin-top: 200px !important;
@@ -912,3 +880,6 @@
   color: #000 !important;
 }
 
+.story-image-wrapper .before {
+  height: 103%;
+}

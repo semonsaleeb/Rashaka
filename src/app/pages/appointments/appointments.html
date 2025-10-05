@@ -1,27 +1,4 @@
-<!-- 👇 Popup Modal -->
-<div class="modal fade" id="authModal" style="z-index: 99999999;" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true" style="z-index: 99999999;">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-4 p-3">
-      <div class="d-flex justify-content-end">
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          [attr.aria-label]="'MODAL.CLOSE' | translate"></button>
-      </div>
-      <div class="text-center mb-3">
-        <img src="assets/Images/Enter OTP-cuate 1.svg" alt="{{ 'MODAL.LOGIN_ILLUSTRATION' | translate }}"
-          style="max-width: 200px;">
-      </div>
-      <h5 class="text-center fw-bold mb-2">{{ 'MODAL.LOGIN_MESSAGE' | translate }}</h5>
-      <div class="d-flex justify-content-center gap-3 mt-3">
-        <button class="btn btn-outline-secondary px-4" (click)="goToRegister()" data-bs-dismiss="modal">
-          {{ 'MODAL.REGISTER' | translate }}
-        </button>
-        <button class="btn btn-success px-4" (click)="goToLogin()" data-bs-dismiss="modal">
-          {{ 'MODAL.LOGIN' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <!-- 👇 الصفحة تظهر بس لو المستخدم عامل Login -->
 @if (token) {
