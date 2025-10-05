@@ -196,7 +196,7 @@
 
 
   <!-- Product Grid -->
-  <div class="row row-cols-2 row-cols-md-3 g-4   py-4 productGrid">
+  <div class="row row-cols-2 row-cols-md-3 g-4   py-4 productGrid" style="width: 100% !important;">
     @for (product of products; track product.id) {
     <div class="col">
       <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark">
