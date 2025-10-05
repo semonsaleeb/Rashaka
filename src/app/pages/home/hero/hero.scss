@@ -350,3 +350,29 @@
     color: black;
 
 }
+
+
+.english-size {
+  h1.hero-title {
+    font-size: 1.1rem !important; /* أصغر من العربي */
+  }
+
+  .hero-description {
+    font-size: 0.7rem !important;
+
+  }
+
+  .hero-subtitle {
+    font-size: 0.8rem !important;
+  }
+
+  .features-container .feature-item span {
+    font-size: 0.60rem !important;
+  }
+
+  .cta-button {
+    font-size: 0.85rem !important;
+    padding: 13px 15px !important;
+  }
+}
+

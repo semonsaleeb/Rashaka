@@ -1,14 +1,24 @@
 <section class="hero-section justify-content-center text-white mt-lg-0 pt-lg-4 py-5 mt-0  w-100">
-  <img src="assets/Images/pattern.svg"
-    style="position: absolute; left: 0; top: 20px; height: 200px; width: 100px; z-index: 1;">
+<img [src]="currentLang === 'ar' ? 'assets/Images/pattern.svg' : 'assets/Images/pattern.svg'"
+     [ngStyle]="{
+       position: 'absolute',
+       top: '20px',
+       height: '200px',
+       width: '100px',
+       zIndex: 1,
+       right: currentLang === 'en' ? '0' : 'auto',
+       left: currentLang === 'ar' ? '0' : 'auto'
+     }">
+
 
   <div class="container py-lg-5">
     <div class="row ">
 
 
       <!-- Right Content Column -->
-      <div class="col-lg-5 mb-4 mb-lg-0  py-5"
-        [ngStyle]="{ direction: currentLang === 'ar' ? 'rtl' : 'ltr', textAlign: currentLang === 'ar' ? 'right' : 'left' }">
+    <div class="col-lg-5 mb-4 mb-lg-0 py-5"
+     [ngStyle]="{ direction: currentLang === 'ar' ? 'rtl' : 'ltr', textAlign: currentLang === 'ar' ? 'right' : 'left' }"
+     [ngClass]="currentLang === 'en' ? 'english-size' : ''">
 
 
         <h1 class="hero-title mb-5 ">
