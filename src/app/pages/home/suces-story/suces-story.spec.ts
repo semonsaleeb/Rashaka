@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SucesStory } from './suces-story';
 
 describe('SucesStory', () => {
+  
   let component: SucesStory;
   let fixture: ComponentFixture<SucesStory>;
 
@@ -21,3 +22,6 @@ describe('SucesStory', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
