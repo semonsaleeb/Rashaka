@@ -216,7 +216,7 @@
       <!-- Loading -->
       <div class="loading-spinner">
         <div class="spinner-border text-success" role="status"></div>
-        <p>جاري تحميل المنتجات...</p>
+<p>{{ 'PRODUCT.LOADING' | translate }}</p>
       </div>
       }
     </div>
@@ -584,42 +584,49 @@
 
       <!-- Pagination Navigation -->
       @if (getTotalPages() > 1) {
-      <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
+    <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
 
-        <!-- Page Info -->
-        <div class="d-none d-md-flex text-muted">
-          الصفحة {{ currentPage + 1 }} من {{ getTotalPages() }}
-        </div>
+  <!-- Page Info -->
+  <div class="d-none d-md-flex text-muted">
+    {{ 'PAGINATION.PAGE_INFO' | translate:{ current: currentPage + 1, total: getTotalPages() } }}
+  </div>
 
-        <!-- Dots Pagination -->
-        <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
-          @for (i of getPagesArray(); track i) {
-          <button (click)="goToPage(i)" class="rounded-circle" [class.bg-success]="currentPage === i"
-            [class.bg-secondary]="currentPage !== i" style="width: 12px; height: 12px; border: none;">
-          </button>
-          }
-        </div>
+  <!-- Dots Pagination -->
+  <div class="d-flex gap-2 justify-content-center mx-auto mx-md-0" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+    @for (i of getPagesArray(); track i) {
+    <button (click)="goToPage(i)" class="rounded-circle"
+      [class.bg-success]="currentPage === i"
+      [class.bg-secondary]="currentPage !== i"
+      style="width: 12px; height: 12px; border: none;">
+    </button>
+    }
+  </div>
 
-        <!-- Arrows (desktop only) -->
-        <div class="pagination-arrows d-none d-md-flex gap-2" dir="rtl">
-          <!-- Next Button -->
-          <button class="arrow-btn next" (click)="nextPage()" [disabled]="currentPage >= getTotalPages() - 1"
-            aria-label="الصفحة التالية" title="الصفحة التالية">
-            <span class="visually-hidden">التالي</span>
-          </button>
+  <!-- Arrows (desktop only) -->
+  <div class="pagination-arrows d-none d-md-flex gap-2" dir="rtl">
 
-          <!-- Prev Button -->
-          <button class="arrow-btn prev" (click)="prevPage()" [disabled]="currentPage === 0" aria-label="الصفحة السابقة"
-            title="الصفحة السابقة">
-            <span class="visually-hidden">السابق</span>
-          </button>
-        </div>
+    <!-- Next Button -->
+    <button class="arrow-btn next"
+      (click)="nextPage()"
+      [disabled]="currentPage >= getTotalPages() - 1"
+      [attr.aria-label]="'PAGINATION.NEXT_PAGE' | translate"
+      [attr.title]="'PAGINATION.NEXT_PAGE' | translate">
+      <span class="visually-hidden">{{ 'PAGINATION.NEXT_PAGE' | translate }}</span>
+    </button>
 
+    <!-- Prev Button -->
+    <button class="arrow-btn prev"
+      (click)="prevPage()"
+      [disabled]="currentPage === 0"
+      [attr.aria-label]="'PAGINATION.PREV_PAGE' | translate"
+      [attr.title]="'PAGINATION.PREV_PAGE' | translate">
+      <span class="visually-hidden">{{ 'PAGINATION.PREV_PAGE' | translate }}</span>
+    </button>
 
+  </div>
 
+</div>
 
-
-      </div>
 
       <!-- Mobile Pagination -->
       <div class="d-flex d-md-none align-items-center justify-content-center gap-3 mt-4">

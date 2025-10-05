@@ -13,11 +13,12 @@ import { map, Observable } from 'rxjs';
 import { Downloadapp } from '../pages/home/downloadapp/downloadapp';
 import { Product } from '../../models/Product';
 import { CartItem } from '../../models/CartItem';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CategoryProducts } from '../pages/home/category-products/category-products';
 import { TruncatePipe } from '../truncate-pipe';
 import { ComparePopup } from '../compare-popup/compare-popup';
 import { CompareService } from '../services/compare-service';
+import { LanguageService } from '../services/language.service';
 declare var bootstrap: any;
 
 @Component({
@@ -60,9 +61,23 @@ export class ProductCard implements OnInit {
     private favoriteService: FavoriteService,
     private compareService: CompareService,
     private cdr: ChangeDetectorRef,
+    private languageService: LanguageService,
+        private translate: TranslateService,
+
   ) { }
 
   ngOnInit(): void {
+
+        // Language setup
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.translate.use(this.currentLang);
+
+    // Listen for language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.translate.use(lang);
+    });
+
     // ضبط عدد الكروت المرئية حسب الشاشة
     this.updateVisibleCards();
     window.addEventListener('resize', () => this.updateVisibleCards());
