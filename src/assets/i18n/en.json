@@ -633,11 +633,31 @@
       "ERROR_TITLE": "Payment Failed",
     "RETRY_PAYMENT": "Retry Payment"
   },
-  "PRODUCT": {
-    "TOP_SELLER": "Best Seller"
-  },
-    "FIRST_PRODUCT_ADDED": "frist product addes"
 
+  "PRODUCT": {
+        "LOADING": "Loading products...",
+    "TOP_SELLER": "Top Seller",
+    "DESCRIPTION": "Description",
+    "REVIEWS": "Reviews",
+    "REVIEWS_AND_COMMENTS": "Reviews and Comments",
+    "NO_REVIEWS": "There are no reviews for this product yet.",
+    "BUTTONS": {
+      "ADD_TO_CART": "Add to Cart",
+      "COMPARE": "Compare"
+    },
+    "SHOW_MORE": "Show More",
+    "SHOW_LESS": "Show Less",
+    "RELATED_PRODUCTS": "Related Products"
+  },
+  "FIRST_PRODUCT_ADDED": "The first product has been added",
+  
+ "PAGINATION": {
+    "PAGE_INFO": "Page {{current}} of {{total}}",
+    "NEXT_PAGE": "Next Page",
+    "PREV_PAGE": "Previous Page"
+  }
 
 
 }
+
+

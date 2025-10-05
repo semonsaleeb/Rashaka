@@ -254,7 +254,7 @@
   "AUTH": {
     "HOME": "الرئيسية",
     "LOGIN_IMAGE_ALT": "صورة تسجيل الدخول",
-    "WELCOME": "أهلاً بك في هابي فيتنس!",
+    "WELCOME": "أهلاً بك في الرشاقة السعيدة!",
     "SUBTITLE": "سجل دخولك أو أنشئ حسابك للمتابعة",
     "REGISTER": "إنشاء الحساب",
     "LOGIN": "تسجيل الدخول"
@@ -634,9 +634,30 @@
     "RETRY_PAYMENT": "إعادة المحاولة"
   },
     "PRODUCT": {
-    "TOP_SELLER": "الأكثر مبيعاً"
+          "LOADING": "جاري تحميل المنتجات...",
+    "TOP_SELLER": "الأكثر مبيعاً",
+     "DESCRIPTION": "الوصف",
+    "REVIEWS": "التقييمات",
+    "REVIEWS_AND_COMMENTS": "التقييمات والمراجعات",
+    "NO_REVIEWS": "لا توجد مراجعات لهذا المنتج بعد.",
+      "BUTTONS": {
+    "ADD_TO_CART": "أضف إلى السلة",
+    "COMPARE": "قارن"
   },
-  "FIRST_PRODUCT_ADDED": "تم أضافة المنتج الاول"
+  "SHOW_MORE": "عرض المزيد",
+  "SHOW_LESS": "عرض أقل",
+  "RELATED_PRODUCTS": "منتجات ذات صلة"
+
+
+
+  },
+  "FIRST_PRODUCT_ADDED": "تم أضافة المنتج الاول" ,
+    "PAGINATION": {
+    "PAGE_INFO": "الصفحة {{current}} من {{total}}",
+    "NEXT_PAGE": "الصفحة التالية",
+    "PREV_PAGE": "الصفحة السابقة"
+  }
+
 
 
 }

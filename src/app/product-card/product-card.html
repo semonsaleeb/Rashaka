@@ -1,15 +1,15 @@
 @if (showComparePopup) {
-<app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()">
-</app-compare-popup>
+<app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()"></app-compare-popup>
 }
 
-
 @if (!isLoading && product) {
-<div class="container py-4 mt-5" dir="rtl">
+<div class="container py-4 mt-5">
   <div class="row g-4">
+
     <!-- ✅ صور المنتج -->
     <div class="col-12 col-md-5">
       <div class="p-3 bg-white text-center position-relative rounded-4">
+
         <!-- Favorite -->
         <button class="btn btn-outline-secondary rounded-circle position-absolute top-0 start-0 m-3"
           style="border-color:#00000033;z-index:2; margin: 40px !important;" (click)="toggleFavorite(product, $event)">
@@ -18,8 +18,7 @@
 
         <!-- Main Image -->
         <div class="mb-2 p-4 border border-1 rounded-4">
-          <img [src]="product.images[selectedImageIndex]" class="img-fluid"
-            style="height:300px;object-fit:contain;" />
+          <img [src]="product.images[selectedImageIndex]" class="img-fluid" style="height:300px;object-fit:contain;" />
         </div>
 
         <!-- Thumbnails -->
@@ -34,14 +33,21 @@
     <!-- ✅ تفاصيل المنتج -->
     <div class="col-12 col-md-7">
       <div class="p-4 bg-white h-100 d-flex flex-column rounded-4">
+<<<<<<< HEAD
        <p *ngIf="product.is_top_seller" 
    class="d-inline-flex align-items-center p-2 rounded w-auto mb-3" style="width: 25% !important; border-radius: 6px !important; border: solid 1px #00000033 !important; padding: 5px !important;">
   <img src="assets/Images/star-circle.svg" alt="" class="me-2">
   {{ 'PRODUCT.TOP_SELLER' | translate }}
 </p>
+=======
+        <p *ngIf="product.is_top_seller" class="d-inline-flex align-items-center p-2 rounded w-auto mb-3">
+          <img src="assets/Images/star-circle.svg" alt="" class="me-2">
+          {{ 'PRODUCT.TOP_SELLER' | translate }}
+        </p>
+>>>>>>> 078679720988f814898756e4dffaf943f5d7a4a0
 
+        <h4 class="fw-bold fs-4">{{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}</h4>
 
-        <h4 class="fw-bold fs-4">{{ product.name_ar }}</h4>
 
         <!-- Rating -->
         <div class="mb-3">
@@ -52,76 +58,85 @@
             }
             <small class="text-muted ms-2">({{ product.average_rating ?? 0 }})</small>
           </div>
-          <small class="text-muted">({{ product.stock }} متوفر)</small>
+          <small class="text-muted">({{ product.stock }} {{ 'IN_STOCK' | translate }})</small>
         </div>
 
         <!-- Price -->
         <div class="mb-3" style="display: flex; flex-direction: column;">
           @if (product.sale_price) {
-          <span class="text-success fw-bold fs-5">{{ product.sale_price }} ر.س</span>
-          <span class="text-muted text-decoration-line-through ms-2">{{ product.price }} ر.س</span>
+          <span class="text-success fw-bold fs-5">{{ product.sale_price }} {{ 'CURRENCY' | translate }}</span>
+          <span class="text-muted text-decoration-line-through ms-2">{{ product.price }} {{ 'CURRENCY' | translate
+            }}</span>
           } @else {
-          <span class="fw-bold fs-5 text-dark">{{ product.price }} ر.س</span>
+          <span class="fw-bold fs-5 text-dark">{{ product.price }} {{ 'CURRENCY' | translate }}</span>
           }
         </div>
 
         <!-- Add to cart + Compare -->
         <div class="d-flex flex-wrap gap-2 mb-3">
           @if (isInCart(product.id)) {
-           <div class="d-flex  mt-2 align-items-center justify-content-center py-1 px-3 gap-2 border border-secondary rounded-2"
-            style="background-color:#7AD03A;direction:rtl; ">
-            <button class="btn custom-increase-btn btn-sm"
-              (click)="decreaseQuantity(product.id);$event.stopPropagation()">
+          <div
+            class="d-flex mt-2 align-items-center justify-content-center py-1 px-3 gap-2 border border-secondary rounded-2"
+            style="background-color:#7AD03A;direction:rtl;">
+            <button class="btn custom-increase-btn btn-sm" (click)="decreaseQuantity(product.id, $event)">
               <i class="fa-solid fa-minus"></i>
             </button>
             <span class="fw-bold custom-qty-display text-center px-3">
               {{ getCartItem(product.id)?.quantity }}
             </span>
-            <button class="btn custom-increase-btn btn-sm"
-              (click)="increaseQuantity(product.id);$event.stopPropagation()">
+            <button class="btn custom-increase-btn btn-sm" (click)="increaseQuantity(product.id, $event)">
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
           } @else {
-        <button 
-  class="btn mt-2 text-black rounded-2 custom-hover px-3 py-2"
-  style="background-color:#7AD03A;"
-  (click)="addToCart(product,$event)">
-  <img src="assets/Images/shopping-cart-add-01.svg" style="width:20px;" class="px-1">
-  {{ 'ADD_TO_CART' | translate }}
-</button>
-
+          <button class="btn mt-2 text-black rounded-2 custom-hover px-3 py-2" style="background-color:#7AD03A;"
+            (click)="addToCart(product,$event)">
+            <img src="assets/Images/shopping-cart-add-01.svg" style="width:20px;" class="px-1">
+            {{ 'PRODUCT.BUTTONS.ADD_TO_CART' | translate }}
+          </button>
           }
 
           <button (click)="addToCompare(product);$event.preventDefault();$event.stopPropagation()"
             class="px-3 py-2 mt-2 rounded-2 border border-secondary" [ngClass]="{'active':isInCompare(product)}">
-            <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="" class="px-2"> قارن
+            <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="" class="px-2">
+            {{ 'PRODUCT.BUTTONS.COMPARE' | translate }}
           </button>
         </div>
 
         <!-- Tabs -->
         <div class="d-flex gap-2 mb-3">
-          <button class="tab-btn" [class.active]="showDescription"
-            (click)="showDescription=true;showReviews=false">الوصف</button>
-          <button class="tab-btn" [class.active]="showReviews"
-            (click)="showDescription=false;showReviews=true">التقييمات</button>
+          <button class="tab-btn" [class.active]="showDescription" (click)="showDescription=true;showReviews=false">{{
+            'PRODUCT.DESCRIPTION' | translate }}</button>
+          <button class="tab-btn" [class.active]="showReviews" (click)="showDescription=false;showReviews=true">{{
+            'PRODUCT.REVIEWS' | translate }}</button>
         </div>
 
         <!-- Tab Content -->
-        <div *ngIf="showDescription" class="border-top pt-3">
-          <h6 class="fw-bold">الوصف</h6>
-          <p class="text-muted" style="white-space:pre-line;">
-            {{ showFullDescription ? (product.description_ar || product.description) : shortDescription }}
-          </p>
-          @if (hasMore) {
-          <button class="btn btn-link p-0" (click)="showFullDescription=!showFullDescription">
-            {{ showFullDescription ? 'عرض أقل' : 'عرض المزيد' }}
-          </button>
-          }
-        </div>
+<div *ngIf="showDescription" class="border-top pt-3">
+  <h6 class="fw-bold">{{ 'PRODUCT.DESCRIPTION' | translate }}</h6>
+
+  @let description = (currentLang === 'ar' ? product.description_ar : product.description);
+
+  <p class="text-muted" style="white-space: pre-line;">
+    {{
+      showFullDescription
+        ? description
+        : (description || '' | truncate:150)
+    }}
+  </p>
+
+  @if (description && description.length > 150) {
+    <button class="btn btn-link p-0" (click)="showFullDescription = !showFullDescription">
+      {{ showFullDescription ? ('PRODUCT.SHOW_LESS' | translate) : ('PRODUCT.SHOW_MORE' | translate) }}
+    </button>
+  }
+</div>
+
+
+
 
         <div *ngIf="showReviews" class="border-top pt-3">
-          <h6 class="fw-bold">التقييمات والمراجعات</h6>
+          <h6 class="fw-bold">{{ 'PRODUCT.REVIEWS_AND_COMMENTS' | translate }}</h6>
           <div *ngIf="product.reviews?.length; else noReviews">
             <div *ngFor="let review of product.reviews" class="mb-3 p-2 bg-light rounded">
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -130,15 +145,15 @@
               </div>
               <div class="mb-1">
                 <ng-container *ngFor="let star of [1,2,3,4,5]">
-                  <i class="fa-star" [class.fa-solid]="star <= review.rating"
-                    [class.fa-regular]="star > review.rating" style="color:gold;"></i>
+                  <i class="fa-star" [class.fa-solid]="star <= review.rating" [class.fa-regular]="star > review.rating"
+                    style="color:gold;"></i>
                 </ng-container>
               </div>
               <p class="mb-0">{{ review.comment }}</p>
             </div>
           </div>
           <ng-template #noReviews>
-            <p class="text-muted">لا توجد مراجعات لهذا المنتج بعد.</p>
+            <p class="text-muted">{{ 'PRODUCT.NO_REVIEWS' | translate }}</p>
           </ng-template>
         </div>
       </div>
@@ -150,7 +165,7 @@
 <!-- ✅ منتجات ذات صلة -->
 <div style="background-color:#081E25;" class="py-5 px-lg-5 mx-0">
   <div class="d-flex text-light justify-content-between align-items-center flex-wrap mb-3 px-4">
-    <h2 class="section-title mb-0 fw-bold">{{ 'RELATED_PRODUCTS' | translate }}</h2>
+    <h2 class="section-title mb-0 fw-bold">{{ 'PRODUCT.RELATED_PRODUCTS' | translate }}</h2>
   </div>
 
   <div class="row g-3 d-md-none px-3">
@@ -165,8 +180,8 @@
             <i class="fa-heart" [ngClass]="product.isFavorite ? 'fa-solid' : 'fa-regular'"></i>
           </button>
 
-          <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()"
-            class="btn-circle" [ngClass]="{'active': isInCompare(product)}">
+          <button (click)="addToCompare(product); $event.preventDefault(); $event.stopPropagation()" class="btn-circle"
+            [ngClass]="{'active': isInCompare(product)}">
             <img src="assets/Images/arrow-data-transfer-horizontal.svg" alt="">
           </button>
         </div>
@@ -176,7 +191,8 @@
             style="height:140px;object-fit:contain;" />
           <div class="card-body">
             <h6 class="fw-bold mb-2">{{ (currentLang==='ar'?product.name_ar:product.name)|truncate:25 }}</h6>
-            <p class="text-muted small mb-2">{{ (currentLang==='ar'?product.description_ar:product.description)|truncate:40 }}</p>
+            <p class="text-muted small mb-2">{{
+              (currentLang==='ar'?product.description_ar:product.description)|truncate:40 }}</p>
             <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY'|translate }}</span>
           </div>
         </a>
@@ -213,43 +229,43 @@
               <img [src]="product.images[0]" class="card-img-top p-3" [alt]="product.name"
                 style="height:180px;object-fit:contain;" />
               <div class="card-body">
-                <h6 class="fw-bold mb-2">{{ (currentLang==='ar'?product.name_ar:product.name)|truncate:25 }}</h6>
-                <p class="text-muted small mb-2">{{ (currentLang==='ar'?product.description_ar:product.description)|truncate:40 }}</p>
+                <h6 class="fw-bold mb-2"> {{ (currentLang === 'ar' ? product.name_ar : product.name) | truncate:25 }}</h6>
+                <p class="text-muted small mb-2"> {{ (currentLang === 'ar' ? product.description_ar : product.description) | truncate:35 }}</p>
                 <span class="fw-bold text-success">{{ product.price }} {{ 'CURRENCY'|translate }}</span>
               </div>
             </a>
             <div class="px-3 my-2">
-               @if (isInCart(product.id)) {
-                  <div
-                    class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-4"
-                    style="direction: rtl;">
-                       <div class="d-flex align-items-center gap-2 Quantity_Controls">
-                        <!-- Increase Button -->
-                        <button class="btn custom-increase-btn btn-sm"
-                          (click)="increaseQuantity(product.id); $event.stopPropagation()">
-                          <i class="fa-solid fa-plus"></i>
-                        </button>
-                        <!-- Quantity Display -->
-                        <span class="fw-bold custom-qty-display text-center px-4">
-                          {{ getCartItem(product.id)?.quantity }}
-                        </span>
-                        <!-- Remove Button -->
-                        <button class="btn custom-increase-btn btn-sm"
-                          (click)="decreaseQuantity(product.id); $event.stopPropagation()">
-                          <i class="fa-solid fa-minus"></i>
-
-                          <!-- <img src="assets/Images/delete-02.svg"> -->
-                        </button>
-                      </div>
-                  </div>
-                  } @else {
-                  <button class="btn btn-outline-secondary btn-xs bg-white w-100 mt-3 text-black rounded-4 custom-hover"
-                    style="font-size: 16px; padding: 0.25rem 0.5rem;" (click)="addToCart(product, $event)"
-                    data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
-                    <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
-                    {{ 'ADD_TO_CART' | translate }}
+              @if (isInCart(product.id)) {
+              <div
+                class="d-flex align-items-center justify-content-center px-3 mt-2 gap-2 border border-secondary rounded-4"
+                style="direction: rtl;">
+                <div class="d-flex align-items-center gap-2 Quantity_Controls">
+                  <!-- Increase Button -->
+                  <button class="btn custom-increase-btn btn-sm"
+                    (click)="increaseQuantity(product.id); $event.stopPropagation()">
+                    <i class="fa-solid fa-plus"></i>
                   </button>
-                  }
+                  <!-- Quantity Display -->
+                  <span class="fw-bold custom-qty-display text-center px-4">
+                    {{ getCartItem(product.id)?.quantity }}
+                  </span>
+                  <!-- Remove Button -->
+                  <button class="btn custom-increase-btn btn-sm"
+                    (click)="decreaseQuantity(product.id); $event.stopPropagation()">
+                    <i class="fa-solid fa-minus"></i>
+
+                    <!-- <img src="assets/Images/delete-02.svg"> -->
+                  </button>
+                </div>
+              </div>
+              } @else {
+              <button class="btn btn-outline-secondary btn-xs bg-white w-100 mt-3 text-black rounded-4 custom-hover"
+                style="font-size: 16px; padding: 0.25rem 0.5rem;" (click)="addToCart(product, $event)"
+                data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
+                <img src="assets/Images/shopping-cart-add-01.svg" style="width: 24px;" class="px-1">
+                {{ 'ADD_TO_CART' | translate }}
+              </button>
+              }
             </div>
           </div>
         </div>
@@ -261,9 +277,8 @@
     <div class="d-flex align-items-center justify-content-between mt-4 px-lg-4">
       <div class="d-flex gap-2 justify-content-center mx-auto">
         @for (i of getDotsArray(); track i) {
-        <button (click)="goToSlide(i)" class="rounded-circle"
-          [class.bg-success]="currentSlideIndex===i" [class.bg-secondary]="currentSlideIndex!==i"
-          style="width:10px;height:10px;border:none;"></button>
+        <button (click)="goToSlide(i)" class="rounded-circle" [class.bg-success]="currentSlideIndex===i"
+          [class.bg-secondary]="currentSlideIndex!==i" style="width:10px;height:10px;border:none;"></button>
         }
       </div>
       <div class="d-flex gap-2">

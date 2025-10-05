@@ -206,8 +206,11 @@ this.cartState.cartItems$.subscribe(items => {
     });
   }
 
-  decreaseQuantity(productId: number) {
-    const currentQty = this.getCurrentQuantity(productId);
+decreaseQuantity(productId: number) {
+  const currentQty = this.getCurrentQuantity(productId);
+
+  if (this.isLoggedIn()) {
+    // ✅ Logged-in users → use API
     if (currentQty <= 1) {
       this.removeItem(productId);
       return;
@@ -221,19 +224,39 @@ this.cartState.cartItems$.subscribe(items => {
           item.quantity--;
           this.cartState.updateItems([...current]);
         }
-      }
+      },
+      error: (err) => this.handleCartActionError(err)
     });
-  }
+  } else {
+    // ✅ Guest users → update localStorage directly
+    const current = this.cartState.getCartSummary().items;
+    const item = current.find(i => i.product_id === productId);
 
-  removeItem(productId: number) {
-    this.cartService.removeCartItem(productId).subscribe({
-      next: () => {
-        let current = this.cartState.getCartSummary().items;
-        current = current.filter(i => i.product_id !== productId);
-        this.cartState.updateItems([...current]);
-      }
-    });
+    if (!item) return;
+
+    if (currentQty <= 1) {
+      this.cartState.removeItem(productId);
+    } else {
+      item.quantity--;
+      this.cartState.updateItems([...current]);
+    }
   }
+}
+
+
+removeItem(productId: number) {
+  if (this.isLoggedIn()) {
+    // ✅ Logged-in users → remove via API
+    this.cartService.removeCartItem(productId).subscribe({
+      next: () => this.cartState.removeItem(productId),
+      error: (err) => this.handleCartActionError(err)
+    });
+  } else {
+    // ✅ Guest users → remove from localStorage directly
+    this.cartState.removeItem(productId);
+  }
+}
+
 
   private getCurrentQuantity(productId: number): number {
     const current = this.cartState.getCartSummary().items;
