@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    image: rashaka:v1
+    container_name: rashaka_app
+    # Your app must listen on port 80 INSIDE the container (change if different)
+    expose:
+      - "80"
+    networks: [web]
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # enables HTTP/3/QUIC (optional)
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    environment:
+      # optional but recommended so ACME emails reach you
+      - ACME_AGREE=true
+    networks: [web]
+    depends_on:
+      - app
+
+networks:
+  web:
+    driver: bridge
+    external: true
