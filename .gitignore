@@ -40,3 +40,18 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+
+# --- Caddy ---
+Caddyfile
+Caddyfile.*
+caddy/
+caddy_* /
+caddy_config/
+caddy_data/
+*.caddy
+*.caddyfile
+*.caddy.json
+*.caddy.yaml
+*.caddy.yml
+
