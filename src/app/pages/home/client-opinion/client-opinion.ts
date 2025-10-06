@@ -159,14 +159,33 @@ goToReview(index: number): void {
 
 
   // ✅ Swipe functions لكل قسم
-  onTouchStart(event: TouchEvent): void {
-    this.touchStartX = event.changedTouches[0].screenX;
-  }
+touchStartY = 0;
+touchEndY = 0;
 
-  onTouchEnd(event: TouchEvent, type: 'story' | 'review'): void {
-    this.touchEndX = event.changedTouches[0].screenX;
-    this.handleSwipe(type);
+onTouchStart(event: TouchEvent): void {
+  this.touchStartX = event.touches[0].clientX;
+  this.touchStartY = event.touches[0].clientY;
+}
+
+onTouchMove(event: TouchEvent): void {
+  const currentX = event.touches[0].clientX;
+  const currentY = event.touches[0].clientY;
+
+  const deltaX = Math.abs(currentX - this.touchStartX);
+  const deltaY = Math.abs(currentY - this.touchStartY);
+
+  // ✅ Prevent default only if it's clearly horizontal
+  if (deltaX > deltaY) {
+    event.preventDefault();
   }
+}
+
+onTouchEnd(event: TouchEvent, type: 'story' | 'review'): void {
+  this.touchEndX = event.changedTouches[0].clientX;
+  this.touchEndY = event.changedTouches[0].clientY;
+  this.handleSwipe(type);
+}
+
 
   handleSwipe(type: 'story' | 'review'): void {
     const swipeDistance = this.touchStartX - this.touchEndX;
