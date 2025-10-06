@@ -628,13 +628,13 @@
 
     &.left {
       opacity: 0.4;
-      transform: translateX(-40%) scale(1.2);
+      transform: translateX(-60%) scale(1.2);
       z-index: 1;
     }
 
     &.right {
       opacity: 0.4;
-      transform: translateX(40%) scale(1.2);
+      transform: translateX(60%) scale(1.2);
       z-index: 1;
     }
 
@@ -694,3 +694,15 @@
   color: #fff;
 }
 
+.video-wrapper {
+  position: relative;
+}
+
+.video-wrapper video {
+  touch-action: pan-y;
+  pointer-events: none;   /* ✅ allows vertical scrolling to pass through */
+}
+
+.video-wrapper video::-webkit-media-controls {
+  pointer-events: auto;   /* ✅ keeps controls usable on iOS Safari */
+}

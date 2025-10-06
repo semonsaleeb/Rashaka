@@ -12,8 +12,11 @@
 
     <div class="client-reviews">
 
-      <div class="carousel-custom-wrapper position-relative" (touchstart)="onTouchStart($event)"
-        (touchend)="onTouchEnd($event, 'review')" (touchmove)="$event.preventDefault()" style="touch-action: pan-y;">
+   <div class="carousel-custom-wrapper position-relative"
+     (touchstart)="onTouchStart($event)"
+     (touchmove)="onTouchMove($event)"
+     (touchend)="onTouchEnd($event, 'review')"
+     style="touch-action: pan-y;">
 
 
         <!-- الكروت -->
@@ -28,10 +31,12 @@
                 </ng-container>
 
                 <ng-template #mp4>
+                  <div class="video-wrapper">
+
                    <video controls preload="metadata">
                     <source [src]="review.video_url" type="video/mp4" />
                   </video>
-
+</div>
                 </ng-template>
               </div>
 
