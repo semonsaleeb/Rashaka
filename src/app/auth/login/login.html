@@ -13,16 +13,21 @@
 <div class="my-3 position-relative" style="width: 100%; justify-self: center;" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
   <label for="password">{{ 'REGISTER.PASSWORD' | translate }}</label>
   
-  <input 
-    [type]="showPassword ? 'text' : 'password'" 
-    id="password" 
-    [(ngModel)]="password" 
-    name="password"
-    class="form-control py-2 mb-2" style="height: 5vh;"
-    [class.pe-5]="currentLang === 'ar'"
-    [class.ps-5]="currentLang === 'en'"
-    required minlength="8" 
-    placeholder="كلمة المرور" />
+<input 
+  [type]="showPassword ? 'text' : 'password'" 
+  id="password" 
+  [(ngModel)]="password" 
+  name="password"
+  class="form-control py-2 mb-2"
+  style="height: 5vh;"
+  [class.pe-5]="currentLang === 'ar'"
+  [class.ps-5]="currentLang === 'en'"
+  [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'"
+
+  required 
+  minlength="8" 
+/>
+  <!-- [placeholder]="'AUTH.PASSWORD' | translate" -->
 
   <!-- 👁 Eye Icon واحدة فقط -->
 <span 

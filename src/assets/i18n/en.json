@@ -97,6 +97,7 @@
     "DEVICE_ALT": "Body Measurement Device"
   },
   "PLANS": {
+    "NO_PLANS": "There are currently no plans for {{plan}}",
     "VIEW_ALL": "View All",
     "PACKAGES": "Packages",
     "SUBSCRIPTION": "Subscription",
@@ -188,8 +189,8 @@
   "HOURS": "Hours",
   "DAYS": "Days",
   "LIMITED_TIME": "Limited Time ",
-"OFFERS": "The Best Offers Await You",
-"OFFERS_DESC": "Enjoy the best discounts and packages tailored just for you.",
+  "OFFERS": "The Best Offers Await You",
+  "OFFERS_DESC": "Enjoy the best discounts and packages tailored just for you.",
   "ALL": "All",
   "VIEW_DIRECTIONS": "View Directions",
   "SUBSCRIPTIONS": {
@@ -252,6 +253,11 @@
   "SUCCESS_STORIES_SUBTITLE": "\"Real Transformation Stories - Your Inspiration Starts Here\"<br>Take the first step now towards your dream body!",
   "SUCCESS_STORIES_CTA": "Book Now",
   "AUTH": {
+      "PASSWORD_RESET_SUCCESS": "Your password has been reset successfully.",
+    "PASSWORD_RESET_FAILED": "Failed to reset password.",
+    "OTP_SENT_SUCCESS": "The code has been sent to your email.",
+    "OTP_SEND_FAILED": "Failed to send the code. Please check your email.",
+    "PASSWORD": "Password",
     "HOME": "Home",
     "LOGIN_IMAGE_ALT": "Login Image",
     "WELCOME": "Welcome to Happy Fitness!",
@@ -276,7 +282,8 @@
     "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
     "SUBMIT": "Register",
     "ERRORS": {
-            "TITLE": "Error",
+      "TITLE": "Error",
+      "PASSWORD_CONFIRM_REQUIRED": "Password confirmation is required",
       "NAME_REQUIRED": "Name is required",
       "NAME_MINLENGTH": "Name must be at least 8 characters",
       "NAME_MAXLENGTH": "Name is too long, maximum 255 characters",
@@ -415,12 +422,11 @@
     "ADD_TO_CART": "Add to Cart"
   },
   "CART": {
-    "DISCOUNT":"Discount",
-
+    "DISCOUNT": "Discount",
     "FREE_SHIPPING_TEXT": "Free shipping for orders above",
     "FREE_SHIPPING_AMOUNT": "1000 SAR",
-    "REMOVE": "Remove",   
-    "VIEW_CART": "View Cart", 
+    "REMOVE": "Remove",
+    "VIEW_CART": "View Cart",
     "PAYMENTMETHOD": "Payment Method",
     "EMPTY_TITLE": "Your cart is empty!",
     "EMPTY_DESC": "Add the products you want and come back later to complete your order.",
@@ -612,30 +618,29 @@
   },
   "MAX_AVAILABLE": "Max available",
   "CLIENT_REVIEWS": " Client Reviews ",
-   "FREE_BALANCE_APPLIED": "The applied free balance",
-    "errors": {
-   "OUTSIDE_WINDOW": "The selected time is outside working hours. Please choose another time.",
+  "FREE_BALANCE_APPLIED": "The applied free balance",
+  "errors": {
+    "OUTSIDE_WINDOW": "The selected time is outside working hours. Please choose another time.",
     "FREE_SESSION_ALREADY_USED": "Free checkup session already used.",
     "OVERLAP": "The requested time overlaps with another appointment.",
     "DEFAULT": "An error occurred while confirming your booking.",
-      "ADDRESS_IN_USE": "This address cannot be deleted because it is linked to an order or appointment.",
+    "ADDRESS_IN_USE": "This address cannot be deleted because it is linked to an order or appointment.",
     "DELETE_FAILED": "Failed to delete the address."
   },
-    "RELATED_PRODUCTS": "Related Products",
-      "BEST_SELLING_PRODUCTS": "Best Selling Products",
-       "PAYMENT": {
+  "RELATED_PRODUCTS": "Related Products",
+  "BEST_SELLING_PRODUCTS": "Best Selling Products",
+  "PAYMENT": {
     "SUCCESS_TITLE": "Payment Successful!",
     "SUCCESS_MESSAGE": "Thank you for your purchase. Your order has been confirmed successfully.",
     "ORDER_ID": "Order ID",
     "INVOICE_ID": "Invoice ID",
     "GO_HOME": "Go to Home",
     "VIEW_ORDERS": "View Orders",
-      "ERROR_TITLE": "Payment Failed",
+    "ERROR_TITLE": "Payment Failed",
     "RETRY_PAYMENT": "Retry Payment"
   },
-
   "PRODUCT": {
-        "LOADING": "Loading products...",
+    "LOADING": "Loading products...",
     "TOP_SELLER": "Top Seller",
     "DESCRIPTION": "Description",
     "REVIEWS": "Reviews",
@@ -650,22 +655,36 @@
     "RELATED_PRODUCTS": "Related Products"
   },
   "FIRST_PRODUCT_ADDED": "The first product has been added",
-  
- "PAGINATION": {
+  "PAGINATION": {
     "PAGE_INFO": "Page {{current}} of {{total}}",
     "NEXT_PAGE": "Next Page",
     "PREV_PAGE": "Previous Page"
   },
   "ERRORS": {
-  "TITLE": "An error occurred"
-},
-"STORY": {
-  "BEFORE_WEIGHT": "Previous Weight",
-  "AFTER_WEIGHT": "Current Weight"
+    "TITLE": "An error occurred"
+  },
+  "STORY": {
+    "BEFORE_WEIGHT": "Previous Weight",
+    "AFTER_WEIGHT": "Current Weight"
+  },
+  "COMPARE": {
+    "TITLE": "Product Comparison",
+    "LOADING": "Loading data...",
+    "FEATURE": "Feature",
+    "PRICE": "Price",
+    "STOCK": "Stock Quantity",
+    "RATING": "Rating",
+    "NO_RATING": "No rating",
+    "DESCRIPTION": "Description",
+    "IMAGE": "Image"
+  },
+  "SEARCH": {
+    "PLACEHOLDER": "Search for products"
+  },
+    "VALIDATION": {
+    "PASSWORD_REQUIRED": "The password field is required.",
+    "EMAIL_REQUIRED": "The email field is required.",
+    "EMAIL_INVALID": "The email must be a valid email address.",
+    "PASSWORD_CONFIRM_MISMATCH": "The password confirmation does not match."
+  }
 }
-
-
-
-}
-
-

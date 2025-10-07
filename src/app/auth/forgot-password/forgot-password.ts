@@ -35,25 +35,26 @@ export class ForgotPassword {
       this.dir = lang === 'ar' ? 'rtl' : 'ltr';
     });
   }
-  sendOtp() {
-    this.loading = true;
-    this.errorMessage = '';
-    this.message = '';
+sendOtp() {
+  this.loading = true;
+  this.errorMessage = '';
+  this.message = '';
 
-    const headers = { 'Accept': 'application/json' };
+  const headers = { 'Accept': 'application/json' };
 
-    this.http.post<any>(`${environment.apiBaseUrl}/forgot-password`, { email: this.email }, { headers })
-      .subscribe({
-        next: (res) => {
-          this.message = res.message || 'تم إرسال الرمز إلى بريدك الإلكتروني.';
-          localStorage.setItem('otp-email', this.email);
-          this.router.navigate(['/verify-otp']); // ✅ Navigate here
-          this.loading = false;
-        },
-        error: (err) => {
-          this.errorMessage = err.error?.message || 'فشل إرسال الرمز. تأكد من البريد الإلكتروني.';
-          this.loading = false;
-        }
-      });
-  }
+  this.http.post<any>(`${environment.apiBaseUrl}/forgot-password`, { email: this.email }, { headers })
+    .subscribe({
+      next: (res) => {
+        this.message = res.message || this.translate.instant('AUTH.OTP_SENT_SUCCESS');
+        localStorage.setItem('otp-email', this.email);
+        this.router.navigate(['/verify-otp']);
+        this.loading = false;
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || this.translate.instant('AUTH.OTP_SEND_FAILED');
+        this.loading = false;
+      }
+    });
+}
+
 }

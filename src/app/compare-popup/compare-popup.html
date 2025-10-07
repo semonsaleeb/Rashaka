@@ -1,11 +1,16 @@
-<div class="popup-overlay" dir="rtl" style="z-index: 9999999999;">
+<div class="popup-overlay"  style="z-index: 9999999999;">
   <div class="popup-content p-4 bg-white shadow rounded">
-    <button (click)="closePopup()" class="btn btn-danger btn-sm float-start">X</button>
-    <h4 class="mb-4">مقارنة المنتجات</h4>
+<button 
+  (click)="closePopup()" 
+  class="btn btn-danger btn-sm"
+  [ngClass]="currentLang === 'ar' ? 'float-start' : 'float-end'">
+  X
+</button>
+    <h4 class="mb-4">{{ 'COMPARE.TITLE' | translate }}</h4>
 
     @if (comparedData.length < 2) {
       <div class="text-center">
-        <p>جاري تحميل البيانات...</p>
+        <p>{{ 'COMPARE.LOADING' | translate }}</p>
       </div>
     }
 
@@ -13,48 +18,46 @@
       <table class="table table-bordered text-center">
         <thead>
           <tr>
-            <th>الخاصية</th>
+            <th>{{ 'COMPARE.FEATURE' | translate }}</th>
             @for (p of comparedData; track p) {
-              <th>{{ p.name_ar || p.name }}</th>
+              <th>{{ currentLang === 'ar' ? (p.name_ar || p.name) : (p.name || p.name_ar) }}</th>
             }
           </tr>
         </thead>
-        @if (comparedData.length === 2) {
-          <tbody>
-            <tr>
-              <td>السعر</td>
-              @for (p of comparedData; track p) {
-                <td>{{ p.sale_price || p.price }} EGP</td>
-              }
-            </tr>
-            <tr>
-              <td>الكمية في المخزون</td>
-              @for (p of comparedData; track p) {
-                <td>{{ p.stock }}</td>
-              }
-            </tr>
-            <tr>
-              <td>التقييم</td>
-              @for (p of comparedData; track p) {
-                <td>{{ p.average_rating || 'لا يوجد تقييم' }}</td>
-              }
-            </tr>
-            <tr>
-              <td>الوصف</td>
-              @for (p of comparedData; track p) {
-                <td>{{ p.description_ar || p.description }}</td>
-              }
-            </tr>
-            <tr>
-              <td>الصورة</td>
-              @for (p of comparedData; track p) {
-                <td>
-                  <img [src]="p.images[0]" width="80" />
-                </td>
-              }
-            </tr>
-          </tbody>
-        }
+        <tbody>
+          <tr>
+            <td>{{ 'COMPARE.PRICE' | translate }}</td>
+            @for (p of comparedData; track p) {
+              <td>{{ p.sale_price || p.price }} EGP</td>
+            }
+          </tr>
+          <tr>
+            <td>{{ 'COMPARE.STOCK' | translate }}</td>
+            @for (p of comparedData; track p) {
+              <td>{{ p.stock }}</td>
+            }
+          </tr>
+          <tr>
+            <td>{{ 'COMPARE.RATING' | translate }}</td>
+            @for (p of comparedData; track p) {
+              <td>{{ p.average_rating || ('COMPARE.NO_RATING' | translate) }}</td>
+            }
+          </tr>
+          <tr>
+            <td>{{ 'COMPARE.DESCRIPTION' | translate }}</td>
+            @for (p of comparedData; track p) {
+              <td>{{ currentLang === 'ar' ? (p.description_ar || p.description) : (p.description || p.description_ar) }}</td>
+            }
+          </tr>
+          <tr>
+            <td>{{ 'COMPARE.IMAGE' | translate }}</td>
+            @for (p of comparedData; track p) {
+              <td>
+                <img [src]="p.images[0]" width="80" />
+              </td>
+            }
+          </tr>
+        </tbody>
       </table>
     }
   </div>

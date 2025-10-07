@@ -278,8 +278,15 @@
     <div class="search-container px-3 pb-3" style="max-width: 500px; margin: 0 auto;">
       <div class="position-relative">
         <div class="input-group">
-          <input type="text" class="form-control ps-5 text-end" [(ngModel)]="searchQuery" placeholder="ابحث عن منتجات"
-            i18n-placeholder="@@searchPlaceholder" (input)="onSearch()" />
+  <input 
+  type="text" 
+  class="form-control ps-5"
+  [(ngModel)]="searchQuery" 
+  [placeholder]="'SEARCH.PLACEHOLDER' | translate" 
+  (input)="onSearch()"
+  [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'" />
+
+
 
           <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="z-index: 5;">
             <img src="assets/Images/search-01.svg" />

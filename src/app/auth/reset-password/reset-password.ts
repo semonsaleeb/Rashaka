@@ -39,31 +39,53 @@ export class ResetPassword {
     this.dir = lang === 'ar' ? 'rtl' : 'ltr';
   });
 }
-  resetPassword() {
-    this.message = '';
-    this.errorMessage = '';
-    this.loading = true;
+resetPassword() {
+  this.message = '';
+  this.errorMessage = '';
+  this.loading = true;
 
-    const headers = { 'Accept': 'application/json' };
-    const payload = {
-      email: this.email,
-      password: this.password,
-      password_confirmation: this.password_confirmation
-    };
+  const headers = { 'Accept': 'application/json' };
+  const payload = {
+    email: this.email,
+    password: this.password,
+    password_confirmation: this.password_confirmation
+  };
 
-    this.http.post<any>(`${environment.apiBaseUrl}/reset-password`, payload, { headers })
-      .subscribe({
-        next: res => {
-          this.message = res.message || 'تمت إعادة تعيين كلمة المرور بنجاح.';
-          localStorage.removeItem('reset-email');
-          this.router.navigate(['/reset-password-done']);
-        },
-        error: err => {
-          this.errorMessage = err.error?.message || 'فشل إعادة تعيين كلمة المرور.';
-          this.loading = false;
-        }
-      });
-  }
+  this.http.post<any>(`${environment.apiBaseUrl}/reset-password`, payload, { headers })
+    .subscribe({
+      next: (res) => {
+        // ✅ رسالة النجاح مترجمة
+        this.message = res.message || this.translate.instant('AUTH.PASSWORD_RESET_SUCCESS');
+        localStorage.removeItem('reset-email');
+        this.router.navigate(['/reset-password-done']);
+      },
+     error: (err) => {
+  console.log('🔥 Full API Error Object:', err);  // 👈 ده اللي هيوضح الرسالة الفعلية
+
+  const apiMessage: string = err.error?.message;
+  console.log('📝 API Error Message:', apiMessage);
+
+const apiToTranslationKey: Record<string, string> = {
+  'The password field is required.': 'VALIDATION.PASSWORD_REQUIRED',
+  'The email field is required.': 'VALIDATION.EMAIL_REQUIRED',
+  'The email must be a valid email address.': 'VALIDATION.EMAIL_INVALID',
+  'The password field confirmation does not match.': 'VALIDATION.PASSWORD_CONFIRM_MISMATCH' // ✅ تم التعديل هنا
+};
+
+
+  const translationKey = apiToTranslationKey[apiMessage];
+
+  this.errorMessage = translationKey
+    ? this.translate.instant(translationKey)
+    : apiMessage || this.translate.instant('AUTH.PASSWORD_RESET_FAILED');
+
+  this.loading = false;
+}
+
+    });
+}
+
+
 
 
   showPassword = false;

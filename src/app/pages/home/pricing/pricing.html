@@ -365,7 +365,9 @@ Grid Mode
   </div>
   } @else {
   <div class="text-center py-5">
-    <p class="fs-5 fw-semibold">لا يوجد باقات حاليا لـ {{selectedPlan}}</p>
+<p class="fs-5 fw-semibold">
+  {{ 'PLANS.NO_PLANS' | translate:{ plan: selectedPlan } }}
+</p>
   </div>
   }
 

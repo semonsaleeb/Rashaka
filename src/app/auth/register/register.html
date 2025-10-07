@@ -98,7 +98,7 @@
     <label class="form-label">{{ 'REGISTER.PASSWORD' | translate }}</label>
     <div class="position-relative">
       <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5 pe-4" style="height: 5vh;"
-        [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate"
+        
         [class.is-invalid]="isFieldInvalid('password')">
 
       <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"
@@ -125,13 +125,14 @@
       {{ 'REGISTER.ERRORS.PASSWORD_WEAK' | translate }}
     </div>
   </div>
-
+<!-- [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate"
+  [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate" -->
   <!-- تأكيد كلمة المرور -->
   <div class="mb-4">
     <label class="form-label">{{ 'REGISTER.PASSWORD_CONFIRM' | translate }}</label>
     <div class="position-relative">
       <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="password_confirmation" style="height: 5vh;"
-        class="form-control ps-5 pe-4" [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate"
+        class="form-control ps-5 pe-4" 
         [class.is-invalid]="isFieldInvalid('password_confirmation') || registerForm.hasError('mismatch')">
 
       <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"

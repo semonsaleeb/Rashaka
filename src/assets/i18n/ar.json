@@ -74,7 +74,7 @@
   "SERVICES": {
     "TITLE": "خدماتنا",
     "BOOK_NOW1": "احجز الآن",
-    "BOOK_NOW2": "   اشترك الآن "  ,
+    "BOOK_NOW2": "   اشترك الآن ",
     "BOOK_NOW3": "تسوق الآن",
     "CARD1": {
       "TITLE": "فحص مجاني",
@@ -97,6 +97,7 @@
     "DEVICE_ALT": "جهاز قياس الجسم"
   },
   "PLANS": {
+    "NO_PLANS": "لا يوجد باقات حاليا لـ {{plan}}",
     "VIEW_ALL": "عرض الكل",
     "PACKAGES": "الأشتراكات",
     "SUBSCRIPTION": "اشتراك",
@@ -252,6 +253,12 @@
   "SUCCESS_STORIES_SUBTITLE": "\"قصص تحوّل حقيقية - إلهامك يبدأ هنا\"<br>ابدأ الآن في أول خطوة نحو جسم أحلامك!",
   "SUCCESS_STORIES_CTA": "احجز الآن",
   "AUTH": {
+    
+      "PASSWORD_RESET_SUCCESS": "تمت إعادة تعيين كلمة المرور بنجاح.",
+    "PASSWORD_RESET_FAILED": "فشل إعادة تعيين كلمة المرور.",
+    "OTP_SENT_SUCCESS": "تم إرسال الرمز إلى بريدك الإلكتروني.",
+    "OTP_SEND_FAILED": "فشل إرسال الرمز. تأكد من البريد الإلكتروني.",
+    "PASSWORD": "كلمة المرور",
     "HOME": "الرئيسية",
     "LOGIN_IMAGE_ALT": "صورة تسجيل الدخول",
     "WELCOME": "أهلاً بك في الرشاقة السعيدة!",
@@ -267,7 +274,6 @@
     "LOADING": "جاري الدخول..."
   },
   "REGISTER": {
-    
     "NAME": "الأسم",
     "EMAIL": "البريد الإلكتروني",
     "PHONE": "رقم الهاتف",
@@ -278,6 +284,7 @@
     "SUBMIT": "تسجيل",
     "ERRORS": {
       "TITLE": "حدث خطأ",
+      "PASSWORD_CONFIRM_REQUIRED": "تأكيد كلمة المرور مطلوب",
       "NAME_MINLENGTH": "يجب أن يكون الاسم 8 أحرف على الأقل",
       "NAME_REQUIRED": "يرجى إدخال الاسم الكامل",
       "NAME_MAXLENGTH": "الاسم طويل جدًا، الحد الأقصى 255 حرف",
@@ -416,7 +423,7 @@
     "ADD_TO_CART": "إضافة للعربة"
   },
   "CART": {
-"DISCOUNT":"الخصم",
+    "DISCOUNT": "الخصم",
     "FREE_SHIPPING_TEXT": "شحن مجاني للطلبات أكثر من",
     "FREE_SHIPPING_AMOUNT": "1000 ريال",
     "REMOVE": "حذف",
@@ -612,59 +619,77 @@
   },
   "MAX_AVAILABLE": "الحد الأقصى المتاح",
   "CLIENT_REVIEWS": "اراء عملائنا",
-   "FREE_BALANCE_APPLIED": "رصيد مجالي مطبق",
-    "errors": {
-        "OUTSIDE_WINDOW": "الوقت الذي اخترته خارج ساعات العمل. من فضلك اختر وقتًا آخر.",
+  "FREE_BALANCE_APPLIED": "رصيد مجالي مطبق",
+  "errors": {
+    "OUTSIDE_WINDOW": "الوقت الذي اخترته خارج ساعات العمل. من فضلك اختر وقتًا آخر.",
     "FREE_SESSION_ALREADY_USED": "لقد استخدمت الجلسة المجانية من قبل.",
     "DEFAULT": "حدث خطأ أثناء تأكيد الحجز.",
     "OVERLAP": "الوقت المختار يتعارض مع موعد آخر.",
-      "ADDRESS_IN_USE": "لا يمكن حذف هذا العنوان لأنه مرتبط بطلب أو موعد.",
+    "ADDRESS_IN_USE": "لا يمكن حذف هذا العنوان لأنه مرتبط بطلب أو موعد.",
     "DELETE_FAILED": "فشل حذف العنوان."
   },
   "RELATED_PRODUCTS": "منتجات ذات صلة",
-    "BEST_SELLING_PRODUCTS": "أفضل المنتجات مبيعًا",
-    "PAYMENT": {
+  "BEST_SELLING_PRODUCTS": "أفضل المنتجات مبيعًا",
+  "PAYMENT": {
     "SUCCESS_TITLE": "تم الدفع بنجاح!",
     "SUCCESS_MESSAGE": "شكراً لك على شرائك. تم تأكيد طلبك بنجاح.",
     "ORDER_ID": "رقم الطلب",
     "INVOICE_ID": "رقم الفاتورة",
     "GO_HOME": "العودة للرئيسية",
     "VIEW_ORDERS": "عرض الطلبات",
-      "ERROR_TITLE": "فشل عملية الدفع",
+    "ERROR_TITLE": "فشل عملية الدفع",
     "RETRY_PAYMENT": "إعادة المحاولة"
   },
-    "PRODUCT": {
-          "LOADING": "جاري تحميل المنتجات...",
+  "PRODUCT": {
+    "LOADING": "جاري تحميل المنتجات...",
     "TOP_SELLER": "الأكثر مبيعاً",
-     "DESCRIPTION": "الوصف",
+    "DESCRIPTION": "الوصف",
     "REVIEWS": "التقييمات",
     "REVIEWS_AND_COMMENTS": "التقييمات والمراجعات",
     "NO_REVIEWS": "لا توجد مراجعات لهذا المنتج بعد.",
-      "BUTTONS": {
-    "ADD_TO_CART": "أضف إلى السلة",
-    "COMPARE": "قارن"
+    "BUTTONS": {
+      "ADD_TO_CART": "أضف إلى السلة",
+      "COMPARE": "قارن"
+    },
+    "SHOW_MORE": "عرض المزيد",
+    "SHOW_LESS": "عرض أقل",
+    "RELATED_PRODUCTS": "منتجات ذات صلة"
   },
-  "SHOW_MORE": "عرض المزيد",
-  "SHOW_LESS": "عرض أقل",
-  "RELATED_PRODUCTS": "منتجات ذات صلة"
-
-
-
-  },
-  "FIRST_PRODUCT_ADDED": "تم أضافة المنتج الاول" ,
-    "PAGINATION": {
+  "FIRST_PRODUCT_ADDED": "تم أضافة المنتج الاول",
+  "PAGINATION": {
     "PAGE_INFO": "الصفحة {{current}} من {{total}}",
     "NEXT_PAGE": "الصفحة التالية",
     "PREV_PAGE": "الصفحة السابقة"
   },
-"ERRORS": {
-  "TITLE": "حدث خطأ"
-},
-"STORY": {
-  "BEFORE_WEIGHT": "الوزن السابق",
-  "AFTER_WEIGHT": "الوزن الحالي"
-}
-
+  "ERRORS": {
+    "TITLE": "حدث خطأ"
+  },
+  "STORY": {
+    "BEFORE_WEIGHT": "الوزن السابق",
+    "AFTER_WEIGHT": "الوزن الحالي"
+  },
+  "COMPARE": {
+    "TITLE": "مقارنة المنتجات",
+    "LOADING": "جاري تحميل البيانات...",
+    "FEATURE": "الخاصية",
+    "PRICE": "السعر",
+    "STOCK": "الكمية في المخزون",
+    "RATING": "التقييم",
+    "NO_RATING": "لا يوجد تقييم",
+    "DESCRIPTION": "الوصف",
+    "IMAGE": "الصورة"
+  },
+  "SEARCH": {
+    "PLACEHOLDER": "ابحث عن منتجات"
+  },
+  
+  "VALIDATION": {
+    "PASSWORD_REQUIRED": "حقل كلمة المرور مطلوب.",
+    "EMAIL_REQUIRED": "حقل البريد الإلكتروني مطلوب.",
+    "EMAIL_INVALID": "يجب إدخال بريد إلكتروني صالح.",
+    "PASSWORD_CONFIRM_MISMATCH": "تأكيد كلمة المرور غير متطابق."
+  }
+  
 
 
 }
