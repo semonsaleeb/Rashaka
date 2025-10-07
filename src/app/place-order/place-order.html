@@ -1,3 +1,20 @@
+
+<!-- لو المستخدم مش عامل Login -->
+<div *ngIf="!isLoggedIn" class="container py-5 text-center">
+  <img src="assets/Images/Enter OTP-cuate 1.svg" style="max-width: 250px;" class="mb-4">
+  <h5 class="fw-bold mb-3">{{ 'MODAL.LOGIN_MESSAGE' | translate }}</h5>
+  <div class="d-flex justify-content-center gap-3">
+    <button class="btn btn-outline-secondary px-4" (click)="goToRegister()">
+      {{ 'MODAL.REGISTER' | translate }}
+    </button>
+    <button class="btn btn-success px-4" (click)="goToLogin()">
+      {{ 'MODAL.LOGIN' | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- لو المستخدم عامل Login -->
+<div *ngIf="isLoggedIn" class="container my-5" [dir]="dir">
 <div class="container my-5" [dir]="dir">
   <!-- Page title -->
   <div class="alert alert-light text-center p-2 mb-4">
@@ -249,4 +266,6 @@
       </div>
     </div>
   </div>
+</div>
+
 </div>

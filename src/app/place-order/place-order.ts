@@ -858,7 +858,13 @@ closeCashModal() {
     modalInstance.hide();
   }
 }
+  goToLogin() {
+    this.router.navigate(['/auth/login']);
+  }
 
+  goToRegister() {
+    this.router.navigate(['/auth/register']);
+  }
 // goHome() {
 //   this.closeCashModal();
 //   this.router.navigate(['/']);
