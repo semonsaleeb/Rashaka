@@ -656,8 +656,10 @@
     "PAGE_INFO": "الصفحة {{current}} من {{total}}",
     "NEXT_PAGE": "الصفحة التالية",
     "PREV_PAGE": "الصفحة السابقة"
-  }
-
+  },
+"ERRORS": {
+  "TITLE": "حدث خطأ"
+}
 
 
 }

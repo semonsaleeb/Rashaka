@@ -655,7 +655,11 @@
     "PAGE_INFO": "Page {{current}} of {{total}}",
     "NEXT_PAGE": "Next Page",
     "PREV_PAGE": "Previous Page"
-  }
+  },
+  "ERRORS": {
+  "TITLE": "An error occurred"
+}
+
 
 
 }

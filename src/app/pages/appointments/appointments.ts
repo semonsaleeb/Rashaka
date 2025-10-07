@@ -83,6 +83,26 @@ openReservation(mode: 'all' | 'free') {
   this.step = 1; // أو توديه للـ branch مباشرة
 }
 
+closeAuthModalAndCleanup() {
+  // 1️⃣ اقفل المودال لو لسه مفتوح
+  const modalEl = document.getElementById('authModal');
+  if (modalEl) {
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
+
+  // 2️⃣ شيل أي Backdrop موجود
+  document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+    backdrop.remove();
+  });
+
+  // 3️⃣ رجّع حالة الـ body لطبيعتها
+  document.body.classList.remove('modal-open');
+  document.body.style.overflow = '';
+  document.body.style.paddingRight = '';
+}
 
   goToStep(step: number) {
     this.step = step;
