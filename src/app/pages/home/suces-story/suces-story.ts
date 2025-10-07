@@ -56,9 +56,11 @@ export class SucesStory {
     this.translate.use(this.languageService.getCurrentLanguage());
 
     // Listen for language changes
-    this.languageService.currentLang$.subscribe(lang => {
-      this.translate.use(lang);
-    });
+ this.languageService.currentLang$.subscribe(lang => {
+  this.currentLang = lang;
+  this.translate.use(lang);
+});
+
 
     // ✅ تحميل القصص و الريفيوز
     this.loadStories();

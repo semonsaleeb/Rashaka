@@ -658,6 +658,10 @@
   },
   "ERRORS": {
   "TITLE": "An error occurred"
+},
+"STORY": {
+  "BEFORE_WEIGHT": "Previous Weight",
+  "AFTER_WEIGHT": "Current Weight"
 }
 
 

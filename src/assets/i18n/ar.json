@@ -659,7 +659,12 @@
   },
 "ERRORS": {
   "TITLE": "حدث خطأ"
+},
+"STORY": {
+  "BEFORE_WEIGHT": "الوزن السابق",
+  "AFTER_WEIGHT": "الوزن الحالي"
 }
+
 
 
 }
