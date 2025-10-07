@@ -18,3 +18,8 @@
     color: black;
 
 }
+
+
+.offcanvas-backdrop.show ,.offcanvas-backdrop.fade {
+  z-index: 99999 !important;
+}

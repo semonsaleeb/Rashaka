@@ -48,3 +48,7 @@
 border-color: #B1E38C;
   color: black;
 }
+
+.offcanvas-backdrop.show {
+  z-index: 99999 !important;
+}
