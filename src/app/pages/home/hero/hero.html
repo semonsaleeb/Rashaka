@@ -16,22 +16,22 @@
 
 
       <!-- Right Content Column -->
-    <div class="col-lg-5 mb-4 mb-lg-0 py-5"
+    <div class="col-lg-5 mb-4 mb-lg-0 py-5 "
      [ngStyle]="{ direction: currentLang === 'ar' ? 'rtl' : 'ltr', textAlign: currentLang === 'ar' ? 'right' : 'left' }"
      [ngClass]="currentLang === 'en' ? 'english-size' : ''">
 
 
-        <h1 class="hero-title mb-5 ">
+        <h1 class="hero-title mb-5 px-lg-0 px-3">
           <div class="highlight-wrapper ">
             <span class="highlight">{{ 'hero.highlight' | translate }}</span>
             {{ 'hero.priority' | translate }}
           </div>
         </h1>
-        <p class="hero-description fs-5" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
+        <p class="hero-description fs-5 px-lg-0 px-3" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
           {{ 'hero.description' | translate }}
         </p>
 
-        <p class="hero-subtitle mb-5 fs-6" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
+        <p class="hero-subtitle mb-5 fs-6 px-lg-0 px-3" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
           {{ 'hero.subtitle' | translate }}
         </p>
 
