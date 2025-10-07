@@ -55,12 +55,11 @@
       <!-- Carousel Container -->
       <div class="carousel-wrapper px-lg-3">
         <div class="position-relative overflow-hidden  mx-lg-5">
-          <div class="d-flex transition-transform carousel-track"
-  [ngStyle]="{
-    transform: 'translateX(+' + (currentSlideIndex * (100 / visibleCards)) + '%)'
-  }"
-  (touchstart)="onTouchStart($event)" 
-  (touchend)="onTouchEnd($event)">
+          <div class="d-flex transition-transform carousel-track" [ngStyle]="{
+  transform: currentLang === 'ar'
+    ? 'translateX(' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+    : 'translateX(-' + (currentSlideIndex * (100 / visibleCards)) + '%)'
+}" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
 
 
 
@@ -110,7 +109,10 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center px-lg-5 mt-4 py-3">
 
           <!-- Dots -->
-          <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 px-lg-4 mb-3 mb-md-0">
+          <div class="d-flex gap-2 w-100 px-lg-4 mb-3 mb-md-0 justify-content-center" [ngClass]="{
+    'justify-content-md-end': currentLang === 'ar',
+    'justify-content-md-start': currentLang === 'en'
+  }">
             @for (i of getDotsArray(); track i) {
             <button (click)="goToSlide(i)" class="rounded-5"
               [style.background-color]="currentSlideIndex === i ? '#7AD03A' : '#ccc'"
@@ -118,6 +120,7 @@
             </button>
             }
           </div>
+
 
           <!-- Arrows -->
           <div class="d-flex gap-2 px-4 d-none d-md-flex" dir="rtl">
