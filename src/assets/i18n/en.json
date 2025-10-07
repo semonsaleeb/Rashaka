@@ -686,5 +686,7 @@
     "EMAIL_REQUIRED": "The email field is required.",
     "EMAIL_INVALID": "The email must be a valid email address.",
     "PASSWORD_CONFIRM_MISMATCH": "The password confirmation does not match."
-  }
+  },
+    "NO_PRODUCTS_MATCH_FILTER": "No products match the filter."
+
 }

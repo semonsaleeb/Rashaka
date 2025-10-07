@@ -21,20 +21,18 @@
 
 
   <!-- Branch Filters -->
-<!-- City Filters -->
-<div class="branch-filters mb-4 px-1 py-3">
-  @for (city of cities; track city.id) {
-    <button 
-      class="btn btn-outline-secondary rounded-3 fw-bold px-3 px-md-5 mb-2"
-      [class.active]="selectedCity?.id === city.id"
-      (click)="selectCity(city)">
+  <!-- City Filters -->
+  <div class="branch-filters mb-4 px-1 py-3">
+    @for (city of cities; track city.id) {
+    <button class="btn btn-outline-secondary rounded-3 fw-bold px-3 px-md-5 mb-2"
+      [class.active]="selectedCity?.id === city.id" (click)="selectCity(city)">
       <span class="px-lg-0 px-3">
         {{ currentLang === 'ar' ? city.name_ar : city.name_en }}
         <!-- <small class="ms-1">({{ city.branchCount }})</small> -->
       </span>
     </button>
-  }
-</div>
+    }
+  </div>
 
 
 
@@ -44,11 +42,9 @@
 
 
 
-<div class="carousel-track-container overflow-hidden"
-     (touchstart)="onTouchStart($event)"
-     (touchend)="onTouchEnd($event)">
-  <div class="carousel-track d-flex transition-transform"
-       [ngStyle]="{
+    <div class="carousel-track-container overflow-hidden" (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)">
+      <div class="carousel-track d-flex transition-transform" [ngStyle]="{
          'transform': currentLang === 'ar' 
             ? 'translateX(' + (branchSlideIndex * (100 / visibleBranchCards)) + '%)'
             : 'translateX(-' + (branchSlideIndex * (100 / visibleBranchCards)) + '%)',
@@ -79,7 +75,7 @@
 
                 {{ l.location }}
               </div>
-              
+
               <button class="btn btn-outline-light btn-sm rounded-pill mx-5 d-inline-flex align-items-center custom-fs"
                 (click)="openMap(selectedBranch)">
                 <span class="d-flex align-items-center tablet-text">

@@ -31,12 +31,15 @@
   </div>
 
   <!-- Tagline -->
-  <p [innerHTML]="formatText('FOOTER.TAGLINE' | translate)" 
-     [ngClass]="{
-       'text-center text-md-end': translate.currentLang === 'ar',
-       'text-center text-md-start': translate.currentLang !== 'ar'
-     }" class="mb-3">
-  </p>
+<p [innerHTML]="'FOOTER.TAGLINE' | translate"
+   [ngClass]="{
+     'text-end': currentLang === 'ar',
+     'text-start': currentLang !== 'ar'
+   }"
+   class="mb-3 w-100 p-0 fs-3">
+</p>
+
+
 
   <!-- Follow Us -->
   <h5 [ngClass]="{

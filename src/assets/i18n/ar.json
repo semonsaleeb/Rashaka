@@ -688,7 +688,9 @@
     "EMAIL_REQUIRED": "حقل البريد الإلكتروني مطلوب.",
     "EMAIL_INVALID": "يجب إدخال بريد إلكتروني صالح.",
     "PASSWORD_CONFIRM_MISMATCH": "تأكيد كلمة المرور غير متطابق."
-  }
+  },
+    "NO_PRODUCTS_MATCH_FILTER": "لا توجد منتجات مطابقة للفلترة."
+
   
 
 

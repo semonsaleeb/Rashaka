@@ -653,7 +653,9 @@
       <!-- No Products -->
       @if (filteredProducts.length === 0) {
       <div class="text-center mt-5">
-        <p class="text-muted">لا توجد منتجات مطابقة للفلترة.</p>
+<p class="text-muted">
+  {{ 'NO_PRODUCTS_MATCH_FILTER' | translate }}
+</p>
       </div>
       }
 

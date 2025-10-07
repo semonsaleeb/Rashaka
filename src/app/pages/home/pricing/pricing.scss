@@ -64,12 +64,12 @@
     border-radius: 15px;
   }
 
-  .toggle-btn {
-    flex: 1;                 /* ياخدوا مساحة متساوية */
-    padding: 12px 0;         /* زر أطول */
-    font-size: 16px;         /* خط أكبر */
-    border-radius: 12px;     /* أقل دوران عشان شكل عصري */
-  }
+  // .toggle-btn {
+  //   flex: 1;                 /* ياخدوا مساحة متساوية */
+  //   padding: 12px 0;         /* زر أطول */
+  //   font-size: 16px;         /* خط أكبر */
+  //   border-radius: 12px;     /* أقل دوران عشان شكل عصري */
+  // }
 
   .toggle-btn.active {
     background: #7AD03A;
