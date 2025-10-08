@@ -89,15 +89,16 @@
           <ul class="dropdown-menu text-dark" aria-labelledby="languageDropdown">
             <li>
               <button class="dropdown-item" (click)="switchLanguage('ar')">
-                العربية
+                {{ 'LANG.AR' | translate }}
               </button>
             </li>
             <li>
               <button class="dropdown-item" (click)="switchLanguage('en')">
-                English
+                {{ 'LANG.EN' | translate }}
               </button>
             </li>
           </ul>
+
         </div>
 
         <!-- Cart + Favorites -->

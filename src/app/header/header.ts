@@ -91,6 +91,9 @@ navItems = [
   selectedCategories: number[] = [];
 
   ngOnInit(): void {
+      this.auth.isLoggedIn$.subscribe(isLogged => {
+    this.isLoggedIn = isLogged;
+  });
     // -------------------------
     // 0️⃣ Get token from localStorage
     // -------------------------

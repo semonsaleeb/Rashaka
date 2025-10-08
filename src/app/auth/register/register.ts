@@ -204,7 +204,7 @@ export class Register {
         this.loading = false;
 
         // تحويل المستخدم للصفحة الرئيسية
-        this.router.navigate(['/home']);
+        // this.router.navigate(['/home']);
       },
       error: (error) => {
         console.error('Registration failed:', error);

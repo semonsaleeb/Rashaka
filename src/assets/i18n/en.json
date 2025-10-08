@@ -253,7 +253,7 @@
   "SUCCESS_STORIES_SUBTITLE": "\"Real Transformation Stories - Your Inspiration Starts Here\"<br>Take the first step now towards your dream body!",
   "SUCCESS_STORIES_CTA": "Book Now",
   "AUTH": {
-      "PASSWORD_RESET_SUCCESS": "Your password has been reset successfully.",
+    "PASSWORD_RESET_SUCCESS": "Your password has been reset successfully.",
     "PASSWORD_RESET_FAILED": "Failed to reset password.",
     "OTP_SENT_SUCCESS": "The code has been sent to your email.",
     "OTP_SEND_FAILED": "Failed to send the code. Please check your email.",
@@ -282,6 +282,7 @@
     "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
     "SUBMIT": "Register",
     "ERRORS": {
+            "NAME_PATTERN":"Name can only contain letters and spaces.",
       "TITLE": "Error",
       "PASSWORD_CONFIRM_REQUIRED": "Password confirmation is required",
       "NAME_REQUIRED": "Name is required",
@@ -531,10 +532,17 @@
     "NO_ORDERS": "No orders yet."
   },
   "ACCOUNT": {
+    "DELETE": "Delete Account",
+    "DELETE_TITLE": "Are you sure you want to delete your account?",
+    "DELETE_CONFIRM_MESSAGE": "Deleting the account will permanently remove all your personal data, records, and booking history. Any active or remaining subscriptions on your account will also be canceled.",
+    "CANCEL": "Cancel",
+    "CONFIRM_DELETE": "Yes, Delete Account",
     "CONTACT_INFO": "Contact Information",
     "EMAIL": "Email",
     "PHONE": "Phone Number",
     "ADD_PHONE": "Add +",
+    "DELETE_SUCCESS_TITLE": "Account Deleted Successfully",
+    "DELETE_SUCCESS_MESSAGE": "Your account has been deleted permanently.",
     "PERSONAL_INFO": "Personal Information",
     "FIRST_NAME": "First Name",
     "LAST_NAME": "Last Name",
@@ -668,10 +676,10 @@
     "AFTER_WEIGHT": "Current Weight"
   },
   "COMPARE": {
-     "ALREADY_ADDED": "This product is already in the comparison list",
+    "ALREADY_ADDED": "This product is already in the comparison list",
     "LIMIT_REACHED": "You can't add more than two products to compare",
     "FIRST_ADDED": "The first product has been added. Please select another product to compare.",
-    "PRODUCT_ALREADY_IN_COMPARE":"This product is already in the comparison list",
+    "PRODUCT_ALREADY_IN_COMPARE": "This product is already in the comparison list",
     "TITLE": "Product Comparison",
     "LOADING": "Loading data...",
     "FEATURE": "Feature",
@@ -685,12 +693,15 @@
   "SEARCH": {
     "PLACEHOLDER": "Search for products"
   },
-    "VALIDATION": {
+  "VALIDATION": {
     "PASSWORD_REQUIRED": "The password field is required.",
     "EMAIL_REQUIRED": "The email field is required.",
     "EMAIL_INVALID": "The email must be a valid email address.",
     "PASSWORD_CONFIRM_MISMATCH": "The password confirmation does not match."
   },
-    "NO_PRODUCTS_MATCH_FILTER": "No products match the filter."
-
+  "NO_PRODUCTS_MATCH_FILTER": "No products match the filter.",
+   "LANG": {
+    "AR": "Arabic",
+    "EN": "English"
+  }
 }

@@ -9,10 +9,11 @@
 
         <!-- البريد الإلكتروني -->
         <div class="col-md-6">
-          <label class="form-label w-100 w-100" [class.text-end]="currentLang === 'ar'" [class.text-start]="currentLang === 'en'">{{
+          <label class="form-label w-100 w-100" [class.text-end]="currentLang === 'ar'"
+            [class.text-start]="currentLang === 'en'">{{
             'ACCOUNT.EMAIL' | translate }}</label>
           <div class="input-group">
-            
+
             <input type="email" class="form-control rounded-0" [(ngModel)]="client.email"
               [ngModelOptions]="{standalone: true}" [disabled]="!isEditingEmail" (blur)="disableEditing('email')">
             <span class="input-group-text rounded-0" (click)="enableEditing('email')" style="cursor: pointer;">
@@ -23,7 +24,8 @@
 
         <!-- رقم الجوال -->
         <div class="col-md-6">
-          <label class="form-label w-100" [class.text-end]="currentLang === 'ar'" [class.text-start]="currentLang === 'en'">{{
+          <label class="form-label w-100" [class.text-end]="currentLang === 'ar'"
+            [class.text-start]="currentLang === 'en'">{{
             'ACCOUNT.PHONE' | translate }}</label>
           <div class="input-group">
             <input type="text" class="form-control rounded-0" [(ngModel)]="client.phone"
@@ -70,11 +72,20 @@
 
           <!-- تسجيل الخروج -->
           <div class="col-md-6 d-flex align-items-end ">
-            <button class="dropdown-item text-dark border rounded-pill w-50 text-center py-2"
+            <button class="dropdown-item text-dark border rounded-pill w-30 text-center py-2 mx-1"
+              style="border-color: #6c757d;" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+              <img src="assets/Images/Frame 9049 (1).svg" class="mx-1">
+              {{ 'ACCOUNT.DELETE' | translate }}
+            </button>
+
+
+            <button class="dropdown-item text-dark border rounded-pill w-30 text-center py-2 mx-1"
               style="border-color: #6c757d;" (click)="logout()">
-              <img src="assets/Images/Frame 9049.svg"> {{ 'ACCOUNT.LOGOUT' | translate }}
+              <img src="assets/Images/Frame 9049.svg" class="mx-1"> {{ 'ACCOUNT.LOGOUT' | translate }}
             </button>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -87,27 +98,36 @@
     </div>
 
     <!-- Bootstrap Modal -->
-    <div class="modal fade" id="profileUpdatedModal" tabindex="-1" aria-labelledby="profileUpdatedModalLabel"
-      aria-hidden="true">
+    <div class="modal fade" style="z-index: 99999;" id="profileUpdatedModal" tabindex="-1"
+      aria-labelledby="profileUpdatedModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header d-flex">
-            <!-- Close button on the left -->
-            <button type="button" class="btn-close me-auto" data-bs-dismiss="modal"
+          <div class="modal-header position-relative">
+            <!-- Close button -->
+            <button type="button" class="btn-close custom-green position-absolute mt-2 mx-2"
+              [ngClass]="currentLang === 'en' ? 'start-0 ms-3' : 'end-0 me-3'" data-bs-dismiss="modal"
               [attr.aria-label]="'ACCOUNT.CLOSE' | translate">
             </button>
 
-            <!-- Title aligned to the right -->
-            <h5 class="modal-title ms-auto" id="profileUpdatedModalLabel">
-              {{ 'ACCOUNT.SUCCESS' | translate }}
-            </h5>
+
+
           </div>
 
+
+
           <div class="modal-body">
+            <img src="assets/Images/Account-pana (1) 1.svg" alt="" height="250px">
+            <br>
+
+            <!-- Title aligned opposite to the X -->
+            <h5 class="modal-title w-100 text-center" id="profileUpdatedModalLabel">
+              {{ 'ACCOUNT.SUCCESS' | translate }}
+            </h5>
             {{ 'ACCOUNT.PROFILE_UPDATED_MESSAGE' | translate }}
           </div>
+
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" (click)="goHome()" data-bs-dismiss="modal">
+            <button type="button" class="btn btn-success w-100" (click)="goHome()" data-bs-dismiss="modal">
               {{ 'ACCOUNT.OK' | translate }}
             </button>
           </div>
@@ -116,4 +136,87 @@
     </div>
 
   </form>
+</div>
+
+
+
+<!-- 🟥 Delete Account Modal (Styled like Edit Modal) -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel"
+  aria-hidden="true" style="z-index: 99999;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header position-relative border-0">
+        <!-- Close button -->
+        <button type="button" class="btn-close custom-green position-absolute mt-2 mx-2"
+          [ngClass]="currentLang === 'en' ? 'start-0 ms-3' : 'end-0 me-3'" data-bs-dismiss="modal"
+          [attr.aria-label]="'ACCOUNT.CLOSE' | translate">
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body text-center">
+        <img src="assets/Images/Account-pana 1.svg" alt="Delete Account" height="200px" class="mb-3">
+
+        <!-- Title -->
+        <h5 class="modal-title w-100 text-center mb-2" id="deleteAccountModalLabel">
+          {{ 'ACCOUNT.DELETE_TITLE' | translate }}
+        </h5>
+
+        <!-- Message -->
+        <p class="text-muted">
+          {{ 'ACCOUNT.DELETE_CONFIRM_MESSAGE' | translate }}
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer border-0 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-outline-danger" style="width: 40%;" (click)="confirmDeleteAccount()"
+          data-bs-dismiss="modal">
+          {{ 'ACCOUNT.CONFIRM_DELETE' | translate }}
+        </button>
+        <button type="button" class="btn btn-success" style="width: 40%;" data-bs-dismiss="modal">
+          {{ 'ACCOUNT.CANCEL' | translate }}
+        </button>
+
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Account Deleted Success Modal -->
+<div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel"
+  aria-hidden="true" style="z-index: 99999;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header position-relative border-0">
+        <button type="button" class="btn-close custom-green position-absolute mt-2 mx-2"
+          [ngClass]="currentLang === 'en' ? 'start-0 ms-3' : 'end-0 me-3'" data-bs-dismiss="modal"
+          [attr.aria-label]="'ACCOUNT.CLOSE' | translate">
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+        <img src="assets/Images/Account-pana (1) 1.svg" alt="Success" height="200px" class="mb-3">
+        <h5 class="modal-title w-100 text-center mb-2" id="deleteSuccessModalLabel">
+          {{ 'ACCOUNT.DELETE_SUCCESS_TITLE' | translate }}
+        </h5>
+        <p class="text-muted">
+          {{ 'ACCOUNT.DELETE_SUCCESS_MESSAGE' | translate }}
+        </p>
+      </div>
+
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-success w-100" (click)="goHome()" data-bs-dismiss="modal">
+          {{ 'ACCOUNT.OK' | translate }}
+        </button>
+      </div>
+
+    </div>
+  </div>
 </div>

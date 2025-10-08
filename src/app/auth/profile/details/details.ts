@@ -106,6 +106,74 @@ logout() {
 }
 
 
+  DeleteAccount(): void {
+    // ✅ Step 1: Confirm
+    const confirmed = confirm('Are you sure you want to delete your account? This action cannot be undone.');
+    if (!confirmed) return;
+
+    // ✅ Step 2: Call API
+    this.clientService.deleteAccount().subscribe({
+      next: (res) => {
+        console.log('Account deleted:', res);
+
+        // ✅ Step 3: Clear local data
+        localStorage.removeItem('token');
+        localStorage.removeItem('client'); // if you store client info
+        sessionStorage.clear();
+
+        // ✅ Step 4: Redirect
+        this.router.navigateByUrl('/');
+      },
+      error: (err) => {
+        console.error('Error deleting account:', err);
+        alert('Failed to delete account. Please try again.');
+      }
+    });
+  }
+
+confirmDeleteAccount(): void {
+  this.clientService.deleteAccount().subscribe({
+    next: (res) => {
+      console.log('Account deleted:', res);
+
+      // 🧹 امسح البيانات وحدث حالة تسجيل الدخول
+      this.auth.clearAuth(); 
+      sessionStorage.clear();
+
+      // 🔹 اغلق أي مودال مفتوح حالياً
+      const modals = document.querySelectorAll('.modal.show');
+      modals.forEach(modalEl => {
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        if (modalInstance) {
+          modalInstance.hide();
+        }
+      });
+
+      // ✅ افتح مودال النجاح
+      const modalElement = document.getElementById('deleteSuccessModal');
+      if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement, {
+          backdrop: 'static', // يمنع الإغلاق بالنقر على الخلفية
+          keyboard: true      // يتيح الإغلاق بزر Back أو Esc
+        });
+        modal.show();
+
+        // ⬅️ أضف حدث Back لإغلاق المودال عند الضغط على زر الرجوع في الهاتف
+        const handlePopState = () => {
+          modal.hide();
+          window.removeEventListener('popstate', handlePopState);
+        };
+        window.addEventListener('popstate', handlePopState);
+      }
+    },
+    error: (err) => {
+      console.error('Error deleting account:', err);
+      alert('Error deleting account');
+    }
+  });
+}
+
+
   loadClientProfile() {
     this.clientService.getProfile().subscribe({
       next: (res) => this.client = res.data,

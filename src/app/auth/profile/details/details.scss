@@ -23,3 +23,32 @@ label {
 .rtl label {
   text-align: right !important;
 }
+.btn-close.custom-green {
+  background-color: #7AD03A !important;
+  opacity: 1;
+}
+
+.btn-close.custom-green:hover,
+.btn-close.custom-green:focus {
+  background-color: #7AD03A !important;
+  opacity: 1;
+  box-shadow: none;
+}
+/* لون زر X */
+.custom-green {
+  background-color: #7AD03A !important;
+  border-radius: 50%;
+  opacity: 1 !important;
+}
+
+.custom-green:hover {
+  background-color: #7AD03A !important;
+  opacity: 0.85 !important;
+}
+
+/* إزالة البوردر من الهيدر والفوتر */
+.modal-header,
+.modal-footer {
+  border: none !important;
+}
+
