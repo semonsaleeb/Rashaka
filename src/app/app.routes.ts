@@ -28,6 +28,7 @@ import { PaymentSuccess } from './place-order/payment-success/payment-success';
 import { PaymentFailed } from './place-order/payment-failed/payment-failed';
 import { PaymentCallback } from './place-order/payment-callback/payment-callback';
 import { ClientOpinion } from './pages/home/client-opinion/client-opinion';
+import { PrivacyAndPolicy } from './privacy-and-policy/privacy-and-policy';
 
 export const routes: Routes = [
   // Home page
@@ -93,6 +94,8 @@ export const routes: Routes = [
 
   // Other Pages
   { path: 'about_us', component: AboutUs },
+{ path: 'privacy-and-policy', component: PrivacyAndPolicy },
+
 
   { path: 'reservation/free', component: Free },
   { path: 'reservation/all', component: Appointments },

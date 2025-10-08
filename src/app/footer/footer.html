@@ -17,64 +17,55 @@
   <div class="container position-relative" style="z-index:2;">
     <div class="row">
 
-     <!-- Logo + Social -->
-<div class="col-md-4 fs-5 mb-4">
+      <!-- Logo + Social -->
+      <div class="col-md-4 fs-5 mb-4">
 
-  <!-- Logo -->
-  <div [ngClass]="{
+        <!-- Logo -->
+        <div [ngClass]="{
         'text-center text-md-end': translate.currentLang === 'ar',
         'text-center text-md-start': translate.currentLang !== 'ar'
       }" class="mb-3">
-    <img src="assets/Images/logo.svg" 
-         alt="{{ 'FOOTER.LOGO_ALT' | translate }}" 
-         class="img-fluid w-75">
-  </div>
+          <img src="assets/Images/logo.svg" alt="{{ 'FOOTER.LOGO_ALT' | translate }}" class="img-fluid w-75">
+        </div>
 
-  <!-- Tagline -->
-<p [innerHTML]="'FOOTER.TAGLINE' | translate"
-   [ngClass]="{
+        <!-- Tagline -->
+        <p [innerHTML]="'FOOTER.TAGLINE' | translate" [ngClass]="{
      'text-end': currentLang === 'ar',
      'text-start': currentLang !== 'ar'
-   }"
-   class="mb-3 w-100 p-0 fs-3">
-</p>
+   }" class="mb-3 w-100 p-0 fs-3">
+        </p>
 
 
 
-  <!-- Follow Us -->
-  <h5 [ngClass]="{
+        <!-- Follow Us -->
+        <h5 [ngClass]="{
         'text-center text-md-end fs-5': translate.currentLang === 'ar',
         'text-center text-md-start fs-5': translate.currentLang !== 'ar'
       }" class="mb-2 mt-5">
-    {{ 'FOOTER.FOLLOW_US' | translate }}
-  </h5>
+          {{ 'FOOTER.FOLLOW_US' | translate }}
+        </h5>
 
-  <!-- Social Icons -->
-  <div class="d-flex mt-4 gap-2 flex-wrap justify-content-center"
-       [ngClass]="{
+        <!-- Social Icons -->
+        <div class="d-flex mt-4 gap-2 flex-wrap justify-content-center" [ngClass]="{
          'justify-content-md-end flex-md-row-reverse': translate.currentLang === 'ar',
          'justify-content-md-start flex-md-row': translate.currentLang !== 'ar'
        }">
 
-    <a href="https://www.facebook.com/happyfitness.sa23/">
-      <img src="assets/Images/facebook-01.svg" alt="Facebook" 
-           class="img-fluid" style="width:40px;">
-    </a>
-    <a href="https://www.instagram.com/happyfitness_sa/">
-      <img src="assets/Images/instagram.svg" alt="Instagram" 
-           class="img-fluid" style="width:40px;">
-    </a>
-    <a href="https://www.youtube.com/@happyfitness_sa">
-      <img src="assets/Images/instagram (1).svg" alt="Instagram Alt" 
-           class="img-fluid" style="width:40px;">
-    </a>
-    <a href="https://www.snapchat.com/@happyfitness.sa">
-      <img src="assets/Images/new-twitter-rectangle.svg" alt="Twitter" 
-           class="img-fluid" style="width:40px;">
-    </a>
-  </div>
+          <a href="https://www.facebook.com/happyfitness.sa23/">
+            <img src="assets/Images/facebook-01.svg" alt="Facebook" class="img-fluid" style="width:40px;">
+          </a>
+          <a href="https://www.instagram.com/happyfitness_sa/">
+            <img src="assets/Images/instagram.svg" alt="Instagram" class="img-fluid" style="width:40px;">
+          </a>
+          <a href="https://www.youtube.com/@happyfitness_sa">
+            <img src="assets/Images/instagram (1).svg" alt="Instagram Alt" class="img-fluid" style="width:40px;">
+          </a>
+          <a href="https://www.snapchat.com/@happyfitness.sa">
+            <img src="assets/Images/new-twitter-rectangle.svg" alt="Twitter" class="img-fluid" style="width:40px;">
+          </a>
+        </div>
 
-</div>
+      </div>
 
 
 
@@ -96,6 +87,8 @@
               translate }}</a></li>
           <li class="mb-3"><a routerLink="/home/sucesStory" class="text-white text-decoration-none">{{
               'FOOTER.SUCCESS_STORIES' | translate }}</a></li>
+               <li class="mb-3"><a routerLink="/privacy-and-policy" class="text-white text-decoration-none">{{
+              'FOOTER.PRIVACY-AND-POLICY' | translate }}</a></li>
         </ul>
       </div>
 
@@ -152,9 +145,9 @@
     </div>
 
     <!-- Footer Bottom -->
-   <div class="border-top border-success pt-3 mt-3 mb-4 opacity-75 text-center">
-  {{ 'FOOTER.COPYRIGHT' | translate }}
-</div>
+    <div class="border-top border-success pt-3 mt-3 mb-4 opacity-75 text-center">
+      {{ 'FOOTER.COPYRIGHT' | translate }}
+    </div>
 
   </div>
 
