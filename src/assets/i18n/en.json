@@ -139,7 +139,7 @@
     "GOOGLE_PLAY_ALT": "Google Play"
   },
   "FOOTER": {
-    "PRIVACY-AND-POLICY":" privacy and policy ",
+    "PRIVACY-AND-POLICY": " privacy and policy ",
     "LOGO_ALT": "Logo",
     "TAGLINE": "Happy Fitness is always with you, and you can contact us anytime",
     "FOLLOW_US": "Follow us on",
@@ -283,6 +283,7 @@
     "PASSWORD_CONFIRM_PLACEHOLDER": "Confirm Password",
     "SUBMIT": "Register",
     "ERRORS": {
+      "PHONE_MAXLENGTH": "Phone number must not exceed the maximum length",
       "NAME_PATTERN": "Name can only contain letters and spaces.",
       "TITLE": "Error",
       "PASSWORD_CONFIRM_REQUIRED": "Password confirmation is required",
@@ -705,38 +706,27 @@
     "AR": "Arabic",
     "EN": "English"
   },
- 
   "PRIVACY": {
     "TITLE": "Terms of Sale, Delivery & Returns — Al-Rashaqa Al-Sa’eeda",
     "LAST_UPDATED": "Last updated: {{date}}",
-    
     "ORDER_ACCEPTANCE": "1) Order Acceptance",
     "ORDER_ACCEPTANCE_TEXT": "Vendor: As indicated on the website, products may be sold by Al-Rashaqa Al-Sa’eeda or by local/international sellers.\nAcceptance: Your order is accepted when we send written confirmation (email/SMS). If we cannot accept, we will notify you and no charge will be made.",
-    
     "PAYMENT": "2) Payment",
     "PAYMENT_TEXT": "Placing an order authorizes us/our payment processors to charge your card/e-wallet or collect Cash on Delivery (COD) up to SAR 500. We may require you to create an account with a processor and accept its terms. We may add/remove payment methods at any time.",
-    
     "CANCELLATION": "3) Cancellation",
     "CANCELLATION_TEXT": "• By you: Free cancellation before shipment.\n• By us: We may cancel for non-payment, missing information, repeated failed delivery, or suspected bulk/repetitive purchases of similar items.",
-    
     "BULK_PURCHASES": "4) Bulk & Repetitive Purchases",
     "BULK_PURCHASES_TEXT": "We may reject orders at our discretion where bulk or repetitive purchasing is suspected.",
-    
     "DELIVERY": "5) Delivery",
     "DELIVERY_TEXT": "• Fees: As shown on the website.\n• Timeframe: 2–5 business days (subject to holidays).\n• Delay: If delays occur beyond our control, we will notify you and mitigate.\n• Failed delivery/collection: We will provide instructions; persistent failure may result in cancellation.\n• International: Duties/taxes may apply and are outside our control; customer bears such costs. Parcels may be opened by customs.",
-    
     "TITLE_TRANSFER": "6) Title & Risk",
     "TITLE_TRANSFER_TEXT": "Title passes upon delivery and full payment.",
-    
     "INVOICING": "7) Invoicing",
     "INVOICING_TEXT": "We issue an electronic invoice to your registered email.",
-    
     "RETURNS": "8) Returns & Exchanges",
     "RETURNS_TEXT": "• Eligible reasons: Wrong item, not as described, damaged → return/exchange within 15 days of receipt.\n• Refurbished items: 7-day return window.\n• Conditions: Unused, original condition/packaging, all accessories/tags, invoice/order number, and RMA before shipping back.\n• Non-returnable: Used apparel/shapewear, opened consumables, customized items, tampered serials, opened food/beverage, digital goods.\nReturn contacts: support@mediazoneag.com\nIn-app chat — social channels",
-    
     "REFUNDS": "9) Refunds",
     "REFUNDS_TEXT": "• Our fault (defect, mismatch, wrong shipment, pricing error, unjustified delay): full product price + return shipping to us.\n• Other cases: product price only; you cover return shipping.\n• Unshipped/cancelled before dispatch: full refund.\nMethod:\n• COD → e-wallet refund.\n• Card → to original card or e-wallet (your choice).\nTiming:\n• Card refunds within 30 days of receiving and inspecting the returned product.\n• E-wallet refunds are typically immediate after acceptance.\n• Pre-shipment cancellations: automatic.",
-    
     "GENERAL": "10) General",
     "GENERAL_TEXT": "Governing law: Kingdom of Saudi Arabia. Dispute resolution via our support channels. Third-party rights, relationship, assignment, force majeure, severability, entire agreement, and amendments apply per standard wording. We may update these terms; continued use constitutes acceptance."
   }

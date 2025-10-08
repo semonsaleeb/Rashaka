@@ -2,9 +2,17 @@
 
   <!-- الاسم -->
   <div class="mb-3">
-    <label class="form-label">{{ 'REGISTER.NAME' | translate }}</label>
-    <input type="text" formControlName="name" class="form-control" style="height: 5vh;"
-      [class.is-invalid]="isFieldInvalid('name') || apiErrors?.name">
+    <!-- <label class="form-label">{{ 'REGISTER.NAME' | translate }}</label>
+    <input type="text" formControlName="name" class="form-control" style="height: 8vh;"
+      [class.is-invalid]="isFieldInvalid('name') || apiErrors?.name"> -->
+      <input
+  type="text"
+  formControlName="name"
+  class="form-control"
+  [class.is-invalid]="isFieldInvalid('name') || apiErrors?.name"
+  [placeholder]="'REGISTER.NAME' | translate"
+/>
+
 
     <div *ngIf="registerForm.get('name')?.hasError('required') && registerForm.get('name')?.touched"
       class="invalid-feedback">
@@ -32,9 +40,19 @@
 
   <!-- البريد الإلكتروني -->
   <div class="mb-3">
-    <label class="form-label">{{ 'REGISTER.EMAIL' | translate }}</label>
-    <input type="email" formControlName="email" class="form-control" style="height: 5vh;"
-      [class.is-invalid]="isFieldInvalid('email') || apiErrors?.email">
+    <!-- <label class="form-label">{{ 'REGISTER.EMAIL' | translate }}</label>
+    <input type="email" formControlName="email" class="form-control" style="height: 8vh;"
+      [class.is-invalid]="isFieldInvalid('email') || apiErrors?.email"> -->
+
+      <input
+  type="email"
+  formControlName="email"
+  class="form-control"
+ 
+  [class.is-invalid]="isFieldInvalid('email') || apiErrors?.email"
+  [placeholder]="'REGISTER.EMAIL' | translate"
+/>
+
     
     <div *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched"
       class="invalid-feedback">
@@ -65,9 +83,20 @@
 
   <!-- رقم الهاتف -->
   <div class="mb-3">
-    <label class="form-label">{{ 'REGISTER.PHONE' | translate }}</label>
-    <input type="tel" formControlName="phone" class="form-control" style="height: 5vh;"
-      [class.is-invalid]="isFieldInvalid('phone') || apiErrors?.phone">
+    <!-- <label class="form-label">{{ 'REGISTER.PHONE' | translate }}</label>
+    <input type="tel" formControlName="phone" class="form-control" style="height: 8vh;"
+      [class.is-invalid]="isFieldInvalid('phone') || apiErrors?.phone"> -->
+
+<input
+  type="tel"
+  formControlName="phone"
+  class="form-control"
+  [class.is-invalid]="isFieldInvalid('phone') || apiErrors?.phone"
+  [placeholder]="'REGISTER.PHONE' | translate"
+  [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'"
+/>
+
+
     
     <div *ngIf="registerForm.get('phone')?.hasError('required') && registerForm.get('phone')?.touched"
       class="invalid-feedback">
@@ -95,10 +124,10 @@
 
   <!-- كلمة المرور -->
   <div class="mb-3">
-    <label class="form-label">{{ 'REGISTER.PASSWORD' | translate }}</label>
+    <!-- <label class="form-label">{{ 'REGISTER.PASSWORD' | translate }}</label> -->
     <div class="position-relative">
-      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5 pe-4" style="height: 5vh;"
-        
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control ps-5 pe-4" 
+        [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate"
         [class.is-invalid]="isFieldInvalid('password')">
 
       <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"
@@ -125,14 +154,12 @@
       {{ 'REGISTER.ERRORS.PASSWORD_WEAK' | translate }}
     </div>
   </div>
-<!-- [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate"
-  [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate" -->
   <!-- تأكيد كلمة المرور -->
   <div class="mb-4">
-    <label class="form-label">{{ 'REGISTER.PASSWORD_CONFIRM' | translate }}</label>
+    <!-- <label class="form-label">{{ 'REGISTER.PASSWORD_CONFIRM' | translate }}</label> -->
     <div class="position-relative">
-      <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="password_confirmation" style="height: 5vh;"
-        class="form-control ps-5 pe-4" 
+      <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="password_confirmation" 
+        class="form-control ps-5 pe-4"    [placeholder]="'REGISTER.PASSWORD_CONFIRM_PLACEHOLDER' | translate"
         [class.is-invalid]="isFieldInvalid('password_confirmation') || registerForm.hasError('mismatch')">
 
       <span class="position-absolute" [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'"

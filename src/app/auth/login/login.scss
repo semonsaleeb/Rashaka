@@ -11,6 +11,24 @@
     color: black;
 
 }
+.form-control {
+  height: 8vh;
+  padding-bottom: 15px;
+}
+
+/* للموبايل (شاشات أصغر من 576px) */
+@media (max-width: 576px) {
+  .form-control {
+    height: 4vh;
+    padding-bottom: 10px;
+    font-size: 14px; /* كمان ممكن تصغر الخط */
+  }
+}
+
+::placeholder {
+  font-size: 14px;
+  line-height: 1.5;
+}
 
 .custom-green-btn:hover {
   background-color: white;
@@ -33,3 +51,4 @@ input[type="password"]::-webkit-password-toggle-button {
   position: absolute !important;
   right: 0;
 }
+

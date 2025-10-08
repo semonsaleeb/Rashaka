@@ -1,48 +1,46 @@
 <form (ngSubmit)="login()" >
-  <div class="mb-3" style="width: 100%; justify-self: center;">
-    <label for="email">{{ 'LOGIN.EMAIL' | translate }}</label>
-    <input
-      type="email"
-      id="email"
-      [(ngModel)]="email"
-      name="email"
-      class="form-control"  style="height: 5vh;"
-      required
-    />
-  </div>
-<div class="my-3 position-relative" style="width: 100%; justify-self: center;" [ngClass]="currentLang === 'ar' ? 'text-end' : 'text-start'">
-  <label for="password">{{ 'REGISTER.PASSWORD' | translate }}</label>
-  
-<input 
-  [type]="showPassword ? 'text' : 'password'" 
-  id="password" 
-  [(ngModel)]="password" 
-  name="password"
-  class="form-control py-2 mb-2"
-  style="height: 5vh;"
-  [class.pe-5]="currentLang === 'ar'"
-  [class.ps-5]="currentLang === 'en'"
+  <div class="my-3 " style="width: 100%; justify-self: center;">
+<input
+  type="email"
+  [(ngModel)]="email"
+  name="email"
+  class="form-control my-2"
   [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'"
+  [placeholder]="'LOGIN.EMAIL' | translate"
+  style=""
 
-  required 
-  minlength="8" 
 />
-  <!-- [placeholder]="'AUTH.PASSWORD' | translate" -->
-
-  <!-- 👁 Eye Icon واحدة فقط -->
-<span 
-  class="position-absolute" 
-  [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'" 
-  style="top: 70%; transform: translateY(-50%); cursor: pointer; z-index: 5;"
-  (click)="togglePasswordVisibility()">
-  <i class="fas" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
-</span>
-
-</div>
 
 
+  </div>
 
+  <div class="my-3 position-relative mx-0" style="width: 100%; justify-self: center;">
+    <input 
+      [type]="showPassword ? 'text' : 'password'" 
+      id="password" 
+      [(ngModel)]="password" 
+      name="password"
+      class="form-control"
+      style="
+        font-size: 18px;
+        padding: 0 1rem;
+        padding-inline-end: 2.5rem;
+        box-sizing: border-box;
+      "
+      [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'"
+      [placeholder]="'LOGIN.PASSWORD' | translate"
+      required 
+      minlength="8" 
+    />
 
+    <span 
+      class="position-absolute" 
+      [ngClass]="currentLang === 'ar' ? 'start-0 ps-3' : 'end-0 pe-3'" 
+      style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 5;"
+      (click)="togglePasswordVisibility()">
+      <i class="fas" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+    </span>
+  </div>
 
   <!-- Forgot Password Link -->
   <a [routerLink]="['/forgot-password']"
