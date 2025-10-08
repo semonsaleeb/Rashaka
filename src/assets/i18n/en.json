@@ -668,6 +668,10 @@
     "AFTER_WEIGHT": "Current Weight"
   },
   "COMPARE": {
+     "ALREADY_ADDED": "This product is already in the comparison list",
+    "LIMIT_REACHED": "You can't add more than two products to compare",
+    "FIRST_ADDED": "The first product has been added. Please select another product to compare.",
+    "PRODUCT_ALREADY_IN_COMPARE":"This product is already in the comparison list",
     "TITLE": "Product Comparison",
     "LOADING": "Loading data...",
     "FEATURE": "Feature",

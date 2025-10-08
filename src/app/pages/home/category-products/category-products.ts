@@ -17,6 +17,7 @@ import { Category } from '../../../../models/Category';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 import { TruncatePipe } from '../../../truncate-pipe';
+import { CompareService } from '../../../services/compare-service';
 
 @Component({
   selector: 'app-category-products',
@@ -89,11 +90,16 @@ export class CategoryProducts implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private translate: TranslateService,
     private languageService: LanguageService,
+        public compareService: CompareService
+    
   ) { }
 
   // ==================== LIFECYCLE METHODS ====================
 
   ngOnInit(): void {
+        this.compareService.compareProducts$.subscribe(products => {
+    this.compareProducts = products;
+  });
     this.resizeHandler();
     window.addEventListener('resize', this.resizeHandler);
 
@@ -706,35 +712,26 @@ applyCombinedFilters(): void {
       event.stopPropagation();
     }
 
-    if (this.compareProducts.find(p => p.id === product.id)) {
-      alert('هذا المنتج مضاف بالفعل للمقارنة');
-      return;
-    }
+    // نستخدم الخدمة لإضافة المنتج
+    this.compareService.addToCompare(product);
 
-    if (this.compareProducts.length >= 2) {
-      alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
-      return;
-    }
-
-    this.compareProducts.push(product);
-
-    if (this.compareProducts.length === 1) {
-      alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
-    }
-
-    if (this.compareProducts.length === 2) {
+    // لو عدد المنتجات بقى 2 → افتح البوب أب
+    const currentCompare = this.compareService.getCompareProducts();
+    if (currentCompare.length === 2) {
       this.showComparePopup = true;
     }
   }
 
-  onCloseComparePopup(): void {
-    this.showComparePopup = false;
-    this.compareProducts = [];
+  isInCompare(product: Product): boolean {
+    // بدلًا من المقارنة محليًا، نستخدم الخدمة
+    return this.compareService.isInCompare(product);
   }
 
-  isInCompare(product: any): boolean {
-    return this.compareProducts?.some(p => p.id === product.id);
+  onCloseComparePopup(): void {
+    this.showComparePopup = false;
+    this.compareService.clearCompare(); // تنظيف قائمة المقارنة من الخدمة
   }
+
 
   // ==================== CAROUSEL METHODS ====================
 

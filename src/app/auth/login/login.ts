@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterModule, RouterStateSnapshot } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
@@ -14,13 +14,13 @@ import { LanguageService } from '../../services/language.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule , RouterModule, TranslateModule, CommonModule],
+  imports: [FormsModule, RouterModule, TranslateModule, CommonModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
 export class Login {
   @Output() forgot = new EventEmitter<void>();
-  
+
   currentLang: string = 'ar';
   dir: 'ltr' | 'rtl' = 'rtl'; // ← default direction
 
@@ -29,80 +29,92 @@ export class Login {
   errorMessage = '';
   loading = false;
 
-  constructor(private translate: TranslateService, private languageService: LanguageService,private http: HttpClient, private router: Router,   private authService: AuthService, private cartService: CartService,private cartState: CartStateService,) {}
+  constructor(private translate: TranslateService, private languageService: LanguageService, private http: HttpClient, private router: Router, private authService: AuthService, private cartService: CartService, private cartState: CartStateService,) { }
 
- 
-    ngOnInit(): void {
 
-  // Set initial language
-  this.currentLang = this.languageService.getCurrentLanguage();
-  this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
+  ngOnInit(): void {
 
-  // Subscribe to language changes
-  this.languageService.currentLang$.subscribe(lang => {
-    this.currentLang = lang;
-    this.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  });
-}
-  
-login() {
-  this.errorMessage = '';
-  this.loading = true;
+    // Set initial language
+    this.currentLang = this.languageService.getCurrentLanguage();
+    this.dir = this.currentLang === 'ar' ? 'rtl' : 'ltr';
 
-  const credentials = { 
-    email: this.email, 
-    password: this.password,
-    device_name: navigator.userAgent || 'web' // 👈 هنا ضفنا اسم الجهاز
-  };
+    // Subscribe to language changes
+    this.languageService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    });
+  }
 
-  this.authService.login(credentials).subscribe({
-    next: (res) => {
-      if (res.token && res.client) {
-        // ✅ Store token and client info
-        this.authService.setLogin(res.token, res.client);
+  login() {
+    this.errorMessage = '';
+    this.loading = true;
 
-        // ✅ Merge guest cart
-        this.authService.mergeGuestCartAfterLogin();
+    const credentials = {
+      email: this.email,
+      password: this.password,
+      device_name: navigator.userAgent || 'web' // 👈 هنا ضفنا اسم الجهاز
+    };
 
-        // ✅ Update cart count after merge
-        this.cartService.getCart().subscribe({
-          next: (cartResponse) => {
-            const count = cartResponse.data.items.reduce(
-              (total: number, item: any) => total + item.quantity,
-              0
-            );
-            this.cartState.updateCount(count);
-          },
-          error: (err) => console.error('Error fetching cart after login', err)
-        });
+    this.authService.login(credentials).subscribe({
+      next: (res) => {
+        if (res.token && res.client) {
+          // ✅ Store token and client info
+          this.authService.setLogin(res.token, res.client);
 
-        // ✅ Redirect
-        const redirect = localStorage.getItem('redirectAfterLogin') || '/';
-        localStorage.removeItem('redirectAfterLogin');
-        this.router.navigateByUrl(redirect);
-      } else {
-        this.errorMessage = 'بيانات تسجيل الدخول غير صحيحة.';
+          // ✅ Merge guest cart
+          this.authService.mergeGuestCartAfterLogin();
+
+          // ✅ Update cart count after merge
+          this.cartService.getCart().subscribe({
+            next: (cartResponse) => {
+              const count = cartResponse.data.items.reduce(
+                (total: number, item: any) => total + item.quantity,
+                0
+              );
+              this.cartState.updateCount(count);
+            },
+            error: (err) => console.error('Error fetching cart after login', err)
+          });
+
+          // ✅ Redirect
+  const redirect = localStorage.getItem('redirectAfterLogin') || '/';
+localStorage.removeItem('redirectAfterLogin');
+this.router.navigateByUrl(redirect);
+
+        } else {
+          this.errorMessage = 'بيانات تسجيل الدخول غير صحيحة.';
+        }
+
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.errorMessage = err.error?.message || 'فشل تسجيل الدخول. تأكد من صحة البيانات.';
       }
+    });
+  }
 
-      this.loading = false;
-    },
-    error: (err) => {
-      this.loading = false;
-      this.errorMessage = err.error?.message || 'فشل تسجيل الدخول. تأكد من صحة البيانات.';
+
+
+
+
+  // example: auth.guard.ts
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (this.authService.isLoggedIn()) {
+      return true;
+    } else {
+      // احفظ آخر URL حاول يفتحه المستخدم
+      localStorage.setItem('redirectAfterLogin', state.url);
+      this.router.navigate(['/login']);
+      return false;
     }
-  });
-}
+  }
 
 
 
+  showPassword: boolean = false;
 
-
-
-
-
-showPassword: boolean = false;
-
-togglePasswordVisibility(): void {
-  this.showPassword = !this.showPassword;
-}
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 }

@@ -1,6 +1,8 @@
-@if (showComparePopup) {
-<app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()">
-</app-compare-popup>
+ @if (showComparePopup) {
+  <app-compare-popup 
+    [products]="compareService.getCompareProducts()" 
+    (close)="onCloseComparePopup()">
+  </app-compare-popup>
 }
 
 
@@ -152,9 +154,13 @@
       </div>
     </div>
 
-    @if (showComparePopup) {
-    <app-compare-popup [products]="compareProducts" (close)="onCloseComparePopup()"></app-compare-popup>
-    }
+ @if (showComparePopup) {
+  <app-compare-popup 
+    [products]="compareService.getCompareProducts()" 
+    (close)="onCloseComparePopup()">
+  </app-compare-popup>
+}
+
   </div>
 </div>
 }

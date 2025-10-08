@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Product } from '../../models/Product';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -13,34 +14,41 @@ export class CompareService {
   
   public compareProducts$ = this.compareProductsSubject.asObservable();
 
-  constructor() {
+  constructor(private translate: TranslateService) {
     this.loadCompareProducts();
   }
 
-  addToCompare(product: Product): void {
+ addToCompare(product: Product): void {
     const productId = Number(product.id);
-    
+
+    // تحقق إذا كان المنتج مضاف بالفعل
     if (this.isInCompare(product)) {
-      alert('هذا المنتج مضاف بالفعل للمقارنة');
+      alert(this.translate.instant('COMPARE.ALREADY_ADDED'));
       return;
     }
 
+    // الحد الأقصى منتجين فقط
     if (this.compareProducts.length >= 2) {
-      alert('لا يمكنك إضافة أكثر من منتجين للمقارنة');
+      alert(this.translate.instant('COMPARE.LIMIT_REACHED'));
       return;
     }
 
+    // إضافة المنتج للمقارنة
     this.compareProducts.push(product);
     this.saveCompareProducts();
-    
+
+    // إذا تمت إضافة المنتج الأول فقط
     if (this.compareProducts.length === 1) {
-      alert('تم إضافة المنتج الأول، من فضلك اختر منتج آخر للمقارنة');
+      alert(this.translate.instant('COMPARE.FIRST_ADDED'));
     }
 
+    // لو أضفت المنتج الثاني
     if (this.compareProducts.length === 2) {
-      // يمكنك فتح البوب أب هنا إذا أردت
+      // يمكنك فتح نافذة المقارنة هنا مثلًا
+      // this.openComparePopup();
     }
   }
+
 
   removeFromCompare(productId: number): void {
     this.compareProducts = this.compareProducts.filter(p => Number(p.id) !== productId);

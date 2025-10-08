@@ -858,13 +858,17 @@ closeCashModal() {
     modalInstance.hide();
   }
 }
-  goToLogin() {
-    this.router.navigate(['/auth/login']);
-  }
+goToLogin() {
+  // ✅ حفظ الصفحة الحالية
+  localStorage.setItem('redirectAfterLogin', this.router.url);
+  this.router.navigate(['/auth/login']);
+}
 
-  goToRegister() {
-    this.router.navigate(['/auth/register']);
-  }
+goToRegister() {
+  // ✅ حفظ الصفحة الحالية
+  localStorage.setItem('redirectAfterLogin', this.router.url);
+  this.router.navigate(['/auth/register']);
+}
 // goHome() {
 //   this.closeCashModal();
 //   this.router.navigate(['/']);

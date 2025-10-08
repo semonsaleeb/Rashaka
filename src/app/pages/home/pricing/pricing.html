@@ -22,12 +22,12 @@ Carousel Mode
     </div>
 
  <!-- Right-aligned toggle -->
-<div class="d-flex justify-content-start align-items-center my-4 flex-wrap px-lg-5">
+<div class="d-flex justify-content-start align-items-center my-4 flex-wrap px-lg-5 ">
   <div class="toggle-container d-flex gap-2">
-    <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
+    <button class="toggle-btn fs-6" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
       {{ 'PLANS.SESSIONS' | translate }}
     </button>
-    <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+    <button class="toggle-btn fs-6" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
       {{ 'PLANS.NUTRITION' | translate }}
     </button>
   </div>
@@ -209,10 +209,10 @@ Grid Mode
 <!-- Centered toggle -->
 <div class="d-flex justify-content-center my-4 flex-wrap w-100">
   <div class="justify-content-center align-items-center   d-flex gap-2">
-    <button class="toggle-btn" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
+    <button class="toggle-btn fs-6" [class.active]="selectedPlan === 'sessions'" (click)="changePlanType('sessions')">
       {{ 'SUBSCRIPTIONS.SESSIONS' | translate }}
     </button>
-    <button class="toggle-btn" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
+    <button class="toggle-btn fs-6" [class.active]="selectedPlan === 'nutrition'" (click)="changePlanType('nutrition')">
       {{ 'SUBSCRIPTIONS.NUTRITION' | translate }}
     </button>
   </div>
@@ -224,14 +224,19 @@ Grid Mode
   @if (plans.length > 0) {
   <!-- Carousel Wrapper -->
   <div class="carousel-wrapper position-relative overflow-hidden px-lg-5" [dir]="textDir">
-    <div class="d-flex transition-transform carousel-track"
-      [ngStyle]="{ transform: 'translateX(' + (currentSlideIndex * (104 / visibleCards) * (lang === 'ar' ? -1 : 1)) + '%)' }"
-      (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
+    <div class="d-flex transition-transform carousel-track"  [ngStyle]="{ 
+       transform: plans.length > visibleCards ? 
+         'translateX(' + (currentSlideIndex * (100 / visibleCards) * (currentLang === 'ar' ? 1 : -1)) + '%)' 
+         : 'translateX(0%)'
+     }"
+ (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" [dir]="textDir">
 
 
-      @for (plan of plans; track trackPlan($index, plan)) {
-      <div class="carousel-slide" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
-        [style.max-width]="'calc(100% / ' + visibleCards + ')'">
+
+
+@for (plan of displayPlans; track trackPlan($index, plan)) {
+  <div class="carousel-slide" [style.flex]="'0 0 calc(100% / ' + visibleCards + ')'"
+       [style.max-width]="'calc(100% / ' + visibleCards + ')'">
 
         <div class="card h-100 rounded-4 border-1 bg-white justify-content-between"
           [ngClass]="plan.styleType + '-card'">
@@ -245,23 +250,23 @@ Grid Mode
             <img src="assets/Images/Group 9010.svg" alt="Frame"
               style="position:absolute; top:0; right:0; width:80px; z-index:2;">
             <div class="plan-info mt-5 ">
-              <span class="d-block" style="font-size: 20px;" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
+              <span class="d-block" [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'">
                 {{ 'PRICING.SUBSCRIPTION' | translate }}
               </span>
-              <div class="sessions fw-bold my-2" style="width: 30%; font-size: 20px;"
+              <div class="sessions fw-bold my-2 "
                 [style.background-color]="plan.styleType === 'basic' ? 'white' : '#1B6079'"
                 [style.color]="plan.styleType === 'basic' ? 'inherit' : 'white'">
                 {{ plan.sessions }}
               </div>
-              <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center" 
+              <div class="price fw-bold d-flex align-items-center gap-1 justify-content-center"
                 [style.color]="plan.styleType === 'basic' ? 'white' : 'inherit'"
                 [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
 
                 <!-- النص "السعر" أو "Price" -->
-                <span style="font-size: 25px !important;">{{ 'PRICING.PRICE' | translate }}</span>
+                <span>{{ 'PRICING.PRICE' | translate }}</span>
 
                 <!-- السعر قبل الخصم -->
-                <span *ngIf="plan.price_before !== null && plan.price_before !== undefined" style="font-size: 25px !important;"
+                <span *ngIf="plan.price_before !== null && plan.price_before !== undefined"
                   [ngStyle]="{'text-decoration': plan.price_after ? 'line-through' : 'none'}">
                   {{ plan.price_before }}
                 </span>
@@ -286,39 +291,32 @@ Grid Mode
           <!-- Card Bottom -->
           <div class="card-bottom  px-3 pb-4">
             <div class="available-places" [ngStyle]="{
-  'background-color': plan.cities && plan.cities.length ? '#E3E3E3' : '#B4EB52',
-  'color': '#333',
-  'padding': '3px 0',
-  'text-align': 'center',
-  'margin': '-20px',
-  'border-radius': '0',
-  'font-size': '14px'
-}">
-              <!-- <div>
-  <span *ngFor="let city of plan.cities; let last = last">
-    {{ currentLang === 'ar' ? city.name_ar : city.name }}<span *ngIf="!last">, </span>
-  </span>
-</div> -->
-
+              'background-color': plan.cities ? '#E3E3E3' : '#B4EB52',
+              'color': '#333',
+              'padding': '3px 0',
+              'text-align': 'center',
+              'margin': '-20px',
+              'border-radius': '0',
+              'font-size': '14px'
+            }">
               {{ getCitiesText(plan.cities) }}
             </div>
 
-
-            <div class="feature mt-4 mb-3">
+            <div class="feature mt-4 mb-3" [attr.dir]="textDir">
               @for (feature of isExpanded(plan.id) ? plan.features : plan.features.slice(0, 3); track feature) {
-              <span class="feature-label fs-6  mb-1">
-                <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp; {{ currentLang === 'ar' ?
-                feature.text_ar : feature.text_en }}
+              <span class="feature-label fs-6 mb-1 d-block">
+                <img src="assets/Images/checkmark-circle-02.svg" alt="✔"> &nbsp;
+                {{ currentLang === 'ar' ? feature.text_ar : feature.text_en }}
               </span>
-
               }
-              @if (plan.features.length > 3) {
+              @if (plan.features && plan.features.length > 3) {
               <button class="btn btn-link p-0 mt-2 text-decoration-underline" (click)="toggleExpand(plan.id)">
                 {{ isExpanded(plan.id) ? ('PRICING.SHOW_LESS' | translate) : ('PRICING.SHOW_MORE' | translate) }}
               </button>
               }
 
             </div>
+
 
             @if (subscribedPlanId !== plan.id) {
             <button class="subscribe-btn w-100 rounded-3 py-2" (click)="handleSubscribe(plan)"
@@ -328,7 +326,7 @@ Grid Mode
             </button>
             } @else {
             <div class="subscribed-text w-100 rounded-3 py-2 text-center fw-bold" [style.background]="'#E3E3E3'"
-              [style.color]="'#000'">
+              [style.color]="'#000'" >
               {{ 'PLANS.SUBSCRIBED' | translate }}
             </div>
 
@@ -341,33 +339,38 @@ Grid Mode
 
     <!-- Navigation -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 py-3">
+
+
+
       <!-- Dots -->
-      <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0">
-        @for (i of getDotsArray(); track i) {
-        <button (click)="goToSlide(i)" class="rounded-circle"
-          [ngClass]="currentSlideIndex === i ? 'dot-active' : 'dot-inactive'"
-          style="width:10px; height:10px; border:none;">
-        </button>
-        }
-      </div>
+    <div class="d-flex gap-2 justify-content-center justify-content-md-start w-100 mt-3 mt-md-0"
+     [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  @for (i of getDotsArray(); track i) {
+    <button (click)="goToSlide(i)" class="rounded-circle"
+            [ngClass]="{ 
+              'dot-active': currentSlideIndex === i, 
+              'dot-inactive': currentSlideIndex !== i 
+            }"
+            style="width:10px; height:10px; border:none;">
+    </button>
+  }
+</div>
+
+
       <!-- Arrows -->
-      <div class="d-flex gap-2 px-lg-4 d-none d-md-flex" dir="rtl">
-        <!-- next = يمشي لقدّام (index++) -->
-        <button class="arrow-btn next" (click)="scrollLeft()" [disabled]="currentSlideIndex === 0"></button>
-
-        <!-- prev = يرجع لورا (index--) -->
-        <button class="arrow-btn prev" (click)="scrollRight()" [disabled]="currentSlideIndex >= getMaxIndex()"></button>
-
-      </div>
+      <div class="d-flex gap-2 d-none d-md-flex" dir="rtl">
+ <button class="arrow-btn next" (click)="scrollNext()" [disabled]="isNextDisabled()"></button>
+<button class="arrow-btn prev" (click)="scrollPrev()" [disabled]="isPrevDisabled()"></button>
 
 
+</div>
     </div>
   </div>
   } @else {
   <div class="text-center py-5">
-<p class="fs-5 fw-semibold">
-  {{ 'PLANS.NO_PLANS' | translate:{ plan: selectedPlan } }}
-</p>
+    <p class="fs-5 fw-semibold">
+      {{ 'PRICING.NO_PLANS' | translate:{ plan: selectedPlan } }}
+    </p>
   </div>
   }
 

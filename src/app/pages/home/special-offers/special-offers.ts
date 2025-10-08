@@ -18,6 +18,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 import { TruncatePipe } from '../../../truncate-pipe';
 import { ClientService } from '../../../services/client.service';
+import { CompareService } from '../../../services/compare-service';
 
 @Component({
   selector: 'app-special-offers',
@@ -69,9 +70,13 @@ export class SpecialOffersComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private languageService: LanguageService,
     private clientService: ClientService,
+    public compareService: CompareService
   ) { }
 
   ngOnInit(): void {
+     this.compareService.compareProducts$.subscribe(products => {
+    this.compareProducts = products;
+  });
     this.updateVisibleCards();
     window.addEventListener('resize', this.resizeListener);
 
@@ -385,35 +390,26 @@ private setInitialSlidePosition(): void {
       event.stopPropagation();
     }
 
-    if (this.compareProducts.find(p => p.id === product.id)) {
-      alert(this.translate.instant('PRODUCT_ALREADY_IN_COMPARE'));
-      return;
-    }
+    // نستخدم الخدمة لإضافة المنتج
+    this.compareService.addToCompare(product);
 
-    if (this.compareProducts.length >= 2) {
-      alert(this.translate.instant('MAX_COMPARE_PRODUCTS'));
-      return;
-    }
-
-    this.compareProducts.push(product);
-
-    if (this.compareProducts.length === 1) {
-      alert(this.translate.instant('FIRST_PRODUCT_ADDED'));
-    }
-
-    if (this.compareProducts.length === 2) {
+    // لو عدد المنتجات بقى 2 → افتح البوب أب
+    const currentCompare = this.compareService.getCompareProducts();
+    if (currentCompare.length === 2) {
       this.showComparePopup = true;
     }
   }
 
   isInCompare(product: Product): boolean {
-    return this.compareProducts.some(p => p.id === product.id);
+    // بدلًا من المقارنة محليًا، نستخدم الخدمة
+    return this.compareService.isInCompare(product);
   }
 
   onCloseComparePopup(): void {
     this.showComparePopup = false;
-    this.compareProducts = [];
+    this.compareService.clearCompare(); // تنظيف قائمة المقارنة من الخدمة
   }
+
 
   /** ------------------- CART ACTIONS ------------------- */
 
